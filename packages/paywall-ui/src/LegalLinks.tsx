@@ -21,6 +21,13 @@ export const LegalLinks = ({
 }: LegalLinksProps) => {
   return (
     <View style={styles.container}>
+      <View
+        style={[
+          styles.topSeparator,
+          { backgroundColor: theme.mutedTextColor },
+        ]}
+      />
+
       {shouldShowLegalPrefix && copy.legalPrefix && (
         <Text style={[styles.legalText, { color: theme.mutedTextColor }]}>
           {copy.legalPrefix}
@@ -78,7 +85,7 @@ export const LegalLinks = ({
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
-    gap: 8,
+    gap: 14,
     width: "100%",
   },
   actionCell: {
@@ -124,5 +131,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
     top: 9,
     width: 10,
+  },
+  topSeparator: {
+    alignSelf: "stretch",
+    height: 1,
+    opacity: 0.35,
   },
 });
