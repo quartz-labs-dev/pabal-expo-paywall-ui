@@ -36,8 +36,7 @@ const profileSubscriptionBaseConfig = {
       icon: <BenefitIcon label="C" />,
     },
   ],
-  headerIcon: <GoldenHorizonIcon />,
-} satisfies Omit<ProfileSubscriptionConfig, "copy">;
+} satisfies Omit<ProfileSubscriptionConfig, "copy" | "headerIcon">;
 
 const profilePeriods: Record<PlaygroundScenario, PaywallPlanPeriod> = {
   annualOnly: "annual",
@@ -137,6 +136,7 @@ export const ProfilePlaygroundScreen = ({
         <ProfileSubscriptionSection
           {...profileSubscriptionBaseConfig}
           copy={profileCopy}
+          headerIcon={<GoldenHorizonIcon isSubscribed={isSubscribed} />}
           isManagingSubscription={isManagingSubscription}
           isRedeemingPromoCode={isRedeemingPromoCode}
           isRestoringPurchases={isRestoringPurchases}
@@ -175,12 +175,36 @@ function BenefitIcon({ label }: BenefitIconProps) {
   );
 }
 
-function GoldenHorizonIcon() {
+interface GoldenHorizonIconProps {
+  isSubscribed: boolean;
+}
+
+function GoldenHorizonIcon({ isSubscribed }: GoldenHorizonIconProps) {
   return (
-    <View style={styles.appIcon}>
+    <View
+      style={[
+        styles.appIcon,
+        isSubscribed ? styles.appIconSubscribed : styles.appIconFree,
+      ]}
+    >
       <View style={styles.appIconSky} />
-      <View style={styles.appIconHorizon} />
-      <View style={styles.appIconGround} />
+      <View
+        style={[
+          styles.appIconHorizon,
+          isSubscribed && styles.appIconHorizonSubscribed,
+        ]}
+      />
+      <View
+        style={[
+          styles.appIconGround,
+          isSubscribed && styles.appIconGroundSubscribed,
+        ]}
+      />
+      {isSubscribed ? (
+        <View style={styles.appIconProBadge}>
+          <Text style={styles.appIconProBadgeText}>PRO</Text>
+        </View>
+      ) : null}
     </View>
   );
 }
@@ -266,6 +290,13 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     width: 58,
   },
+  appIconFree: {
+    opacity: 0.82,
+  },
+  appIconSubscribed: {
+    borderColor: "#FFE29A",
+    borderWidth: 2,
+  },
   appIconSky: {
     backgroundColor: "#1987F3",
     height: 25,
@@ -274,9 +305,34 @@ const styles = StyleSheet.create({
     backgroundColor: "#6DB8D7",
     height: 13,
   },
+  appIconHorizonSubscribed: {
+    backgroundColor: "#9EE6DD",
+  },
   appIconGround: {
     backgroundColor: "#E6C568",
     flex: 1,
+  },
+  appIconGroundSubscribed: {
+    backgroundColor: "#FFD86F",
+  },
+  appIconProBadge: {
+    alignItems: "center",
+    backgroundColor: "#101820",
+    borderColor: "#FFE29A",
+    borderRadius: 8,
+    borderWidth: 1,
+    bottom: 6,
+    height: 18,
+    justifyContent: "center",
+    left: 10,
+    position: "absolute",
+    right: 10,
+  },
+  appIconProBadgeText: {
+    color: "#FFE29A",
+    fontSize: 8,
+    fontWeight: "900",
+    lineHeight: 10,
   },
   benefitIcon: {
     alignItems: "center",
