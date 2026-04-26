@@ -2,11 +2,23 @@ import type { ReactNode } from "react";
 
 export type PaywallPlanPeriod = "monthly" | "annual" | "lifetime";
 
+export type PaywallTrialUnit = "day" | "week";
+
+export interface PaywallTrialDuration {
+  value: number;
+  unit: PaywallTrialUnit;
+}
+
+export interface PaywallFreeTrialConfig {
+  duration?: PaywallTrialDuration;
+}
+
 export interface PaywallPlan<TPackage = unknown> {
   id: string;
   period: PaywallPlanPeriod;
   title: string;
   priceText: string;
+  pricePerPeriodText?: string;
   monthlyPriceText?: string;
   discountText?: string;
   badgeText?: string;
@@ -19,6 +31,7 @@ export interface PaywallCopy {
   title: string;
   subtitle?: string;
   purchaseButton: string;
+  continueButton?: string;
   purchasingButton?: string;
   restoreButton: string;
   termsText: string;
@@ -28,6 +41,13 @@ export interface PaywallCopy {
   closeButtonAccessibilityLabel?: string;
   nextButton?: string;
   nextButtonAccessibilityLabel?: string;
+  formatTrialDuration?: (duration: PaywallTrialDuration) => string;
+  formatTrialPriceDisclosure?: (
+    duration: PaywallTrialDuration,
+    pricePerPeriodText: string
+  ) => string;
+  formatTrialIncludedTitle?: (duration: PaywallTrialDuration) => string;
+  trialIncludedDescription?: string;
 }
 
 export interface PaywallBenefitDetail {
@@ -76,6 +96,7 @@ export interface PaywallProps<TPackage = unknown> {
   content?: ReactNode;
   purchaseButtonBackground?: ReactNode;
   copy: PaywallCopy;
+  freeTrial?: boolean | PaywallFreeTrialConfig;
   selectedPlanId?: string;
   theme?: Partial<PaywallTheme>;
   isPurchasing?: boolean;
@@ -97,6 +118,7 @@ export interface PaywallConfig {
   content?: ReactNode;
   purchaseButtonBackground?: ReactNode;
   copy: PaywallCopy;
+  freeTrial?: boolean | PaywallFreeTrialConfig;
   theme?: Partial<PaywallTheme>;
   planOptions?: CreatePaywallPlansOptions;
 }
@@ -153,6 +175,10 @@ export interface PurchasesPackageLike {
   product: {
     price: number;
     priceString: string;
+    pricePerPeriodString?: string | null;
+    price_per_period?: string | null;
+    pricePerMonthString?: string | null;
+    pricePerYearString?: string | null;
     title?: string;
     description?: string;
     subscriptionPeriod?: string | null;
@@ -173,6 +199,10 @@ export interface CreatePaywallPlansOptions {
   lifetimeBadgeText?: string;
   formatDiscountText?: (discountPercentage: number) => string;
   formatMonthlyPriceText?: (monthlyPriceText: string) => string;
+  formatPricePerPeriodText?: (
+    priceText: string,
+    period: Exclude<PaywallPlanPeriod, "lifetime">
+  ) => string;
   recommendedPeriod?: PaywallPlanPeriod;
   displayOrder?: PaywallPlanPeriod[];
 }

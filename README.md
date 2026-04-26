@@ -168,6 +168,7 @@ What to verify on `/paywall`:
 - plan card rendering
 - selected plan state
 - purchasing loading state
+- free-trial disclosure and no-trial CTA states
 - hero image slot
 - restore / terms / privacy callbacks
 
@@ -238,8 +239,11 @@ const myAppPaywallConfig = {
     title: "Upgrade to Pro",
     subtitle: "Get the full app experience.",
     purchaseButton: "Start trial",
+    continueButton: "Continue",
     purchasingButton: "Processing",
     restoreButton: "Restore purchases",
+    trialIncludedDescription:
+      "Cancel anytime in your subscription settings. No charge if cancelled before trial ends.",
     legalSeparator: "/",
     closeButtonAccessibilityLabel: "Close paywall",
     termsText: "Terms",
@@ -249,6 +253,8 @@ const myAppPaywallConfig = {
     annualTitle: "Yearly",
     formatDiscountText: (discountPercentage) => `Save ${discountPercentage}%`,
     formatMonthlyPriceText: (monthlyPriceText) => `${monthlyPriceText} / mo`,
+    formatPricePerPeriodText: (priceText, period) =>
+      period === "annual" ? `${priceText} / year` : `${priceText} / month`,
     monthlyTitle: "Monthly",
     recommendedPeriod: "annual",
   },
@@ -279,6 +285,25 @@ rare app-specific cases.
 Use `stepMode: "singleStep"` in the config when an app should render the classic
 one-step paywall.
 
+Free trials are enabled by default as a 7-day trial. The paywall keeps the
+existing `Start trial` CTA, shows small footer copy like
+`7 days free, then $29.99 / year`, and inserts the localized trial notice before
+restore purchases. Pass `freeTrial={false}` to switch the CTA to
+`copy.continueButton ?? "Continue"` and hide trial disclosures. Pass a duration
+when the app needs a different trial:
+
+```tsx
+<Paywall
+  {...paywallPresentation}
+  freeTrial={{ duration: { value: 2, unit: "week" } }}
+  {...props}
+/>
+```
+
+Default copy handles singular/plural durations such as `1 day`, `7 days`,
+`1 week`, and `2 weeks`. Apps can override the trial formatter functions on
+`copy` for locale-specific grammar.
+
 Animations are enabled by default. Use `animationMode: "none"` when an app
 should render the initial paywall and step changes immediately.
 
@@ -292,7 +317,10 @@ an app-owned `expo-linear-gradient` fill, into the fixed footer button.
 When both monthly and annual packages are present, `createPaywallPlans()` uses
 RevenueCat product prices to show annual discount copy such as `Save 33%` in the
 annual badge. Pass `formatDiscountText` and `formatMonthlyPriceText` in
-`planOptions` when generated plan copy needs localization.
+`planOptions` when generated plan copy needs localization. Trial disclosures use
+`PaywallPlan.pricePerPeriodText`, which `createPaywallPlans()` fills from
+product `pricePerPeriodString`, product `price_per_period`, or
+`formatPricePerPeriodText`.
 
 Then pass only plans and callbacks into the UI.
 
@@ -447,6 +475,7 @@ createPaywallPlans()
   +-- supports app-specific package identifiers
   +-- preserves the original rawPackage
   +-- handles long currency strings
+  +-- formats trial price-per-period and singular/plural trial copy
 ```
 
 Run:
@@ -478,7 +507,7 @@ Last verified:
 
 ```bash
 yarn typecheck  # pass
-yarn test       # pass, 10 tests
+yarn test       # pass, 16 tests
 yarn build      # pass
 ```
 

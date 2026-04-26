@@ -7,6 +7,7 @@ import { HomeScreen } from "./src/screens/HomeScreen";
 import { PaywallPlaygroundScreen } from "./src/screens/PaywallPlaygroundScreen";
 import { ProfilePlaygroundScreen } from "./src/screens/ProfilePlaygroundScreen";
 import type {
+  PlaygroundFreeTrialMode,
   PlaygroundPaywallAnimation,
   PlaygroundPaywallFlow,
   PlaygroundLocale,
@@ -46,6 +47,8 @@ export default function App() {
     useState<PlaygroundPaywallFlow>("twoStep");
   const [paywallAnimation, setPaywallAnimation] =
     useState<PlaygroundPaywallAnimation>("default");
+  const [freeTrialMode, setFreeTrialMode] =
+    useState<PlaygroundFreeTrialMode>("sevenDays");
   const [selectedLocale, setSelectedLocale] =
     useState<PlaygroundLocale>("en-US");
 
@@ -79,6 +82,7 @@ export default function App() {
           selectedLocale={selectedLocale}
           paywallFlow={paywallFlow}
           paywallAnimation={paywallAnimation}
+          freeTrialMode={freeTrialMode}
           onClose={() => navigate("home")}
         />
       ) : route === "profile" ? (
@@ -94,11 +98,13 @@ export default function App() {
           selectedLocale={selectedLocale}
           paywallFlow={paywallFlow}
           paywallAnimation={paywallAnimation}
+          freeTrialMode={freeTrialMode}
           onChangeScenario={setScenario}
           onToggleLongPrice={setIsLongPriceEnabled}
           onChangeLocale={setSelectedLocale}
           onChangePaywallFlow={setPaywallFlow}
           onChangePaywallAnimation={setPaywallAnimation}
+          onChangeFreeTrialMode={setFreeTrialMode}
           onOpenPaywall={() => navigate("paywall")}
           onOpenProfile={() => navigate("profile")}
         />

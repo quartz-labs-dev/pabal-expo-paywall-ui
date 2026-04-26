@@ -8,6 +8,7 @@ const en = createPaywallLocaleText({
   text: {
     annualPlanTitle: "Yearly",
     benefitsTitle: "Your Pro Benefits",
+    continueButton: "Continue",
     enterPromoCode: "Enter promo code",
     freeBadge: "FREE",
     lifetimePlanTitle: "Lifetime",
@@ -25,6 +26,12 @@ const en = createPaywallLocaleText({
     subscriptionRenewsAutomatically: "Subscription renews automatically.",
     subscribedSubtitle: "Thank you for your support!",
     termsText: "Terms",
+    formatTrialIncludedTitle: (duration) => {
+      const unit = duration.unit === "week" ? "Week" : "Day";
+      return `${duration.value}-${unit} Free Trial Included`;
+    },
+    trialIncludedDescription:
+      "Cancel anytime in your subscription settings. No charge if cancelled before trial ends.",
   },
 });
 

@@ -22,6 +22,13 @@ const defaultFormatMonthlyPriceText = (monthlyPriceText: string): string => {
   return `${monthlyPriceText} / mo`;
 };
 
+const defaultFormatPricePerPeriodText = (
+  priceText: string,
+  period: Exclude<PaywallPlanPeriod, "lifetime">,
+): string => {
+  return period === "annual" ? `${priceText} / year` : `${priceText} / month`;
+};
+
 const getPeriod = (
   pack: PurchasesPackageLike,
   options: Required<
@@ -71,6 +78,26 @@ const formatDiscountText = (
   return formatText(discountPercentage);
 };
 
+const getProductPricePerPeriodText = (
+  pack: PurchasesPackageLike,
+  period: PaywallPlanPeriod,
+  formatText: (
+    priceText: string,
+    period: Exclude<PaywallPlanPeriod, "lifetime">,
+  ) => string,
+): string | undefined => {
+  if (period === "lifetime") return undefined;
+
+  return (
+    pack.product.pricePerPeriodString ??
+    pack.product.price_per_period ??
+    (period === "annual"
+      ? pack.product.pricePerYearString
+      : pack.product.pricePerMonthString) ??
+    formatText(pack.product.priceString, period)
+  );
+};
+
 const orderPlans = <TPackage extends PurchasesPackageLike>(
   plans: PaywallPlan<TPackage>[],
   displayOrder: PaywallPlanPeriod[],
@@ -100,6 +127,8 @@ export const createPaywallPlans = <TPackage extends PurchasesPackageLike>(
   const displayOrder = options.displayOrder ?? DEFAULT_DISPLAY_ORDER;
   const formatMonthlyPriceText =
     options.formatMonthlyPriceText ?? defaultFormatMonthlyPriceText;
+  const formatPricePerPeriodText =
+    options.formatPricePerPeriodText ?? defaultFormatPricePerPeriodText;
   const formatDiscountTextOption =
     options.formatDiscountText ?? defaultFormatDiscountText;
   const monthlyPackage = packages.find((pack) => {
@@ -141,6 +170,11 @@ export const createPaywallPlans = <TPackage extends PurchasesPackageLike>(
           : options.monthlyTitle) ??
         (isAnnual ? "Yearly" : isLifetime ? "Lifetime" : "Monthly"),
       priceText: pack.product.priceString,
+      pricePerPeriodText: getProductPricePerPeriodText(
+        pack,
+        period,
+        formatPricePerPeriodText,
+      ),
       monthlyPriceText,
       discountText,
       badgeText: isAnnual

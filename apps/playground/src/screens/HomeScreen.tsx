@@ -8,6 +8,7 @@ import {
   packageScenarioLabels,
 } from "../fixtures/paywall-plans";
 import type {
+  PlaygroundFreeTrialMode,
   PlaygroundPackageScenario,
   PlaygroundPaywallAnimation,
   PlaygroundPaywallFlow,
@@ -20,6 +21,7 @@ interface HomeScreenProps {
   selectedLocale: PlaygroundLocale;
   paywallFlow: PlaygroundPaywallFlow;
   paywallAnimation: PlaygroundPaywallAnimation;
+  freeTrialMode: PlaygroundFreeTrialMode;
   onChangeScenario: (scenario: PlaygroundPackageScenario) => void;
   onChangeLocale: (locale: PlaygroundLocale) => void;
   onToggleLongPrice: (isEnabled: boolean) => void;
@@ -27,6 +29,7 @@ interface HomeScreenProps {
   onChangePaywallAnimation: (
     paywallAnimation: PlaygroundPaywallAnimation,
   ) => void;
+  onChangeFreeTrialMode: (freeTrialMode: PlaygroundFreeTrialMode) => void;
   onOpenPaywall: () => void;
   onOpenProfile: () => void;
 }
@@ -54,6 +57,21 @@ const paywallAnimationDescriptions: Record<PlaygroundPaywallAnimation, string> =
     default: "Bottom-up entrance and side-to-side step transition.",
     none: "Render paywall and step changes immediately.",
   };
+const freeTrialModes: PlaygroundFreeTrialMode[] = [
+  "sevenDays",
+  "twoWeeks",
+  "none",
+];
+const freeTrialModeLabels: Record<PlaygroundFreeTrialMode, string> = {
+  sevenDays: "7 days",
+  twoWeeks: "2 weeks",
+  none: "No trial",
+};
+const freeTrialModeDescriptions: Record<PlaygroundFreeTrialMode, string> = {
+  sevenDays: "Default: Start trial CTA, trial notice, and price disclosure.",
+  twoWeeks: "Checks plural week copy and injected trial duration.",
+  none: "Uses Continue CTA and hides trial disclosures.",
+};
 const FIXED_FOOTER_BUTTON_HEIGHT = 54;
 const FIXED_FOOTER_TOP_PADDING = 12;
 const FIXED_FOOTER_MIN_BOTTOM_PADDING = 12;
@@ -65,11 +83,13 @@ export const HomeScreen = ({
   selectedLocale,
   paywallFlow,
   paywallAnimation,
+  freeTrialMode,
   onChangeScenario,
   onChangeLocale,
   onToggleLongPrice,
   onChangePaywallFlow,
   onChangePaywallAnimation,
+  onChangeFreeTrialMode,
   onOpenPaywall,
   onOpenProfile,
 }: HomeScreenProps) => {
@@ -217,6 +237,38 @@ export const HomeScreen = ({
                   </Text>
                   <Text style={styles.flowDescription}>
                     {paywallAnimationDescriptions[item]}
+                  </Text>
+                </Pressable>
+              );
+            })}
+          </View>
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Free trial</Text>
+          <View style={styles.segmentedList}>
+            {freeTrialModes.map((item) => {
+              const isSelected = item === freeTrialMode;
+
+              return (
+                <Pressable
+                  key={item}
+                  onPress={() => onChangeFreeTrialMode(item)}
+                  style={[
+                    styles.flowOption,
+                    isSelected && styles.flowOptionSelected,
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.flowTitle,
+                      isSelected && styles.flowTitleSelected,
+                    ]}
+                  >
+                    {freeTrialModeLabels[item]}
+                  </Text>
+                  <Text style={styles.flowDescription}>
+                    {freeTrialModeDescriptions[item]}
                   </Text>
                 </Pressable>
               );

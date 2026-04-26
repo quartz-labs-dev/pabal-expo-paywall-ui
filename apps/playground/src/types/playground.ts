@@ -18,4 +18,6 @@ export type PlaygroundPaywallFlow = "twoStep" | "singleStep";
 
 export type PlaygroundPaywallAnimation = "default" | "none";
 
+export type PlaygroundFreeTrialMode = "sevenDays" | "twoWeeks" | "none";
+
 export type PlaygroundLocale = UnifiedLocale;

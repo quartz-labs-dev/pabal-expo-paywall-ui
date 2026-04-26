@@ -61,6 +61,7 @@ export const getDefaultPaywallPlanOptions = (
 
   return {
     annualTitle: text.annualPlanTitle,
+    formatPricePerPeriodText: text.formatPricePerPeriodText,
     lifetimeBadgeText: text.oneTime,
     lifetimeTitle: text.lifetimePlanTitle,
     monthlyTitle: text.monthlyPlanTitle,
@@ -83,11 +84,16 @@ export const getDefaultPaywallCopy = (
 
   return {
     purchaseButton: text.purchaseButton,
+    continueButton: text.continueButton,
     purchasingButton: text.purchasingButton,
     restoreButton: text.restoreButton,
     termsText: text.termsText,
     privacyText: text.privacyText,
     legalPrefix: text.subscriptionRenewsAutomatically,
+    formatTrialDuration: text.formatTrialDuration,
+    formatTrialIncludedTitle: text.formatTrialIncludedTitle,
+    formatTrialPriceDisclosure: text.formatTrialPriceDisclosure,
+    trialIncludedDescription: text.trialIncludedDescription,
     ...PAYWALL_VALUE_STEP_TEXT[resolvePaywallTextLocale(locale)],
     ...copy,
   };

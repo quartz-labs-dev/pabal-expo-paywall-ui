@@ -29,8 +29,11 @@ export type {
   PaywallPlan,
   PaywallProps,
   PaywallCopy,
+  PaywallFreeTrialConfig,
   PaywallStepMode,
   PaywallTheme,
+  PaywallTrialDuration,
+  PaywallTrialUnit,
   PaywallValueStep,
   ProfileSubscriptionConfig,
   ProfileSubscriptionCopy,
@@ -47,6 +50,7 @@ interface PaywallPlan<TPackage = unknown> {
   period: "monthly" | "annual" | "lifetime";
   title: string;
   priceText: string;
+  pricePerPeriodText?: string;
   monthlyPriceText?: string;
   discountText?: string;
   badgeText?: string;
@@ -62,6 +66,15 @@ RevenueCat package object. The app uses it when purchasing.
 ```ts
 type PaywallStepMode = "twoStep" | "singleStep";
 type PaywallAnimationMode = "default" | "none";
+
+interface PaywallTrialDuration {
+  value: number;
+  unit: "day" | "week";
+}
+
+interface PaywallFreeTrialConfig {
+  duration?: PaywallTrialDuration;
+}
 
 interface PaywallValueStep {
   title: string;
@@ -117,7 +130,10 @@ const paywallConfig = {
   copy: {
     title: "Upgrade to Pro",
     purchaseButton: "Start trial",
+    continueButton: "Continue",
     restoreButton: "Restore purchases",
+    trialIncludedDescription:
+      "Cancel anytime in your subscription settings. No charge if cancelled before trial ends.",
     legalSeparator: "/",
     closeButtonAccessibilityLabel: "Close paywall",
     termsText: "Terms",
@@ -126,6 +142,8 @@ const paywallConfig = {
   planOptions: {
     formatDiscountText: (discountPercentage) => `Save ${discountPercentage}%`,
     formatMonthlyPriceText: (monthlyPriceText) => `${monthlyPriceText} / mo`,
+    formatPricePerPeriodText: (priceText, period) =>
+      period === "annual" ? `${priceText} / year` : `${priceText} / month`,
     lifetimeBadgeText: "One-time payment",
     recommendedPeriod: "annual",
   },
@@ -153,6 +171,26 @@ still be overridden on `valueStep` when an app needs a custom label.
 Use `stepMode: "singleStep"` to opt out and render the classic one-step paywall
 while keeping the same config object.
 
+Free trials are enabled by default with a 7-day duration. When enabled, the
+purchase CTA keeps `copy.purchaseButton`, the footer shows copy such as
+`7 days free, then $29.99 / year`, and the restore/legal area shows a short
+trial notice before restore purchases.
+
+Use `freeTrial={false}` to hide trial copy and switch the purchase CTA to
+`copy.continueButton ?? "Continue"`. Use a config object to inject the duration:
+
+```tsx
+<Paywall
+  {...props}
+  freeTrial={{ duration: { value: 2, unit: "week" } }}
+/>
+```
+
+Default localized copy handles English singular/plural durations such as
+`1 day`, `7 days`, `1 week`, and `2 weeks`. Apps can override
+`formatTrialDuration`, `formatTrialPriceDisclosure`, and
+`formatTrialIncludedTitle` on `copy` for locale-specific grammar.
+
 Animations are enabled by default. Use `animationMode: "none"` to render the
 initial paywall and step changes immediately.
 
@@ -176,6 +214,8 @@ interface PurchasesPackageLike {
   product: {
     price: number;
     priceString: string;
+    pricePerPeriodString?: string | null;
+    price_per_period?: string | null;
     description?: string;
   };
 }
@@ -187,7 +227,10 @@ By default, `createPaywallPlans()` recognizes `$rc_monthly`, `$rc_annual`, and
 `monthly.product.price * 12` with `annual.product.price` and adds annual
 discount copy such as `Save 33%`. This discount copy is used as the annual badge
 instead of `annualBadgeText`. Use `formatDiscountText` and
-`formatMonthlyPriceText` to localize generated plan copy.
+`formatMonthlyPriceText` to localize generated plan copy. Use
+`formatPricePerPeriodText` or product-level `pricePerPeriodString` /
+`price_per_period` when trial disclosures need exact store copy such as
+`$29.99 / year`.
 
 ```ts
 const plans = createPaywallPlans(offering.availablePackages, {
@@ -195,6 +238,8 @@ const plans = createPaywallPlans(offering.availablePackages, {
   monthlyTitle: "월간",
   formatDiscountText: (discountPercentage) => `${discountPercentage}% 할인`,
   formatMonthlyPriceText: (monthlyPriceText) => `월 ${monthlyPriceText}`,
+  formatPricePerPeriodText: (priceText, period) =>
+    period === "annual" ? `${priceText} / 년` : `${priceText} / 월`,
 });
 ```
 

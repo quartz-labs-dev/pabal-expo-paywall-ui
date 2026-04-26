@@ -16,12 +16,14 @@ const makePackage = (
   identifier: string,
   price: number,
   priceString: string,
+  productOverrides: Partial<PurchasesPackageLike["product"]> = {},
 ): PurchasesPackageLike => ({
   identifier,
   product: {
     price,
     priceString,
     description: `${identifier} description`,
+    ...productOverrides,
   },
 });
 
@@ -166,6 +168,66 @@ test("supports localized annual pricing copy", () => {
   assert.equal(annualPlan?.discountText, "33% 할인");
   assert.equal(annualPlan?.badgeText, "33% 할인");
   assert.equal(annualPlan?.monthlyPriceText, "월 KRW 6,667");
+});
+
+test("adds localized price-per-period copy for trial disclosures", () => {
+  const plans = createPaywallPlans(
+    [
+      makePackage("$rc_monthly", 10000, "KRW 10,000"),
+      makePackage("$rc_annual", 80000, "KRW 80,000"),
+    ],
+    getDefaultPaywallPlanOptions("ko-KR"),
+  );
+
+  assert.equal(
+    plans.find((plan) => plan.period === "monthly")?.pricePerPeriodText,
+    "KRW 10,000 / 월",
+  );
+  assert.equal(
+    plans.find((plan) => plan.period === "annual")?.pricePerPeriodText,
+    "KRW 80,000 / 년",
+  );
+});
+
+test("uses product price-per-period copy when provided", () => {
+  const plans = createPaywallPlans([
+    makePackage("$rc_annual", 29.99, "$29.99", {
+      price_per_period: "$29.99 per year",
+    }),
+  ]);
+
+  assert.equal(plans[0]?.pricePerPeriodText, "$29.99 per year");
+});
+
+test("formats free-trial durations with singular and plural copy", () => {
+  const enCopy = getDefaultPaywallCopy("en-US", { title: "Pro" });
+  const koCopy = getDefaultPaywallCopy("ko-KR", { title: "Pro" });
+
+  assert.equal(
+    enCopy.formatTrialPriceDisclosure?.(
+      { value: 1, unit: "day" },
+      "$4.99 / month",
+    ),
+    "1 day free, then $4.99 / month",
+  );
+  assert.equal(
+    enCopy.formatTrialPriceDisclosure?.(
+      { value: 2, unit: "week" },
+      "$29.99 / year",
+    ),
+    "2 weeks free, then $29.99 / year",
+  );
+  assert.equal(
+    enCopy.formatTrialIncludedTitle?.({ value: 7, unit: "day" }),
+    "7-Day Free Trial Included",
+  );
+  assert.equal(
+    koCopy.formatTrialPriceDisclosure?.(
+      { value: 2, unit: "week" },
+      "KRW 80,000 / 년",
+    ),
+    "2주 무료, 이후 KRW 80,000 / 년",
+  );
 });
 
 test("provides localized default plan copy from locale strings", () => {

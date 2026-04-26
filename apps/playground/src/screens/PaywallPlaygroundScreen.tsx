@@ -7,6 +7,7 @@ import {
   getDefaultPaywallPlanOptions,
   getDefaultSelectedPlanId,
   type PaywallConfig,
+  type PaywallFreeTrialConfig,
   type PaywallPlan,
   type PurchasesPackageLike,
 } from "pabal-expo-paywall-ui";
@@ -14,6 +15,7 @@ import {
 import { getPackagesForScenario } from "../fixtures/paywall-plans";
 import type {
   PlaygroundPaywallAnimation,
+  PlaygroundFreeTrialMode,
   PlaygroundPaywallFlow,
   PlaygroundLocale,
   PlaygroundScenario,
@@ -73,14 +75,24 @@ interface PaywallPlaygroundScreenProps {
   selectedLocale: PlaygroundLocale;
   paywallFlow: PlaygroundPaywallFlow;
   paywallAnimation: PlaygroundPaywallAnimation;
+  freeTrialMode: PlaygroundFreeTrialMode;
   onClose: () => void;
 }
+
+const getFreeTrialConfig = (
+  mode: PlaygroundFreeTrialMode,
+): boolean | PaywallFreeTrialConfig => {
+  if (mode === "none") return false;
+  if (mode === "twoWeeks") return { duration: { value: 2, unit: "week" } };
+  return true;
+};
 
 export const PaywallPlaygroundScreen = ({
   scenario,
   selectedLocale,
   paywallFlow,
   paywallAnimation,
+  freeTrialMode,
   onClose,
 }: PaywallPlaygroundScreenProps) => {
   const [selectedPlanId, setSelectedPlanId] = useState<string | undefined>();
@@ -129,6 +141,7 @@ export const PaywallPlaygroundScreen = ({
         plans={plans}
         stepMode={paywallFlow}
         animationMode={paywallAnimation}
+        freeTrial={getFreeTrialConfig(freeTrialMode)}
         selectedPlanId={selectedPlanId}
         isPurchasing={isPurchasing}
         onSelectPlan={setSelectedPlanId}

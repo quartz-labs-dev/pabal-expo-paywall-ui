@@ -19,9 +19,11 @@ import { PurchaseButton } from "./PurchaseButton";
 import { mergePaywallTheme } from "./theme";
 import type {
   PaywallBenefit,
+  PaywallFreeTrialConfig,
   PaywallPlan,
   PaywallProps,
   PaywallTheme,
+  PaywallTrialDuration,
 } from "./types";
 
 type PaywallStep = "value" | "purchase";
@@ -49,6 +51,65 @@ const hasRenewingSubscriptionPlan = <TPackage,>(
   return plans.some((plan) => plan.period !== "lifetime");
 };
 
+const DEFAULT_TRIAL_DURATION: PaywallTrialDuration = {
+  value: 7,
+  unit: "day",
+};
+
+const resolveFreeTrialConfig = (
+  freeTrial: boolean | PaywallFreeTrialConfig | undefined,
+  selectedPlan?: PaywallPlan,
+): PaywallFreeTrialConfig | undefined => {
+  if (freeTrial === false || selectedPlan?.period === "lifetime") {
+    return undefined;
+  }
+
+  if (freeTrial === true || freeTrial === undefined) {
+    return { duration: DEFAULT_TRIAL_DURATION };
+  }
+
+  return {
+    ...freeTrial,
+    duration: freeTrial.duration ?? DEFAULT_TRIAL_DURATION,
+  };
+};
+
+const formatFallbackTrialDuration = (
+  duration: PaywallTrialDuration,
+): string => {
+  const unit = duration.unit === "week" ? "week" : "day";
+  const suffix = duration.value === 1 ? unit : `${unit}s`;
+  return `${duration.value} ${suffix}`;
+};
+
+const getTrialDurationText = (
+  copy: PaywallProps["copy"],
+  duration: PaywallTrialDuration,
+): string => {
+  return copy.formatTrialDuration?.(duration) ?? formatFallbackTrialDuration(duration);
+};
+
+const getTrialPriceDisclosure = (
+  copy: PaywallProps["copy"],
+  duration: PaywallTrialDuration,
+  pricePerPeriodText: string,
+): string => {
+  return (
+    copy.formatTrialPriceDisclosure?.(duration, pricePerPeriodText) ??
+    `${getTrialDurationText(copy, duration)} free, then ${pricePerPeriodText}`
+  );
+};
+
+const getTrialIncludedTitle = (
+  copy: PaywallProps["copy"],
+  duration: PaywallTrialDuration,
+): string => {
+  return (
+    copy.formatTrialIncludedTitle?.(duration) ??
+    `${getTrialDurationText(copy, duration)} Free Trial Included`
+  );
+};
+
 const FIXED_FOOTER_BUTTON_HEIGHT = 52;
 const FIXED_FOOTER_TOP_PADDING = 12;
 const FIXED_FOOTER_MIN_BOTTOM_PADDING = 12;
@@ -71,6 +132,7 @@ export const Paywall = <TPackage,>({
   content,
   purchaseButtonBackground,
   copy,
+  freeTrial = true,
   selectedPlanId,
   theme: themeOverride,
   isPurchasing = false,
@@ -98,6 +160,26 @@ export const Paywall = <TPackage,>({
     useState<PaywallTransitionPhase>("idle");
   const selectedPlan = getSelectedPlan(plans, selectedPlanId);
   const resolvedSelectedPlanId = selectedPlan?.id;
+  const freeTrialConfig = resolveFreeTrialConfig(freeTrial, selectedPlan);
+  const trialDuration = freeTrialConfig?.duration;
+  const trialPriceDisclosure =
+    trialDuration && selectedPlan
+      ? getTrialPriceDisclosure(
+          copy,
+          trialDuration,
+          selectedPlan.pricePerPeriodText ?? selectedPlan.priceText,
+        )
+      : undefined;
+  const trialNotice =
+    trialDuration && copy.trialIncludedDescription
+      ? {
+          title: getTrialIncludedTitle(copy, trialDuration),
+          description: copy.trialIncludedDescription,
+        }
+      : undefined;
+  const purchaseButtonLabel = trialDuration
+    ? copy.purchaseButton
+    : copy.continueButton ?? "Continue";
   const heroHeight = Math.round(windowHeight * heroHeightRatio);
   const [measuredFooterHeight, setMeasuredFooterHeight] = useState(0);
   const footerBottomPadding = Math.max(
@@ -328,6 +410,7 @@ export const Paywall = <TPackage,>({
           {!isValueStep && (
             <LegalLinks
               copy={copy}
+              trialNotice={trialNotice}
               shouldShowLegalPrefix={shouldShowLegalPrefix}
               theme={theme}
               onRestore={onRestore}
@@ -368,17 +451,29 @@ export const Paywall = <TPackage,>({
             />
           </View>
         ) : (
-          <PurchaseButton
-            label={copy.purchaseButton}
-            loadingLabel={copy.purchasingButton}
-            background={purchaseButtonBackground}
-            isLoading={isPurchasing}
-            isDisabled={!selectedPlan}
-            theme={theme}
-            onPress={() => {
-              if (selectedPlan) onPurchase(selectedPlan);
-            }}
-          />
+          <View style={styles.purchaseActionGroup}>
+            <PurchaseButton
+              label={purchaseButtonLabel}
+              loadingLabel={copy.purchasingButton}
+              background={purchaseButtonBackground}
+              isLoading={isPurchasing}
+              isDisabled={!selectedPlan}
+              theme={theme}
+              onPress={() => {
+                if (selectedPlan) onPurchase(selectedPlan);
+              }}
+            />
+            {trialPriceDisclosure && (
+              <Text
+                style={[
+                  styles.trialPriceDisclosure,
+                  { color: theme.mutedTextColor },
+                ]}
+              >
+                {trialPriceDisclosure}
+              </Text>
+            )}
+          </View>
         )}
       </View>
     </View>
@@ -462,6 +557,16 @@ const styles = StyleSheet.create({
   },
   nextButtonRow: {
     alignItems: "flex-end",
+  },
+  purchaseActionGroup: {
+    gap: 8,
+  },
+  trialPriceDisclosure: {
+    flexShrink: 1,
+    fontSize: 11,
+    fontWeight: "600",
+    lineHeight: 15,
+    textAlign: "center",
   },
   nextButton: {
     alignItems: "center",
