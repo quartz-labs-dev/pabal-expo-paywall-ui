@@ -191,8 +191,9 @@ const copyProfileIdentifier = async (item: ProfileIdentifierItem) => {
 const profileSubscriptionConfig = {
   benefits: paywallBenefits,
   copy: {
-    subscribedTitle: "Pro is active",
-    notSubscribedTitle: "Upgrade to Pro",
+    subscribedTitle: "Golden Horizon Pro",
+    notSubscribedTitle: "Golden Horizon Pro",
+    subscribedSubtitle: "Thank you for your support!",
     notSubscribedSubtitle: "Unlock the full app experience.",
     manageSubscriptionButton: "Manage subscription",
     restorePurchasesButton: "Restore purchases",
@@ -224,6 +225,11 @@ const profileSubscriptionConfig = {
 
 When `isSubscribed` is true, upgrade and restore actions are hidden. Subscription
 management remains visible.
+
+Prefer using the same profile title in both states, formatted as the app name
+plus `Pro` (for example, `Golden Horizon Pro`). Put subscription state in the
+badge, subtitle, plan label, or action button instead of changing the main title
+to generic copy like `Pro is active` or `Upgrade to Pro`.
 
 Use `theme.surfaceColor` for the profile card background. If the profile UI is
 split between a lighter top card and a darker lower background, set
