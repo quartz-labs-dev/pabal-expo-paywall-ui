@@ -1,4 +1,4 @@
-import { createPaywallPlans, getDefaultSelectedPlanId } from "@pabal/expo-paywall-ui";
+import { createPaywallPlans, getDefaultSelectedPlanId } from "pabal-expo-paywall-ui";
 import { useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -94,7 +94,7 @@ export const HomeScreen = ({
         ]}
       >
         <View style={styles.header}>
-          <Text style={styles.eyebrow}>@pabal/expo-paywall-ui playground</Text>
+          <Text style={styles.eyebrow}>pabal-expo-paywall-ui playground</Text>
           <Text style={styles.title}>Choose test packages</Text>
           <Text style={styles.subtitle}>
             Select an offering state on the home screen, then open `/paywall`

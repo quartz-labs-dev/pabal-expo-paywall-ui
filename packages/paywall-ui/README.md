@@ -1,4 +1,4 @@
-# @pabal/expo-paywall-ui
+# pabal-expo-paywall-ui
 
 RevenueCat-agnostic React Native paywall UI.
 
@@ -11,14 +11,14 @@ consuming app must provide `SafeAreaProvider` at the app root.
 ## Install
 
 ```bash
-yarn add @pabal/expo-paywall-ui
+yarn add pabal-expo-paywall-ui
 ```
 
 ## Public API
 
 ```ts
-export { Paywall } from "@pabal/expo-paywall-ui";
-export { createPaywallPlans, getDefaultSelectedPlanId } from "@pabal/expo-paywall-ui";
+export { Paywall } from "pabal-expo-paywall-ui";
+export { createPaywallPlans, getDefaultSelectedPlanId } from "pabal-expo-paywall-ui";
 export type {
   CreatePaywallPlansOptions,
   PaywallAnimationMode,
@@ -32,7 +32,7 @@ export type {
   PaywallTheme,
   PaywallValueStep,
   PurchasesPackageLike,
-} from "@pabal/expo-paywall-ui";
+} from "pabal-expo-paywall-ui";
 ```
 
 ## Types
@@ -76,7 +76,7 @@ Keep each app's paywall copy, colors, media slot, and package mapping in one typ
 config object.
 
 ```tsx
-import { type PaywallConfig } from "@pabal/expo-paywall-ui";
+import { type PaywallConfig } from "pabal-expo-paywall-ui";
 
 const paywallConfig = {
   hero: <HeroImage />,
@@ -269,7 +269,7 @@ native version.
 ## Test
 
 ```bash
-yarn workspace @pabal/expo-paywall-ui test
+yarn workspace pabal-expo-paywall-ui test
 ```
 
 The current tests cover plan filtering, default selection, custom identifiers,

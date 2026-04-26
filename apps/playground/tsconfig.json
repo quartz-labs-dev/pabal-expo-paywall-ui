@@ -3,7 +3,7 @@
   "compilerOptions": {
     "jsx": "react-jsx",
     "paths": {
-      "@pabal/expo-paywall-ui": [
+      "pabal-expo-paywall-ui": [
         "../../packages/paywall-ui/src"
       ]
     }

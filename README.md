@@ -1,4 +1,4 @@
-# @pabal/expo-paywall-ui
+# pabal-expo-paywall-ui
 
 Shared React Native paywall UI for Pabal apps.
 
@@ -6,10 +6,10 @@ The core rule of this repository is simple:
 
 ```txt
 The app owns RevenueCat.
-@pabal/expo-paywall-ui owns UI and plan selection.
+pabal-expo-paywall-ui owns UI and plan selection.
 ```
 
-`@pabal/expo-paywall-ui` does not import `react-native-purchases` or
+`pabal-expo-paywall-ui` does not import `react-native-purchases` or
 `react-native-purchases-ui`. Each app owns its RevenueCat version, offering fetch,
 purchase, restore, analytics, navigation, widget sync, and post-purchase behavior.
 This package only receives normalized plan data and app-provided callbacks.
@@ -21,7 +21,7 @@ pabal-expo-paywall-ui/
   apps/
     playground/            # Expo app for mock UI states
   packages/
-    paywall-ui/            # @pabal/expo-paywall-ui package
+    paywall-ui/            # pabal-expo-paywall-ui package
 ```
 
 ## Data Flow
@@ -70,7 +70,7 @@ The app owns:
 - post-purchase storage/widget sync
 - toast/confetti/success handling
 
-`@pabal/expo-paywall-ui` owns:
+`pabal-expo-paywall-ui` owns:
 
 - paywall layout
 - value-first multi-step presentation state
@@ -87,7 +87,7 @@ The app owns:
 Install the published package in a consuming app:
 
 ```bash
-yarn add @pabal/expo-paywall-ui
+yarn add pabal-expo-paywall-ui
 ```
 
 Consuming apps must already provide `react-native-safe-area-context`. The current
@@ -104,6 +104,7 @@ yarn android    # run the playground on Android
 yarn typecheck  # run TypeScript checks across all workspaces
 yarn test       # run paywall-ui adapter tests
 yarn build      # build paywall-ui into dist
+yarn publish:paywall # publish pabal-expo-paywall-ui to npm
 ```
 
 Use `swpm` or `yarn` when adding dependencies. Do not use `npm`.
@@ -170,7 +171,7 @@ import {
   getDefaultSelectedPlanId,
   type PaywallConfig,
   type PaywallPlan,
-} from "@pabal/expo-paywall-ui";
+} from "pabal-expo-paywall-ui";
 
 const myAppPaywallConfig = {
   hero: <MyAppPaywallHero />,

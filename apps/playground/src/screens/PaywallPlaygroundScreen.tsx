@@ -7,7 +7,7 @@ import {
   type PaywallConfig,
   type PaywallPlan,
   type PurchasesPackageLike,
-} from "@pabal/expo-paywall-ui";
+} from "pabal-expo-paywall-ui";
 
 import { getPackagesForScenario } from "../fixtures/paywall-plans";
 import type {

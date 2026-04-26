@@ -1,4 +1,4 @@
-import type { PurchasesPackageLike } from "@pabal/expo-paywall-ui";
+import type { PurchasesPackageLike } from "pabal-expo-paywall-ui";
 import type { PlaygroundScenario } from "../types/playground";
 
 type MockPackageType =
