@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -15,6 +16,11 @@ const getSelectedPlan = <TPackage,>(
   const fallbackPlanId = selectedPlanId ?? getDefaultSelectedPlanId(plans);
   return plans.find((plan) => plan.id === fallbackPlanId);
 };
+
+const FIXED_FOOTER_BUTTON_HEIGHT = 52;
+const FIXED_FOOTER_TOP_PADDING = 12;
+const FIXED_FOOTER_MIN_BOTTOM_PADDING = 12;
+const FIXED_FOOTER_SCROLL_GAP = 24;
 
 export const Paywall = <TPackage,>({
   plans,
@@ -35,6 +41,19 @@ export const Paywall = <TPackage,>({
   const insets = useSafeAreaInsets();
   const selectedPlan = getSelectedPlan(plans, selectedPlanId);
   const resolvedSelectedPlanId = selectedPlan?.id;
+  const [measuredFooterHeight, setMeasuredFooterHeight] = useState(0);
+  const footerBottomPadding = Math.max(
+    insets.bottom,
+    FIXED_FOOTER_MIN_BOTTOM_PADDING,
+  );
+  const fallbackFooterHeight =
+    FIXED_FOOTER_TOP_PADDING +
+    FIXED_FOOTER_BUTTON_HEIGHT +
+    footerBottomPadding;
+  const fixedFooterHeight = Math.max(
+    measuredFooterHeight,
+    fallbackFooterHeight,
+  );
 
   return (
     <View style={[styles.root, { backgroundColor: theme.backgroundColor }]}>
@@ -53,7 +72,7 @@ export const Paywall = <TPackage,>({
         contentContainerStyle={[
           styles.content,
           {
-            paddingBottom: Math.max(insets.bottom + 24, 36),
+            paddingBottom: fixedFooterHeight + FIXED_FOOTER_SCROLL_GAP,
             paddingTop: Math.max(insets.top + 36, 56),
           },
         ]}
@@ -94,6 +113,32 @@ export const Paywall = <TPackage,>({
           onSelectPlan={onSelectPlan}
         />
 
+        <LegalLinks
+          copy={copy}
+          theme={theme}
+          onRestore={onRestore}
+          onOpenTerms={onOpenTerms}
+          onOpenPrivacy={onOpenPrivacy}
+        />
+      </ScrollView>
+
+      <View
+        onLayout={(event) => {
+          const nextFooterHeight = Math.ceil(event.nativeEvent.layout.height);
+          setMeasuredFooterHeight((previousFooterHeight) =>
+            previousFooterHeight === nextFooterHeight
+              ? previousFooterHeight
+              : nextFooterHeight,
+          );
+        }}
+        style={[
+          styles.fixedFooter,
+          {
+            backgroundColor: theme.backgroundColor,
+            paddingBottom: footerBottomPadding,
+          },
+        ]}
+      >
         <PurchaseButton
           label={copy.purchaseButton}
           loadingLabel={copy.purchasingButton}
@@ -104,15 +149,7 @@ export const Paywall = <TPackage,>({
             if (selectedPlan) onPurchase(selectedPlan);
           }}
         />
-
-        <LegalLinks
-          copy={copy}
-          theme={theme}
-          onRestore={onRestore}
-          onOpenTerms={onOpenTerms}
-          onOpenPrivacy={onOpenPrivacy}
-        />
-      </ScrollView>
+      </View>
     </View>
   );
 };
@@ -134,6 +171,15 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "700",
     lineHeight: 28,
+  },
+  fixedFooter: {
+    bottom: 0,
+    left: 0,
+    paddingHorizontal: 20,
+    paddingTop: FIXED_FOOTER_TOP_PADDING,
+    position: "absolute",
+    right: 0,
+    zIndex: 5,
   },
   content: {
     gap: 24,
