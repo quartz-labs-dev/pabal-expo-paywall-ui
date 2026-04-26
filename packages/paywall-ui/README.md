@@ -21,7 +21,9 @@ export type {
   PaywallPlan,
   PaywallProps,
   PaywallCopy,
+  PaywallStepMode,
   PaywallTheme,
+  PaywallValueStep,
   PurchasesPackageLike,
 } from "@pabal/expo-paywall-ui";
 ```
@@ -46,6 +48,20 @@ interface PaywallPlan<TPackage = unknown> {
 `rawPackage` is intentionally generic. In a RevenueCat app it will be the original
 RevenueCat package object. The app uses it when purchasing.
 
+```ts
+type PaywallStepMode = "twoStep" | "singleStep";
+
+interface PaywallValueStep {
+  title: string;
+  subtitle?: string;
+  benefits?: PaywallBenefit[];
+  content?: ReactNode;
+  nextButton: string;
+  nextButtonAccessibilityLabel?: string;
+  closeButtonVisibility?: "hidden" | "visible";
+}
+```
+
 ## App Config
 
 Keep each app's paywall copy, colors, media slot, and package mapping in one typed
@@ -57,6 +73,22 @@ import { type PaywallConfig } from "@pabal/expo-paywall-ui";
 const paywallConfig = {
   hero: <HeroImage />,
   heroHeightRatio: 0.2,
+  valueStep: {
+    title: "Unlock the full app",
+    subtitle: "See what Pro adds before choosing a plan.",
+    benefits: [
+      {
+        title: "Get the result faster",
+        description: "Use the premium tools without limits.",
+      },
+      {
+        title: "Keep access across devices",
+        description: "Your subscription follows your store account.",
+      },
+    ],
+    nextButton: "Next",
+    nextButtonAccessibilityLabel: "Continue to plan selection",
+  },
   benefits: [
     {
       title: "Unlock all premium features",
@@ -69,7 +101,7 @@ const paywallConfig = {
   ],
   copy: {
     title: "Upgrade to Pro",
-    purchaseButton: "Continue",
+    purchaseButton: "Start trial",
     restoreButton: "Restore purchases",
     legalSeparator: "/",
     closeButtonAccessibilityLabel: "Close paywall",
@@ -92,6 +124,14 @@ const paywallConfig = {
 
 const { planOptions, ...paywallPresentation } = paywallConfig;
 ```
+
+When `valueStep` is present, `Paywall` defaults to a two-step flow:
+
+1. value step: no close button, no prices, no restore/legal links, compact right-aligned primary-color `nextButton`
+2. purchase step: close button visible, plan selector, restore/legal links, full-width purchase button
+
+Use `stepMode: "singleStep"` to opt out and render the classic one-step paywall
+while keeping the same config object.
 
 Use `benefits: string[]` for the simplest built-in checklist. Use
 `benefits: [{ title, description }]` when each benefit needs supporting copy.

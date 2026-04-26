@@ -8,15 +8,30 @@ import {
   scenarioDescriptions,
   scenarioLabels,
 } from "../fixtures/paywall-plans";
-import type { PlaygroundScenario } from "../types/playground";
+import type {
+  PlaygroundPaywallFlow,
+  PlaygroundScenario,
+} from "../types/playground";
 
 interface HomeScreenProps {
   scenario: PlaygroundScenario;
+  paywallFlow: PlaygroundPaywallFlow;
   onChangeScenario: (scenario: PlaygroundScenario) => void;
+  onChangePaywallFlow: (paywallFlow: PlaygroundPaywallFlow) => void;
   onOpenPaywall: () => void;
 }
 
 const scenarios = Object.keys(scenarioLabels) as PlaygroundScenario[];
+const paywallFlows: PlaygroundPaywallFlow[] = ["twoStep", "singleStep"];
+const paywallFlowLabels: Record<PlaygroundPaywallFlow, string> = {
+  twoStep: "Two-step",
+  singleStep: "One-step",
+};
+const paywallFlowDescriptions: Record<PlaygroundPaywallFlow, string> = {
+  twoStep:
+    "Default value-first flow: value screen first, then plans and purchase.",
+  singleStep: "Classic paywall: show plans and purchase UI immediately.",
+};
 const FIXED_FOOTER_BUTTON_HEIGHT = 54;
 const FIXED_FOOTER_TOP_PADDING = 12;
 const FIXED_FOOTER_MIN_BOTTOM_PADDING = 12;
@@ -24,7 +39,9 @@ const FIXED_FOOTER_SCROLL_GAP = 24;
 
 export const HomeScreen = ({
   scenario,
+  paywallFlow,
   onChangeScenario,
+  onChangePaywallFlow,
   onOpenPaywall,
 }: HomeScreenProps) => {
   const insets = useSafeAreaInsets();
@@ -110,6 +127,38 @@ export const HomeScreen = ({
           </View>
         </View>
 
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Paywall flow</Text>
+          <View style={styles.segmentedList}>
+            {paywallFlows.map((item) => {
+              const isSelected = item === paywallFlow;
+
+              return (
+                <Pressable
+                  key={item}
+                  onPress={() => onChangePaywallFlow(item)}
+                  style={[
+                    styles.flowOption,
+                    isSelected && styles.flowOptionSelected,
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.flowTitle,
+                      isSelected && styles.flowTitleSelected,
+                    ]}
+                  >
+                    {paywallFlowLabels[item]}
+                  </Text>
+                  <Text style={styles.flowDescription}>
+                    {paywallFlowDescriptions[item]}
+                  </Text>
+                </Pressable>
+              );
+            })}
+          </View>
+        </View>
+
         <View style={styles.preview}>
           <Text style={styles.previewTitle}>Selected offering preview</Text>
           {plans.map((plan) => (
@@ -120,6 +169,9 @@ export const HomeScreen = ({
           ))}
           <Text style={styles.previewMeta}>
             Default selected plan: {defaultPlanId ?? "none"}
+          </Text>
+          <Text style={styles.previewMeta}>
+            Paywall flow: {paywallFlowLabels[paywallFlow]}
           </Text>
         </View>
       </ScrollView>
@@ -196,6 +248,10 @@ const styles = StyleSheet.create({
   scenarioList: {
     gap: 12,
   },
+  segmentedList: {
+    flexDirection: "row",
+    gap: 10,
+  },
   scenarioCard: {
     backgroundColor: "#151D25",
     borderColor: "#2B3845",
@@ -245,6 +301,34 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     height: 8,
     width: 8,
+  },
+  flowOption: {
+    backgroundColor: "#151D25",
+    borderColor: "#2B3845",
+    borderRadius: 8,
+    borderWidth: 1,
+    flex: 1,
+    gap: 6,
+    minHeight: 104,
+    padding: 14,
+  },
+  flowOptionSelected: {
+    backgroundColor: "#102A2A",
+    borderColor: "#5AC8B7",
+  },
+  flowTitle: {
+    color: "#F5F7FA",
+    fontSize: 16,
+    fontWeight: "900",
+  },
+  flowTitleSelected: {
+    color: "#5AC8B7",
+  },
+  flowDescription: {
+    color: "#B9C4CF",
+    flexShrink: 1,
+    fontSize: 12,
+    lineHeight: 17,
   },
   preview: {
     backgroundColor: "#101820",

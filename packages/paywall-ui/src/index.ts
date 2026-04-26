@@ -9,6 +9,8 @@ export type {
   PaywallPlan,
   PaywallPlanPeriod,
   PaywallProps,
+  PaywallStepMode,
   PaywallTheme,
+  PaywallValueStep,
   PurchasesPackageLike,
 } from "./types";

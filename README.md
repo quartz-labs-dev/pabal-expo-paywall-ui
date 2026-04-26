@@ -73,6 +73,7 @@ The app owns:
 `@pabal/expo-paywall-ui` owns:
 
 - paywall layout
+- value-first multi-step presentation state
 - safe area spacing
 - hero slot placement
 - monthly/annual plan cards
@@ -187,6 +188,22 @@ import {
 const myAppPaywallConfig = {
   hero: <MyAppPaywallHero />,
   heroHeightRatio: 0.2,
+  valueStep: {
+    title: "Unlock the full app",
+    subtitle: "See the value first, then choose your plan.",
+    benefits: [
+      {
+        title: "Get the result faster",
+        description: "Use every premium tool without limits.",
+      },
+      {
+        title: "Keep access across devices",
+        description: "Your subscription follows your store account.",
+      },
+    ],
+    nextButton: "Next",
+    nextButtonAccessibilityLabel: "Continue to plan selection",
+  },
   benefits: [
     {
       title: "Unlock all premium features",
@@ -204,7 +221,7 @@ const myAppPaywallConfig = {
   copy: {
     title: "Upgrade to Pro",
     subtitle: "Get the full app experience.",
-    purchaseButton: "Continue",
+    purchaseButton: "Start trial",
     purchasingButton: "Processing",
     restoreButton: "Restore purchases",
     legalPrefix: "Subscription renews automatically.",
@@ -234,6 +251,14 @@ const { planOptions, ...paywallPresentation } = myAppPaywallConfig;
 
 const plans = createPaywallPlans(offering.availablePackages, planOptions);
 ```
+
+When `valueStep` is present, the default presentation is two-step. Step 1 hides
+the close button, prices, plan cards, restore, and legal links. Its compact
+right-aligned primary-color `nextButton` advances to step 2. Step 2 shows the
+close button and uses the normal full-width purchase button.
+
+Use `stepMode: "singleStep"` in the config when an app should render the classic
+one-step paywall.
 
 Use `benefits: string[]` for a simple checklist, or
 `benefits: [{ title, description }]` when each item needs a title and supporting
@@ -364,7 +389,7 @@ Last verified:
 
 ```bash
 yarn typecheck  # pass
-yarn test       # pass, 6 tests
+yarn test       # pass, 10 tests
 yarn build      # pass
 ```
 

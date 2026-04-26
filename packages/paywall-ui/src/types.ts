@@ -35,6 +35,18 @@ export interface PaywallBenefitDetail {
 
 export type PaywallBenefit = string | PaywallBenefitDetail;
 
+export type PaywallStepMode = "twoStep" | "singleStep";
+
+export interface PaywallValueStep {
+  title: string;
+  subtitle?: string;
+  benefits?: PaywallBenefit[];
+  content?: ReactNode;
+  nextButton: string;
+  nextButtonAccessibilityLabel?: string;
+  closeButtonVisibility?: "hidden" | "visible";
+}
+
 export interface PaywallTheme {
   backgroundColor: string;
   surfaceColor: string;
@@ -52,6 +64,8 @@ export interface PaywallProps<TPackage = unknown> {
   plans: PaywallPlan<TPackage>[];
   hero: ReactNode;
   heroHeightRatio?: number;
+  stepMode?: PaywallStepMode;
+  valueStep?: PaywallValueStep;
   benefits?: PaywallBenefit[];
   content?: ReactNode;
   purchaseButtonBackground?: ReactNode;
@@ -70,6 +84,8 @@ export interface PaywallProps<TPackage = unknown> {
 export interface PaywallConfig {
   hero: ReactNode;
   heroHeightRatio?: number;
+  stepMode?: PaywallStepMode;
+  valueStep?: PaywallValueStep;
   benefits?: PaywallBenefit[];
   content?: ReactNode;
   purchaseButtonBackground?: ReactNode;

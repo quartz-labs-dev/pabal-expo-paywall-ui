@@ -6,6 +6,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { HomeScreen } from "./src/screens/HomeScreen";
 import { PaywallPlaygroundScreen } from "./src/screens/PaywallPlaygroundScreen";
 import type {
+  PlaygroundPaywallFlow,
   PlaygroundRoute,
   PlaygroundScenario,
 } from "./src/types/playground";
@@ -32,6 +33,8 @@ const pushWebPath = (route: PlaygroundRoute) => {
 export default function App() {
   const [route, setRoute] = useState<PlaygroundRoute>(getInitialRoute);
   const [scenario, setScenario] = useState<PlaygroundScenario>("standard");
+  const [paywallFlow, setPaywallFlow] =
+    useState<PlaygroundPaywallFlow>("twoStep");
 
   useEffect(() => {
     if (Platform.OS !== "web" || typeof window?.addEventListener !== "function") {
@@ -57,12 +60,15 @@ export default function App() {
       {route === "paywall" ? (
         <PaywallPlaygroundScreen
           scenario={scenario}
+          paywallFlow={paywallFlow}
           onClose={() => navigate("home")}
         />
       ) : (
         <HomeScreen
           scenario={scenario}
+          paywallFlow={paywallFlow}
           onChangeScenario={setScenario}
+          onChangePaywallFlow={setPaywallFlow}
           onOpenPaywall={() => navigate("paywall")}
         />
       )}

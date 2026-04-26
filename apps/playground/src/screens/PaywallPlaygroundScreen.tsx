@@ -10,7 +10,10 @@ import {
 } from "@pabal/expo-paywall-ui";
 
 import { getPackagesForScenario } from "../fixtures/paywall-plans";
-import type { PlaygroundScenario } from "../types/playground";
+import type {
+  PlaygroundPaywallFlow,
+  PlaygroundScenario,
+} from "../types/playground";
 
 const Hero = () => {
   return (
@@ -28,6 +31,22 @@ const Hero = () => {
 
 const playgroundPaywallConfig = {
   hero: <Hero />,
+  valueStep: {
+    title: "Get the full Pabal experience",
+    subtitle: "See the value first, then choose a plan on the next step.",
+    benefits: [
+      {
+        title: "Hard paywall feel without the harsh first impression",
+        description: "The first step explains value before showing prices.",
+      },
+      {
+        title: "A separate navigation action",
+        description: "The compact Next button does not look like payment.",
+      },
+    ],
+    nextButton: "Next",
+    nextButtonAccessibilityLabel: "Continue to plan selection",
+  },
   benefits: [
     {
       title: "Unlock all premium features",
@@ -41,7 +60,7 @@ const playgroundPaywallConfig = {
   copy: {
     title: "Upgrade to Pro",
     subtitle: "Unlock every feature.",
-    purchaseButton: "Continue",
+    purchaseButton: "Start trial",
     purchasingButton: "Processing",
     restoreButton: "Restore purchases",
     legalPrefix: "Subscription renews automatically.",
@@ -68,11 +87,13 @@ const { planOptions: playgroundPlanOptions, ...playgroundPaywallProps } =
 
 interface PaywallPlaygroundScreenProps {
   scenario: PlaygroundScenario;
+  paywallFlow: PlaygroundPaywallFlow;
   onClose: () => void;
 }
 
 export const PaywallPlaygroundScreen = ({
   scenario,
+  paywallFlow,
   onClose,
 }: PaywallPlaygroundScreenProps) => {
   const [selectedPlanId, setSelectedPlanId] = useState<string | undefined>();
@@ -108,6 +129,7 @@ export const PaywallPlaygroundScreen = ({
       <Paywall
         {...playgroundPaywallProps}
         plans={plans}
+        stepMode={paywallFlow}
         selectedPlanId={selectedPlanId}
         isPurchasing={isPurchasing}
         onSelectPlan={setSelectedPlanId}

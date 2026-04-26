@@ -6,3 +6,5 @@ export type PlaygroundScenario =
   | "longPrice";
 
 export type PlaygroundRoute = "home" | "paywall";
+
+export type PlaygroundPaywallFlow = "twoStep" | "singleStep";

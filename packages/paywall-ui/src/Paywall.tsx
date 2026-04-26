@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Pressable,
   ScrollView,
@@ -14,7 +14,14 @@ import { LegalLinks } from "./LegalLinks";
 import { PlanSelector } from "./PlanSelector";
 import { PurchaseButton } from "./PurchaseButton";
 import { mergePaywallTheme } from "./theme";
-import type { PaywallBenefit, PaywallPlan, PaywallProps } from "./types";
+import type {
+  PaywallBenefit,
+  PaywallPlan,
+  PaywallProps,
+  PaywallTheme,
+} from "./types";
+
+type PaywallStep = "value" | "purchase";
 
 const getSelectedPlan = <TPackage,>(
   plans: PaywallPlan<TPackage>[],
@@ -38,6 +45,8 @@ export const Paywall = <TPackage,>({
   plans,
   hero,
   heroHeightRatio = DEFAULT_HERO_HEIGHT_RATIO,
+  stepMode = "twoStep",
+  valueStep,
   benefits = [],
   content,
   purchaseButtonBackground,
@@ -55,6 +64,10 @@ export const Paywall = <TPackage,>({
   const theme = mergePaywallTheme(themeOverride);
   const insets = useSafeAreaInsets();
   const { height: windowHeight } = useWindowDimensions();
+  const shouldUseValueStep = stepMode === "twoStep" && Boolean(valueStep);
+  const [currentStep, setCurrentStep] = useState<PaywallStep>(() =>
+    shouldUseValueStep ? "value" : "purchase",
+  );
   const selectedPlan = getSelectedPlan(plans, selectedPlanId);
   const resolvedSelectedPlanId = selectedPlan?.id;
   const heroHeight = Math.round(windowHeight * heroHeightRatio);
@@ -69,42 +82,55 @@ export const Paywall = <TPackage,>({
     measuredFooterHeight,
     fallbackFooterHeight
   );
+  const isValueStep = shouldUseValueStep && currentStep === "value";
+  const title = isValueStep ? valueStep?.title : copy.title;
+  const subtitle = isValueStep ? valueStep?.subtitle : copy.subtitle;
+  const bodyBenefits = isValueStep ? valueStep?.benefits ?? [] : benefits;
+  const bodyContent = isValueStep ? valueStep?.content : content;
+  const shouldShowCloseButton =
+    !isValueStep || valueStep?.closeButtonVisibility === "visible";
+
+  useEffect(() => {
+    setCurrentStep(shouldUseValueStep ? "value" : "purchase");
+  }, [shouldUseValueStep]);
 
   return (
     <View style={[styles.root, { backgroundColor: theme.backgroundColor }]}>
-      <Pressable
-        accessibilityLabel={
-          copy.closeButtonAccessibilityLabel ?? "Close paywall"
-        }
-        accessibilityRole="button"
-        onPress={onClose}
-        style={[styles.closeButton, { top: Math.max(insets.top, 10) }]}
-      >
-        <View
-          style={[
-            styles.closeIcon,
-            {
-              backgroundColor: theme.backgroundColor,
-              borderColor: theme.secondaryTextColor,
-            },
-          ]}
+      {shouldShowCloseButton && (
+        <Pressable
+          accessibilityLabel={
+            copy.closeButtonAccessibilityLabel ?? "Close paywall"
+          }
+          accessibilityRole="button"
+          onPress={onClose}
+          style={[styles.closeButton, { top: Math.max(insets.top, 10) }]}
         >
           <View
             style={[
-              styles.closeIconLine,
-              styles.closeIconLineFirst,
-              { backgroundColor: theme.primaryTextColor },
+              styles.closeIcon,
+              {
+                backgroundColor: theme.backgroundColor,
+                borderColor: theme.secondaryTextColor,
+              },
             ]}
-          />
-          <View
-            style={[
-              styles.closeIconLine,
-              styles.closeIconLineSecond,
-              { backgroundColor: theme.primaryTextColor },
-            ]}
-          />
-        </View>
-      </Pressable>
+          >
+            <View
+              style={[
+                styles.closeIconLine,
+                styles.closeIconLineFirst,
+                { backgroundColor: theme.primaryTextColor },
+              ]}
+            />
+            <View
+              style={[
+                styles.closeIconLine,
+                styles.closeIconLineSecond,
+                { backgroundColor: theme.primaryTextColor },
+              ]}
+            />
+          </View>
+        </Pressable>
+      )}
 
       <ScrollView
         contentContainerStyle={[
@@ -120,29 +146,31 @@ export const Paywall = <TPackage,>({
         <View style={styles.body}>
           <View style={styles.header}>
             <Text style={[styles.title, { color: theme.primaryTextColor }]}>
-              {copy.title}
+              {title}
             </Text>
-            {copy.subtitle && (
+            {subtitle && (
               <Text
                 style={[styles.subtitle, { color: theme.secondaryTextColor }]}
               >
-                {copy.subtitle}
+                {subtitle}
               </Text>
             )}
           </View>
 
-          <PlanSelector
-            plans={plans}
-            selectedPlanId={resolvedSelectedPlanId}
-            theme={theme}
-            onSelectPlan={onSelectPlan}
-          />
+          {!isValueStep && (
+            <PlanSelector
+              plans={plans}
+              selectedPlanId={resolvedSelectedPlanId}
+              theme={theme}
+              onSelectPlan={onSelectPlan}
+            />
+          )}
 
-          {content ? (
-            <View style={styles.contentSlot}>{content}</View>
+          {bodyContent ? (
+            <View style={styles.contentSlot}>{bodyContent}</View>
           ) : (
             <View style={styles.benefits}>
-              {benefits.map((benefit, index) => (
+              {bodyBenefits.map((benefit, index) => (
                 <View
                   key={`${getBenefitKey(benefit)}-${index}`}
                   style={styles.benefitRow}
@@ -175,13 +203,15 @@ export const Paywall = <TPackage,>({
             </View>
           )}
 
-          <LegalLinks
-            copy={copy}
-            theme={theme}
-            onRestore={onRestore}
-            onOpenTerms={onOpenTerms}
-            onOpenPrivacy={onOpenPrivacy}
-          />
+          {!isValueStep && (
+            <LegalLinks
+              copy={copy}
+              theme={theme}
+              onRestore={onRestore}
+              onOpenTerms={onOpenTerms}
+              onOpenPrivacy={onOpenPrivacy}
+            />
+          )}
         </View>
       </ScrollView>
 
@@ -202,19 +232,63 @@ export const Paywall = <TPackage,>({
           },
         ]}
       >
-        <PurchaseButton
-          label={copy.purchaseButton}
-          loadingLabel={copy.purchasingButton}
-          background={purchaseButtonBackground}
-          isLoading={isPurchasing}
-          isDisabled={!selectedPlan}
-          theme={theme}
-          onPress={() => {
-            if (selectedPlan) onPurchase(selectedPlan);
-          }}
-        />
+        {isValueStep && valueStep ? (
+          <View style={styles.nextButtonRow}>
+            <StepNextButton
+              accessibilityLabel={valueStep.nextButtonAccessibilityLabel}
+              label={valueStep.nextButton}
+              theme={theme}
+              onPress={() => setCurrentStep("purchase")}
+            />
+          </View>
+        ) : (
+          <PurchaseButton
+            label={copy.purchaseButton}
+            loadingLabel={copy.purchasingButton}
+            background={purchaseButtonBackground}
+            isLoading={isPurchasing}
+            isDisabled={!selectedPlan}
+            theme={theme}
+            onPress={() => {
+              if (selectedPlan) onPurchase(selectedPlan);
+            }}
+          />
+        )}
       </View>
     </View>
+  );
+};
+
+interface StepNextButtonProps {
+  label: string;
+  accessibilityLabel?: string;
+  theme: PaywallTheme;
+  onPress: () => void;
+}
+
+const StepNextButton = ({
+  label,
+  accessibilityLabel,
+  theme,
+  onPress,
+}: StepNextButtonProps) => {
+  return (
+    <Pressable
+      accessibilityLabel={accessibilityLabel}
+      accessibilityRole="button"
+      onPress={onPress}
+      style={({ pressed }) => [
+        styles.nextButton,
+        {
+          backgroundColor: theme.accentColor,
+          opacity: pressed ? 0.82 : 1,
+        },
+      ]}
+    >
+      <Text style={[styles.nextButtonLabel, { color: theme.accentTextColor }]}>
+        {label}
+      </Text>
+    </Pressable>
   );
 };
 
@@ -259,6 +333,24 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 0,
     zIndex: 5,
+  },
+  nextButtonRow: {
+    alignItems: "flex-end",
+  },
+  nextButton: {
+    alignItems: "center",
+    borderRadius: 8,
+    justifyContent: "center",
+    minHeight: 44,
+    minWidth: 104,
+    paddingHorizontal: 18,
+    paddingVertical: 11,
+  },
+  nextButtonLabel: {
+    fontSize: 15,
+    fontWeight: "800",
+    lineHeight: 20,
+    textAlign: "center",
   },
   content: {
     gap: 22,
