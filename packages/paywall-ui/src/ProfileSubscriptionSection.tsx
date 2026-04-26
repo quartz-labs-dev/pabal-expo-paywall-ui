@@ -63,6 +63,8 @@ export const ProfileSubscriptionSection = ({
     showPromoCodeButton &&
     Boolean(onRedeemPromoCode) &&
     Boolean(copy.redeemPromoCodeButton);
+  const shouldShowBothSecondaryActions =
+    shouldShowRestorePurchases && shouldShowPromoCode;
   const cardAction = isSubscribed
     ? onManageSubscription
     : shouldShowUpgrade
@@ -267,33 +269,50 @@ export const ProfileSubscriptionSection = ({
             {(shouldShowRestorePurchases || shouldShowPromoCode) && (
               <View style={styles.secondaryActions}>
                 {shouldShowPromoCode && (
-                  <ProfileActionButton
-                    disabled={isRedeemingPromoCode}
-                    label={
-                      isRedeemingPromoCode
-                        ? copy.redeemingPromoCodeButton ??
-                          copy.redeemPromoCodeButton ??
-                          ""
-                        : copy.redeemPromoCodeButton ?? ""
-                    }
-                    theme={theme}
-                    variant="text"
-                    onPress={onRedeemPromoCode}
-                  />
+                  <View
+                    style={[
+                      styles.secondaryActionItem,
+                      shouldShowBothSecondaryActions &&
+                        styles.secondaryActionStart,
+                    ]}
+                  >
+                    <ProfileActionButton
+                      disabled={isRedeemingPromoCode}
+                      label={
+                        isRedeemingPromoCode
+                          ? copy.redeemingPromoCodeButton ??
+                            copy.redeemPromoCodeButton ??
+                            ""
+                          : copy.redeemPromoCodeButton ?? ""
+                      }
+                      theme={theme}
+                      variant="text"
+                      onPress={onRedeemPromoCode}
+                    />
+                  </View>
                 )}
                 {shouldShowRestorePurchases && (
-                  <ProfileActionButton
-                    disabled={isRestoringPurchases}
-                    label={
-                      isRestoringPurchases
-                        ? copy.restoringPurchasesButton ??
-                          copy.restorePurchasesButton
-                        : copy.restorePurchasesButton
-                    }
-                    theme={theme}
-                    variant="text"
-                    onPress={onRestorePurchases}
-                  />
+                  <View
+                    style={[
+                      styles.secondaryActionItem,
+                      shouldShowBothSecondaryActions
+                        ? styles.secondaryActionEnd
+                        : styles.secondaryActionCenter,
+                    ]}
+                  >
+                    <ProfileActionButton
+                      disabled={isRestoringPurchases}
+                      label={
+                        isRestoringPurchases
+                          ? copy.restoringPurchasesButton ??
+                            copy.restorePurchasesButton
+                          : copy.restorePurchasesButton
+                      }
+                      theme={theme}
+                      variant="text"
+                      onPress={onRestorePurchases}
+                    />
+                  </View>
                 )}
               </View>
             )}
@@ -490,10 +509,27 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   secondaryActions: {
+    alignItems: "center",
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "center",
+    justifyContent: "space-between",
     gap: 14,
+    width: "100%",
+  },
+  secondaryActionItem: {
+    alignItems: "center",
+    flexBasis: 0,
+    flex: 1,
+    minWidth: 0,
+  },
+  secondaryActionStart: {
+    alignItems: "center",
+  },
+  secondaryActionCenter: {
+    alignItems: "center",
+  },
+  secondaryActionEnd: {
+    alignItems: "center",
   },
   actionButton: {
     alignItems: "center",

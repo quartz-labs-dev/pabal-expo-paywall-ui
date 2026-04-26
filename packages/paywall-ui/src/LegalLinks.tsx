@@ -21,31 +21,55 @@ export const LegalLinks = ({
 }: LegalLinksProps) => {
   return (
     <View style={styles.container}>
-      <Pressable accessibilityRole="button" onPress={onRestore}>
-        <Text style={[styles.restoreLink, { color: theme.mutedTextColor }]}>
-          {copy.restoreButton}
-        </Text>
-      </Pressable>
-
-      <View style={styles.legalRow}>
-        {shouldShowLegalPrefix && copy.legalPrefix && (
-          <Text style={[styles.legalText, { color: theme.mutedTextColor }]}>
-            {copy.legalPrefix}
-          </Text>
-        )}
-        <Pressable accessibilityRole="link" onPress={onOpenTerms}>
-          <Text style={[styles.link, { color: theme.secondaryTextColor }]}>
-            {copy.termsText}
-          </Text>
-        </Pressable>
+      {shouldShowLegalPrefix && copy.legalPrefix && (
         <Text style={[styles.legalText, { color: theme.mutedTextColor }]}>
-          {copy.legalSeparator ?? "/"}
+          {copy.legalPrefix}
         </Text>
-        <Pressable accessibilityRole="link" onPress={onOpenPrivacy}>
-          <Text style={[styles.link, { color: theme.secondaryTextColor }]}>
-            {copy.privacyText}
+      )}
+
+      <View style={styles.actionRow}>
+        <View style={styles.actionCell}>
+          <Pressable
+            accessibilityRole="button"
+            hitSlop={8}
+            onPress={onRestore}
+            style={styles.actionItem}
+          >
+            <Text style={[styles.actionLabel, { color: theme.secondaryTextColor }]}>
+              {copy.restoreButton}
+            </Text>
+          </Pressable>
+          <Text style={[styles.separator, { color: theme.mutedTextColor }]}>
+            |
           </Text>
-        </Pressable>
+        </View>
+        <View style={styles.actionCell}>
+          <Pressable
+            accessibilityRole="link"
+            hitSlop={8}
+            onPress={onOpenPrivacy}
+            style={styles.actionItem}
+          >
+            <Text style={[styles.actionLabel, { color: theme.secondaryTextColor }]}>
+              {copy.privacyText}
+            </Text>
+          </Pressable>
+          <Text style={[styles.separator, { color: theme.mutedTextColor }]}>
+            |
+          </Text>
+        </View>
+        <View style={styles.actionCell}>
+          <Pressable
+            accessibilityRole="link"
+            hitSlop={8}
+            onPress={onOpenTerms}
+            style={styles.actionItem}
+          >
+            <Text style={[styles.actionLabel, { color: theme.secondaryTextColor }]}>
+              {copy.termsText}
+            </Text>
+          </Pressable>
+        </View>
       </View>
     </View>
   );
@@ -54,30 +78,51 @@ export const LegalLinks = ({
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
-    gap: 10,
+    gap: 8,
+    width: "100%",
   },
-  legalRow: {
+  actionCell: {
+    flex: 1,
+    flexBasis: 0,
+    minWidth: 0,
+    position: "relative",
+  },
+  actionItem: {
     alignItems: "center",
+    justifyContent: "center",
+    minHeight: 36,
+    paddingHorizontal: 4,
+    width: "100%",
+  },
+  actionLabel: {
+    flexShrink: 1,
+    fontSize: 13,
+    fontWeight: "700",
+    lineHeight: 18,
+    textAlign: "center",
+    textDecorationLine: "underline",
+  },
+  actionRow: {
+    alignItems: "center",
+    alignSelf: "stretch",
     flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 7,
     justifyContent: "center",
   },
   legalText: {
-    fontSize: 11,
-    lineHeight: 16,
+    flexShrink: 1,
+    fontSize: 12,
+    fontWeight: "600",
+    lineHeight: 17,
     textAlign: "center",
   },
-  link: {
-    fontSize: 11,
+  separator: {
+    fontSize: 13,
     fontWeight: "700",
-    lineHeight: 16,
-    textDecorationLine: "underline",
-  },
-  restoreLink: {
-    fontSize: 11,
-    fontWeight: "700",
-    lineHeight: 16,
-    textDecorationLine: "underline",
+    lineHeight: 18,
+    position: "absolute",
+    right: -5,
+    textAlign: "center",
+    top: 9,
+    width: 10,
   },
 });

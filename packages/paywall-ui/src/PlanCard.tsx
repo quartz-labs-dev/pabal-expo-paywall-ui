@@ -221,8 +221,8 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     flexShrink: 0,
     overflow: "hidden",
-    paddingHorizontal: 9,
-    paddingVertical: 4,
+    paddingHorizontal: 12,
+    paddingVertical: 5,
     position: "relative",
   },
   badgeShine: {
