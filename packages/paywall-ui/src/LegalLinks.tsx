@@ -37,7 +37,7 @@ export const LegalLinks = ({
           </Text>
         </Pressable>
         <Text style={[styles.legalText, { color: theme.mutedTextColor }]}>
-          /
+          {copy.legalSeparator ?? "/"}
         </Text>
         <Pressable accessibilityRole="link" onPress={onOpenPrivacy}>
           <Text style={[styles.link, { color: theme.secondaryTextColor }]}>

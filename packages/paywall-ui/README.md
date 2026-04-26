@@ -14,6 +14,7 @@ consuming app must provide `SafeAreaProvider` at the app root.
 export { Paywall } from "@pabal/expo-paywall-ui";
 export { createPaywallPlans, getDefaultSelectedPlanId } from "@pabal/expo-paywall-ui";
 export type {
+  CreatePaywallPlansOptions,
   PaywallBenefit,
   PaywallBenefitDetail,
   PaywallConfig,
@@ -70,11 +71,15 @@ const paywallConfig = {
     title: "Upgrade to Pro",
     purchaseButton: "Continue",
     restoreButton: "Restore purchases",
+    legalSeparator: "/",
+    closeButtonAccessibilityLabel: "Close paywall",
     termsText: "Terms",
     privacyText: "Privacy",
   },
   planOptions: {
     annualBadgeText: "Best value",
+    formatDiscountText: (discountPercentage) => `Save ${discountPercentage}%`,
+    formatMonthlyPriceText: (monthlyPriceText) => `${monthlyPriceText} / mo`,
     lifetimeBadgeText: "One-time",
     recommendedPeriod: "annual",
   },
@@ -117,7 +122,17 @@ By default, `createPaywallPlans()` recognizes `$rc_monthly`, `$rc_annual`, and
 `$rc_lifetime`. When both monthly and annual packages are present, the helper compares
 `monthly.product.price * 12` with `annual.product.price` and adds annual
 discount copy such as `Save 33%`. This discount copy is used as the annual badge
-instead of `annualBadgeText`.
+instead of `annualBadgeText`. Use `formatDiscountText` and
+`formatMonthlyPriceText` to localize generated plan copy.
+
+```ts
+const plans = createPaywallPlans(offering.availablePackages, {
+  annualTitle: "연간",
+  monthlyTitle: "월간",
+  formatDiscountText: (discountPercentage) => `${discountPercentage}% 할인`,
+  formatMonthlyPriceText: (monthlyPriceText) => `월 ${monthlyPriceText}`,
+});
+```
 
 ## Render
 

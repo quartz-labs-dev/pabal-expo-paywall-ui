@@ -14,6 +14,14 @@ const DEFAULT_DISPLAY_ORDER: PaywallPlanPeriod[] = [
   "monthly",
 ];
 
+const defaultFormatDiscountText = (discountPercentage: number): string => {
+  return `Save ${discountPercentage}%`;
+};
+
+const defaultFormatMonthlyPriceText = (monthlyPriceText: string): string => {
+  return `${monthlyPriceText} / mo`;
+};
+
 const getPeriod = (
   pack: PurchasesPackageLike,
   options: Required<
@@ -46,6 +54,7 @@ const formatMonthlyPrice = (annualPackage: PurchasesPackageLike): string => {
 const formatDiscountText = (
   annualPackage: PurchasesPackageLike,
   monthlyPackage: PurchasesPackageLike,
+  formatText: (discountPercentage: number) => string,
 ): string | undefined => {
   const annualPrice = annualPackage.product.price;
   const annualizedMonthlyPrice = monthlyPackage.product.price * 12;
@@ -57,7 +66,7 @@ const formatDiscountText = (
   );
   if (discountPercentage <= 0) return undefined;
 
-  return `Save ${discountPercentage}%`;
+  return formatText(discountPercentage);
 };
 
 const orderPlans = <TPackage extends PurchasesPackageLike>(
@@ -87,6 +96,10 @@ export const createPaywallPlans = <TPackage extends PurchasesPackageLike>(
     options.lifetimePackageIds ?? DEFAULT_LIFETIME_PACKAGE_IDS;
   const recommendedPeriod = options.recommendedPeriod ?? "annual";
   const displayOrder = options.displayOrder ?? DEFAULT_DISPLAY_ORDER;
+  const formatMonthlyPriceText =
+    options.formatMonthlyPriceText ?? defaultFormatMonthlyPriceText;
+  const formatDiscountTextOption =
+    options.formatDiscountText ?? defaultFormatDiscountText;
   const monthlyPackage = packages.find((pack) => {
     return (
       getPeriod(pack, {
@@ -109,8 +122,11 @@ export const createPaywallPlans = <TPackage extends PurchasesPackageLike>(
     const isLifetime = period === "lifetime";
     const discountText =
       isAnnual && monthlyPackage
-        ? formatDiscountText(pack, monthlyPackage)
+        ? formatDiscountText(pack, monthlyPackage, formatDiscountTextOption)
         : undefined;
+    const monthlyPriceText = isAnnual
+      ? formatMonthlyPriceText(formatMonthlyPrice(pack))
+      : undefined;
 
     acc.push({
       id: pack.identifier,
@@ -123,7 +139,7 @@ export const createPaywallPlans = <TPackage extends PurchasesPackageLike>(
           : options.monthlyTitle) ??
         (isAnnual ? "Annual" : isLifetime ? "Lifetime" : "Monthly"),
       priceText: pack.product.priceString,
-      monthlyPriceText: isAnnual ? formatMonthlyPrice(pack) : undefined,
+      monthlyPriceText,
       discountText,
       badgeText: isAnnual
         ? discountText ?? options.annualBadgeText

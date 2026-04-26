@@ -24,6 +24,8 @@ export interface PaywallCopy {
   termsText: string;
   privacyText: string;
   legalPrefix?: string;
+  legalSeparator?: string;
+  closeButtonAccessibilityLabel?: string;
 }
 
 export interface PaywallBenefitDetail {
@@ -98,6 +100,8 @@ export interface CreatePaywallPlansOptions {
   lifetimeDescription?: string;
   annualBadgeText?: string;
   lifetimeBadgeText?: string;
+  formatDiscountText?: (discountPercentage: number) => string;
+  formatMonthlyPriceText?: (monthlyPriceText: string) => string;
   recommendedPeriod?: PaywallPlanPeriod;
   displayOrder?: PaywallPlanPeriod[];
 }

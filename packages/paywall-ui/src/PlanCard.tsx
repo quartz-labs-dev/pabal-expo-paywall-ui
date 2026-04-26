@@ -75,7 +75,7 @@ export const PlanCard = <TPackage,>({
           <Text
             style={[styles.monthlyPrice, { color: theme.secondaryTextColor }]}
           >
-            {plan.monthlyPriceText} / mo
+            {plan.monthlyPriceText}
           </Text>
         )}
       </View>

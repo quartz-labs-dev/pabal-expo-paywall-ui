@@ -208,12 +208,16 @@ const myAppPaywallConfig = {
     purchasingButton: "Processing",
     restoreButton: "Restore purchases",
     legalPrefix: "Subscription renews automatically.",
+    legalSeparator: "/",
+    closeButtonAccessibilityLabel: "Close paywall",
     termsText: "Terms",
     privacyText: "Privacy",
   },
   planOptions: {
     annualBadgeText: "Best value",
     annualTitle: "Yearly",
+    formatDiscountText: (discountPercentage) => `Save ${discountPercentage}%`,
+    formatMonthlyPriceText: (monthlyPriceText) => `${monthlyPriceText} / mo`,
     monthlyTitle: "Monthly",
     recommendedPeriod: "annual",
   },
@@ -238,7 +242,8 @@ copy. Use `content` only when an app needs full custom React Native layout. When
 
 When both monthly and annual packages are present, `createPaywallPlans()` uses
 RevenueCat product prices to show annual discount copy such as `Save 33%` in the
-annual badge.
+annual badge. Pass `formatDiscountText` and `formatMonthlyPriceText` in
+`planOptions` when generated plan copy needs localization.
 
 Then pass only plans and callbacks into the UI.
 

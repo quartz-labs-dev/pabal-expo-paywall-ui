@@ -18,7 +18,7 @@ import type { PaywallBenefit, PaywallPlan, PaywallProps } from "./types";
 
 const getSelectedPlan = <TPackage,>(
   plans: PaywallPlan<TPackage>[],
-  selectedPlanId?: string,
+  selectedPlanId?: string
 ): PaywallPlan<TPackage> | undefined => {
   const fallbackPlanId = selectedPlanId ?? getDefaultSelectedPlanId(plans);
   return plans.find((plan) => plan.id === fallbackPlanId);
@@ -60,21 +60,21 @@ export const Paywall = <TPackage,>({
   const [measuredFooterHeight, setMeasuredFooterHeight] = useState(0);
   const footerBottomPadding = Math.max(
     insets.bottom,
-    FIXED_FOOTER_MIN_BOTTOM_PADDING,
+    FIXED_FOOTER_MIN_BOTTOM_PADDING
   );
   const fallbackFooterHeight =
-    FIXED_FOOTER_TOP_PADDING +
-    FIXED_FOOTER_BUTTON_HEIGHT +
-    footerBottomPadding;
+    FIXED_FOOTER_TOP_PADDING + FIXED_FOOTER_BUTTON_HEIGHT + footerBottomPadding;
   const fixedFooterHeight = Math.max(
     measuredFooterHeight,
-    fallbackFooterHeight,
+    fallbackFooterHeight
   );
 
   return (
     <View style={[styles.root, { backgroundColor: theme.backgroundColor }]}>
       <Pressable
-        accessibilityLabel="Close paywall"
+        accessibilityLabel={
+          copy.closeButtonAccessibilityLabel ?? "Close paywall"
+        }
         accessibilityRole="button"
         onPress={onClose}
         style={[styles.closeButton, { top: Math.max(insets.top, 10) }]}
@@ -190,7 +190,7 @@ export const Paywall = <TPackage,>({
           setMeasuredFooterHeight((previousFooterHeight) =>
             previousFooterHeight === nextFooterHeight
               ? previousFooterHeight
-              : nextFooterHeight,
+              : nextFooterHeight
           );
         }}
         style={[

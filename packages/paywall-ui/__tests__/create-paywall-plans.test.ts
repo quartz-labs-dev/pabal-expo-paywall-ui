@@ -114,7 +114,7 @@ test("formats high-value annual prices without cents", () => {
     makePackage("$rc_annual", 49900, "KRW 49,900"),
   ]);
 
-  assert.equal(plans[0]?.monthlyPriceText, "KRW 4158");
+  assert.equal(plans[0]?.monthlyPriceText, "KRW 4158 / mo");
 });
 
 test("adds annual discount text compared to monthly pricing", () => {
@@ -135,4 +135,23 @@ test("adds annual discount text compared to monthly pricing", () => {
     plans.find((plan) => plan.period === "monthly")?.discountText,
     undefined,
   );
+});
+
+test("supports localized annual pricing copy", () => {
+  const plans = createPaywallPlans(
+    [
+      makePackage("$rc_monthly", 10000, "KRW 10,000"),
+      makePackage("$rc_annual", 80000, "KRW 80,000"),
+    ],
+    {
+      formatDiscountText: (discountPercentage) => `${discountPercentage}% 할인`,
+      formatMonthlyPriceText: (monthlyPriceText) => `월 ${monthlyPriceText}`,
+    },
+  );
+
+  const annualPlan = plans.find((plan) => plan.period === "annual");
+
+  assert.equal(annualPlan?.discountText, "33% 할인");
+  assert.equal(annualPlan?.badgeText, "33% 할인");
+  assert.equal(annualPlan?.monthlyPriceText, "월 KRW 6667");
 });
