@@ -84,28 +84,15 @@ The app owns:
 
 ## Install
 
-This is currently a local workspace package.
+Install the published package in a consuming app:
 
 ```bash
-yarn install
+yarn add @pabal/expo-paywall-ui
 ```
 
 Consuming apps must already provide `react-native-safe-area-context`. The current
 Pabal Expo apps use the 5.6.x line, so the shared package declares it as a peer
 dependency.
-
-When testing inside a real app before publishing, use a file dependency first:
-
-```json
-{
-  "dependencies": {
-    "@pabal/expo-paywall-ui": "file:../pabal-expo-paywall-ui/packages/paywall-ui"
-  }
-}
-```
-
-After the API stabilizes, publish it to npm or GitHub Packages and pin an explicit
-version in each app.
 
 ## Commands
 

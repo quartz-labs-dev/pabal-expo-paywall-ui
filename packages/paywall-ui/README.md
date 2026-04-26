@@ -8,6 +8,12 @@ RevenueCat directly.
 It uses `react-native-safe-area-context` for notch and home-indicator spacing. The
 consuming app must provide `SafeAreaProvider` at the app root.
 
+## Install
+
+```bash
+yarn add @pabal/expo-paywall-ui
+```
+
 ## Public API
 
 ```ts
