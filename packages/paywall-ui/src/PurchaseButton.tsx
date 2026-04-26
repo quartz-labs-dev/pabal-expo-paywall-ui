@@ -1,6 +1,7 @@
-import type { ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import {
   ActivityIndicator,
+  Animated,
   Pressable,
   StyleSheet,
   Text,
@@ -28,6 +29,37 @@ export const PurchaseButton = ({
   theme,
   onPress,
 }: PurchaseButtonProps) => {
+  const loadingOpacity = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    if (!isLoading) {
+      loadingOpacity.stopAnimation();
+      loadingOpacity.setValue(1);
+      return;
+    }
+
+    const animation = Animated.loop(
+      Animated.sequence([
+        Animated.timing(loadingOpacity, {
+          duration: 520,
+          toValue: 0.35,
+          useNativeDriver: true,
+        }),
+        Animated.timing(loadingOpacity, {
+          duration: 520,
+          toValue: 1,
+          useNativeDriver: true,
+        }),
+      ])
+    );
+
+    animation.start();
+
+    return () => {
+      animation.stop();
+    };
+  }, [isLoading, loadingOpacity]);
+
   return (
     <Pressable
       accessibilityRole="button"
@@ -46,13 +78,21 @@ export const PurchaseButton = ({
           {background}
         </View>
       )}
-      {isLoading ? (
-        <ActivityIndicator color={theme.accentTextColor} />
-      ) : (
+      <Animated.View
+        style={[
+          styles.content,
+          isLoading && {
+            opacity: loadingOpacity,
+          },
+        ]}
+      >
+        {isLoading && (
+          <ActivityIndicator color={theme.accentTextColor} size="small" />
+        )}
         <Text style={[styles.label, { color: theme.accentTextColor }]}>
-          {loadingLabel ?? label}
+          {isLoading ? loadingLabel ?? label : label}
         </Text>
-      )}
+      </Animated.View>
     </Pressable>
   );
 };
@@ -71,7 +111,14 @@ const styles = StyleSheet.create({
   background: {
     ...StyleSheet.absoluteFillObject,
   },
+  content: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 8,
+    justifyContent: "center",
+  },
   label: {
+    flexShrink: 1,
     fontSize: 16,
     fontWeight: "900",
     textAlign: "center",
