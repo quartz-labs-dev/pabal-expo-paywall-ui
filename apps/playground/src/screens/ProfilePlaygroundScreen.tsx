@@ -10,6 +10,7 @@ import { useMemo, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { playgroundBenefits } from "../fixtures/playground-benefits";
 import type { PlaygroundLocale, PlaygroundScenario } from "../types/playground";
 
 const wait = (duration: number) => {
@@ -19,23 +20,7 @@ const wait = (duration: number) => {
 };
 
 const profileSubscriptionBaseConfig = {
-  benefits: [
-    {
-      title: "Home Screen Widget",
-      description: "Keep your status visible from the home screen.",
-      icon: <BenefitIcon label="W" />,
-    },
-    {
-      title: "Custom Location Settings",
-      description: "Save the places that matter most to you.",
-      icon: <BenefitIcon label="L" />,
-    },
-    {
-      title: "Custom Color Palette Settings",
-      description: "Tune the interface to match your preferred look.",
-      icon: <BenefitIcon label="C" />,
-    },
-  ],
+  benefits: playgroundBenefits,
 } satisfies Omit<ProfileSubscriptionConfig, "copy" | "headerIcon">;
 
 const profilePeriods: Record<PlaygroundScenario, PaywallPlanPeriod> = {
@@ -162,18 +147,6 @@ export const ProfilePlaygroundScreen = ({
     </View>
   );
 };
-
-interface BenefitIconProps {
-  label: string;
-}
-
-function BenefitIcon({ label }: BenefitIconProps) {
-  return (
-    <View style={styles.benefitIcon}>
-      <Text style={styles.benefitIconText}>{label}</Text>
-    </View>
-  );
-}
 
 interface GoldenHorizonIconProps {
   isSubscribed: boolean;
@@ -333,19 +306,5 @@ const styles = StyleSheet.create({
     fontSize: 8,
     fontWeight: "900",
     lineHeight: 10,
-  },
-  benefitIcon: {
-    alignItems: "center",
-    backgroundColor: "rgba(90, 200, 183, 0.16)",
-    borderRadius: 8,
-    height: 24,
-    justifyContent: "center",
-    width: 24,
-  },
-  benefitIconText: {
-    color: "#5AC8B7",
-    fontSize: 11,
-    fontWeight: "700",
-    lineHeight: 14,
   },
 });

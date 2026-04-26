@@ -37,7 +37,6 @@ export interface PaywallCopy {
   termsText: string;
   privacyText: string;
   legalPrefix?: string;
-  legalSeparator?: string;
   closeButtonAccessibilityLabel?: string;
   nextButton?: string;
   nextButtonAccessibilityLabel?: string;
@@ -65,7 +64,6 @@ export type PaywallAnimationMode = "default" | "none";
 export interface PaywallValueStep {
   title: string;
   subtitle?: string;
-  benefits?: PaywallBenefit[];
   content?: ReactNode;
   nextButton?: string;
   nextButtonAccessibilityLabel?: string;
@@ -203,6 +201,5 @@ export interface CreatePaywallPlansOptions {
     priceText: string,
     period: Exclude<PaywallPlanPeriod, "lifetime">
   ) => string;
-  recommendedPeriod?: PaywallPlanPeriod;
   displayOrder?: PaywallPlanPeriod[];
 }

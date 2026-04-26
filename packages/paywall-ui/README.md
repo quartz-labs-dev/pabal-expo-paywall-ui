@@ -2,11 +2,11 @@
 
 RevenueCat-agnostic React Native paywall UI.
 
-This package renders a paywall from normalized data. It does not configure or call
-RevenueCat directly.
+The consuming app owns RevenueCat configuration, offering fetch, purchase,
+restore, analytics, navigation, and legal links. This package receives normalized
+plan data and app-owned callbacks only.
 
-It uses `react-native-safe-area-context` for notch and home-indicator spacing. The
-consuming app must provide `SafeAreaProvider` at the app root.
+It does not import `react-native-purchases` or `react-native-purchases-ui`.
 
 ## Install
 
@@ -14,138 +14,57 @@ consuming app must provide `SafeAreaProvider` at the app root.
 yarn add pabal-expo-paywall-ui
 ```
 
-## Public API
+If the consuming app uses `swpm`:
 
-```ts
-export { Paywall } from "pabal-expo-paywall-ui";
-export { ProfileSubscriptionSection } from "pabal-expo-paywall-ui";
-export { createPaywallPlans, getDefaultSelectedPlanId } from "pabal-expo-paywall-ui";
-export type {
-  CreatePaywallPlansOptions,
-  PaywallAnimationMode,
-  PaywallBenefit,
-  PaywallBenefitDetail,
-  PaywallConfig,
-  PaywallPlan,
-  PaywallProps,
-  PaywallCopy,
-  PaywallFreeTrialConfig,
-  PaywallStepMode,
-  PaywallTheme,
-  PaywallTrialDuration,
-  PaywallTrialUnit,
-  PaywallValueStep,
-  ProfileSubscriptionConfig,
-  ProfileSubscriptionCopy,
-  ProfileSubscriptionSectionProps,
-  PurchasesPackageLike,
-} from "pabal-expo-paywall-ui";
+```bash
+swpm add pabal-expo-paywall-ui
 ```
 
-## Types
-
-```ts
-interface PaywallPlan<TPackage = unknown> {
-  id: string;
-  period: "monthly" | "annual" | "lifetime";
-  title: string;
-  priceText: string;
-  pricePerPeriodText?: string;
-  monthlyPriceText?: string;
-  discountText?: string;
-  badgeText?: string;
-  description?: string;
-  isRecommended?: boolean;
-  rawPackage: TPackage;
-}
-```
-
-`rawPackage` is intentionally generic. In a RevenueCat app it will be the original
-RevenueCat package object. The app uses it when purchasing.
-
-```ts
-type PaywallStepMode = "twoStep" | "singleStep";
-type PaywallAnimationMode = "default" | "none";
-
-interface PaywallTrialDuration {
-  value: number;
-  unit: "day" | "week";
-}
-
-interface PaywallFreeTrialConfig {
-  duration?: PaywallTrialDuration;
-}
-
-interface PaywallValueStep {
-  title: string;
-  subtitle?: string;
-  benefits?: PaywallBenefit[];
-  content?: ReactNode;
-  nextButton?: string;
-  nextButtonAccessibilityLabel?: string;
-  closeButtonVisibility?: "hidden" | "visible";
-}
-```
+Wrap the app with `SafeAreaProvider`. `react-native-safe-area-context` is a peer
+dependency.
 
 ## App Config
 
-Keep each app's paywall copy, colors, media slot, and package mapping in one typed
-config object.
+Keep app-owned media, benefits, copy, plan mapping, and theme in one typed config.
+`valueStep` controls the first screen copy only. The paywall uses the top-level
+`benefits` list for both the value step and purchase step.
 
 ```tsx
-import { type PaywallConfig } from "pabal-expo-paywall-ui";
+import {
+  getDefaultPaywallCopy,
+  getDefaultPaywallPlanOptions,
+  type PaywallConfig,
+} from "pabal-expo-paywall-ui";
+
+const paywallBenefits = [
+  {
+    title: "Use every premium tool",
+    description: "Remove limits and unlock the full workflow.",
+    icon: <PremiumIcon />,
+  },
+  {
+    title: "Store-managed subscription",
+    description: "Restore access on devices signed into the same store account.",
+    icon: <StoreIcon />,
+  },
+];
 
 const paywallConfig = {
   hero: <HeroImage />,
-  heroHeightRatio: 0.2,
-  animationMode: "default",
+  stepMode: "twoStep",
+  freeTrial: { duration: { value: 7, unit: "day" } },
   valueStep: {
     title: "Unlock the full app",
     subtitle: "See what Pro adds before choosing a plan.",
-    benefits: [
-      {
-        title: "Get the result faster",
-        description: "Use the premium tools without limits.",
-        icon: <SpeedIcon />,
-      },
-      {
-        title: "Keep access across devices",
-        description: "Your subscription follows your store account.",
-        icon: <SyncIcon />,
-      },
-    ],
   },
-  benefits: [
-    {
-      title: "Unlock all premium features",
-      description: "Get every premium tool in this app.",
-      icon: <PremiumIcon />,
-    },
-    {
-      title: "Cancel anytime",
-      description: "Manage or cancel the subscription from the store.",
-      icon: <StoreIcon />,
-    },
-  ],
-  copy: {
+  benefits: paywallBenefits,
+  copy: getDefaultPaywallCopy(undefined, {
     title: "Upgrade to Pro",
-    purchaseButton: "Start trial",
-    continueButton: "Continue",
-    restoreButton: "Restore purchases",
-    trialIncludedDescription:
-      "Cancel anytime in your subscription settings. No charge if cancelled before trial ends.",
-    legalSeparator: "/",
-    closeButtonAccessibilityLabel: "Close paywall",
-    termsText: "Terms",
-    privacyText: "Privacy",
-  },
+    subtitle: "Get the full app experience.",
+  }),
   planOptions: {
-    formatDiscountText: (discountPercentage) => `Save ${discountPercentage}%`,
-    formatMonthlyPriceText: (monthlyPriceText) => `${monthlyPriceText} / mo`,
-    formatPricePerPeriodText: (priceText, period) =>
-      period === "annual" ? `${priceText} / year` : `${priceText} / month`,
-    lifetimeBadgeText: "One-time payment",
-    recommendedPeriod: "annual",
+    ...getDefaultPaywallPlanOptions(),
+    displayOrder: ["annual", "monthly"],
   },
   theme: {
     accentColor: "#5AC8B7",
@@ -157,56 +76,23 @@ const paywallConfig = {
 const { planOptions, ...paywallPresentation } = paywallConfig;
 ```
 
-When `valueStep` is present, `Paywall` defaults to a two-step flow:
+Use `stepMode: "singleStep"` to skip the value step. Use `content` only when the
+app needs a custom React Native body instead of the built-in benefit list.
 
-1. value step: no close button, no prices, no restore/legal links, compact right-aligned primary-color `nextButton`
-2. purchase step: close button visible, plan selector, restore/legal links, full-width purchase button
-
-The value step is app-configurable through `hero`, `valueStep.title`,
-`valueStep.subtitle`, `valueStep.benefits`, `valueStep.content`, and
-`valueStep.closeButtonVisibility`. `nextButton` and
-`nextButtonAccessibilityLabel` are fixed UI copy from `copy` by default and can
-still be overridden on `valueStep` when an app needs a custom label.
-
-Use `stepMode: "singleStep"` to opt out and render the classic one-step paywall
-while keeping the same config object.
-
-Free trials are enabled by default with a 7-day duration. When enabled, the
-purchase CTA keeps `copy.purchaseButton`, the footer shows copy such as
-`7 days free, then $29.99 / year`, and the restore/legal area shows a short
-trial notice before restore purchases.
-
-Use `freeTrial={false}` to hide trial copy and switch the purchase CTA to
-`copy.continueButton ?? "Continue"`. Use a config object to inject the duration:
+## Convert Offerings
 
 ```tsx
-<Paywall
-  {...props}
-  freeTrial={{ duration: { value: 2, unit: "week" } }}
-/>
-```
+import {
+  createPaywallPlans,
+  getDefaultSelectedPlanId,
+} from "pabal-expo-paywall-ui";
 
-Default localized copy handles English singular/plural durations such as
-`1 day`, `7 days`, `1 week`, and `2 weeks`. Apps can override
-`formatTrialDuration`, `formatTrialPriceDisclosure`, and
-`formatTrialIncludedTitle` on `copy` for locale-specific grammar.
-
-Animations are enabled by default. Use `animationMode: "none"` to render the
-initial paywall and step changes immediately.
-
-Use `benefits: string[]` for the simplest built-in checklist. Use
-`benefits: [{ title, description, icon }]` when each benefit needs supporting
-copy or an app-owned icon.
-Use `content` for custom React Native content. If both are passed, `content`
-replaces the built-in benefits list.
-
-## Adapter
-
-```ts
 const plans = createPaywallPlans(offering.availablePackages, planOptions);
+const defaultSelectedPlanId = getDefaultSelectedPlanId(plans);
 ```
 
-The helper only assumes this structural shape:
+`createPaywallPlans()` accepts RevenueCat-like packages and preserves the
+original object as `plan.rawPackage`.
 
 ```ts
 interface PurchasesPackageLike {
@@ -216,86 +102,81 @@ interface PurchasesPackageLike {
     priceString: string;
     pricePerPeriodString?: string | null;
     price_per_period?: string | null;
+    pricePerMonthString?: string | null;
+    pricePerYearString?: string | null;
     description?: string;
   };
 }
 ```
 
-This keeps the package independent from `react-native-purchases` versions.
-By default, `createPaywallPlans()` recognizes `$rc_monthly`, `$rc_annual`, and
-`$rc_lifetime`. When both monthly and annual packages are present, the helper compares
-`monthly.product.price * 12` with `annual.product.price` and adds annual
-discount copy such as `Save 33%`. This discount copy is used as the annual badge
-instead of `annualBadgeText`. Use `formatDiscountText` and
-`formatMonthlyPriceText` to localize generated plan copy. Use
-`formatPricePerPeriodText` or product-level `pricePerPeriodString` /
-`price_per_period` when trial disclosures need exact store copy such as
-`$29.99 / year`.
-
-```ts
-const plans = createPaywallPlans(offering.availablePackages, {
-  annualTitle: "연간",
-  monthlyTitle: "월간",
-  formatDiscountText: (discountPercentage) => `${discountPercentage}% 할인`,
-  formatMonthlyPriceText: (monthlyPriceText) => `월 ${monthlyPriceText}`,
-  formatPricePerPeriodText: (priceText, period) =>
-    period === "annual" ? `${priceText} / 년` : `${priceText} / 월`,
-});
-```
-
 ## Render
 
 ```tsx
+import { useState } from "react";
+import Purchases from "react-native-purchases";
+import {
+  Paywall,
+  getDefaultSelectedPlanId,
+  type PaywallPlan,
+} from "pabal-expo-paywall-ui";
+
+const [selectedPlanId, setSelectedPlanId] = useState(defaultSelectedPlanId);
+
+if (plans.length === 0) return <LoadingOrErrorState />;
+
 <Paywall
   {...paywallPresentation}
   plans={plans}
-  selectedPlanId={selectedPlanId}
+  selectedPlanId={selectedPlanId ?? getDefaultSelectedPlanId(plans)}
   onSelectPlan={setSelectedPlanId}
-  onPurchase={(plan) => purchasePackage(plan.rawPackage)}
-  onRestore={restorePurchases}
-  onClose={goBack}
+  onPurchase={async (plan: PaywallPlan) => {
+    await Purchases.purchasePackage(plan.rawPackage);
+  }}
+  onRestore={async () => {
+    await Purchases.restorePurchases();
+  }}
+  onClose={() => router.back()}
   onOpenTerms={openTerms}
   onOpenPrivacy={openPrivacy}
-/>
+/>;
 ```
 
-`heroHeightRatio` is optional and defaults to `0.2`, so the media slot uses 20%
-of the current device height. Increase or decrease it per app when the paywall
-needs a taller or shorter media section.
+Purchase success, cancellation, failure handling, analytics, toast, widget sync,
+entitlement refresh, and navigation belong inside the app's `onPurchase`.
 
-## Profile Subscription Section
+## Options
 
-Use `ProfileSubscriptionSection` inside an app-owned profile or settings screen
-when the app needs to show Pro status, benefits, subscription management, restore,
-and optional promo code entry. The component stays RevenueCat-agnostic; the app
-owns every callback and message after each action.
+| Need | Use |
+| --- | --- |
+| Two-step or one-step flow | `stepMode` |
+| Disable motion | `animationMode: "none"` |
+| Trial duration or no trial | `freeTrial` |
+| Top media | `hero`, `heroHeightRatio` |
+| Benefit rows | `benefits` |
+| Custom body layout | `content` |
+| RevenueCat package mapping | `planOptions.*PackageIds` |
+| Plan card order | `planOptions.displayOrder` |
+| Theme colors | `theme` |
+| Custom purchase button fill | `purchaseButtonBackground` |
+
+## Profile Section
+
+Add this only when the app needs to show subscription status in profile/settings.
 
 ```tsx
-import { type ProfileSubscriptionConfig } from "pabal-expo-paywall-ui";
+import {
+  ProfileSubscriptionSection,
+  type ProfileSubscriptionConfig,
+} from "pabal-expo-paywall-ui";
 
 const profileSubscriptionConfig = {
-  benefits: [
-    {
-      title: "Unlock all premium features",
-      description: "Get every premium tool in this app.",
-      icon: <PremiumIcon />,
-    },
-    {
-      title: "Cancel anytime",
-      description: "Manage the subscription from the store.",
-      icon: <StoreIcon />,
-    },
-  ],
+  benefits: paywallBenefits,
   copy: {
     subscribedTitle: "Pro is active",
-    subscribedSubtitle: "Your premium benefits are available.",
     notSubscribedTitle: "Upgrade to Pro",
     notSubscribedSubtitle: "Unlock the full app experience.",
-    benefitsTitle: "Pro benefits",
-    upgradeButton: "Upgrade to Pro",
     manageSubscriptionButton: "Manage subscription",
     restorePurchasesButton: "Restore purchases",
-    redeemPromoCodeButton: "Enter promo code",
   },
   headerIcon: <AppIcon />,
 } satisfies ProfileSubscriptionConfig;
@@ -304,94 +185,23 @@ const profileSubscriptionConfig = {
   {...profileSubscriptionConfig}
   isSubscribed={isPro}
   planLabel={isPro ? "Annual Pro" : undefined}
-  renewalLabel={isPro ? "Renews from your store account" : undefined}
-  showPromoCodeButton={!isPro && canRedeemPromoCode}
+  renewalLabel={isPro ? "Managed by your store account" : undefined}
   onUpgrade={() => router.push("/paywall")}
   onManageSubscription={openStoreSubscriptionManagement}
   onRestorePurchases={restorePurchases}
-  onRedeemPromoCode={redeemPromoCode}
-/>
+/>;
 ```
 
-Pass `showPromoCodeButton={true}` only when the consuming app can present a promo
-or offer-code flow. If `onRedeemPromoCode` is omitted, the promo button is hidden.
-When `isSubscribed` is true, upgrade, restore, and promo-code actions are hidden
-because the user already has Pro; subscription management remains visible.
+When `isSubscribed` is true, upgrade and restore actions are hidden. Subscription
+management remains visible.
 
-The header icon and benefit body can be app-owned React Native content:
-
-```tsx
-<ProfileSubscriptionSection
-  {...profileProps}
-  headerIcon={<AppIcon />}
-  content={<MyBenefitRows />}
-/>
-```
-
-When `content` is provided, it replaces the built-in benefit list. Both
-`Paywall` and `ProfileSubscriptionSection` accept benefit items as
-`{ title, description, icon }`; `icon` is optional React Native content.
-
-## Styling
-
-Pass a partial theme when an app needs different colors.
-
-```tsx
-<Paywall
-  theme={{
-    accentColor: "#5AC8B7",
-    backgroundColor: "#05080C",
-  }}
-  {...props}
-/>
-```
-
-Pass `purchaseButtonBackground` when an app needs a custom button fill such as a
-gradient. The shared package only receives React Native content and does not
-depend on a specific gradient library.
-
-```tsx
-import { LinearGradient } from "expo-linear-gradient";
-
-<Paywall
-  purchaseButtonBackground={
-    <LinearGradient
-      colors={["#5AC8B7", "#3E8BFF"]}
-      end={{ x: 1, y: 1 }}
-      start={{ x: 0, y: 0 }}
-      style={{ flex: 1 }}
-    />
-  }
-  {...props}
-/>
-```
-
-Do not add app-specific styling systems here. Keep the shared package on React
-Native primitives.
-
-## Safe Area
-
-The paywall applies safe area insets to:
-
-- close button top position
-- scroll content bottom padding
-
-Keep `react-native-safe-area-context` as a peer dependency so consuming apps own the
-native version.
-
-## Edge Cases The Caller Should Handle
-
-- `plans.length === 0`: show an app-level loading or error state before rendering.
-- purchase cancellation: app decides whether to show nothing or a message.
-- restore with no active entitlement: app decides the toast/message.
-- already-pro user: app should avoid showing the paywall or close it immediately.
-- post-purchase sync: app updates widget/storage/analytics after purchase.
-
-## Test
+## Validate
 
 ```bash
-yarn workspace pabal-expo-paywall-ui test
+yarn typecheck
+yarn test
+yarn build
 ```
 
-The current tests cover plan filtering, default selection, custom identifiers,
-raw package preservation, and high-value price formatting.
+Real RevenueCat sandbox purchases belong in consuming apps. Do not add the
+RevenueCat SDK to this package or the playground.

@@ -13,6 +13,7 @@ const DEFAULT_DISPLAY_ORDER: PaywallPlanPeriod[] = [
   "lifetime",
   "monthly",
 ];
+const DEFAULT_RECOMMENDED_PERIOD: PaywallPlanPeriod = "annual";
 
 const defaultFormatDiscountText = (discountPercentage: number): string => {
   return `Save ${discountPercentage}%`;
@@ -123,7 +124,6 @@ export const createPaywallPlans = <TPackage extends PurchasesPackageLike>(
     options.annualPackageIds ?? DEFAULT_ANNUAL_PACKAGE_IDS;
   const lifetimePackageIds =
     options.lifetimePackageIds ?? DEFAULT_LIFETIME_PACKAGE_IDS;
-  const recommendedPeriod = options.recommendedPeriod ?? "annual";
   const displayOrder = options.displayOrder ?? DEFAULT_DISPLAY_ORDER;
   const formatMonthlyPriceText =
     options.formatMonthlyPriceText ?? defaultFormatMonthlyPriceText;
@@ -189,7 +189,7 @@ export const createPaywallPlans = <TPackage extends PurchasesPackageLike>(
           ? options.lifetimeDescription
           : options.monthlyDescription) ??
         pack.product.description,
-      isRecommended: period === recommendedPeriod,
+      isRecommended: period === DEFAULT_RECOMMENDED_PERIOD,
       rawPackage: pack,
     });
 

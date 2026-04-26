@@ -13,6 +13,7 @@ import {
 } from "pabal-expo-paywall-ui";
 
 import { getPackagesForScenario } from "../fixtures/paywall-plans";
+import { playgroundBenefits } from "../fixtures/playground-benefits";
 import type {
   PlaygroundPaywallAnimation,
   PlaygroundFreeTrialMode,
@@ -40,35 +41,14 @@ const playgroundPaywallConfig = {
   valueStep: {
     title: "Get the full Pabal experience",
     subtitle: "See the value first, then choose a plan on the next step.",
-    benefits: [
-      {
-        title: "Hard paywall feel without the harsh first impression",
-        description: "The first step explains value before showing prices.",
-      },
-      {
-        title: "A separate navigation action",
-        description: "The compact Next button does not look like payment.",
-      },
-    ],
   },
-  benefits: [
-    {
-      title: "Unlock all premium features",
-      description: "Use title and description rows without custom layout code.",
-    },
-    {
-      title: "Keep access across devices",
-      description: "App config can still switch to content for full control.",
-    },
-  ],
+  benefits: playgroundBenefits,
   theme: {
     accentColor: "#5AC8B7",
     backgroundColor: "#05080C",
     primaryTextColor: "#F5F7FA",
   },
-} satisfies Omit<PaywallConfig, "copy" | "planOptions" | "valueStep"> & {
-  valueStep: Omit<NonNullable<PaywallConfig["valueStep"]>, "nextButton">;
-};
+} satisfies Omit<PaywallConfig, "copy" | "planOptions">;
 
 interface PaywallPlaygroundScreenProps {
   scenario: PlaygroundScenario;
@@ -101,10 +81,7 @@ export const PaywallPlaygroundScreen = ({
   const plans = useMemo(() => {
     return createPaywallPlans(
       getPackagesForScenario(scenario),
-      {
-        ...getDefaultPaywallPlanOptions(selectedLocale),
-        recommendedPeriod: "annual",
-      },
+      getDefaultPaywallPlanOptions(selectedLocale),
     );
   }, [scenario, selectedLocale]);
 

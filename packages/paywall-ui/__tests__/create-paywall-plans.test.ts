@@ -103,7 +103,7 @@ test("uses yearly as the default annual plan title", () => {
   assert.equal(plans[0]?.title, "Yearly");
 });
 
-test("can recommend lifetime packages", () => {
+test("supports custom lifetime plan copy", () => {
   const plans = createPaywallPlans(
     [
       makePackage("$rc_monthly", 10, "$10.00"),
@@ -112,7 +112,6 @@ test("can recommend lifetime packages", () => {
     {
       lifetimeBadgeText: "One-time payment",
       lifetimeTitle: "Lifetime access",
-      recommendedPeriod: "lifetime",
     },
   );
 
@@ -120,7 +119,7 @@ test("can recommend lifetime packages", () => {
 
   assert.equal(lifetimePlan?.badgeText, "One-time payment");
   assert.equal(lifetimePlan?.title, "Lifetime access");
-  assert.equal(lifetimePlan?.isRecommended, true);
+  assert.equal(lifetimePlan?.isRecommended, false);
   assert.equal(getDefaultSelectedPlanId(plans), "$rc_lifetime");
 });
 
