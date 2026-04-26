@@ -13,6 +13,11 @@
 - This workspace currently uses Yarn classic workspaces.
 - Default validation commands are `yarn typecheck`, `yarn test`, and `yarn build`.
 
+## Documentation
+
+- When installing or wiring `pabal-expo-paywall-ui` into a consuming app for the first time, read `packages/paywall-ui/README.md` and follow its installation guide.
+- Keep the root `README.md` focused on repository structure and workspace commands.
+
 ## Architecture Rules
 
 - `packages/paywall-ui` must stay RevenueCat-agnostic.
