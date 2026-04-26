@@ -1,0 +1,39 @@
+import { createPaywallLocaleText } from "./types";
+
+const zhHans = createPaywallLocaleText({
+  valueStep: {
+    nextButton: "下一步",
+    nextButtonAccessibilityLabel: "继续选择方案",
+  },
+  text: {
+    annualPlanTitle: "年度",
+    benefitsTitle: "Pro 权益",
+    enterPromoCode: "输入优惠码",
+    freeBadge: "免费",
+    lifetimePlanTitle: "终身",
+    manageSubscription: "管理订阅",
+    monthlyPlanTitle: "月度",
+    oneTime: "一次性",
+    oneTimePayment: "一次性付款",
+    opening: "正在打开...",
+    openingPaywall: "正在打开付费页...",
+    privacyText: "隐私",
+    purchaseButton: "开始试用",
+    purchasingButton: "处理中",
+    restoreButton: "恢复购买",
+    restoring: "正在恢复...",
+    subscriptionRenewsAutomatically: "订阅会自动续订。",
+    subscribedSubtitle: "感谢你的支持！",
+    termsText: "条款",
+    annualPlanPrefix: "年度",
+    lifetimePlanPrefix: "终身",
+    monthlyPlanPrefix: "月度",
+    monthlyPricePrefix: "每月 ",
+    renewsOnSuffix: " 续订",
+    savePrefix: "节省 ",
+    upgradeSuffix: "升级",
+    upgradePrefix: "",
+  },
+});
+
+export default zhHans;

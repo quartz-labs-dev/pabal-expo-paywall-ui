@@ -1,0 +1,35 @@
+import { createPaywallLocaleText } from "./types";
+
+const ms = createPaywallLocaleText({
+  valueStep: {
+    nextButton: "Seterusnya",
+    nextButtonAccessibilityLabel: "Teruskan ke pilihan pelan",
+  },
+  text: {
+    annualPlanTitle: "Tahunan",
+    benefitsTitle: "Manfaat Pro anda",
+    enterPromoCode: "Masukkan kod promo",
+    freeBadge: "PERCUMA",
+    lifetimePlanTitle: "Seumur hidup",
+    manageSubscription: "Urus langganan",
+    monthlyPlanTitle: "Bulanan",
+    oneTime: "Pembelian sekali",
+    oneTimePayment: "Pembelian sekali",
+    opening: "Membuka...",
+    openingPaywall: "Membuka halaman bayaran...",
+    privacyText: "Privasi",
+    purchaseButton: "Mulakan percubaan",
+    purchasingButton: "Memproses",
+    restoreButton: "Pulihkan pembelian",
+    restoring: "Memulihkan...",
+    subscriptionRenewsAutomatically: "Langganan diperbaharui secara automatik.",
+    subscribedSubtitle: "Terima kasih atas sokongan anda!",
+    termsText: "Terma",
+    monthlyPricePrefix: "sebulan ",
+    renewsOnPrefix: "Diperbaharui pada ",
+    savePrefix: "Jimat ",
+    upgradePrefix: "Naik taraf kepada ",
+  },
+});
+
+export default ms;

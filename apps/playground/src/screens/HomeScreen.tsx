@@ -1,24 +1,28 @@
-import { createPaywallPlans, getDefaultSelectedPlanId } from "pabal-expo-paywall-ui";
 import { useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { LocaleSelector } from "../components/LocaleSelector";
 import {
-  getPackagesForScenario,
-  scenarioDescriptions,
-  scenarioLabels,
+  packageScenarioDescriptions,
+  packageScenarioLabels,
 } from "../fixtures/paywall-plans";
 import type {
+  PlaygroundPackageScenario,
   PlaygroundPaywallAnimation,
   PlaygroundPaywallFlow,
-  PlaygroundScenario,
+  PlaygroundLocale,
 } from "../types/playground";
 
 interface HomeScreenProps {
-  scenario: PlaygroundScenario;
+  scenario: PlaygroundPackageScenario;
+  isLongPriceEnabled: boolean;
+  selectedLocale: PlaygroundLocale;
   paywallFlow: PlaygroundPaywallFlow;
   paywallAnimation: PlaygroundPaywallAnimation;
-  onChangeScenario: (scenario: PlaygroundScenario) => void;
+  onChangeScenario: (scenario: PlaygroundPackageScenario) => void;
+  onChangeLocale: (locale: PlaygroundLocale) => void;
+  onToggleLongPrice: (isEnabled: boolean) => void;
   onChangePaywallFlow: (paywallFlow: PlaygroundPaywallFlow) => void;
   onChangePaywallAnimation: (
     paywallAnimation: PlaygroundPaywallAnimation,
@@ -27,7 +31,9 @@ interface HomeScreenProps {
   onOpenProfile: () => void;
 }
 
-const scenarios = Object.keys(scenarioLabels) as PlaygroundScenario[];
+const scenarios = Object.keys(
+  packageScenarioLabels,
+) as PlaygroundPackageScenario[];
 const paywallFlows: PlaygroundPaywallFlow[] = ["twoStep", "singleStep"];
 const paywallFlowLabels: Record<PlaygroundPaywallFlow, string> = {
   twoStep: "Two-step",
@@ -55,9 +61,13 @@ const FIXED_FOOTER_SCROLL_GAP = 24;
 
 export const HomeScreen = ({
   scenario,
+  isLongPriceEnabled,
+  selectedLocale,
   paywallFlow,
   paywallAnimation,
   onChangeScenario,
+  onChangeLocale,
+  onToggleLongPrice,
   onChangePaywallFlow,
   onChangePaywallAnimation,
   onOpenPaywall,
@@ -65,15 +75,6 @@ export const HomeScreen = ({
 }: HomeScreenProps) => {
   const insets = useSafeAreaInsets();
   const [measuredFooterHeight, setMeasuredFooterHeight] = useState(0);
-  const plans = createPaywallPlans(getPackagesForScenario(scenario), {
-    annualBadgeText: "Best value",
-    annualTitle: "Yearly",
-    lifetimeBadgeText: "One-time",
-    lifetimeTitle: "Lifetime",
-    monthlyTitle: "Monthly",
-    recommendedPeriod: "annual",
-  });
-  const defaultPlanId = getDefaultSelectedPlanId(plans);
   const footerBottomPadding = Math.max(
     insets.bottom,
     FIXED_FOOTER_MIN_BOTTOM_PADDING,
@@ -92,20 +93,33 @@ export const HomeScreen = ({
       <ScrollView
         contentContainerStyle={[
           styles.content,
-          { paddingBottom: fixedFooterHeight + FIXED_FOOTER_SCROLL_GAP },
+          {
+            paddingBottom: fixedFooterHeight + FIXED_FOOTER_SCROLL_GAP,
+            paddingTop: Math.max(insets.top, 12) + 16,
+          },
         ]}
       >
         <View style={styles.header}>
           <Text style={styles.eyebrow}>pabal-expo-paywall-ui playground</Text>
-          <Text style={styles.title}>Choose test packages</Text>
+          <Text style={styles.title}>Paywall lab</Text>
           <Text style={styles.subtitle}>
-            Select an offering state on the home screen, then open `/paywall`
-            to inspect only the shared paywall UI.
+            Pick packages, locale, flow, then inspect the shared screens.
           </Text>
         </View>
 
+        <LocaleSelector
+          selectedLocale={selectedLocale}
+          onChangeLocale={onChangeLocale}
+        />
+
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Package scenario</Text>
+          <View style={styles.sectionHeaderRow}>
+            <Text style={styles.sectionTitle}>Package scenario</Text>
+            <LongPriceToggle
+              isEnabled={isLongPriceEnabled}
+              onPress={() => onToggleLongPrice(!isLongPriceEnabled)}
+            />
+          </View>
           <View style={styles.scenarioList}>
             {scenarios.map((item) => {
               const isSelected = item === scenario;
@@ -126,7 +140,7 @@ export const HomeScreen = ({
                         isSelected && styles.scenarioTitleSelected,
                       ]}
                     >
-                      {scenarioLabels[item]}
+                      {packageScenarioLabels[item]}
                     </Text>
                     <View
                       style={[
@@ -138,7 +152,7 @@ export const HomeScreen = ({
                     </View>
                   </View>
                   <Text style={styles.scenarioDescription}>
-                    {scenarioDescriptions[item]}
+                    {packageScenarioDescriptions[item]}
                   </Text>
                 </Pressable>
               );
@@ -209,25 +223,6 @@ export const HomeScreen = ({
             })}
           </View>
         </View>
-
-        <View style={styles.preview}>
-          <Text style={styles.previewTitle}>Selected offering preview</Text>
-          {plans.map((plan) => (
-            <View key={plan.id} style={styles.previewRow}>
-              <Text style={styles.previewPlan}>{plan.title}</Text>
-              <Text style={styles.previewPrice}>{plan.priceText}</Text>
-            </View>
-          ))}
-          <Text style={styles.previewMeta}>
-            Default selected plan: {defaultPlanId ?? "none"}
-          </Text>
-          <Text style={styles.previewMeta}>
-            Paywall flow: {paywallFlowLabels[paywallFlow]}
-          </Text>
-          <Text style={styles.previewMeta}>
-            Animation: {paywallAnimationLabels[paywallAnimation]}
-          </Text>
-        </View>
       </ScrollView>
 
       <View
@@ -254,15 +249,42 @@ export const HomeScreen = ({
   );
 };
 
+interface LongPriceToggleProps {
+  isEnabled: boolean;
+  onPress: () => void;
+}
+
+const LongPriceToggle = ({ isEnabled, onPress }: LongPriceToggleProps) => {
+  return (
+    <Pressable
+      accessibilityRole="switch"
+      accessibilityState={{ checked: isEnabled }}
+      onPress={onPress}
+      style={[styles.longPriceToggle, isEnabled && styles.longPriceToggleOn]}
+    >
+      <Text
+        style={[
+          styles.longPriceToggleText,
+          isEnabled && styles.longPriceToggleTextOn,
+        ]}
+      >
+        Long price
+      </Text>
+      <View style={[styles.switchTrack, isEnabled && styles.switchTrackOn]}>
+        <View style={[styles.switchThumb, isEnabled && styles.switchThumbOn]} />
+      </View>
+    </Pressable>
+  );
+};
+
 const styles = StyleSheet.create({
   root: {
     backgroundColor: "#05080C",
     flex: 1,
   },
   content: {
-    gap: 28,
+    gap: 18,
     paddingHorizontal: 20,
-    paddingTop: 72,
   },
   fixedFooter: {
     backgroundColor: "#05080C",
@@ -279,7 +301,7 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   header: {
-    gap: 10,
+    gap: 6,
   },
   eyebrow: {
     color: "#5AC8B7",
@@ -290,26 +312,81 @@ const styles = StyleSheet.create({
   },
   title: {
     color: "#F5F7FA",
-    fontSize: 34,
+    fontSize: 28,
     fontWeight: "900",
     letterSpacing: 0,
-    lineHeight: 40,
+    lineHeight: 34,
   },
   subtitle: {
     color: "#B9C4CF",
-    fontSize: 15,
-    lineHeight: 22,
+    fontSize: 13,
+    lineHeight: 19,
   },
   section: {
+    gap: 10,
+  },
+  sectionHeaderRow: {
+    alignItems: "center",
+    flexDirection: "row",
     gap: 12,
+    justifyContent: "space-between",
   },
   sectionTitle: {
     color: "#F5F7FA",
-    fontSize: 17,
+    fontSize: 15,
     fontWeight: "900",
   },
+  longPriceToggle: {
+    alignItems: "center",
+    backgroundColor: "#151D25",
+    borderColor: "#2B3845",
+    borderRadius: 8,
+    borderWidth: 1,
+    flexDirection: "row",
+    gap: 8,
+    minHeight: 32,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+  },
+  longPriceToggleOn: {
+    backgroundColor: "#102A2A",
+    borderColor: "#5AC8B7",
+  },
+  longPriceToggleText: {
+    color: "#B9C4CF",
+    fontSize: 12,
+    fontWeight: "900",
+    lineHeight: 15,
+  },
+  longPriceToggleTextOn: {
+    color: "#5AC8B7",
+  },
+  switchTrack: {
+    alignItems: "flex-start",
+    backgroundColor: "#2B3845",
+    borderRadius: 999,
+    height: 16,
+    justifyContent: "center",
+    paddingHorizontal: 2,
+    width: 30,
+  },
+  switchTrackOn: {
+    alignItems: "flex-end",
+    backgroundColor: "#5AC8B7",
+  },
+  switchThumb: {
+    backgroundColor: "#7F8B96",
+    borderRadius: 6,
+    height: 12,
+    width: 12,
+  },
+  switchThumbOn: {
+    backgroundColor: "#071312",
+  },
   scenarioList: {
-    gap: 12,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10,
   },
   segmentedList: {
     flexDirection: "row",
@@ -320,8 +397,11 @@ const styles = StyleSheet.create({
     borderColor: "#2B3845",
     borderRadius: 8,
     borderWidth: 1,
+    flexBasis: "47%",
+    flexGrow: 1,
     gap: 8,
-    padding: 16,
+    minHeight: 102,
+    padding: 12,
   },
   scenarioCardSelected: {
     backgroundColor: "#102A2A",
@@ -336,7 +416,7 @@ const styles = StyleSheet.create({
   scenarioTitle: {
     color: "#F5F7FA",
     flexShrink: 1,
-    fontSize: 17,
+    fontSize: 14,
     fontWeight: "900",
   },
   scenarioTitleSelected: {
@@ -344,8 +424,8 @@ const styles = StyleSheet.create({
   },
   scenarioDescription: {
     color: "#B9C4CF",
-    fontSize: 13,
-    lineHeight: 19,
+    fontSize: 12,
+    lineHeight: 17,
   },
   radio: {
     alignItems: "center",
@@ -372,8 +452,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     flex: 1,
     gap: 6,
-    minHeight: 104,
-    padding: 14,
+    minHeight: 86,
+    padding: 12,
   },
   flowOptionSelected: {
     backgroundColor: "#102A2A",
@@ -381,7 +461,7 @@ const styles = StyleSheet.create({
   },
   flowTitle: {
     color: "#F5F7FA",
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "900",
   },
   flowTitleSelected: {
@@ -392,40 +472,6 @@ const styles = StyleSheet.create({
     flexShrink: 1,
     fontSize: 12,
     lineHeight: 17,
-  },
-  preview: {
-    backgroundColor: "#101820",
-    borderColor: "#2B3845",
-    borderRadius: 8,
-    borderWidth: 1,
-    gap: 10,
-    padding: 16,
-  },
-  previewTitle: {
-    color: "#F5F7FA",
-    fontSize: 15,
-    fontWeight: "900",
-  },
-  previewRow: {
-    alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    gap: 12,
-  },
-  previewPlan: {
-    color: "#B9C4CF",
-    fontSize: 14,
-    fontWeight: "700",
-  },
-  previewPrice: {
-    color: "#F5F7FA",
-    fontSize: 14,
-    fontWeight: "900",
-  },
-  previewMeta: {
-    color: "#7F8B96",
-    fontSize: 12,
-    lineHeight: 18,
   },
   cta: {
     alignItems: "center",

@@ -3,6 +3,8 @@ import { Alert, ImageBackground, StyleSheet, View } from "react-native";
 import {
   Paywall,
   createPaywallPlans,
+  getDefaultPaywallCopy,
+  getDefaultPaywallPlanOptions,
   getDefaultSelectedPlanId,
   type PaywallConfig,
   type PaywallPlan,
@@ -13,6 +15,7 @@ import { getPackagesForScenario } from "../fixtures/paywall-plans";
 import type {
   PlaygroundPaywallAnimation,
   PlaygroundPaywallFlow,
+  PlaygroundLocale,
   PlaygroundScenario,
 } from "../types/playground";
 
@@ -45,8 +48,6 @@ const playgroundPaywallConfig = {
         description: "The compact Next button does not look like payment.",
       },
     ],
-    nextButton: "Next",
-    nextButtonAccessibilityLabel: "Continue to plan selection",
   },
   benefits: [
     {
@@ -58,36 +59,18 @@ const playgroundPaywallConfig = {
       description: "App config can still switch to content for full control.",
     },
   ],
-  copy: {
-    title: "Upgrade to Pro",
-    subtitle: "Unlock every feature.",
-    purchaseButton: "Start trial",
-    purchasingButton: "Processing",
-    restoreButton: "Restore purchases",
-    legalPrefix: "Subscription renews automatically.",
-    termsText: "Terms",
-    privacyText: "Privacy",
-  },
-  planOptions: {
-    annualBadgeText: "Best value",
-    annualTitle: "Yearly",
-    lifetimeBadgeText: "One-time",
-    lifetimeTitle: "Lifetime",
-    monthlyTitle: "Monthly",
-    recommendedPeriod: "annual",
-  },
   theme: {
     accentColor: "#5AC8B7",
     backgroundColor: "#05080C",
     primaryTextColor: "#F5F7FA",
   },
-} satisfies PaywallConfig;
-
-const { planOptions: playgroundPlanOptions, ...playgroundPaywallProps } =
-  playgroundPaywallConfig;
+} satisfies Omit<PaywallConfig, "copy" | "planOptions" | "valueStep"> & {
+  valueStep: Omit<NonNullable<PaywallConfig["valueStep"]>, "nextButton">;
+};
 
 interface PaywallPlaygroundScreenProps {
   scenario: PlaygroundScenario;
+  selectedLocale: PlaygroundLocale;
   paywallFlow: PlaygroundPaywallFlow;
   paywallAnimation: PlaygroundPaywallAnimation;
   onClose: () => void;
@@ -95,6 +78,7 @@ interface PaywallPlaygroundScreenProps {
 
 export const PaywallPlaygroundScreen = ({
   scenario,
+  selectedLocale,
   paywallFlow,
   paywallAnimation,
   onClose,
@@ -105,9 +89,19 @@ export const PaywallPlaygroundScreen = ({
   const plans = useMemo(() => {
     return createPaywallPlans(
       getPackagesForScenario(scenario),
-      playgroundPlanOptions,
+      {
+        ...getDefaultPaywallPlanOptions(selectedLocale),
+        recommendedPeriod: "annual",
+      },
     );
-  }, [scenario]);
+  }, [scenario, selectedLocale]);
+
+  const copy = useMemo(() => {
+    return getDefaultPaywallCopy(selectedLocale, {
+      title: "Upgrade to Pro",
+      subtitle: "Unlock every feature.",
+    });
+  }, [selectedLocale]);
 
   useEffect(() => {
     setSelectedPlanId((currentPlanId) => {
@@ -130,7 +124,8 @@ export const PaywallPlaygroundScreen = ({
   return (
     <View style={styles.root}>
       <Paywall
-        {...playgroundPaywallProps}
+        {...playgroundPaywallConfig}
+        copy={copy}
         plans={plans}
         stepMode={paywallFlow}
         animationMode={paywallAnimation}

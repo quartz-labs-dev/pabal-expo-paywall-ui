@@ -26,6 +26,8 @@ export interface PaywallCopy {
   legalPrefix?: string;
   legalSeparator?: string;
   closeButtonAccessibilityLabel?: string;
+  nextButton?: string;
+  nextButtonAccessibilityLabel?: string;
 }
 
 export interface PaywallBenefitDetail {
@@ -45,7 +47,7 @@ export interface PaywallValueStep {
   subtitle?: string;
   benefits?: PaywallBenefit[];
   content?: ReactNode;
-  nextButton: string;
+  nextButton?: string;
   nextButtonAccessibilityLabel?: string;
   closeButtonVisibility?: "hidden" | "visible";
 }

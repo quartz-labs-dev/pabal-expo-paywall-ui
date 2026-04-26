@@ -1,10 +1,16 @@
 import {
   ProfileSubscriptionSection,
+  getDefaultProfilePlanLabel,
+  getDefaultProfileRenewalLabel,
+  getDefaultProfileSubscriptionCopy,
   type ProfileSubscriptionConfig,
+  type PaywallPlanPeriod,
 } from "pabal-expo-paywall-ui";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import type { PlaygroundLocale, PlaygroundScenario } from "../types/playground";
 
 const wait = (duration: number) => {
   return new Promise((resolve) => {
@@ -12,7 +18,7 @@ const wait = (duration: number) => {
   });
 };
 
-const profileSubscriptionConfig = {
+const profileSubscriptionBaseConfig = {
   benefits: [
     {
       title: "Home Screen Widget",
@@ -30,32 +36,26 @@ const profileSubscriptionConfig = {
       icon: <BenefitIcon label="C" />,
     },
   ],
-  copy: {
-    subscribedTitle: "Golden Horizon Pro",
-    subscribedSubtitle: "Thank you for your support!",
-    notSubscribedTitle: "Golden Horizon Pro",
-    notSubscribedSubtitle:
-      "Unlock widgets, custom locations, and premium color tools.",
-    subscribedBadge: "ACTIVE",
-    notSubscribedBadge: "FREE PLAN",
-    benefitsTitle: "Your Pro Benefits",
-    upgradeButton: "Upgrade to Pro",
-    upgradingButton: "Opening paywall...",
-    manageSubscriptionButton: "Manage subscription",
-    managingSubscriptionButton: "Opening...",
-    restorePurchasesButton: "Restore purchases",
-    restoringPurchasesButton: "Restoring...",
-    redeemPromoCodeButton: "Enter promo code",
-    redeemingPromoCodeButton: "Opening...",
-  },
   headerIcon: <GoldenHorizonIcon />,
-} satisfies ProfileSubscriptionConfig;
+} satisfies Omit<ProfileSubscriptionConfig, "copy">;
+
+const profilePeriods: Record<PlaygroundScenario, PaywallPlanPeriod> = {
+  annualOnly: "annual",
+  lifetimeOnly: "lifetime",
+  longPrice: "annual",
+  monthlyOnly: "monthly",
+  standard: "annual",
+};
 
 interface ProfilePlaygroundScreenProps {
+  scenario: PlaygroundScenario;
+  selectedLocale: PlaygroundLocale;
   onClose: () => void;
 }
 
 export const ProfilePlaygroundScreen = ({
+  scenario,
+  selectedLocale,
   onClose,
 }: ProfilePlaygroundScreenProps) => {
   const insets = useSafeAreaInsets();
@@ -65,6 +65,31 @@ export const ProfilePlaygroundScreen = ({
   const [isManagingSubscription, setIsManagingSubscription] = useState(false);
   const [isRestoringPurchases, setIsRestoringPurchases] = useState(false);
   const [isRedeemingPromoCode, setIsRedeemingPromoCode] = useState(false);
+  const subscribedPeriod = profilePeriods[scenario];
+  const profileCopy = useMemo(() => {
+    return {
+      ...getDefaultProfileSubscriptionCopy(selectedLocale, {
+        productName: "Pro",
+      }),
+      notSubscribedSubtitle:
+        "Unlock widgets, custom locations, and premium color tools.",
+      notSubscribedTitle: "Golden Horizon Pro",
+      subscribedBadge: "ACTIVE",
+      subscribedTitle: "Golden Horizon Pro",
+    };
+  }, [selectedLocale]);
+  const planLabel = isSubscribed
+    ? getDefaultProfilePlanLabel(subscribedPeriod, selectedLocale, {
+        productName: "Pro",
+      })
+    : undefined;
+  const renewalLabel = isSubscribed
+    ? getDefaultProfileRenewalLabel(
+        subscribedPeriod,
+        "Sep 18, 2026",
+        selectedLocale,
+      )
+    : undefined;
 
   const runLoadingState = async (
     setLoading: (isLoading: boolean) => void,
@@ -110,14 +135,15 @@ export const ProfilePlaygroundScreen = ({
         </View>
 
         <ProfileSubscriptionSection
-          {...profileSubscriptionConfig}
+          {...profileSubscriptionBaseConfig}
+          copy={profileCopy}
           isManagingSubscription={isManagingSubscription}
           isRedeemingPromoCode={isRedeemingPromoCode}
           isRestoringPurchases={isRestoringPurchases}
           isSubscribed={isSubscribed}
           isUpgrading={isUpgrading}
-          planLabel={isSubscribed ? "Annual Pro" : undefined}
-          renewalLabel={isSubscribed ? "Renews on Sep 18, 2026" : undefined}
+          planLabel={planLabel}
+          renewalLabel={renewalLabel}
           showPromoCodeButton={showPromoCodeButton}
           onManageSubscription={() =>
             runLoadingState(setIsManagingSubscription)

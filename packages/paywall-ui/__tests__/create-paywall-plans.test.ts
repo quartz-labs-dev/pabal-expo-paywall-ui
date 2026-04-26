@@ -2,6 +2,12 @@ import {
   createPaywallPlans,
   getDefaultSelectedPlanId,
 } from "../src/create-paywall-plans";
+import {
+  getDefaultPaywallCopy,
+  getDefaultPaywallPlanOptions,
+  resolvePaywallTextLocale,
+} from "../src/localized-paywall-copy";
+import { UNIFIED_LOCALES } from "../src/unified-locales";
 import type { PurchasesPackageLike } from "../src/types";
 import assert from "node:assert/strict";
 import test from "node:test";
@@ -88,6 +94,12 @@ test("supports a single lifetime package offering", () => {
   assert.equal(getDefaultSelectedPlanId(plans), "$rc_lifetime");
 });
 
+test("uses yearly as the default annual plan title", () => {
+  const plans = createPaywallPlans([makePackage("$rc_annual", 29.99, "$29.99")]);
+
+  assert.equal(plans[0]?.title, "Yearly");
+});
+
 test("can recommend lifetime packages", () => {
   const plans = createPaywallPlans(
     [
@@ -95,7 +107,7 @@ test("can recommend lifetime packages", () => {
       makePackage("$rc_lifetime", 149.99, "$149.99"),
     ],
     {
-      lifetimeBadgeText: "One-time",
+      lifetimeBadgeText: "One-time payment",
       lifetimeTitle: "Lifetime access",
       recommendedPeriod: "lifetime",
     },
@@ -103,7 +115,7 @@ test("can recommend lifetime packages", () => {
 
   const lifetimePlan = plans.find((plan) => plan.period === "lifetime");
 
-  assert.equal(lifetimePlan?.badgeText, "One-time");
+  assert.equal(lifetimePlan?.badgeText, "One-time payment");
   assert.equal(lifetimePlan?.title, "Lifetime access");
   assert.equal(lifetimePlan?.isRecommended, true);
   assert.equal(getDefaultSelectedPlanId(plans), "$rc_lifetime");
@@ -114,7 +126,7 @@ test("formats high-value annual prices without cents", () => {
     makePackage("$rc_annual", 49900, "KRW 49,900"),
   ]);
 
-  assert.equal(plans[0]?.monthlyPriceText, "KRW 4158 / mo");
+  assert.equal(plans[0]?.monthlyPriceText, "KRW 4,158 / mo");
 });
 
 test("adds annual discount text compared to monthly pricing", () => {
@@ -153,5 +165,48 @@ test("supports localized annual pricing copy", () => {
 
   assert.equal(annualPlan?.discountText, "33% 할인");
   assert.equal(annualPlan?.badgeText, "33% 할인");
-  assert.equal(annualPlan?.monthlyPriceText, "월 KRW 6667");
+  assert.equal(annualPlan?.monthlyPriceText, "월 KRW 6,667");
+});
+
+test("provides localized default plan copy from locale strings", () => {
+  const plans = createPaywallPlans(
+    [
+      makePackage("$rc_monthly", 10000, "KRW 10,000"),
+      makePackage("$rc_annual", 80000, "KRW 80,000"),
+      makePackage("$rc_lifetime", 120000, "KRW 120,000"),
+    ],
+    getDefaultPaywallPlanOptions("ko-KR"),
+  );
+
+  const annualPlan = plans.find((plan) => plan.period === "annual");
+  const lifetimePlan = plans.find((plan) => plan.period === "lifetime");
+
+  assert.equal(resolvePaywallTextLocale("pt-BR"), "ptBr");
+  assert.equal(resolvePaywallTextLocale("zh-Hant"), "zhHant");
+  assert.equal(annualPlan?.title, "연간");
+  assert.equal(annualPlan?.badgeText, "33% 할인");
+  assert.equal(annualPlan?.monthlyPriceText, "월 KRW 6,667");
+  assert.equal(lifetimePlan?.badgeText, "일회성 구매");
+  assert.equal(
+    getDefaultPaywallCopy("ko-KR", { title: "Pro" }).nextButton,
+    "다음",
+  );
+});
+
+test("resolves every unified non-English locale without falling back to English", () => {
+  for (const locale of UNIFIED_LOCALES) {
+    const resolvedLocale = resolvePaywallTextLocale(locale);
+    const isEnglishLocale = locale.toLowerCase().startsWith("en");
+
+    if (isEnglishLocale) {
+      assert.equal(resolvedLocale, "en", `${locale} resolved to ${resolvedLocale}`);
+      continue;
+    }
+
+    assert.notEqual(resolvedLocale, "en", `${locale} resolved to ${resolvedLocale}`);
+  }
+
+  assert.equal(resolvePaywallTextLocale("fa-AE"), "fa");
+  assert.equal(resolvePaywallTextLocale("no-NO"), "nb");
+  assert.equal(resolvePaywallTextLocale("zh-HK"), "zhHant");
 });

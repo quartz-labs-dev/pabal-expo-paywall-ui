@@ -1,0 +1,35 @@
+import { createPaywallLocaleText } from "./types";
+
+const fa = createPaywallLocaleText({
+  valueStep: {
+    nextButton: "بعدی",
+    nextButtonAccessibilityLabel: "ادامه به انتخاب طرح",
+  },
+  text: {
+    annualPlanTitle: "سالانه",
+    benefitsTitle: "مزایای Pro شما",
+    enterPromoCode: "کد تخفیف را وارد کنید",
+    freeBadge: "رایگان",
+    lifetimePlanTitle: "مادام‌العمر",
+    manageSubscription: "مدیریت اشتراک",
+    monthlyPlanTitle: "ماهانه",
+    oneTime: "خرید یک‌باره",
+    oneTimePayment: "خرید یک‌باره",
+    opening: "در حال باز کردن...",
+    openingPaywall: "در حال باز کردن صفحه پرداخت...",
+    privacyText: "حریم خصوصی",
+    purchaseButton: "شروع دوره آزمایشی",
+    purchasingButton: "در حال پردازش",
+    restoreButton: "بازیابی خریدها",
+    restoring: "در حال بازیابی...",
+    subscriptionRenewsAutomatically: "اشتراک به‌صورت خودکار تمدید می‌شود.",
+    subscribedSubtitle: "از حمایت شما سپاسگزاریم!",
+    termsText: "شرایط",
+    monthlyPricePrefix: "ماهانه ",
+    renewsOnPrefix: "تمدید در ",
+    savePrefix: "صرفه‌جویی ",
+    upgradePrefix: "ارتقا به ",
+  },
+});
+
+export default fa;

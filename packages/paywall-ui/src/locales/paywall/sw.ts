@@ -1,0 +1,35 @@
+import { createPaywallLocaleText } from "./types";
+
+const sw = createPaywallLocaleText({
+  valueStep: {
+    nextButton: "Inayofuata",
+    nextButtonAccessibilityLabel: "Endelea kwenye kuchagua mpango",
+  },
+  text: {
+    annualPlanTitle: "Kila mwaka",
+    benefitsTitle: "Manufaa yako ya Pro",
+    enterPromoCode: "Weka msimbo wa ofa",
+    freeBadge: "BURE",
+    lifetimePlanTitle: "Maisha yote",
+    manageSubscription: "Dhibiti usajili",
+    monthlyPlanTitle: "Kila mwezi",
+    oneTime: "Ununuzi wa mara moja",
+    oneTimePayment: "Ununuzi wa mara moja",
+    opening: "Inafunguliwa...",
+    openingPaywall: "Ukurasa wa malipo unafunguliwa...",
+    privacyText: "Faragha",
+    purchaseButton: "Anza jaribio",
+    purchasingButton: "Inachakata",
+    restoreButton: "Rejesha manunuzi",
+    restoring: "Inarejesha...",
+    subscriptionRenewsAutomatically: "Usajili hujisasisha kiotomatiki.",
+    subscribedSubtitle: "Asante kwa msaada wako!",
+    termsText: "Masharti",
+    monthlyPricePrefix: "kwa mwezi ",
+    renewsOnPrefix: "Hujisasisha tarehe ",
+    savePrefix: "Okoa ",
+    upgradePrefix: "Pata toleo la ",
+  },
+});
+
+export default sw;

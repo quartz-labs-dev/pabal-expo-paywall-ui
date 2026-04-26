@@ -1,0 +1,35 @@
+import { createPaywallLocaleText } from "./types";
+
+const ml = createPaywallLocaleText({
+  valueStep: {
+    nextButton: "അടുത്തത്",
+    nextButtonAccessibilityLabel: "പ്ലാൻ തിരഞ്ഞെടുപ്പിലേക്ക് തുടരുക",
+  },
+  text: {
+    annualPlanTitle: "വാർഷികം",
+    benefitsTitle: "നിങ്ങളുടെ Pro ആനുകൂല്യങ്ങൾ",
+    enterPromoCode: "പ്രമോ കോഡ് നൽകുക",
+    freeBadge: "സൗജന്യം",
+    lifetimePlanTitle: "ആജീവനാന്തം",
+    manageSubscription: "സബ്സ്ക്രിപ്ഷൻ നിയന്ത്രിക്കുക",
+    monthlyPlanTitle: "മാസിക",
+    oneTime: "ഒറ്റത്തവണ വാങ്ങൽ",
+    oneTimePayment: "ഒറ്റത്തവണ വാങ്ങൽ",
+    opening: "തുറക്കുന്നു...",
+    openingPaywall: "പേയ്മെന്റ് പേജ് തുറക്കുന്നു...",
+    privacyText: "സ്വകാര്യത",
+    purchaseButton: "ട്രയൽ ആരംഭിക്കുക",
+    purchasingButton: "പ്രോസസ് ചെയ്യുന്നു",
+    restoreButton: "വാങ്ങലുകൾ പുനഃസ്ഥാപിക്കുക",
+    restoring: "പുനഃസ്ഥാപിക്കുന്നു...",
+    subscriptionRenewsAutomatically: "സബ്സ്ക്രിപ്ഷൻ സ്വയമേവ പുതുക്കും.",
+    subscribedSubtitle: "നിങ്ങളുടെ പിന്തുണയ്ക്ക് നന്ദി!",
+    termsText: "നിബന്ധനകൾ",
+    monthlyPricePrefix: "മാസത്തിൽ ",
+    renewsOnPrefix: "പുതുക്കുന്നത് ",
+    savePrefix: "ലാഭിക്കുക ",
+    upgradePrefix: "അപ്‌ഗ്രേഡ് ചെയ്യുക ",
+  },
+});
+
+export default ml;

@@ -1,0 +1,40 @@
+import { createPaywallLocaleText } from "./types";
+
+const ja = createPaywallLocaleText({
+  valueStep: {
+    nextButton: "次へ",
+    nextButtonAccessibilityLabel: "プラン選択へ進む",
+  },
+  text: {
+    annualPlanTitle: "年額",
+    benefitsTitle: "Pro特典",
+    enterPromoCode: "プロモコードを入力",
+    freeBadge: "無料",
+    lifetimePlanTitle: "買い切り",
+    manageSubscription: "サブスクリプションを管理",
+    monthlyPlanTitle: "月額",
+    oneTime: "買い切り",
+    oneTimePayment: "一回限りの支払い",
+    opening: "開いています...",
+    openingPaywall: "ペイウォールを開いています...",
+    privacyText: "プライバシー",
+    purchaseButton: "トライアルを開始",
+    purchasingButton: "処理中",
+    restoreButton: "購入を復元",
+    restoring: "復元中...",
+    subscriptionRenewsAutomatically: "サブスクリプションは自動更新されます。",
+    subscribedSubtitle: "ご支援ありがとうございます！",
+    termsText: "利用規約",
+    annualPlanPrefix: "年額",
+    lifetimePlanPrefix: "買い切り",
+    monthlyPlanPrefix: "月額",
+    monthlyPricePrefix: "月 ",
+    renewsOnSuffix: " に更新",
+    savePrefix: "",
+    saveSuffix: "お得",
+    upgradeSuffix: "にアップグレード",
+    upgradePrefix: "",
+  },
+});
+
+export default ja;

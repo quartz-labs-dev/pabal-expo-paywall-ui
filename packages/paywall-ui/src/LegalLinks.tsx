@@ -4,6 +4,7 @@ import type { PaywallCopy, PaywallTheme } from "./types";
 
 interface LegalLinksProps {
   copy: PaywallCopy;
+  shouldShowLegalPrefix?: boolean;
   theme: PaywallTheme;
   onRestore: () => Promise<void> | void;
   onOpenTerms: () => void;
@@ -12,6 +13,7 @@ interface LegalLinksProps {
 
 export const LegalLinks = ({
   copy,
+  shouldShowLegalPrefix = true,
   theme,
   onRestore,
   onOpenTerms,
@@ -26,7 +28,7 @@ export const LegalLinks = ({
       </Pressable>
 
       <View style={styles.legalRow}>
-        {copy.legalPrefix && (
+        {shouldShowLegalPrefix && copy.legalPrefix && (
           <Text style={[styles.legalText, { color: theme.mutedTextColor }]}>
             {copy.legalPrefix}
           </Text>

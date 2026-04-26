@@ -46,7 +46,9 @@ const formatMonthlyPrice = (annualPackage: PurchasesPackageLike): string => {
   const prefix = getCurrencyPrefix(annualPackage.product.priceString);
   const monthlyPrice = annualPackage.product.price / 12;
 
-  if (monthlyPrice >= 100) return `${prefix}${Math.round(monthlyPrice)}`;
+  if (monthlyPrice >= 100) {
+    return `${prefix}${Math.round(monthlyPrice).toLocaleString("en-US")}`;
+  }
 
   return `${prefix}${monthlyPrice.toFixed(2)}`;
 };
@@ -137,7 +139,7 @@ export const createPaywallPlans = <TPackage extends PurchasesPackageLike>(
           : isLifetime
           ? options.lifetimeTitle
           : options.monthlyTitle) ??
-        (isAnnual ? "Annual" : isLifetime ? "Lifetime" : "Monthly"),
+        (isAnnual ? "Yearly" : isLifetime ? "Lifetime" : "Monthly"),
       priceText: pack.product.priceString,
       monthlyPriceText,
       discountText,

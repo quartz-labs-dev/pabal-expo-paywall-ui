@@ -1,0 +1,35 @@
+import { createPaywallLocaleText } from "./types";
+
+const kn = createPaywallLocaleText({
+  valueStep: {
+    nextButton: "ಮುಂದೆ",
+    nextButtonAccessibilityLabel: "ಯೋಜನೆ ಆಯ್ಕೆಗೆ ಮುಂದುವರಿಸಿ",
+  },
+  text: {
+    annualPlanTitle: "ವಾರ್ಷಿಕ",
+    benefitsTitle: "ನಿಮ್ಮ Pro ಪ್ರಯೋಜನಗಳು",
+    enterPromoCode: "ಪ್ರೋಮೋ ಕೋಡ್ ನಮೂದಿಸಿ",
+    freeBadge: "ಉಚಿತ",
+    lifetimePlanTitle: "ಆಜೀವ",
+    manageSubscription: "ಚಂದಾದಾರಿಕೆಯನ್ನು ನಿರ್ವಹಿಸಿ",
+    monthlyPlanTitle: "ಮಾಸಿಕ",
+    oneTime: "ಒಮ್ಮೆಗಿನ ಖರೀದಿ",
+    oneTimePayment: "ಒಮ್ಮೆಗಿನ ಖರೀದಿ",
+    opening: "ತೆರೆಯುತ್ತಿದೆ...",
+    openingPaywall: "ಪಾವತಿ ಪುಟ ತೆರೆಯುತ್ತಿದೆ...",
+    privacyText: "ಗೌಪ್ಯತೆ",
+    purchaseButton: "ಟ್ರಯಲ್ ಆರಂಭಿಸಿ",
+    purchasingButton: "ಪ್ರಕ್ರಿಯೆಗೊಳಿಸಲಾಗುತ್ತಿದೆ",
+    restoreButton: "ಖರೀದಿಗಳನ್ನು ಮರುಸ್ಥಾಪಿಸಿ",
+    restoring: "ಮರುಸ್ಥಾಪಿಸಲಾಗುತ್ತಿದೆ...",
+    subscriptionRenewsAutomatically: "ಚಂದಾದಾರಿಕೆ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ನವೀಕರಿಸುತ್ತದೆ.",
+    subscribedSubtitle: "ನಿಮ್ಮ ಬೆಂಬಲಕ್ಕೆ ಧನ್ಯವಾದಗಳು!",
+    termsText: "ನಿಯಮಗಳು",
+    monthlyPricePrefix: "ಪ್ರತಿ ತಿಂಗಳು ",
+    renewsOnPrefix: "ನವೀಕರಣ ",
+    savePrefix: "ಉಳಿಸಿ ",
+    upgradePrefix: "ಅಪ್‌ಗ್ರೇಡ್ ಮಾಡಿ ",
+  },
+});
+
+export default kn;

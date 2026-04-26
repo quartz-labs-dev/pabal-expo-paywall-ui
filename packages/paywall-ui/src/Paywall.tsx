@@ -43,6 +43,12 @@ const getBenefitIcon = (benefit: PaywallBenefit) => {
   return typeof benefit === "string" ? undefined : benefit.icon;
 };
 
+const hasRenewingSubscriptionPlan = <TPackage,>(
+  plans: PaywallPlan<TPackage>[],
+): boolean => {
+  return plans.some((plan) => plan.period !== "lifetime");
+};
+
 const FIXED_FOOTER_BUTTON_HEIGHT = 52;
 const FIXED_FOOTER_TOP_PADDING = 12;
 const FIXED_FOOTER_MIN_BOTTOM_PADDING = 12;
@@ -111,6 +117,7 @@ export const Paywall = <TPackage,>({
   const bodyContent = isValueStep ? valueStep?.content : content;
   const shouldShowCloseButton =
     !isValueStep || valueStep?.closeButtonVisibility === "visible";
+  const shouldShowLegalPrefix = hasRenewingSubscriptionPlan(plans);
   const initialTranslateY = initialTransition.interpolate({
     inputRange: [0, 1],
     outputRange: [INITIAL_TRANSITION_DISTANCE, 0],
@@ -321,6 +328,7 @@ export const Paywall = <TPackage,>({
           {!isValueStep && (
             <LegalLinks
               copy={copy}
+              shouldShowLegalPrefix={shouldShowLegalPrefix}
               theme={theme}
               onRestore={onRestore}
               onOpenTerms={onOpenTerms}
@@ -350,8 +358,11 @@ export const Paywall = <TPackage,>({
         {isValueStep && valueStep ? (
           <View style={styles.nextButtonRow}>
             <StepNextButton
-              accessibilityLabel={valueStep.nextButtonAccessibilityLabel}
-              label={valueStep.nextButton}
+              accessibilityLabel={
+                valueStep.nextButtonAccessibilityLabel ??
+                copy.nextButtonAccessibilityLabel
+              }
+              label={valueStep.nextButton ?? copy.nextButton ?? "Next"}
               theme={theme}
               onPress={handleShowPurchaseStep}
             />

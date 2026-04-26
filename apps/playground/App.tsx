@@ -9,6 +9,8 @@ import { ProfilePlaygroundScreen } from "./src/screens/ProfilePlaygroundScreen";
 import type {
   PlaygroundPaywallAnimation,
   PlaygroundPaywallFlow,
+  PlaygroundLocale,
+  PlaygroundPackageScenario,
   PlaygroundRoute,
   PlaygroundScenario,
 } from "./src/types/playground";
@@ -37,11 +39,15 @@ const pushWebPath = (route: PlaygroundRoute) => {
 
 export default function App() {
   const [route, setRoute] = useState<PlaygroundRoute>(getInitialRoute);
-  const [scenario, setScenario] = useState<PlaygroundScenario>("standard");
+  const [scenario, setScenario] =
+    useState<PlaygroundPackageScenario>("standard");
+  const [isLongPriceEnabled, setIsLongPriceEnabled] = useState(false);
   const [paywallFlow, setPaywallFlow] =
     useState<PlaygroundPaywallFlow>("twoStep");
   const [paywallAnimation, setPaywallAnimation] =
     useState<PlaygroundPaywallAnimation>("default");
+  const [selectedLocale, setSelectedLocale] =
+    useState<PlaygroundLocale>("en-US");
 
   useEffect(() => {
     if (Platform.OS !== "web" || typeof window?.addEventListener !== "function") {
@@ -60,25 +66,37 @@ export default function App() {
     setRoute(nextRoute);
     pushWebPath(nextRoute);
   };
+  const effectiveScenario: PlaygroundScenario = isLongPriceEnabled
+    ? "longPrice"
+    : scenario;
 
   return (
     <SafeAreaProvider>
       <StatusBar style="light" />
       {route === "paywall" ? (
         <PaywallPlaygroundScreen
-          scenario={scenario}
+          scenario={effectiveScenario}
+          selectedLocale={selectedLocale}
           paywallFlow={paywallFlow}
           paywallAnimation={paywallAnimation}
           onClose={() => navigate("home")}
         />
       ) : route === "profile" ? (
-        <ProfilePlaygroundScreen onClose={() => navigate("home")} />
+        <ProfilePlaygroundScreen
+          scenario={effectiveScenario}
+          selectedLocale={selectedLocale}
+          onClose={() => navigate("home")}
+        />
       ) : (
         <HomeScreen
           scenario={scenario}
+          isLongPriceEnabled={isLongPriceEnabled}
+          selectedLocale={selectedLocale}
           paywallFlow={paywallFlow}
           paywallAnimation={paywallAnimation}
           onChangeScenario={setScenario}
+          onToggleLongPrice={setIsLongPriceEnabled}
+          onChangeLocale={setSelectedLocale}
           onChangePaywallFlow={setPaywallFlow}
           onChangePaywallAnimation={setPaywallAnimation}
           onOpenPaywall={() => navigate("paywall")}

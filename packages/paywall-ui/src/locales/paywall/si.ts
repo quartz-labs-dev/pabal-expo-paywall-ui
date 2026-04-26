@@ -1,0 +1,35 @@
+import { createPaywallLocaleText } from "./types";
+
+const si = createPaywallLocaleText({
+  valueStep: {
+    nextButton: "ඊළඟ",
+    nextButtonAccessibilityLabel: "සැලැස්ම තේරීමට ඉදිරියට යන්න",
+  },
+  text: {
+    annualPlanTitle: "වාර්ෂික",
+    benefitsTitle: "ඔබගේ Pro වාසි",
+    enterPromoCode: "ප්‍රවර්ධන කේතය ඇතුළත් කරන්න",
+    freeBadge: "නොමිලේ",
+    lifetimePlanTitle: "ජීවිත කාලය",
+    manageSubscription: "දායකත්වය කළමනාකරණය කරන්න",
+    monthlyPlanTitle: "මාසික",
+    oneTime: "එක් වරක් මිලදී ගැනීම",
+    oneTimePayment: "එක් වරක් මිලදී ගැනීම",
+    opening: "විවෘත වෙමින්...",
+    openingPaywall: "ගෙවීම් පිටුව විවෘත වෙමින්...",
+    privacyText: "පෞද්ගලිකත්වය",
+    purchaseButton: "අත්හදා බැලීම ආරම්භ කරන්න",
+    purchasingButton: "සකසමින්",
+    restoreButton: "මිලදී ගැනීම් ප්‍රතිසාධනය කරන්න",
+    restoring: "ප්‍රතිසාධනය වෙමින්...",
+    subscriptionRenewsAutomatically: "දායකත්වය ස්වයංක්‍රීයව අලුත් වේ.",
+    subscribedSubtitle: "ඔබගේ සහයෝගයට ස්තූතියි!",
+    termsText: "නියමයන්",
+    monthlyPricePrefix: "මසකට ",
+    renewsOnPrefix: "අලුත් වන්නේ ",
+    savePrefix: "ඉතිරි කරන්න ",
+    upgradePrefix: "උසස් කරන්න ",
+  },
+});
+
+export default si;

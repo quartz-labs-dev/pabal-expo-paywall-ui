@@ -54,12 +54,20 @@ export const ProfileSubscriptionSection = ({
   const statusBadge = isSubscribed
     ? copy.subscribedBadge ?? "PRO"
     : copy.notSubscribedBadge ?? "FREE";
-  const shouldShowUpgrade = !isSubscribed && Boolean(onUpgrade);
+  const shouldShowUpgrade =
+    !isSubscribed && Boolean(onUpgrade) && Boolean(copy.upgradeButton);
   const shouldShowManageSubscription = isSubscribed;
   const shouldShowRestorePurchases = !isSubscribed;
   const shouldShowPromoCode =
-    !isSubscribed && showPromoCodeButton && Boolean(onRedeemPromoCode);
-  const cardAction = isSubscribed ? onManageSubscription : onUpgrade;
+    !isSubscribed &&
+    showPromoCodeButton &&
+    Boolean(onRedeemPromoCode) &&
+    Boolean(copy.redeemPromoCodeButton);
+  const cardAction = isSubscribed
+    ? onManageSubscription
+    : shouldShowUpgrade
+    ? onUpgrade
+    : undefined;
   const isCardActionDisabled = isSubscribed
     ? isManagingSubscription
     : isUpgrading;

@@ -68,7 +68,7 @@ interface PaywallValueStep {
   subtitle?: string;
   benefits?: PaywallBenefit[];
   content?: ReactNode;
-  nextButton: string;
+  nextButton?: string;
   nextButtonAccessibilityLabel?: string;
   closeButtonVisibility?: "hidden" | "visible";
 }
@@ -101,8 +101,6 @@ const paywallConfig = {
         icon: <SyncIcon />,
       },
     ],
-    nextButton: "Next",
-    nextButtonAccessibilityLabel: "Continue to plan selection",
   },
   benefits: [
     {
@@ -126,10 +124,9 @@ const paywallConfig = {
     privacyText: "Privacy",
   },
   planOptions: {
-    annualBadgeText: "Best value",
     formatDiscountText: (discountPercentage) => `Save ${discountPercentage}%`,
     formatMonthlyPriceText: (monthlyPriceText) => `${monthlyPriceText} / mo`,
-    lifetimeBadgeText: "One-time",
+    lifetimeBadgeText: "One-time payment",
     recommendedPeriod: "annual",
   },
   theme: {
@@ -148,9 +145,10 @@ When `valueStep` is present, `Paywall` defaults to a two-step flow:
 2. purchase step: close button visible, plan selector, restore/legal links, full-width purchase button
 
 The value step is app-configurable through `hero`, `valueStep.title`,
-`valueStep.subtitle`, `valueStep.benefits`, `valueStep.content`,
-`valueStep.nextButton`, `valueStep.nextButtonAccessibilityLabel`, and
-`valueStep.closeButtonVisibility`.
+`valueStep.subtitle`, `valueStep.benefits`, `valueStep.content`, and
+`valueStep.closeButtonVisibility`. `nextButton` and
+`nextButtonAccessibilityLabel` are fixed UI copy from `copy` by default and can
+still be overridden on `valueStep` when an app needs a custom label.
 
 Use `stepMode: "singleStep"` to opt out and render the classic one-step paywall
 while keeping the same config object.

@@ -1,0 +1,35 @@
+import { createPaywallLocaleText } from "./types";
+
+const gu = createPaywallLocaleText({
+  valueStep: {
+    nextButton: "આગળ",
+    nextButtonAccessibilityLabel: "પ્લાન પસંદગી પર આગળ વધો",
+  },
+  text: {
+    annualPlanTitle: "વાર્ષિક",
+    benefitsTitle: "તમારા Pro લાભો",
+    enterPromoCode: "પ્રોમો કોડ દાખલ કરો",
+    freeBadge: "મફત",
+    lifetimePlanTitle: "આજીવન",
+    manageSubscription: "સબ્સ્ક્રિપ્શન મેનેજ કરો",
+    monthlyPlanTitle: "માસિક",
+    oneTime: "એક વખતની ખરીદી",
+    oneTimePayment: "એક વખતની ખરીદી",
+    opening: "ખુલી રહ્યું છે...",
+    openingPaywall: "ચુકવણી પેજ ખુલી રહ્યું છે...",
+    privacyText: "ગોપનીયતા",
+    purchaseButton: "ટ્રાયલ શરૂ કરો",
+    purchasingButton: "પ્રક્રિયા ચાલુ છે",
+    restoreButton: "ખરીદીઓ પુનઃસ્થાપિત કરો",
+    restoring: "પુનઃસ્થાપિત થઈ રહ્યું છે...",
+    subscriptionRenewsAutomatically: "સબ્સ્ક્રિપ્શન આપમેળે રિન્યૂ થાય છે.",
+    subscribedSubtitle: "તમારા સમર્થન માટે આભાર!",
+    termsText: "શરતો",
+    monthlyPricePrefix: "દર મહિને ",
+    renewsOnPrefix: "રિન્યૂ થશે ",
+    savePrefix: "બચાવો ",
+    upgradePrefix: "અપગ્રેડ કરો ",
+  },
+});
+
+export default gu;

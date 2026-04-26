@@ -216,8 +216,6 @@ const myAppPaywallConfig = {
         icon: <SyncIcon />,
       },
     ],
-    nextButton: "Next",
-    nextButtonAccessibilityLabel: "Continue to plan selection",
   },
   benefits: [
     {
@@ -242,14 +240,12 @@ const myAppPaywallConfig = {
     purchaseButton: "Start trial",
     purchasingButton: "Processing",
     restoreButton: "Restore purchases",
-    legalPrefix: "Subscription renews automatically.",
     legalSeparator: "/",
     closeButtonAccessibilityLabel: "Close paywall",
     termsText: "Terms",
     privacyText: "Privacy",
   },
   planOptions: {
-    annualBadgeText: "Best value",
     annualTitle: "Yearly",
     formatDiscountText: (discountPercentage) => `Save ${discountPercentage}%`,
     formatMonthlyPriceText: (monthlyPriceText) => `${monthlyPriceText} / mo`,
@@ -276,8 +272,9 @@ right-aligned primary-color `nextButton` advances to step 2. Step 2 shows the
 close button and uses the normal full-width purchase button.
 
 The first value screen can customize the hero slot, title, subtitle, benefits,
-custom content, next button copy, next button accessibility label, and close
-button visibility.
+custom content, and close button visibility. The next button label comes from
+the shared paywall copy by default, with a `valueStep` override available for
+rare app-specific cases.
 
 Use `stepMode: "singleStep"` in the config when an app should render the classic
 one-step paywall.

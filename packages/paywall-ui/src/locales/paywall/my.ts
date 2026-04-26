@@ -1,0 +1,35 @@
+import { createPaywallLocaleText } from "./types";
+
+const my = createPaywallLocaleText({
+  valueStep: {
+    nextButton: "နောက်တစ်ခု",
+    nextButtonAccessibilityLabel: "အစီအစဉ် ရွေးချယ်ရန် ဆက်လုပ်ပါ",
+  },
+  text: {
+    annualPlanTitle: "နှစ်စဉ်",
+    benefitsTitle: "သင်၏ Pro အကျိုးကျေးဇူးများ",
+    enterPromoCode: "ပရိုမိုကုဒ် ထည့်ပါ",
+    freeBadge: "အခမဲ့",
+    lifetimePlanTitle: "တစ်သက်တာ",
+    manageSubscription: "စာရင်းသွင်းမှုကို စီမံပါ",
+    monthlyPlanTitle: "လစဉ်",
+    oneTime: "တစ်ကြိမ်တည်း ဝယ်ယူမှု",
+    oneTimePayment: "တစ်ကြိမ်တည်း ဝယ်ယူမှု",
+    opening: "ဖွင့်နေသည်...",
+    openingPaywall: "ငွေပေးချေမှု စာမျက်နှာ ဖွင့်နေသည်...",
+    privacyText: "ကိုယ်ရေးလုံခြုံမှု",
+    purchaseButton: "စမ်းသပ်မှု စတင်ပါ",
+    purchasingButton: "လုပ်ဆောင်နေသည်",
+    restoreButton: "ဝယ်ယူမှုများ ပြန်လည်ရယူပါ",
+    restoring: "ပြန်လည်ရယူနေသည်...",
+    subscriptionRenewsAutomatically: "စာရင်းသွင်းမှုသည် အလိုအလျောက် သက်တမ်းတိုးမည်။",
+    subscribedSubtitle: "သင့်ထောက်ပံ့မှုအတွက် ကျေးဇူးတင်ပါသည်!",
+    termsText: "စည်းမျဉ်းများ",
+    monthlyPricePrefix: "တစ်လလျှင် ",
+    renewsOnPrefix: "သက်တမ်းတိုးမည့်နေ့ ",
+    savePrefix: "ချွေတာပါ ",
+    upgradePrefix: "အဆင့်မြှင့်ရန် ",
+  },
+});
+
+export default my;
