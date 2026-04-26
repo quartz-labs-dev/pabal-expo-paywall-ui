@@ -8,6 +8,7 @@ import type {
 export interface PaywallText {
   annualPlanTitle: string;
   benefitsTitle: string;
+  closeButtonAccessibilityLabel: string;
   continueButton: string;
   enterPromoCode: string;
   freeBadge: string;
@@ -55,7 +56,6 @@ interface PaywallTextInput
   extends Omit<
     PaywallText,
     | "annualProfilePlan"
-    | "continueButton"
     | "formatPricePerPeriodText"
     | "formatTrialDuration"
     | "formatTrialIncludedTitle"
@@ -65,11 +65,9 @@ interface PaywallTextInput
     | "monthlyProfilePlan"
     | "renewsOn"
     | "saveDiscount"
-    | "trialIncludedDescription"
     | "upgradeTo"
   > {
   annualPlanPrefix?: string;
-  continueButton?: string;
   formatPricePerPeriodText?: (
     priceText: string,
     period: Exclude<PaywallPlanPeriod, "lifetime">
@@ -82,25 +80,25 @@ interface PaywallTextInput
   ) => string;
   lifetimePlanPrefix?: string;
   monthlyPlanPrefix?: string;
-  monthlyPricePrefix?: string;
-  pricePerAnnualPeriodSuffix?: string;
-  pricePerMonthlyPeriodSuffix?: string;
-  renewsOnPrefix?: string;
-  renewsOnSuffix?: string;
-  savePrefix?: string;
-  saveSuffix?: string;
-  trialDaySingular?: string;
-  trialDayPlural?: string;
-  trialDurationSeparator?: string;
-  trialIncludedDescription?: string;
-  trialIncludedTitlePrefix?: string;
-  trialIncludedTitleSuffix?: string;
-  trialPriceDisclosureFreeSuffix?: string;
-  trialPriceDisclosureThenPrefix?: string;
-  trialWeekSingular?: string;
-  trialWeekPlural?: string;
-  upgradePrefix?: string;
-  upgradeSuffix?: string;
+  monthlyPricePrefix: string;
+  monthlyPriceSuffix: string;
+  pricePerAnnualPeriodSuffix: string;
+  pricePerMonthlyPeriodSuffix: string;
+  renewsOnPrefix: string;
+  renewsOnSuffix: string;
+  savePrefix: string;
+  saveSuffix: string;
+  trialDaySingular: string;
+  trialDayPlural: string;
+  trialDurationSeparator: string;
+  trialIncludedTitlePrefix: string;
+  trialIncludedTitleSuffix: string;
+  trialPriceDisclosureFreeSuffix: string;
+  trialPriceDisclosureThenPrefix: string;
+  trialWeekSingular: string;
+  trialWeekPlural: string;
+  upgradePrefix: string;
+  upgradeSuffix: string;
 }
 
 export interface PaywallLocaleText {
@@ -114,19 +112,15 @@ const getDefaultTrialUnitLabel = (
   text: PaywallTextInput,
 ): string => {
   if (unit === "week") {
-    return value === 1
-      ? text.trialWeekSingular ?? "week"
-      : text.trialWeekPlural ?? "weeks";
+    return value === 1 ? text.trialWeekSingular : text.trialWeekPlural;
   }
 
-  return value === 1
-    ? text.trialDaySingular ?? "day"
-    : text.trialDayPlural ?? "days";
+  return value === 1 ? text.trialDaySingular : text.trialDayPlural;
 };
 
 const createPaywallText = (text: PaywallTextInput): PaywallText => {
   const formatDefaultTrialDuration = (duration: PaywallTrialDuration) => {
-    return `${duration.value}${text.trialDurationSeparator ?? " "}${getDefaultTrialUnitLabel(
+    return `${duration.value}${text.trialDurationSeparator}${getDefaultTrialUnitLabel(
       duration.value,
       duration.unit,
       text,
@@ -137,49 +131,41 @@ const createPaywallText = (text: PaywallTextInput): PaywallText => {
 
   return {
     ...text,
-    continueButton: text.continueButton ?? "Continue",
-    trialIncludedDescription:
-      text.trialIncludedDescription ??
-      "Cancel anytime in your subscription settings. No charge if cancelled before trial ends.",
+    continueButton: text.continueButton,
+    trialIncludedDescription: text.trialIncludedDescription,
     annualProfilePlan: (productName) =>
       `${text.annualPlanPrefix ?? text.annualPlanTitle} ${productName}`,
     formatPricePerPeriodText:
       text.formatPricePerPeriodText ??
       ((priceText, period) =>
         period === "annual"
-          ? `${priceText}${text.pricePerAnnualPeriodSuffix ?? " / year"}`
-          : `${priceText}${text.pricePerMonthlyPeriodSuffix ?? " / month"}`),
+          ? `${priceText}${text.pricePerAnnualPeriodSuffix}`
+          : `${priceText}${text.pricePerMonthlyPeriodSuffix}`),
     formatTrialDuration,
     formatTrialIncludedTitle:
       text.formatTrialIncludedTitle ??
       ((duration) =>
-        `${text.trialIncludedTitlePrefix ?? ""}${formatTrialDuration(duration)}${
-          text.trialIncludedTitleSuffix ?? " Free Trial Included"
+        `${text.trialIncludedTitlePrefix}${formatTrialDuration(duration)}${
+          text.trialIncludedTitleSuffix
         }`),
     formatTrialPriceDisclosure:
       text.formatTrialPriceDisclosure ??
       ((duration, pricePerPeriodText) =>
         `${formatTrialDuration(duration)}${
-          text.trialPriceDisclosureFreeSuffix ?? " free"
-        }, ${text.trialPriceDisclosureThenPrefix ?? "then "}${pricePerPeriodText}`),
+          text.trialPriceDisclosureFreeSuffix
+        }, ${text.trialPriceDisclosureThenPrefix}${pricePerPeriodText}`),
     lifetimeProfilePlan: (productName) =>
       `${text.lifetimePlanPrefix ?? text.lifetimePlanTitle} ${productName}`,
     monthlyPrice: (priceText) =>
-      `${text.monthlyPricePrefix ?? ""}${priceText}${
-        text.monthlyPricePrefix ? "" : " / mo"
-      }`,
+      `${text.monthlyPricePrefix}${priceText}${text.monthlyPriceSuffix}`,
     monthlyProfilePlan: (productName) =>
       `${text.monthlyPlanPrefix ?? text.monthlyPlanTitle} ${productName}`,
     renewsOn: (dateText) =>
-      `${text.renewsOnPrefix ?? "Renews on "}${dateText}${
-        text.renewsOnSuffix ?? ""
-      }`,
+      `${text.renewsOnPrefix}${dateText}${text.renewsOnSuffix}`,
     saveDiscount: (discountPercentage) =>
-      `${text.savePrefix ?? "Save "}${discountPercentage}%${text.saveSuffix ?? ""}`,
+      `${text.savePrefix}${discountPercentage}%${text.saveSuffix}`,
     upgradeTo: (productName) =>
-      `${text.upgradePrefix ?? "Upgrade to "}${productName}${
-        text.upgradeSuffix ?? ""
-      }`,
+      `${text.upgradePrefix}${productName}${text.upgradeSuffix}`,
   };
 };
 

@@ -31,6 +31,13 @@
 - Check small-screen text wrapping with `flexShrink`, `flexWrap`, and no unnecessary fixed widths.
 - Keep card radius at 8px unless the design system changes.
 
+## Localization Rules
+
+- When adding or changing localized paywall copy, update every locale in `packages/paywall-ui/src/locales/paywall`.
+- Do not add English-only fallback text for user-visible copy unless the fallback is only for app-provided custom `copy`.
+- If a new localized copy key is added, make it required in the locale text type so missing locale entries fail typecheck.
+- Add or update tests to verify non-English locales do not fall back to English for the changed copy.
+
 ## File Ownership
 
 - `packages/paywall-ui/src/create-paywall-plans.ts`: pure adapter from RevenueCat-like packages to `PaywallPlan[]`.

@@ -89,6 +89,7 @@ export const getDefaultPaywallCopy = (
     restoreButton: text.restoreButton,
     termsText: text.termsText,
     privacyText: text.privacyText,
+    closeButtonAccessibilityLabel: text.closeButtonAccessibilityLabel,
     legalPrefix: text.subscriptionRenewsAutomatically,
     formatTrialDuration: text.formatTrialDuration,
     formatTrialIncludedTitle: text.formatTrialIncludedTitle,

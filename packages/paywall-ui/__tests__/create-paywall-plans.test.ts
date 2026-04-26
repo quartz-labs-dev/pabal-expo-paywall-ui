@@ -3,6 +3,7 @@ import {
   getDefaultSelectedPlanId,
 } from "../src/create-paywall-plans";
 import {
+  PAYWALL_TEXT_LOCALES,
   getDefaultPaywallCopy,
   getDefaultPaywallPlanOptions,
   resolvePaywallTextLocale,
@@ -253,6 +254,10 @@ test("provides localized default plan copy from locale strings", () => {
     getDefaultPaywallCopy("ko-KR", { title: "Pro" }).nextButton,
     "다음",
   );
+  assert.equal(
+    getDefaultPaywallCopy("ko-KR", { title: "Pro" }).continueButton,
+    "계속",
+  );
 });
 
 test("resolves every unified non-English locale without falling back to English", () => {
@@ -271,4 +276,62 @@ test("resolves every unified non-English locale without falling back to English"
   assert.equal(resolvePaywallTextLocale("fa-AE"), "fa");
   assert.equal(resolvePaywallTextLocale("no-NO"), "nb");
   assert.equal(resolvePaywallTextLocale("zh-HK"), "zhHant");
+});
+
+test("localizes continue button copy for every non-English paywall locale", () => {
+  for (const locale of PAYWALL_TEXT_LOCALES) {
+    const copy = getDefaultPaywallCopy(locale, { title: "Pro" });
+
+    if (locale === "en") {
+      assert.equal(copy.continueButton, "Continue");
+      continue;
+    }
+
+    assert.notEqual(copy.continueButton, "Continue", locale);
+  }
+});
+
+test("localizes generated paywall copy for every non-English paywall locale", () => {
+  for (const locale of PAYWALL_TEXT_LOCALES) {
+    const copy = getDefaultPaywallCopy(locale, { title: "Pro" });
+    const plans = createPaywallPlans(
+      [
+        makePackage("$rc_monthly", 10, "$10.00"),
+        makePackage("$rc_annual", 80, "$80.00"),
+      ],
+      getDefaultPaywallPlanOptions(locale),
+    );
+    const trialTitle = copy.formatTrialIncludedTitle?.({
+      value: 2,
+      unit: "week",
+    });
+    const trialDisclosure = copy.formatTrialPriceDisclosure?.(
+      { value: 2, unit: "week" },
+      "$80.00",
+    );
+    const annualPlan = plans.find((plan) => plan.period === "annual");
+    const monthlyPlan = plans.find((plan) => plan.period === "monthly");
+
+    assert.ok(copy.closeButtonAccessibilityLabel, locale);
+    assert.ok(copy.trialIncludedDescription, locale);
+    assert.ok(trialTitle, locale);
+    assert.ok(trialDisclosure, locale);
+    assert.ok(annualPlan?.monthlyPriceText, locale);
+    assert.ok(annualPlan?.pricePerPeriodText, locale);
+    assert.ok(monthlyPlan?.pricePerPeriodText, locale);
+
+    if (locale === "en") continue;
+
+    assert.notEqual(copy.closeButtonAccessibilityLabel, "Close paywall", locale);
+    assert.doesNotMatch(
+      copy.trialIncludedDescription ?? "",
+      /Cancel anytime/,
+      locale,
+    );
+    assert.doesNotMatch(trialTitle ?? "", /Free Trial Included/, locale);
+    assert.doesNotMatch(trialDisclosure ?? "", / free, then /, locale);
+    assert.doesNotMatch(annualPlan?.monthlyPriceText ?? "", / \/ mo$/, locale);
+    assert.doesNotMatch(annualPlan?.pricePerPeriodText ?? "", / \/ year$/, locale);
+    assert.doesNotMatch(monthlyPlan?.pricePerPeriodText ?? "", / \/ month$/, locale);
+  }
 });
