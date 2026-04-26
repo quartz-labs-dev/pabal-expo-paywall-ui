@@ -46,7 +46,13 @@ export const LegalLinks = ({
               {copy.restoreButton}
             </Text>
           </Pressable>
-          <Text style={[styles.separator, { color: theme.mutedTextColor }]}>
+          <Text
+            style={[
+              styles.separator,
+              styles.mutedSeparator,
+              { color: theme.mutedTextColor },
+            ]}
+          >
             |
           </Text>
         </View>
@@ -61,7 +67,13 @@ export const LegalLinks = ({
               {copy.privacyText}
             </Text>
           </Pressable>
-          <Text style={[styles.separator, { color: theme.mutedTextColor }]}>
+          <Text
+            style={[
+              styles.separator,
+              styles.mutedSeparator,
+              { color: theme.mutedTextColor },
+            ]}
+          >
             |
           </Text>
         </View>
@@ -98,14 +110,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     minHeight: 36,
-    paddingHorizontal: 4,
+    paddingHorizontal: 8,
     width: "100%",
   },
   actionLabel: {
     flexShrink: 1,
-    fontSize: 13,
-    fontWeight: "700",
+    fontSize: 12,
+    fontWeight: "500",
     lineHeight: 18,
+    paddingHorizontal: 4,
     textAlign: "center",
     textDecorationLine: "underline",
   },
@@ -123,8 +136,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   separator: {
-    fontSize: 13,
-    fontWeight: "700",
+    fontSize: 12,
+    fontWeight: "500",
     lineHeight: 18,
     position: "absolute",
     right: -5,
@@ -132,9 +145,13 @@ const styles = StyleSheet.create({
     top: 9,
     width: 10,
   },
+  mutedSeparator: {
+    opacity: 0.3,
+  },
   topSeparator: {
     alignSelf: "stretch",
     height: 1,
-    opacity: 0.35,
+    marginBottom: 8,
+    opacity: 0.3,
   },
 });

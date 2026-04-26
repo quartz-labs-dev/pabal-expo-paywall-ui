@@ -117,6 +117,7 @@ const INITIAL_TRANSITION_DURATION = 380;
 const INITIAL_TRANSITION_DISTANCE = 22;
 const NAV_ICON_BACKGROUND_COLOR = "rgba(0, 0, 0, 0.22)";
 const NAV_ICON_COLOR = "#FFFFFF";
+const PAYWALL_HORIZONTAL_PADDING = 8;
 
 const getStepTransitionOffset = (
   phase: PaywallTransitionPhase,
@@ -555,7 +556,7 @@ const styles = StyleSheet.create({
   fixedFooter: {
     bottom: 0,
     left: 0,
-    paddingHorizontal: 20,
+    paddingHorizontal: PAYWALL_HORIZONTAL_PADDING,
     paddingTop: FIXED_FOOTER_TOP_PADDING,
     position: "absolute",
     right: 0,
@@ -598,7 +599,7 @@ const styles = StyleSheet.create({
   },
   body: {
     gap: 24,
-    paddingHorizontal: 20,
+    paddingHorizontal: PAYWALL_HORIZONTAL_PADDING,
   },
   valueBody: {
     gap: 34,
@@ -608,6 +609,7 @@ const styles = StyleSheet.create({
   },
   header: {
     gap: 8,
+    paddingHorizontal: 8,
   },
   title: {
     fontSize: 26,
