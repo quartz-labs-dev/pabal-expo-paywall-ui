@@ -36,8 +36,8 @@ export const HomeScreen = ({
           <Text style={styles.eyebrow}>@pabal/expo-paywall-ui playground</Text>
           <Text style={styles.title}>Choose test packages</Text>
           <Text style={styles.subtitle}>
-            홈에서 offering 상태를 고르고 `/paywall` 화면에서 실제 페이월만
-            확인합니다.
+            Select an offering state on the home screen, then open `/paywall`
+            to inspect only the shared paywall UI.
           </Text>
         </View>
 
