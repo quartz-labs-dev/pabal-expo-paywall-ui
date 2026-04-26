@@ -7,16 +7,25 @@ import type {
 
 const DEFAULT_MONTHLY_PACKAGE_IDS = ["$rc_monthly"];
 const DEFAULT_ANNUAL_PACKAGE_IDS = ["$rc_annual"];
-const DEFAULT_DISPLAY_ORDER: PaywallPlanPeriod[] = ["annual", "monthly"];
+const DEFAULT_LIFETIME_PACKAGE_IDS = ["$rc_lifetime"];
+const DEFAULT_DISPLAY_ORDER: PaywallPlanPeriod[] = [
+  "annual",
+  "lifetime",
+  "monthly",
+];
 
 const getPeriod = (
   pack: PurchasesPackageLike,
   options: Required<
-    Pick<CreatePaywallPlansOptions, "monthlyPackageIds" | "annualPackageIds">
+    Pick<
+      CreatePaywallPlansOptions,
+      "monthlyPackageIds" | "annualPackageIds" | "lifetimePackageIds"
+    >
   >,
 ): PaywallPlanPeriod | null => {
   if (options.monthlyPackageIds.includes(pack.identifier)) return "monthly";
   if (options.annualPackageIds.includes(pack.identifier)) return "annual";
+  if (options.lifetimePackageIds.includes(pack.identifier)) return "lifetime";
   return null;
 };
 
@@ -74,19 +83,30 @@ export const createPaywallPlans = <TPackage extends PurchasesPackageLike>(
     options.monthlyPackageIds ?? DEFAULT_MONTHLY_PACKAGE_IDS;
   const annualPackageIds =
     options.annualPackageIds ?? DEFAULT_ANNUAL_PACKAGE_IDS;
+  const lifetimePackageIds =
+    options.lifetimePackageIds ?? DEFAULT_LIFETIME_PACKAGE_IDS;
   const recommendedPeriod = options.recommendedPeriod ?? "annual";
   const displayOrder = options.displayOrder ?? DEFAULT_DISPLAY_ORDER;
   const monthlyPackage = packages.find((pack) => {
     return (
-      getPeriod(pack, { monthlyPackageIds, annualPackageIds }) === "monthly"
+      getPeriod(pack, {
+        monthlyPackageIds,
+        annualPackageIds,
+        lifetimePackageIds,
+      }) === "monthly"
     );
   });
 
   const plans = packages.reduce<PaywallPlan<TPackage>[]>((acc, pack) => {
-    const period = getPeriod(pack, { monthlyPackageIds, annualPackageIds });
+    const period = getPeriod(pack, {
+      monthlyPackageIds,
+      annualPackageIds,
+      lifetimePackageIds,
+    });
     if (period === null) return acc;
 
     const isAnnual = period === "annual";
+    const isLifetime = period === "lifetime";
     const discountText =
       isAnnual && monthlyPackage
         ? formatDiscountText(pack, monthlyPackage)
@@ -96,14 +116,26 @@ export const createPaywallPlans = <TPackage extends PurchasesPackageLike>(
       id: pack.identifier,
       period,
       title:
-        (isAnnual ? options.annualTitle : options.monthlyTitle) ??
-        (isAnnual ? "Annual" : "Monthly"),
+        (isAnnual
+          ? options.annualTitle
+          : isLifetime
+          ? options.lifetimeTitle
+          : options.monthlyTitle) ??
+        (isAnnual ? "Annual" : isLifetime ? "Lifetime" : "Monthly"),
       priceText: pack.product.priceString,
       monthlyPriceText: isAnnual ? formatMonthlyPrice(pack) : undefined,
       discountText,
-      badgeText: isAnnual ? discountText ?? options.annualBadgeText : undefined,
+      badgeText: isAnnual
+        ? discountText ?? options.annualBadgeText
+        : isLifetime
+        ? options.lifetimeBadgeText
+        : undefined,
       description:
-        (isAnnual ? options.annualDescription : options.monthlyDescription) ??
+        (isAnnual
+          ? options.annualDescription
+          : isLifetime
+          ? options.lifetimeDescription
+          : options.monthlyDescription) ??
         pack.product.description,
       isRecommended: period === recommendedPeriod,
       rawPackage: pack,

@@ -14,7 +14,7 @@ import { LegalLinks } from "./LegalLinks";
 import { PlanSelector } from "./PlanSelector";
 import { PurchaseButton } from "./PurchaseButton";
 import { mergePaywallTheme } from "./theme";
-import type { PaywallPlan, PaywallProps } from "./types";
+import type { PaywallBenefit, PaywallPlan, PaywallProps } from "./types";
 
 const getSelectedPlan = <TPackage,>(
   plans: PaywallPlan<TPackage>[],
@@ -22,6 +22,10 @@ const getSelectedPlan = <TPackage,>(
 ): PaywallPlan<TPackage> | undefined => {
   const fallbackPlanId = selectedPlanId ?? getDefaultSelectedPlanId(plans);
   return plans.find((plan) => plan.id === fallbackPlanId);
+};
+
+const getBenefitKey = (benefit: PaywallBenefit): string => {
+  return typeof benefit === "string" ? benefit : benefit.title;
 };
 
 const FIXED_FOOTER_BUTTON_HEIGHT = 52;
@@ -34,7 +38,8 @@ export const Paywall = <TPackage,>({
   plans,
   hero,
   heroHeightRatio = DEFAULT_HERO_HEIGHT_RATIO,
-  benefits,
+  benefits = [],
+  content,
   copy,
   selectedPlanId,
   theme: themeOverride,
@@ -132,23 +137,42 @@ export const Paywall = <TPackage,>({
             onSelectPlan={onSelectPlan}
           />
 
-          <View style={styles.benefits}>
-            {benefits.map((benefit) => (
-              <View key={benefit} style={styles.benefitRow}>
-                <Text style={[styles.check, { color: theme.accentColor }]}>
-                  +
-                </Text>
-                <Text
-                  style={[
-                    styles.benefitText,
-                    { color: theme.primaryTextColor },
-                  ]}
+          {content ? (
+            <View style={styles.contentSlot}>{content}</View>
+          ) : (
+            <View style={styles.benefits}>
+              {benefits.map((benefit, index) => (
+                <View
+                  key={`${getBenefitKey(benefit)}-${index}`}
+                  style={styles.benefitRow}
                 >
-                  {benefit}
-                </Text>
-              </View>
-            ))}
-          </View>
+                  <Text style={[styles.check, { color: theme.accentColor }]}>
+                    +
+                  </Text>
+                  <View style={styles.benefitTextGroup}>
+                    <Text
+                      style={[
+                        styles.benefitText,
+                        { color: theme.primaryTextColor },
+                      ]}
+                    >
+                      {typeof benefit === "string" ? benefit : benefit.title}
+                    </Text>
+                    {typeof benefit !== "string" && benefit.description && (
+                      <Text
+                        style={[
+                          styles.benefitDescription,
+                          { color: theme.secondaryTextColor },
+                        ]}
+                      >
+                        {benefit.description}
+                      </Text>
+                    )}
+                  </View>
+                </View>
+              ))}
+            </View>
+          )}
 
           <LegalLinks
             copy={copy}
@@ -235,7 +259,7 @@ const styles = StyleSheet.create({
     zIndex: 5,
   },
   content: {
-    gap: 14,
+    gap: 22,
   },
   hero: {
     overflow: "hidden",
@@ -263,6 +287,11 @@ const styles = StyleSheet.create({
   },
   benefits: {
     gap: 12,
+    paddingVertical: 8,
+  },
+  contentSlot: {
+    paddingVertical: 8,
+    width: "100%",
   },
   benefitRow: {
     alignItems: "flex-start",
@@ -275,9 +304,17 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   benefitText: {
-    flex: 1,
     fontSize: 15,
-    fontWeight: "600",
+    fontWeight: "800",
     lineHeight: 22,
+  },
+  benefitTextGroup: {
+    flex: 1,
+    gap: 2,
+  },
+  benefitDescription: {
+    fontSize: 13,
+    fontWeight: "500",
+    lineHeight: 19,
   },
 });

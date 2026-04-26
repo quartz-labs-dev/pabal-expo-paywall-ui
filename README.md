@@ -139,6 +139,7 @@ Scenarios available on the home screen:
 - monthly + annual
 - annual only
 - monthly only
+- lifetime only
 - long localized price
 
 Mock RevenueCat data lives in:
@@ -179,16 +180,61 @@ import {
   Paywall,
   createPaywallPlans,
   getDefaultSelectedPlanId,
+  type PaywallConfig,
   type PaywallPlan,
 } from "@pabal/expo-paywall-ui";
 
-const plans = createPaywallPlans(offering.availablePackages, {
-  annualBadgeText: "Best value",
-  annualTitle: "Yearly",
-  monthlyTitle: "Monthly",
-  recommendedPeriod: "annual",
-});
+const myAppPaywallConfig = {
+  hero: <MyAppPaywallHero />,
+  heroHeightRatio: 0.2,
+  benefits: [
+    {
+      title: "Unlock all premium features",
+      description: "Get every premium tool in this app.",
+    },
+    {
+      title: "Sync across supported devices",
+      description: "Keep access on every device signed into the same store account.",
+    },
+    {
+      title: "Cancel anytime",
+      description: "Manage or cancel the subscription from the App Store or Play Store.",
+    },
+  ],
+  copy: {
+    title: "Upgrade to Pro",
+    subtitle: "Get the full app experience.",
+    purchaseButton: "Continue",
+    purchasingButton: "Processing",
+    restoreButton: "Restore purchases",
+    legalPrefix: "Subscription renews automatically.",
+    termsText: "Terms",
+    privacyText: "Privacy",
+  },
+  planOptions: {
+    annualBadgeText: "Best value",
+    annualTitle: "Yearly",
+    monthlyTitle: "Monthly",
+    recommendedPeriod: "annual",
+  },
+  theme: {
+    accentColor: "#5AC8B7",
+    accentTextColor: "#071312",
+    backgroundColor: "#05080C",
+    primaryTextColor: "#F5F7FA",
+    secondaryTextColor: "#B9C4CF",
+  },
+} satisfies PaywallConfig;
+
+const { planOptions, ...paywallPresentation } = myAppPaywallConfig;
+
+const plans = createPaywallPlans(offering.availablePackages, planOptions);
 ```
+
+Use `benefits: string[]` for a simple checklist, or
+`benefits: [{ title, description }]` when each item needs a title and supporting
+copy. Use `content` only when an app needs full custom React Native layout. When
+`content` is present, the paywall renders it instead of the default benefits list.
 
 When both monthly and annual packages are present, `createPaywallPlans()` uses
 RevenueCat product prices to show annual discount copy such as `Save 33%` in the
@@ -205,25 +251,9 @@ const selectedPlanIdSafe =
   selectedPlanId ?? getDefaultSelectedPlanId(plans);
 
 <Paywall
-  hero={<MyAppPaywallHero />}
-  heroHeightRatio={0.2}
+  {...paywallPresentation}
   plans={plans}
   selectedPlanId={selectedPlanIdSafe}
-  benefits={[
-    "Unlock all premium features",
-    "Sync across supported devices",
-    "Cancel anytime",
-  ]}
-  copy={{
-    title: "Upgrade to Pro",
-    subtitle: "Get the full app experience.",
-    purchaseButton: "Continue",
-    purchasingButton: "Processing",
-    restoreButton: "Restore purchases",
-    legalPrefix: "Subscription renews automatically.",
-    termsText: "Terms",
-    privacyText: "Privacy",
-  }}
   onSelectPlan={setSelectedPlanId}
   onPurchase={async (plan: PaywallPlan) => {
     await Purchases.purchasePackage(plan.rawPackage);
@@ -290,9 +320,9 @@ The current tests lock down the highest-risk adapter path for purchases.
 
 ```txt
 createPaywallPlans()
-  +-- filters to monthly/annual packages
+  +-- filters to monthly/annual/lifetime packages
   +-- recommends annual by default
-  +-- falls back to the first plan when annual is missing
+  +-- falls back to the first plan when annual is missing, including lifetime-only offerings
   +-- supports app-specific package identifiers
   +-- preserves the original rawPackage
   +-- handles long currency strings

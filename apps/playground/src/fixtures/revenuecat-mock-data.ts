@@ -104,6 +104,8 @@ const createStoreProduct = ({
   pricePerYear,
   pricePerYearString,
   priceString,
+  productCategory = "SUBSCRIPTION",
+  productType = "AUTO_RENEWABLE_SUBSCRIPTION",
   subscriptionPeriod,
   title,
   offeringIdentifier,
@@ -119,7 +121,9 @@ const createStoreProduct = ({
   pricePerYear: number | null;
   pricePerYearString: string | null;
   priceString: string;
-  subscriptionPeriod: string;
+  productCategory?: MockProductCategory;
+  productType?: MockProductType;
+  subscriptionPeriod: string | null;
   title: string;
   offeringIdentifier: string;
 }): MockPurchasesStoreProduct => ({
@@ -137,8 +141,8 @@ const createStoreProduct = ({
   currencyCode,
   introPrice: null,
   discounts: null,
-  productCategory: "SUBSCRIPTION",
-  productType: "AUTO_RENEWABLE_SUBSCRIPTION",
+  productCategory,
+  productType,
   subscriptionPeriod,
   defaultOption: null,
   subscriptionOptions: null,
@@ -178,6 +182,8 @@ const createOffering = ({
 }): MockPurchasesOffering => {
   const annual =
     availablePackages.find((pack) => pack.packageType === "ANNUAL") ?? null;
+  const lifetime =
+    availablePackages.find((pack) => pack.packageType === "LIFETIME") ?? null;
   const monthly =
     availablePackages.find((pack) => pack.packageType === "MONTHLY") ?? null;
 
@@ -186,7 +192,7 @@ const createOffering = ({
     serverDescription,
     metadata: metadata ?? {},
     availablePackages,
-    lifetime: null,
+    lifetime,
     annual,
     sixMonth: null,
     threeMonth: null,
@@ -248,6 +254,30 @@ const usdAnnualPackage = createPackage({
     priceString: "$29.99",
     subscriptionPeriod: "P1Y",
     title: "Annual Pro",
+  }),
+});
+
+const usdLifetimePackage = createPackage({
+  identifier: "$rc_lifetime",
+  offeringIdentifier: usdOfferingIdentifier,
+  packageType: "LIFETIME",
+  product: createStoreProduct({
+    currencyCode: "USD",
+    description: "One payment for permanent Pro access.",
+    identifier: "pabal_pro_lifetime",
+    offeringIdentifier: usdOfferingIdentifier,
+    price: 99.99,
+    pricePerMonth: null,
+    pricePerMonthString: null,
+    pricePerWeek: null,
+    pricePerWeekString: null,
+    pricePerYear: null,
+    pricePerYearString: null,
+    priceString: "$99.99",
+    productCategory: "NON_SUBSCRIPTION",
+    productType: "NON_CONSUMABLE",
+    subscriptionPeriod: null,
+    title: "Lifetime Pro",
   }),
 });
 
@@ -329,6 +359,18 @@ const monthlyOnlyOffering = createOffering({
   ],
 });
 
+const lifetimeOnlyOffering = createOffering({
+  identifier: "lifetime_only",
+  serverDescription: "Offering with only a lifetime package.",
+  availablePackages: [
+    {
+      ...usdLifetimePackage,
+      offeringIdentifier: "lifetime_only",
+      presentedOfferingContext: createPresentedOfferingContext("lifetime_only"),
+    },
+  ],
+});
+
 const longPriceOffering = createOffering({
   identifier: krwOfferingIdentifier,
   serverDescription: "Offering with long localized KRW price strings.",
@@ -345,6 +387,7 @@ export const mockRevenueCatOfferingsByScenario: Record<
   standard: createOfferings(standardOffering),
   annualOnly: createOfferings(annualOnlyOffering),
   monthlyOnly: createOfferings(monthlyOnlyOffering),
+  lifetimeOnly: createOfferings(lifetimeOnlyOffering),
   longPrice: createOfferings(longPriceOffering),
 };
 

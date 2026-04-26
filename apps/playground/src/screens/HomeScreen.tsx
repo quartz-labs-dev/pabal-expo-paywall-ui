@@ -32,6 +32,8 @@ export const HomeScreen = ({
   const plans = createPaywallPlans(getPackagesForScenario(scenario), {
     annualBadgeText: "Best value",
     annualTitle: "Yearly",
+    lifetimeBadgeText: "One-time",
+    lifetimeTitle: "Lifetime",
     monthlyTitle: "Monthly",
     recommendedPeriod: "annual",
   });

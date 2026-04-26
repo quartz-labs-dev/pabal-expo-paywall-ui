@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-export type PaywallPlanPeriod = "monthly" | "annual";
+export type PaywallPlanPeriod = "monthly" | "annual" | "lifetime";
 
 export interface PaywallPlan<TPackage = unknown> {
   id: string;
@@ -26,6 +26,13 @@ export interface PaywallCopy {
   legalPrefix?: string;
 }
 
+export interface PaywallBenefitDetail {
+  title: string;
+  description?: string;
+}
+
+export type PaywallBenefit = string | PaywallBenefitDetail;
+
 export interface PaywallTheme {
   backgroundColor: string;
   surfaceColor: string;
@@ -43,7 +50,8 @@ export interface PaywallProps<TPackage = unknown> {
   plans: PaywallPlan<TPackage>[];
   hero: ReactNode;
   heroHeightRatio?: number;
-  benefits: string[];
+  benefits?: PaywallBenefit[];
+  content?: ReactNode;
   copy: PaywallCopy;
   selectedPlanId?: string;
   theme?: Partial<PaywallTheme>;
@@ -54,6 +62,16 @@ export interface PaywallProps<TPackage = unknown> {
   onClose: () => void;
   onOpenTerms: () => void;
   onOpenPrivacy: () => void;
+}
+
+export interface PaywallConfig {
+  hero: ReactNode;
+  heroHeightRatio?: number;
+  benefits?: PaywallBenefit[];
+  content?: ReactNode;
+  copy: PaywallCopy;
+  theme?: Partial<PaywallTheme>;
+  planOptions?: CreatePaywallPlansOptions;
 }
 
 export interface PurchasesPackageLike {
@@ -71,11 +89,15 @@ export interface PurchasesPackageLike {
 export interface CreatePaywallPlansOptions {
   monthlyPackageIds?: string[];
   annualPackageIds?: string[];
+  lifetimePackageIds?: string[];
   monthlyTitle?: string;
   annualTitle?: string;
+  lifetimeTitle?: string;
   monthlyDescription?: string;
   annualDescription?: string;
+  lifetimeDescription?: string;
   annualBadgeText?: string;
+  lifetimeBadgeText?: string;
   recommendedPeriod?: PaywallPlanPeriod;
   displayOrder?: PaywallPlanPeriod[];
 }

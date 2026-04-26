@@ -14,6 +14,9 @@ consuming app must provide `SafeAreaProvider` at the app root.
 export { Paywall } from "@pabal/expo-paywall-ui";
 export { createPaywallPlans, getDefaultSelectedPlanId } from "@pabal/expo-paywall-ui";
 export type {
+  PaywallBenefit,
+  PaywallBenefitDetail,
+  PaywallConfig,
   PaywallPlan,
   PaywallProps,
   PaywallCopy,
@@ -27,7 +30,7 @@ export type {
 ```ts
 interface PaywallPlan<TPackage = unknown> {
   id: string;
-  period: "monthly" | "annual";
+  period: "monthly" | "annual" | "lifetime";
   title: string;
   priceText: string;
   monthlyPriceText?: string;
@@ -42,15 +45,58 @@ interface PaywallPlan<TPackage = unknown> {
 `rawPackage` is intentionally generic. In a RevenueCat app it will be the original
 RevenueCat package object. The app uses it when purchasing.
 
+## App Config
+
+Keep each app's paywall copy, colors, media slot, and package mapping in one typed
+config object.
+
+```tsx
+import { type PaywallConfig } from "@pabal/expo-paywall-ui";
+
+const paywallConfig = {
+  hero: <HeroImage />,
+  heroHeightRatio: 0.2,
+  benefits: [
+    {
+      title: "Unlock all premium features",
+      description: "Get every premium tool in this app.",
+    },
+    {
+      title: "Cancel anytime",
+      description: "Manage or cancel the subscription from the store.",
+    },
+  ],
+  copy: {
+    title: "Upgrade to Pro",
+    purchaseButton: "Continue",
+    restoreButton: "Restore purchases",
+    termsText: "Terms",
+    privacyText: "Privacy",
+  },
+  planOptions: {
+    annualBadgeText: "Best value",
+    lifetimeBadgeText: "One-time",
+    recommendedPeriod: "annual",
+  },
+  theme: {
+    accentColor: "#5AC8B7",
+    backgroundColor: "#05080C",
+    primaryTextColor: "#F5F7FA",
+  },
+} satisfies PaywallConfig;
+
+const { planOptions, ...paywallPresentation } = paywallConfig;
+```
+
+Use `benefits: string[]` for the simplest built-in checklist. Use
+`benefits: [{ title, description }]` when each benefit needs supporting copy.
+Use `content` for custom React Native content. If both are passed, `content`
+replaces the built-in benefits list.
+
 ## Adapter
 
 ```ts
-const plans = createPaywallPlans(offering.availablePackages, {
-  monthlyPackageIds: ["$rc_monthly"],
-  annualPackageIds: ["$rc_annual"],
-  annualBadgeText: "Best value",
-  recommendedPeriod: "annual",
-});
+const plans = createPaywallPlans(offering.availablePackages, planOptions);
 ```
 
 The helper only assumes this structural shape:
@@ -67,7 +113,8 @@ interface PurchasesPackageLike {
 ```
 
 This keeps the package independent from `react-native-purchases` versions.
-When both monthly and annual packages are present, the helper compares
+By default, `createPaywallPlans()` recognizes `$rc_monthly`, `$rc_annual`, and
+`$rc_lifetime`. When both monthly and annual packages are present, the helper compares
 `monthly.product.price * 12` with `annual.product.price` and adds annual
 discount copy such as `Save 33%`. This discount copy is used as the annual badge
 instead of `annualBadgeText`.
@@ -76,18 +123,9 @@ instead of `annualBadgeText`.
 
 ```tsx
 <Paywall
-  hero={<HeroImage />}
-  heroHeightRatio={0.2}
+  {...paywallPresentation}
   plans={plans}
   selectedPlanId={selectedPlanId}
-  benefits={["Unlock all premium features"]}
-  copy={{
-    title: "Upgrade to Pro",
-    purchaseButton: "Continue",
-    restoreButton: "Restore purchases",
-    termsText: "Terms",
-    privacyText: "Privacy",
-  }}
   onSelectPlan={setSelectedPlanId}
   onPurchase={(plan) => purchasePackage(plan.rawPackage)}
   onRestore={restorePurchases}

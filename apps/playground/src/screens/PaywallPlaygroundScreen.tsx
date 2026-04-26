@@ -4,6 +4,7 @@ import {
   Paywall,
   createPaywallPlans,
   getDefaultSelectedPlanId,
+  type PaywallConfig,
   type PaywallPlan,
   type PurchasesPackageLike,
 } from "@pabal/expo-paywall-ui";
@@ -25,6 +26,46 @@ const Hero = () => {
   );
 };
 
+const playgroundPaywallConfig = {
+  hero: <Hero />,
+  benefits: [
+    {
+      title: "Unlock all premium features",
+      description: "Use title and description rows without custom layout code.",
+    },
+    {
+      title: "Keep access across devices",
+      description: "App config can still switch to content for full control.",
+    },
+  ],
+  copy: {
+    title: "Upgrade to Pro",
+    subtitle: "Unlock every feature.",
+    purchaseButton: "Continue",
+    purchasingButton: "Processing",
+    restoreButton: "Restore purchases",
+    legalPrefix: "Subscription renews automatically.",
+    termsText: "Terms",
+    privacyText: "Privacy",
+  },
+  planOptions: {
+    annualBadgeText: "Best value",
+    annualTitle: "Yearly",
+    lifetimeBadgeText: "One-time",
+    lifetimeTitle: "Lifetime",
+    monthlyTitle: "Monthly",
+    recommendedPeriod: "annual",
+  },
+  theme: {
+    accentColor: "#5AC8B7",
+    backgroundColor: "#05080C",
+    primaryTextColor: "#F5F7FA",
+  },
+} satisfies PaywallConfig;
+
+const { planOptions: playgroundPlanOptions, ...playgroundPaywallProps } =
+  playgroundPaywallConfig;
+
 interface PaywallPlaygroundScreenProps {
   scenario: PlaygroundScenario;
   onClose: () => void;
@@ -38,12 +79,10 @@ export const PaywallPlaygroundScreen = ({
   const [isPurchasing, setIsPurchasing] = useState(false);
 
   const plans = useMemo(() => {
-    return createPaywallPlans(getPackagesForScenario(scenario), {
-      annualBadgeText: "Best value",
-      annualTitle: "Yearly",
-      monthlyTitle: "Monthly",
-      recommendedPeriod: "annual",
-    });
+    return createPaywallPlans(
+      getPackagesForScenario(scenario),
+      playgroundPlanOptions,
+    );
   }, [scenario]);
 
   useEffect(() => {
@@ -67,25 +106,10 @@ export const PaywallPlaygroundScreen = ({
   return (
     <View style={styles.root}>
       <Paywall
-        hero={<Hero />}
+        {...playgroundPaywallProps}
         plans={plans}
         selectedPlanId={selectedPlanId}
         isPurchasing={isPurchasing}
-        benefits={[
-          "Unlock all premium features",
-          "Keep access across supported devices",
-          "Cancel anytime from the App Store or Play Store",
-        ]}
-        copy={{
-          title: "Upgrade to Pro",
-          subtitle: "Unlock every feature.",
-          purchaseButton: "Continue",
-          purchasingButton: "Processing",
-          restoreButton: "Restore purchases",
-          legalPrefix: "Subscription renews automatically.",
-          termsText: "Terms",
-          privacyText: "Privacy",
-        }}
         onSelectPlan={setSelectedPlanId}
         onPurchase={handlePurchase}
         onRestore={() => Alert.alert("Restore callback")}

@@ -19,7 +19,7 @@ const makePackage = (
   },
 });
 
-test("keeps only monthly and annual packages by default", () => {
+test("keeps monthly, annual, and lifetime packages by default", () => {
   const plans = createPaywallPlans([
     makePackage("$rc_monthly", 4.99, "$4.99"),
     makePackage("$rc_annual", 29.99, "$29.99"),
@@ -28,6 +28,7 @@ test("keeps only monthly and annual packages by default", () => {
 
   assert.deepEqual(plans.map((plan) => plan.id), [
     "$rc_annual",
+    "$rc_lifetime",
     "$rc_monthly",
   ]);
 });
@@ -63,14 +64,49 @@ test("supports app-specific package identifiers", () => {
     [
       makePackage("monthly-pro", 6.99, "$6.99"),
       makePackage("yearly-pro", 49.99, "$49.99"),
+      makePackage("forever-pro", 99.99, "$99.99"),
     ],
     {
       annualPackageIds: ["yearly-pro"],
+      lifetimePackageIds: ["forever-pro"],
       monthlyPackageIds: ["monthly-pro"],
     },
   );
 
-  assert.deepEqual(plans.map((plan) => plan.period), ["annual", "monthly"]);
+  assert.deepEqual(plans.map((plan) => plan.period), [
+    "annual",
+    "lifetime",
+    "monthly",
+  ]);
+});
+
+test("supports a single lifetime package offering", () => {
+  const plans = createPaywallPlans([makePackage("$rc_lifetime", 99.99, "$99.99")]);
+
+  assert.deepEqual(plans.map((plan) => plan.period), ["lifetime"]);
+  assert.equal(plans[0]?.title, "Lifetime");
+  assert.equal(getDefaultSelectedPlanId(plans), "$rc_lifetime");
+});
+
+test("can recommend lifetime packages", () => {
+  const plans = createPaywallPlans(
+    [
+      makePackage("$rc_monthly", 10, "$10.00"),
+      makePackage("$rc_lifetime", 149.99, "$149.99"),
+    ],
+    {
+      lifetimeBadgeText: "One-time",
+      lifetimeTitle: "Lifetime access",
+      recommendedPeriod: "lifetime",
+    },
+  );
+
+  const lifetimePlan = plans.find((plan) => plan.period === "lifetime");
+
+  assert.equal(lifetimePlan?.badgeText, "One-time");
+  assert.equal(lifetimePlan?.title, "Lifetime access");
+  assert.equal(lifetimePlan?.isRecommended, true);
+  assert.equal(getDefaultSelectedPlanId(plans), "$rc_lifetime");
 });
 
 test("formats high-value annual prices without cents", () => {
