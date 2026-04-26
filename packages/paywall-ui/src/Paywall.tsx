@@ -63,9 +63,30 @@ export const Paywall = <TPackage,>({
         onPress={onClose}
         style={[styles.closeButton, { top: Math.max(insets.top, 10) }]}
       >
-        <Text style={[styles.closeText, { color: theme.primaryTextColor }]}>
-          x
-        </Text>
+        <View
+          style={[
+            styles.closeIcon,
+            {
+              backgroundColor: theme.backgroundColor,
+              borderColor: theme.secondaryTextColor,
+            },
+          ]}
+        >
+          <View
+            style={[
+              styles.closeIconLine,
+              styles.closeIconLineFirst,
+              { backgroundColor: theme.primaryTextColor },
+            ]}
+          />
+          <View
+            style={[
+              styles.closeIconLine,
+              styles.closeIconLineSecond,
+              { backgroundColor: theme.primaryTextColor },
+            ]}
+          />
+        </View>
       </Pressable>
 
       <ScrollView
@@ -167,10 +188,25 @@ const styles = StyleSheet.create({
     width: 44,
     zIndex: 10,
   },
-  closeText: {
-    fontSize: 24,
-    fontWeight: "700",
-    lineHeight: 28,
+  closeIcon: {
+    alignItems: "center",
+    borderRadius: 17,
+    borderWidth: StyleSheet.hairlineWidth,
+    height: 34,
+    justifyContent: "center",
+    width: 34,
+  },
+  closeIconLine: {
+    borderRadius: 1,
+    height: 2,
+    position: "absolute",
+    width: 14,
+  },
+  closeIconLineFirst: {
+    transform: [{ rotate: "45deg" }],
+  },
+  closeIconLineSecond: {
+    transform: [{ rotate: "-45deg" }],
   },
   fixedFooter: {
     bottom: 0,

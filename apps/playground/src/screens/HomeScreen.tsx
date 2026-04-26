@@ -1,5 +1,7 @@
 import { createPaywallPlans, getDefaultSelectedPlanId } from "@pabal/expo-paywall-ui";
+import { useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import {
   getPackagesForScenario,
@@ -15,12 +17,18 @@ interface HomeScreenProps {
 }
 
 const scenarios = Object.keys(scenarioLabels) as PlaygroundScenario[];
+const FIXED_FOOTER_BUTTON_HEIGHT = 54;
+const FIXED_FOOTER_TOP_PADDING = 12;
+const FIXED_FOOTER_MIN_BOTTOM_PADDING = 12;
+const FIXED_FOOTER_SCROLL_GAP = 24;
 
 export const HomeScreen = ({
   scenario,
   onChangeScenario,
   onOpenPaywall,
 }: HomeScreenProps) => {
+  const insets = useSafeAreaInsets();
+  const [measuredFooterHeight, setMeasuredFooterHeight] = useState(0);
   const plans = createPaywallPlans(getPackagesForScenario(scenario), {
     annualBadgeText: "Best value",
     annualTitle: "Yearly",
@@ -28,10 +36,27 @@ export const HomeScreen = ({
     recommendedPeriod: "annual",
   });
   const defaultPlanId = getDefaultSelectedPlanId(plans);
+  const footerBottomPadding = Math.max(
+    insets.bottom,
+    FIXED_FOOTER_MIN_BOTTOM_PADDING,
+  );
+  const fallbackFooterHeight =
+    FIXED_FOOTER_TOP_PADDING +
+    FIXED_FOOTER_BUTTON_HEIGHT +
+    footerBottomPadding;
+  const fixedFooterHeight = Math.max(
+    measuredFooterHeight,
+    fallbackFooterHeight,
+  );
 
   return (
     <View style={styles.root}>
-      <ScrollView contentContainerStyle={styles.content}>
+      <ScrollView
+        contentContainerStyle={[
+          styles.content,
+          { paddingBottom: fixedFooterHeight + FIXED_FOOTER_SCROLL_GAP },
+        ]}
+      >
         <View style={styles.header}>
           <Text style={styles.eyebrow}>@pabal/expo-paywall-ui playground</Text>
           <Text style={styles.title}>Choose test packages</Text>
@@ -95,11 +120,23 @@ export const HomeScreen = ({
             Default selected plan: {defaultPlanId ?? "none"}
           </Text>
         </View>
+      </ScrollView>
 
+      <View
+        onLayout={(event) => {
+          const nextFooterHeight = Math.ceil(event.nativeEvent.layout.height);
+          setMeasuredFooterHeight((previousFooterHeight) =>
+            previousFooterHeight === nextFooterHeight
+              ? previousFooterHeight
+              : nextFooterHeight,
+          );
+        }}
+        style={[styles.fixedFooter, { paddingBottom: footerBottomPadding }]}
+      >
         <Pressable onPress={onOpenPaywall} style={styles.cta}>
           <Text style={styles.ctaText}>Open /paywall</Text>
         </Pressable>
-      </ScrollView>
+      </View>
     </View>
   );
 };
@@ -111,8 +148,18 @@ const styles = StyleSheet.create({
   },
   content: {
     gap: 28,
-    padding: 20,
+    paddingHorizontal: 20,
     paddingTop: 72,
+  },
+  fixedFooter: {
+    backgroundColor: "#05080C",
+    bottom: 0,
+    left: 0,
+    paddingHorizontal: 20,
+    paddingTop: FIXED_FOOTER_TOP_PADDING,
+    position: "absolute",
+    right: 0,
+    zIndex: 5,
   },
   header: {
     gap: 10,
