@@ -72,17 +72,14 @@ export const PlanCard = <TPackage,>({
           {plan.priceText}
         </Text>
         {plan.monthlyPriceText && (
-          <Text style={[styles.monthlyPrice, { color: theme.secondaryTextColor }]}>
+          <Text
+            style={[styles.monthlyPrice, { color: theme.secondaryTextColor }]}
+          >
             {plan.monthlyPriceText} / mo
           </Text>
         )}
       </View>
 
-      {plan.description && (
-        <Text style={[styles.description, { color: theme.secondaryTextColor }]}>
-          {plan.description}
-        </Text>
-      )}
     </Pressable>
   );
 };
@@ -146,9 +143,5 @@ const styles = StyleSheet.create({
   monthlyPrice: {
     fontSize: 13,
     fontWeight: "600",
-  },
-  description: {
-    fontSize: 13,
-    lineHeight: 18,
   },
 });

@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { getDefaultSelectedPlanId } from "./create-paywall-plans";
@@ -21,10 +28,12 @@ const FIXED_FOOTER_BUTTON_HEIGHT = 52;
 const FIXED_FOOTER_TOP_PADDING = 12;
 const FIXED_FOOTER_MIN_BOTTOM_PADDING = 12;
 const FIXED_FOOTER_SCROLL_GAP = 24;
+const DEFAULT_HERO_HEIGHT_RATIO = 0.2;
 
 export const Paywall = <TPackage,>({
   plans,
   hero,
+  heroHeightRatio = DEFAULT_HERO_HEIGHT_RATIO,
   benefits,
   copy,
   selectedPlanId,
@@ -39,8 +48,10 @@ export const Paywall = <TPackage,>({
 }: PaywallProps<TPackage>) => {
   const theme = mergePaywallTheme(themeOverride);
   const insets = useSafeAreaInsets();
+  const { height: windowHeight } = useWindowDimensions();
   const selectedPlan = getSelectedPlan(plans, selectedPlanId);
   const resolvedSelectedPlanId = selectedPlan?.id;
+  const heroHeight = Math.round(windowHeight * heroHeightRatio);
   const [measuredFooterHeight, setMeasuredFooterHeight] = useState(0);
   const footerBottomPadding = Math.max(
     insets.bottom,
@@ -94,53 +105,59 @@ export const Paywall = <TPackage,>({
           styles.content,
           {
             paddingBottom: fixedFooterHeight + FIXED_FOOTER_SCROLL_GAP,
-            paddingTop: Math.max(insets.top + 36, 56),
           },
         ]}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.hero}>{hero}</View>
+        <View style={[styles.hero, { height: heroHeight }]}>{hero}</View>
 
-        <View style={styles.header}>
-          <Text style={[styles.title, { color: theme.primaryTextColor }]}>
-            {copy.title}
-          </Text>
-          {copy.subtitle && (
-            <Text style={[styles.subtitle, { color: theme.secondaryTextColor }]}>
-              {copy.subtitle}
+        <View style={styles.body}>
+          <View style={styles.header}>
+            <Text style={[styles.title, { color: theme.primaryTextColor }]}>
+              {copy.title}
             </Text>
-          )}
-        </View>
-
-        <View style={styles.benefits}>
-          {benefits.map((benefit) => (
-            <View key={benefit} style={styles.benefitRow}>
-              <Text style={[styles.check, { color: theme.accentColor }]}>
-                +
-              </Text>
+            {copy.subtitle && (
               <Text
-                style={[styles.benefitText, { color: theme.primaryTextColor }]}
+                style={[styles.subtitle, { color: theme.secondaryTextColor }]}
               >
-                {benefit}
+                {copy.subtitle}
               </Text>
-            </View>
-          ))}
+            )}
+          </View>
+
+          <PlanSelector
+            plans={plans}
+            selectedPlanId={resolvedSelectedPlanId}
+            theme={theme}
+            onSelectPlan={onSelectPlan}
+          />
+
+          <View style={styles.benefits}>
+            {benefits.map((benefit) => (
+              <View key={benefit} style={styles.benefitRow}>
+                <Text style={[styles.check, { color: theme.accentColor }]}>
+                  +
+                </Text>
+                <Text
+                  style={[
+                    styles.benefitText,
+                    { color: theme.primaryTextColor },
+                  ]}
+                >
+                  {benefit}
+                </Text>
+              </View>
+            ))}
+          </View>
+
+          <LegalLinks
+            copy={copy}
+            theme={theme}
+            onRestore={onRestore}
+            onOpenTerms={onOpenTerms}
+            onOpenPrivacy={onOpenPrivacy}
+          />
         </View>
-
-        <PlanSelector
-          plans={plans}
-          selectedPlanId={resolvedSelectedPlanId}
-          theme={theme}
-          onSelectPlan={onSelectPlan}
-        />
-
-        <LegalLinks
-          copy={copy}
-          theme={theme}
-          onRestore={onRestore}
-          onOpenTerms={onOpenTerms}
-          onOpenPrivacy={onOpenPrivacy}
-        />
       </ScrollView>
 
       <View
@@ -218,20 +235,24 @@ const styles = StyleSheet.create({
     zIndex: 5,
   },
   content: {
-    gap: 24,
-    paddingHorizontal: 20,
+    gap: 14,
   },
   hero: {
-    minHeight: 180,
+    overflow: "hidden",
+    width: "100%",
+  },
+  body: {
+    gap: 24,
+    paddingHorizontal: 20,
   },
   header: {
     gap: 8,
   },
   title: {
-    fontSize: 30,
+    fontSize: 26,
     fontWeight: "900",
     letterSpacing: 0,
-    lineHeight: 36,
+    lineHeight: 32,
     textAlign: "center",
   },
   subtitle: {

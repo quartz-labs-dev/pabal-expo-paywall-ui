@@ -190,6 +190,10 @@ const plans = createPaywallPlans(offering.availablePackages, {
 });
 ```
 
+When both monthly and annual packages are present, `createPaywallPlans()` uses
+RevenueCat product prices to show annual discount copy such as `Save 33%` in the
+annual badge.
+
 Then pass only plans and callbacks into the UI.
 
 ```tsx
@@ -202,6 +206,7 @@ const selectedPlanIdSafe =
 
 <Paywall
   hero={<MyAppPaywallHero />}
+  heroHeightRatio={0.2}
   plans={plans}
   selectedPlanId={selectedPlanIdSafe}
   benefits={[

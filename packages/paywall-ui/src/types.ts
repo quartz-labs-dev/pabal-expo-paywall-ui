@@ -8,6 +8,7 @@ export interface PaywallPlan<TPackage = unknown> {
   title: string;
   priceText: string;
   monthlyPriceText?: string;
+  discountText?: string;
   badgeText?: string;
   description?: string;
   isRecommended?: boolean;
@@ -41,6 +42,7 @@ export interface PaywallTheme {
 export interface PaywallProps<TPackage = unknown> {
   plans: PaywallPlan<TPackage>[];
   hero: ReactNode;
+  heroHeightRatio?: number;
   benefits: string[];
   copy: PaywallCopy;
   selectedPlanId?: string;

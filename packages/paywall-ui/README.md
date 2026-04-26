@@ -31,6 +31,7 @@ interface PaywallPlan<TPackage = unknown> {
   title: string;
   priceText: string;
   monthlyPriceText?: string;
+  discountText?: string;
   badgeText?: string;
   description?: string;
   isRecommended?: boolean;
@@ -66,12 +67,17 @@ interface PurchasesPackageLike {
 ```
 
 This keeps the package independent from `react-native-purchases` versions.
+When both monthly and annual packages are present, the helper compares
+`monthly.product.price * 12` with `annual.product.price` and adds annual
+discount copy such as `Save 33%`. This discount copy is used as the annual badge
+instead of `annualBadgeText`.
 
 ## Render
 
 ```tsx
 <Paywall
   hero={<HeroImage />}
+  heroHeightRatio={0.2}
   plans={plans}
   selectedPlanId={selectedPlanId}
   benefits={["Unlock all premium features"]}
@@ -90,6 +96,10 @@ This keeps the package independent from `react-native-purchases` versions.
   onOpenPrivacy={openPrivacy}
 />
 ```
+
+`heroHeightRatio` is optional and defaults to `0.2`, so the media slot uses 20%
+of the current device height. Increase or decrease it per app when the paywall
+needs a taller or shorter media section.
 
 ## Styling
 
@@ -113,7 +123,6 @@ Native primitives.
 The paywall applies safe area insets to:
 
 - close button top position
-- scroll content top padding
 - scroll content bottom padding
 
 Keep `react-native-safe-area-context` as a peer dependency so consuming apps own the

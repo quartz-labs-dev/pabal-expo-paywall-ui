@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Alert, ImageBackground, StyleSheet, Text, View } from "react-native";
+import { Alert, ImageBackground, StyleSheet, View } from "react-native";
 import {
   Paywall,
   createPaywallPlans,
@@ -20,10 +20,7 @@ const Hero = () => {
       imageStyle={styles.heroImage}
       style={styles.hero}
     >
-      <View style={styles.heroOverlay}>
-        <Text style={styles.heroEyebrow}>PLAYGROUND MEDIA SLOT</Text>
-        <Text style={styles.heroTitle}>Swap this for app image or video</Text>
-      </View>
+      <View />
     </ImageBackground>
   );
 };
@@ -43,9 +40,7 @@ export const PaywallPlaygroundScreen = ({
   const plans = useMemo(() => {
     return createPaywallPlans(getPackagesForScenario(scenario), {
       annualBadgeText: "Best value",
-      annualDescription: "Save with one payment per year.",
       annualTitle: "Yearly",
-      monthlyDescription: "Pay month to month.",
       monthlyTitle: "Monthly",
       recommendedPeriod: "annual",
     });
@@ -83,7 +78,7 @@ export const PaywallPlaygroundScreen = ({
         ]}
         copy={{
           title: "Upgrade to Pro",
-          subtitle: "One reusable paywall shell, app-owned purchase logic.",
+          subtitle: "Unlock every feature.",
           purchaseButton: "Continue",
           purchasingButton: "Processing",
           restoreButton: "Restore purchases",
@@ -107,29 +102,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   hero: {
-    borderRadius: 8,
-    height: 220,
+    height: "100%",
     justifyContent: "flex-end",
     overflow: "hidden",
+    width: "100%",
   },
-  heroImage: {
-    borderRadius: 8,
-  },
-  heroOverlay: {
-    backgroundColor: "rgba(0,0,0,0.36)",
-    gap: 4,
-    padding: 16,
-  },
-  heroEyebrow: {
-    color: "#B9C4CF",
-    fontSize: 11,
-    fontWeight: "900",
-    letterSpacing: 0,
-  },
-  heroTitle: {
-    color: "#FFFFFF",
-    fontSize: 20,
-    fontWeight: "900",
-    letterSpacing: 0,
-  },
+  heroImage: {},
 });

@@ -80,3 +80,23 @@ test("formats high-value annual prices without cents", () => {
 
   assert.equal(plans[0]?.monthlyPriceText, "KRW 4158");
 });
+
+test("adds annual discount text compared to monthly pricing", () => {
+  const plans = createPaywallPlans([
+    makePackage("$rc_monthly", 10, "$10.00"),
+    makePackage("$rc_annual", 80, "$80.00"),
+  ]);
+
+  assert.equal(
+    plans.find((plan) => plan.period === "annual")?.discountText,
+    "Save 33%",
+  );
+  assert.equal(
+    plans.find((plan) => plan.period === "annual")?.badgeText,
+    "Save 33%",
+  );
+  assert.equal(
+    plans.find((plan) => plan.period === "monthly")?.discountText,
+    undefined,
+  );
+});
