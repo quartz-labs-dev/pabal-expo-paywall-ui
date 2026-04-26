@@ -7,6 +7,7 @@ import {
 } from "react-native";
 
 import { ProfileIdentifiersSection } from "./ProfileIdentifiersSection";
+import { getDefaultProfileIdentifiersCopy } from "./localized-paywall-copy";
 import { mergePaywallTheme } from "./theme";
 import type {
   PaywallBenefit,
@@ -33,6 +34,7 @@ export const ProfileSubscriptionSection = ({
   copy,
   headerIcon,
   identifierSection,
+  locale,
   theme: themeOverride,
   planLabel,
   renewalLabel,
@@ -70,6 +72,16 @@ export const ProfileSubscriptionSection = ({
   const shouldShowIdentifiers =
     identifierSection?.isEnabled === true &&
     Boolean(identifierSection?.items.length);
+  const resolvedIdentifierSection =
+    shouldShowIdentifiers && identifierSection
+      ? {
+          ...identifierSection,
+          copy: {
+            ...getDefaultProfileIdentifiersCopy(locale),
+            ...identifierSection.copy,
+          },
+        }
+      : undefined;
   const cardAction = isSubscribed
     ? onManageSubscription
     : shouldShowUpgrade
@@ -332,8 +344,11 @@ export const ProfileSubscriptionSection = ({
         </View>
       </Pressable>
 
-      {identifierSection && shouldShowIdentifiers && (
-        <ProfileIdentifiersSection section={identifierSection} theme={theme} />
+      {resolvedIdentifierSection && (
+        <ProfileIdentifiersSection
+          section={resolvedIdentifierSection}
+          theme={theme}
+        />
       )}
     </View>
   );

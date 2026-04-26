@@ -153,7 +153,7 @@ export interface ProfileIdentifiersCopy {
 }
 
 export interface ProfileIdentifiersConfig {
-  copy: ProfileIdentifiersCopy;
+  copy?: Partial<ProfileIdentifiersCopy>;
   defaultExpanded?: boolean;
   isEnabled?: boolean;
 }
@@ -171,6 +171,7 @@ export interface ProfileSubscriptionSectionProps {
   copy: ProfileSubscriptionCopy;
   headerIcon?: ReactNode;
   identifierSection?: ProfileIdentifiersSectionProps;
+  locale?: string;
   theme?: Partial<PaywallTheme>;
   planLabel?: string;
   renewalLabel?: string;
@@ -191,6 +192,7 @@ export interface ProfileSubscriptionConfig {
   copy: ProfileSubscriptionCopy;
   headerIcon?: ReactNode;
   identifierSection?: ProfileIdentifiersSectionProps;
+  locale?: string;
   theme?: Partial<PaywallTheme>;
 }
 

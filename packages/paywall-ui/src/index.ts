@@ -2,6 +2,7 @@ export { createPaywallPlans, getDefaultSelectedPlanId } from "./create-paywall-p
 export {
   getDefaultPaywallCopy,
   getDefaultPaywallPlanOptions,
+  getDefaultProfileIdentifiersCopy,
   getDefaultProfilePlanLabel,
   getDefaultProfileRenewalLabel,
   getDefaultProfileSubscriptionCopy,

@@ -77,11 +77,6 @@ export const ProfilePlaygroundScreen = ({
     : undefined;
   const identifierSection = useMemo(() => {
     return {
-      copy: {
-        copyButtonAccessibilityLabel: "Copy identifier",
-        hideButtonLabel: "Hide identifiers",
-        showButtonLabel: "Show identifiers",
-      },
       defaultExpanded: true,
       isEnabled: showProfileIdentifiers,
       items: [
@@ -143,7 +138,7 @@ export const ProfilePlaygroundScreen = ({
           />
           <ToggleButton
             isSelected={showProfileIdentifiers}
-            label={showProfileIdentifiers ? "Identifiers" : "No identifiers"}
+            label={showProfileIdentifiers ? "IDs" : "No IDs"}
             onPress={() =>
               setShowProfileIdentifiers((previousValue) => !previousValue)
             }
@@ -160,6 +155,7 @@ export const ProfilePlaygroundScreen = ({
           isRestoringPurchases={isRestoringPurchases}
           isSubscribed={isSubscribed}
           isUpgrading={isUpgrading}
+          locale={selectedLocale}
           planLabel={planLabel}
           renewalLabel={renewalLabel}
           showPromoCodeButton={showPromoCodeButton}

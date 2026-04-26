@@ -8,6 +8,7 @@ import type {
   CreatePaywallPlansOptions,
   PaywallCopy,
   PaywallPlanPeriod,
+  ProfileIdentifiersCopy,
   ProfileSubscriptionCopy,
 } from "./types";
 
@@ -122,6 +123,18 @@ export const getDefaultProfileSubscriptionCopy = (
     restoringPurchasesButton: text.restoring,
     redeemPromoCodeButton: text.enterPromoCode,
     redeemingPromoCodeButton: text.opening,
+  };
+};
+
+export const getDefaultProfileIdentifiersCopy = (
+  locale?: string,
+): ProfileIdentifiersCopy => {
+  const text = getPaywallText(locale);
+
+  return {
+    copyButtonAccessibilityLabel: text.copyIdentifierAccessibilityLabel,
+    hideButtonLabel: text.hideIdentifiersButton,
+    showButtonLabel: text.showIdentifiersButton,
   };
 };
 

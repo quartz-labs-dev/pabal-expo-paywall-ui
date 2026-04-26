@@ -6,6 +6,7 @@ import {
   PAYWALL_TEXT_LOCALES,
   getDefaultPaywallCopy,
   getDefaultPaywallPlanOptions,
+  getDefaultProfileIdentifiersCopy,
   resolvePaywallTextLocale,
 } from "../src/localized-paywall-copy";
 import { UNIFIED_LOCALES } from "../src/unified-locales";
@@ -287,6 +288,23 @@ test("localizes continue button copy for every non-English paywall locale", () =
     }
 
     assert.notEqual(copy.continueButton, "Continue", locale);
+  }
+});
+
+test("localizes profile identifier copy for every non-English paywall locale", () => {
+  for (const locale of PAYWALL_TEXT_LOCALES) {
+    const copy = getDefaultProfileIdentifiersCopy(locale);
+
+    if (locale === "en") {
+      assert.equal(copy.copyButtonAccessibilityLabel, "Copy IDs");
+      assert.equal(copy.hideButtonLabel, "Hide IDs");
+      assert.equal(copy.showButtonLabel, "Show IDs");
+      continue;
+    }
+
+    assert.match(copy.copyButtonAccessibilityLabel, /IDs/, locale);
+    assert.match(copy.hideButtonLabel, /IDs/, locale);
+    assert.match(copy.showButtonLabel, /IDs/, locale);
   }
 });
 

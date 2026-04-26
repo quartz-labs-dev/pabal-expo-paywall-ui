@@ -199,16 +199,12 @@ const profileSubscriptionConfig = {
   },
   headerIcon: <AppIcon />,
   identifierSection: {
-    copy: {
-      copyButtonAccessibilityLabel: "Copy identifier",
-      hideButtonLabel: "Hide identifiers",
-      showButtonLabel: "Show identifiers",
-    },
     defaultExpanded: true,
     isEnabled: true,
     items: profileIdentifiers,
     onCopy: copyProfileIdentifier,
   },
+  locale: appLocale,
 } satisfies ProfileSubscriptionConfig;
 
 <ProfileSubscriptionSection
@@ -225,8 +221,10 @@ const profileSubscriptionConfig = {
 When `isSubscribed` is true, upgrade and restore actions are hidden. Subscription
 management remains visible.
 
-`identifierSection` renders the profile ID copy UI. It is hidden by default; set
+`identifierSection` renders the profile IDs copy UI. It is hidden by default; set
 `isEnabled: true` to show the whole UI.
+The show/hide/copy labels are localized by the package from `locale`; pass
+`identifierSection.copy` only when the app needs to override that default copy.
 The package does not import a clipboard dependency, so the consuming app owns
 `onCopy`.
 

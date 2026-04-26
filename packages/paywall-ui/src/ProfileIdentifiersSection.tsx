@@ -16,6 +16,7 @@ import { ChevronDownIcon, CopyIcon } from "./icons";
 import type {
   PaywallTheme,
   ProfileIdentifierItem,
+  ProfileIdentifiersCopy,
   ProfileIdentifiersSectionProps,
 } from "./types";
 
@@ -50,7 +51,7 @@ const getColorWithAlpha = (
 };
 
 interface ProfileIdentifiersSectionComponentProps {
-  section: ProfileIdentifiersSectionProps;
+  section: ProfileIdentifiersSectionProps & { copy: ProfileIdentifiersCopy };
   theme: PaywallTheme;
 }
 

@@ -10,8 +10,10 @@ export interface PaywallText {
   benefitsTitle: string;
   closeButtonAccessibilityLabel: string;
   continueButton: string;
+  copyIdentifierAccessibilityLabel: string;
   enterPromoCode: string;
   freeBadge: string;
+  hideIdentifiersButton: string;
   lifetimePlanTitle: string;
   manageSubscription: string;
   monthlyPlanTitle: string;
@@ -25,6 +27,7 @@ export interface PaywallText {
   subscriptionRenewsAutomatically: string;
   restoreButton: string;
   restoring: string;
+  showIdentifiersButton: string;
   subscribedSubtitle: string;
   termsText: string;
   trialIncludedDescription: string;

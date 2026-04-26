@@ -15,7 +15,7 @@ pabal-expo-paywall-ui/
   packages/
     paywall-ui/
       # Published package source.
-      # See packages/paywall-ui/README.md for first-time installation and usage.
+      # See packages/paywall-ui/README.md for the UI prop contract and usage.
 ```
 
 ## Workspace Commands
