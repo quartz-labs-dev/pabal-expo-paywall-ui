@@ -239,6 +239,8 @@ Use `benefits: string[]` for a simple checklist, or
 `benefits: [{ title, description }]` when each item needs a title and supporting
 copy. Use `content` only when an app needs full custom React Native layout. When
 `content` is present, the paywall renders it instead of the default benefits list.
+Use `purchaseButtonBackground` to pass a custom React Native background, such as
+an app-owned `expo-linear-gradient` fill, into the fixed footer button.
 
 When both monthly and annual packages are present, `createPaywallPlans()` uses
 RevenueCat product prices to show annual discount copy such as `Save 33%` in the

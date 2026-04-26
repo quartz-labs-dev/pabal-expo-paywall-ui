@@ -54,6 +54,7 @@ export interface PaywallProps<TPackage = unknown> {
   heroHeightRatio?: number;
   benefits?: PaywallBenefit[];
   content?: ReactNode;
+  purchaseButtonBackground?: ReactNode;
   copy: PaywallCopy;
   selectedPlanId?: string;
   theme?: Partial<PaywallTheme>;
@@ -71,6 +72,7 @@ export interface PaywallConfig {
   heroHeightRatio?: number;
   benefits?: PaywallBenefit[];
   content?: ReactNode;
+  purchaseButtonBackground?: ReactNode;
   copy: PaywallCopy;
   theme?: Partial<PaywallTheme>;
   planOptions?: CreatePaywallPlansOptions;

@@ -168,6 +168,26 @@ Pass a partial theme when an app needs different colors.
 />
 ```
 
+Pass `purchaseButtonBackground` when an app needs a custom button fill such as a
+gradient. The shared package only receives React Native content and does not
+depend on a specific gradient library.
+
+```tsx
+import { LinearGradient } from "expo-linear-gradient";
+
+<Paywall
+  purchaseButtonBackground={
+    <LinearGradient
+      colors={["#5AC8B7", "#3E8BFF"]}
+      end={{ x: 1, y: 1 }}
+      start={{ x: 0, y: 0 }}
+      style={{ flex: 1 }}
+    />
+  }
+  {...props}
+/>
+```
+
 Do not add app-specific styling systems here. Keep the shared package on React
 Native primitives.
 

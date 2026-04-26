@@ -40,6 +40,7 @@ export const Paywall = <TPackage,>({
   heroHeightRatio = DEFAULT_HERO_HEIGHT_RATIO,
   benefits = [],
   content,
+  purchaseButtonBackground,
   copy,
   selectedPlanId,
   theme: themeOverride,
@@ -204,6 +205,7 @@ export const Paywall = <TPackage,>({
         <PurchaseButton
           label={copy.purchaseButton}
           loadingLabel={copy.purchasingButton}
+          background={purchaseButtonBackground}
           isLoading={isPurchasing}
           isDisabled={!selectedPlan}
           theme={theme}
