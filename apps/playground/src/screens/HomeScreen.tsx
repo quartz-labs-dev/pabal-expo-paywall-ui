@@ -24,6 +24,7 @@ interface HomeScreenProps {
     paywallAnimation: PlaygroundPaywallAnimation,
   ) => void;
   onOpenPaywall: () => void;
+  onOpenProfile: () => void;
 }
 
 const scenarios = Object.keys(scenarioLabels) as PlaygroundScenario[];
@@ -60,6 +61,7 @@ export const HomeScreen = ({
   onChangePaywallFlow,
   onChangePaywallAnimation,
   onOpenPaywall,
+  onOpenProfile,
 }: HomeScreenProps) => {
   const insets = useSafeAreaInsets();
   const [measuredFooterHeight, setMeasuredFooterHeight] = useState(0);
@@ -239,9 +241,14 @@ export const HomeScreen = ({
         }}
         style={[styles.fixedFooter, { paddingBottom: footerBottomPadding }]}
       >
-        <Pressable onPress={onOpenPaywall} style={styles.cta}>
-          <Text style={styles.ctaText}>Open /paywall</Text>
-        </Pressable>
+        <View style={styles.footerActions}>
+          <Pressable onPress={onOpenProfile} style={styles.secondaryCta}>
+            <Text style={styles.secondaryCtaText}>Open /profile</Text>
+          </Pressable>
+          <Pressable onPress={onOpenPaywall} style={styles.cta}>
+            <Text style={styles.ctaText}>Open /paywall</Text>
+          </Pressable>
+        </View>
       </View>
     </View>
   );
@@ -266,6 +273,10 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 0,
     zIndex: 5,
+  },
+  footerActions: {
+    flexDirection: "row",
+    gap: 10,
   },
   header: {
     gap: 10,
@@ -420,6 +431,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#5AC8B7",
     borderRadius: 8,
+    flex: 1,
     justifyContent: "center",
     minHeight: 54,
     paddingHorizontal: 20,
@@ -428,5 +440,23 @@ const styles = StyleSheet.create({
     color: "#071312",
     fontSize: 16,
     fontWeight: "900",
+  },
+  secondaryCta: {
+    alignItems: "center",
+    backgroundColor: "#151D25",
+    borderColor: "#2B3845",
+    borderRadius: 8,
+    borderWidth: 1,
+    flex: 1,
+    justifyContent: "center",
+    minHeight: 54,
+    paddingHorizontal: 14,
+  },
+  secondaryCtaText: {
+    color: "#F5F7FA",
+    flexShrink: 1,
+    fontSize: 15,
+    fontWeight: "900",
+    textAlign: "center",
   },
 });

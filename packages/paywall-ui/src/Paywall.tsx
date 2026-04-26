@@ -39,6 +39,10 @@ const getBenefitKey = (benefit: PaywallBenefit): string => {
   return typeof benefit === "string" ? benefit : benefit.title;
 };
 
+const getBenefitIcon = (benefit: PaywallBenefit) => {
+  return typeof benefit === "string" ? undefined : benefit.icon;
+};
+
 const FIXED_FOOTER_BUTTON_HEIGHT = 52;
 const FIXED_FOOTER_TOP_PADDING = 12;
 const FIXED_FOOTER_MIN_BOTTOM_PADDING = 12;
@@ -280,9 +284,15 @@ export const Paywall = <TPackage,>({
                   key={`${getBenefitKey(benefit)}-${index}`}
                   style={styles.benefitRow}
                 >
-                  <Text style={[styles.check, { color: theme.accentColor }]}>
-                    +
-                  </Text>
+                  {getBenefitIcon(benefit) ? (
+                    <View style={styles.benefitIcon}>
+                      {getBenefitIcon(benefit)}
+                    </View>
+                  ) : (
+                    <Text style={[styles.check, { color: theme.accentColor }]}>
+                      +
+                    </Text>
+                  )}
                   <View style={styles.benefitTextGroup}>
                     <Text
                       style={[
@@ -504,6 +514,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "900",
     lineHeight: 22,
+  },
+  benefitIcon: {
+    alignItems: "center",
+    minHeight: 22,
+    justifyContent: "center",
+    width: 18,
   },
   benefitText: {
     fontSize: 15,

@@ -5,7 +5,7 @@ export type PlaygroundScenario =
   | "lifetimeOnly"
   | "longPrice";
 
-export type PlaygroundRoute = "home" | "paywall";
+export type PlaygroundRoute = "home" | "paywall" | "profile";
 
 export type PlaygroundPaywallFlow = "twoStep" | "singleStep";
 

@@ -18,6 +18,7 @@ yarn add pabal-expo-paywall-ui
 
 ```ts
 export { Paywall } from "pabal-expo-paywall-ui";
+export { ProfileSubscriptionSection } from "pabal-expo-paywall-ui";
 export { createPaywallPlans, getDefaultSelectedPlanId } from "pabal-expo-paywall-ui";
 export type {
   CreatePaywallPlansOptions,
@@ -31,6 +32,9 @@ export type {
   PaywallStepMode,
   PaywallTheme,
   PaywallValueStep,
+  ProfileSubscriptionConfig,
+  ProfileSubscriptionCopy,
+  ProfileSubscriptionSectionProps,
   PurchasesPackageLike,
 } from "pabal-expo-paywall-ui";
 ```
@@ -89,10 +93,12 @@ const paywallConfig = {
       {
         title: "Get the result faster",
         description: "Use the premium tools without limits.",
+        icon: <SpeedIcon />,
       },
       {
         title: "Keep access across devices",
         description: "Your subscription follows your store account.",
+        icon: <SyncIcon />,
       },
     ],
     nextButton: "Next",
@@ -102,10 +108,12 @@ const paywallConfig = {
     {
       title: "Unlock all premium features",
       description: "Get every premium tool in this app.",
+      icon: <PremiumIcon />,
     },
     {
       title: "Cancel anytime",
       description: "Manage or cancel the subscription from the store.",
+      icon: <StoreIcon />,
     },
   ],
   copy: {
@@ -151,7 +159,8 @@ Animations are enabled by default. Use `animationMode: "none"` to render the
 initial paywall and step changes immediately.
 
 Use `benefits: string[]` for the simplest built-in checklist. Use
-`benefits: [{ title, description }]` when each benefit needs supporting copy.
+`benefits: [{ title, description, icon }]` when each benefit needs supporting
+copy or an app-owned icon.
 Use `content` for custom React Native content. If both are passed, `content`
 replaces the built-in benefits list.
 
@@ -210,6 +219,75 @@ const plans = createPaywallPlans(offering.availablePackages, {
 `heroHeightRatio` is optional and defaults to `0.2`, so the media slot uses 20%
 of the current device height. Increase or decrease it per app when the paywall
 needs a taller or shorter media section.
+
+## Profile Subscription Section
+
+Use `ProfileSubscriptionSection` inside an app-owned profile or settings screen
+when the app needs to show Pro status, benefits, subscription management, restore,
+and optional promo code entry. The component stays RevenueCat-agnostic; the app
+owns every callback and message after each action.
+
+```tsx
+import { type ProfileSubscriptionConfig } from "pabal-expo-paywall-ui";
+
+const profileSubscriptionConfig = {
+  benefits: [
+    {
+      title: "Unlock all premium features",
+      description: "Get every premium tool in this app.",
+      icon: <PremiumIcon />,
+    },
+    {
+      title: "Cancel anytime",
+      description: "Manage the subscription from the store.",
+      icon: <StoreIcon />,
+    },
+  ],
+  copy: {
+    subscribedTitle: "Pro is active",
+    subscribedSubtitle: "Your premium benefits are available.",
+    notSubscribedTitle: "Upgrade to Pro",
+    notSubscribedSubtitle: "Unlock the full app experience.",
+    benefitsTitle: "Pro benefits",
+    upgradeButton: "Upgrade to Pro",
+    manageSubscriptionButton: "Manage subscription",
+    restorePurchasesButton: "Restore purchases",
+    redeemPromoCodeButton: "Enter promo code",
+  },
+  headerIcon: <AppIcon />,
+} satisfies ProfileSubscriptionConfig;
+
+<ProfileSubscriptionSection
+  {...profileSubscriptionConfig}
+  isSubscribed={isPro}
+  planLabel={isPro ? "Annual Pro" : undefined}
+  renewalLabel={isPro ? "Renews from your store account" : undefined}
+  showPromoCodeButton={!isPro && canRedeemPromoCode}
+  onUpgrade={() => router.push("/paywall")}
+  onManageSubscription={openStoreSubscriptionManagement}
+  onRestorePurchases={restorePurchases}
+  onRedeemPromoCode={redeemPromoCode}
+/>
+```
+
+Pass `showPromoCodeButton={true}` only when the consuming app can present a promo
+or offer-code flow. If `onRedeemPromoCode` is omitted, the promo button is hidden.
+When `isSubscribed` is true, upgrade, restore, and promo-code actions are hidden
+because the user already has Pro; subscription management remains visible.
+
+The header icon and benefit body can be app-owned React Native content:
+
+```tsx
+<ProfileSubscriptionSection
+  {...profileProps}
+  headerIcon={<AppIcon />}
+  content={<MyBenefitRows />}
+/>
+```
+
+When `content` is provided, it replaces the built-in benefit list. Both
+`Paywall` and `ProfileSubscriptionSection` accept benefit items as
+`{ title, description, icon }`; `icon` is optional React Native content.
 
 ## Styling
 

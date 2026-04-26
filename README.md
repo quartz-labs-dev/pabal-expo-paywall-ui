@@ -49,6 +49,21 @@ PaywallPlan[]
   +-- onClose()
 ```
 
+Profile and settings screens use the same boundary:
+
+```txt
+App subscription state
+  |
+  | isPro, benefits, app-owned callbacks
+  v
+<ProfileSubscriptionSection />
+  |
+  +-- onUpgrade()
+  +-- onManageSubscription()
+  +-- onRestorePurchases()
+  +-- onRedeemPromoCode()
+```
+
 `rawPackage` is the original package object passed in by the app. For a RevenueCat
 app, pass it back to the app-owned purchase function:
 
@@ -73,13 +88,14 @@ The app owns:
 `pabal-expo-paywall-ui` owns:
 
 - paywall layout
+- profile subscription status layout
 - value-first multi-step presentation state
 - safe area spacing
 - hero slot placement
 - monthly/annual plan cards
 - selected plan rendering
 - purchase button loading/disabled state
-- restore/legal callback buttons
+- restore/legal/subscription management callback buttons
 - plan normalization helper
 
 ## Install
@@ -121,6 +137,7 @@ Flow:
 ```txt
 /           home screen for selecting a package scenario
 /paywall    paywall rendered with the selected scenario
+/profile    profile subscription section rendered with mock Pro/free states
 ```
 
 Scenarios available on the home screen:
@@ -154,6 +171,13 @@ What to verify on `/paywall`:
 - hero image slot
 - restore / terms / privacy callbacks
 
+What to verify on `/profile`:
+
+- Pro vs free status copy
+- Pro benefit list
+- manage subscription and restore purchase actions
+- optional promo code action visibility
+
 Real RevenueCat sandbox purchases should be tested in the consuming apps. Do not
 put RevenueCat SDKs in the playground unless the package boundary intentionally
 changes.
@@ -184,10 +208,12 @@ const myAppPaywallConfig = {
       {
         title: "Get the result faster",
         description: "Use every premium tool without limits.",
+        icon: <SpeedIcon />,
       },
       {
         title: "Keep access across devices",
         description: "Your subscription follows your store account.",
+        icon: <SyncIcon />,
       },
     ],
     nextButton: "Next",
@@ -197,14 +223,17 @@ const myAppPaywallConfig = {
     {
       title: "Unlock all premium features",
       description: "Get every premium tool in this app.",
+      icon: <PremiumIcon />,
     },
     {
       title: "Sync across supported devices",
       description: "Keep access on every device signed into the same store account.",
+      icon: <SyncIcon />,
     },
     {
       title: "Cancel anytime",
       description: "Manage or cancel the subscription from the App Store or Play Store.",
+      icon: <StoreIcon />,
     },
   ],
   copy: {
@@ -257,8 +286,8 @@ Animations are enabled by default. Use `animationMode: "none"` when an app
 should render the initial paywall and step changes immediately.
 
 Use `benefits: string[]` for a simple checklist, or
-`benefits: [{ title, description }]` when each item needs a title and supporting
-copy. Use `content` only when an app needs full custom React Native layout. When
+`benefits: [{ title, description, icon }]` when each item needs a title,
+supporting copy, or an app-owned icon. Use `content` only when an app needs full custom React Native layout. When
 `content` is present, the paywall renders it instead of the default benefits list.
 Use `purchaseButtonBackground` to pass a custom React Native background, such as
 an app-owned `expo-linear-gradient` fill, into the fixed footer button.
@@ -313,6 +342,73 @@ onPurchase={async (plan) => {
   router.back();
 }}
 ```
+
+Use the profile section in a profile or settings route with app-owned purchase
+state and callbacks.
+
+```tsx
+import {
+  ProfileSubscriptionSection,
+  type ProfileSubscriptionConfig,
+} from "pabal-expo-paywall-ui";
+
+const profileSubscriptionConfig = {
+  benefits: [
+    {
+      title: "Unlock all premium features",
+      description: "Get every premium tool in this app.",
+      icon: <PremiumIcon />,
+    },
+    {
+      title: "Cancel anytime",
+      description: "Manage the subscription from the App Store or Play Store.",
+      icon: <StoreIcon />,
+    },
+  ],
+  copy: {
+    subscribedTitle: "Pro is active",
+    subscribedSubtitle: "Your premium benefits are ready.",
+    notSubscribedTitle: "Upgrade to Pro",
+    notSubscribedSubtitle: "Unlock the full app experience.",
+    benefitsTitle: "Pro benefits",
+    upgradeButton: "Upgrade to Pro",
+    manageSubscriptionButton: "Manage subscription",
+    restorePurchasesButton: "Restore purchases",
+    redeemPromoCodeButton: "Enter promo code",
+  },
+  headerIcon: <AppIcon />,
+} satisfies ProfileSubscriptionConfig;
+
+<ProfileSubscriptionSection
+  {...profileSubscriptionConfig}
+  isSubscribed={isPro}
+  planLabel={isPro ? "Annual Pro" : undefined}
+  renewalLabel={isPro ? "Managed by your store account" : undefined}
+  showPromoCodeButton={!isPro && canRedeemPromoCode}
+  onUpgrade={() => router.push("/paywall")}
+  onManageSubscription={openStoreSubscriptionManagement}
+  onRestorePurchases={restorePurchases}
+  onRedeemPromoCode={redeemPromoCode}
+/>
+```
+
+When `isSubscribed` is true, the profile section hides upgrade, restore, and
+promo-code actions because the user already has Pro; subscription management
+remains visible.
+
+For richer profile cards, pass app-owned slots:
+
+```tsx
+<ProfileSubscriptionSection
+  {...profileProps}
+  headerIcon={<AppIcon />}
+  content={<CustomBenefitRows />}
+/>
+```
+
+`content` replaces the built-in benefit list. Paywall and profile benefits share
+the same object shape: `{ title, description, icon }`. `icon` is optional React
+Native content.
 
 ## Hero Media
 

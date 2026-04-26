@@ -31,6 +31,7 @@ export interface PaywallCopy {
 export interface PaywallBenefitDetail {
   title: string;
   description?: string;
+  icon?: ReactNode;
 }
 
 export type PaywallBenefit = string | PaywallBenefitDetail;
@@ -96,6 +97,52 @@ export interface PaywallConfig {
   copy: PaywallCopy;
   theme?: Partial<PaywallTheme>;
   planOptions?: CreatePaywallPlansOptions;
+}
+
+export interface ProfileSubscriptionCopy {
+  subscribedTitle: string;
+  subscribedSubtitle?: string;
+  notSubscribedTitle: string;
+  notSubscribedSubtitle?: string;
+  subscribedBadge?: string;
+  notSubscribedBadge?: string;
+  benefitsTitle?: string;
+  upgradeButton?: string;
+  upgradingButton?: string;
+  manageSubscriptionButton: string;
+  managingSubscriptionButton?: string;
+  restorePurchasesButton: string;
+  restoringPurchasesButton?: string;
+  redeemPromoCodeButton?: string;
+  redeemingPromoCodeButton?: string;
+}
+
+export interface ProfileSubscriptionSectionProps {
+  isSubscribed: boolean;
+  benefits?: PaywallBenefit[];
+  content?: ReactNode;
+  copy: ProfileSubscriptionCopy;
+  headerIcon?: ReactNode;
+  theme?: Partial<PaywallTheme>;
+  planLabel?: string;
+  renewalLabel?: string;
+  showPromoCodeButton?: boolean;
+  isUpgrading?: boolean;
+  isManagingSubscription?: boolean;
+  isRestoringPurchases?: boolean;
+  isRedeemingPromoCode?: boolean;
+  onUpgrade?: () => Promise<void> | void;
+  onManageSubscription: () => Promise<void> | void;
+  onRestorePurchases: () => Promise<void> | void;
+  onRedeemPromoCode?: () => Promise<void> | void;
+}
+
+export interface ProfileSubscriptionConfig {
+  benefits?: PaywallBenefit[];
+  content?: ReactNode;
+  copy: ProfileSubscriptionCopy;
+  headerIcon?: ReactNode;
+  theme?: Partial<PaywallTheme>;
 }
 
 export interface PurchasesPackageLike {

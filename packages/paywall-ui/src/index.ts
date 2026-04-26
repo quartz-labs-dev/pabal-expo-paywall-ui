@@ -1,5 +1,6 @@
 export { createPaywallPlans, getDefaultSelectedPlanId } from "./create-paywall-plans";
 export { Paywall } from "./Paywall";
+export { ProfileSubscriptionSection } from "./ProfileSubscriptionSection";
 export type {
   CreatePaywallPlansOptions,
   PaywallAnimationMode,
@@ -13,5 +14,8 @@ export type {
   PaywallStepMode,
   PaywallTheme,
   PaywallValueStep,
+  ProfileSubscriptionCopy,
+  ProfileSubscriptionConfig,
+  ProfileSubscriptionSectionProps,
   PurchasesPackageLike,
 } from "./types";

@@ -5,6 +5,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { HomeScreen } from "./src/screens/HomeScreen";
 import { PaywallPlaygroundScreen } from "./src/screens/PaywallPlaygroundScreen";
+import { ProfilePlaygroundScreen } from "./src/screens/ProfilePlaygroundScreen";
 import type {
   PlaygroundPaywallAnimation,
   PlaygroundPaywallFlow,
@@ -17,6 +18,8 @@ const getInitialRoute = (): PlaygroundRoute => {
     return "home";
   }
 
+  if (window.location.pathname === "/profile") return "profile";
+
   return window.location.pathname === "/paywall" ? "paywall" : "home";
 };
 
@@ -25,7 +28,8 @@ const pushWebPath = (route: PlaygroundRoute) => {
     return;
   }
 
-  const nextPath = route === "paywall" ? "/paywall" : "/";
+  const nextPath =
+    route === "paywall" ? "/paywall" : route === "profile" ? "/profile" : "/";
   if (window.location.pathname === nextPath) return;
 
   window.history.pushState({ route }, "", nextPath);
@@ -67,6 +71,8 @@ export default function App() {
           paywallAnimation={paywallAnimation}
           onClose={() => navigate("home")}
         />
+      ) : route === "profile" ? (
+        <ProfilePlaygroundScreen onClose={() => navigate("home")} />
       ) : (
         <HomeScreen
           scenario={scenario}
@@ -76,6 +82,7 @@ export default function App() {
           onChangePaywallFlow={setPaywallFlow}
           onChangePaywallAnimation={setPaywallAnimation}
           onOpenPaywall={() => navigate("paywall")}
+          onOpenProfile={() => navigate("profile")}
         />
       )}
     </SafeAreaProvider>
