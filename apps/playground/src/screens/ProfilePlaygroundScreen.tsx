@@ -56,7 +56,7 @@ interface ProfilePlaygroundScreenProps {
 }
 
 export const ProfilePlaygroundScreen = ({
-  onClose: _onClose,
+  onClose,
 }: ProfilePlaygroundScreenProps) => {
   const insets = useSafeAreaInsets();
   const [isSubscribed, setIsSubscribed] = useState(false);
@@ -90,6 +90,10 @@ export const ProfilePlaygroundScreen = ({
           },
         ]}
       >
+        <Pressable onPress={onClose} style={styles.backButton}>
+          <Text style={styles.backButtonText}>Back</Text>
+        </Pressable>
+
         <View style={styles.controls}>
           <ToggleButton
             isSelected={isSubscribed}
@@ -187,6 +191,19 @@ const styles = StyleSheet.create({
   content: {
     gap: 22,
     paddingHorizontal: 20,
+  },
+  backButton: {
+    alignSelf: "flex-start",
+    backgroundColor: "#151D25",
+    borderRadius: 8,
+    minHeight: 38,
+    paddingHorizontal: 14,
+    paddingVertical: 9,
+  },
+  backButtonText: {
+    color: "#F5F7FA",
+    fontSize: 13,
+    fontWeight: "700",
   },
   controls: {
     flexDirection: "row",
