@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     minHeight: 36,
-    paddingHorizontal: 8,
+    paddingHorizontal: 4,
     width: "100%",
   },
   actionLabel: {
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "500",
     lineHeight: 18,
-    paddingHorizontal: 4,
+    paddingHorizontal: 8,
     textAlign: "center",
     textDecorationLine: "underline",
   },
