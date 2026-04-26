@@ -116,6 +116,7 @@ const STEP_TRANSITION_DISTANCE = 28;
 const INITIAL_TRANSITION_DURATION = 380;
 const INITIAL_TRANSITION_DISTANCE = 22;
 const NAV_ICON_BACKGROUND_COLOR = "rgba(0, 0, 0, 0.22)";
+const NAV_ICON_COLOR = "#FFFFFF";
 
 const getStepTransitionOffset = (
   phase: PaywallTransitionPhase,
@@ -331,7 +332,7 @@ export const Paywall = <TPackage,>({
               },
             ]}
           >
-            <ChevronLeftIcon color={theme.primaryTextColor} />
+            <ChevronLeftIcon color={NAV_ICON_COLOR} />
           </View>
         </TouchableOpacity>
       )}
@@ -354,7 +355,7 @@ export const Paywall = <TPackage,>({
               },
             ]}
           >
-            <CloseIcon color={theme.primaryTextColor} />
+            <CloseIcon color={NAV_ICON_COLOR} />
           </View>
         </TouchableOpacity>
       )}
