@@ -425,6 +425,7 @@ export const Paywall = <TPackage,>({
               <PlanSelector
                 plans={plans}
                 selectedPlanId={resolvedSelectedPlanId}
+                shouldAnimate={shouldAnimate}
                 theme={theme}
                 onSelectPlan={onSelectPlan}
               />
