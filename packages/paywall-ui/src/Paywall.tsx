@@ -17,6 +17,7 @@ import { LegalLinks } from "./LegalLinks";
 import { PlanSelector } from "./PlanSelector";
 import { PurchaseButton } from "./PurchaseButton";
 import { mergePaywallTheme } from "./theme";
+import { TrialNotice } from "./TrialNotice";
 import type {
   PaywallBenefit,
   PaywallFreeTrialConfig,
@@ -28,6 +29,7 @@ import type {
 
 type PaywallStep = "value" | "purchase";
 type PaywallTransitionPhase = "idle" | "exiting" | "entering";
+type PaywallTransitionDirection = "forward" | "backward";
 
 const getSelectedPlan = <TPackage,>(
   plans: PaywallPlan<TPackage>[],
@@ -120,6 +122,22 @@ const STEP_TRANSITION_IN_DURATION = 300;
 const STEP_TRANSITION_DISTANCE = 28;
 const INITIAL_TRANSITION_DURATION = 380;
 const INITIAL_TRANSITION_DISTANCE = 22;
+const NAV_ICON_BACKGROUND_COLOR = "rgba(0, 0, 0, 0.22)";
+
+const getStepTransitionOffset = (
+  phase: PaywallTransitionPhase,
+  direction: PaywallTransitionDirection,
+): number => {
+  if (phase === "exiting") {
+    return direction === "forward"
+      ? -STEP_TRANSITION_DISTANCE
+      : STEP_TRANSITION_DISTANCE;
+  }
+
+  return direction === "forward"
+    ? STEP_TRANSITION_DISTANCE
+    : -STEP_TRANSITION_DISTANCE;
+};
 
 export const Paywall = <TPackage,>({
   plans,
@@ -158,6 +176,8 @@ export const Paywall = <TPackage,>({
   );
   const [transitionPhase, setTransitionPhase] =
     useState<PaywallTransitionPhase>("idle");
+  const [transitionDirection, setTransitionDirection] =
+    useState<PaywallTransitionDirection>("forward");
   const selectedPlan = getSelectedPlan(plans, selectedPlanId);
   const resolvedSelectedPlanId = selectedPlan?.id;
   const freeTrialConfig = resolveFreeTrialConfig(freeTrial, selectedPlan);
@@ -199,6 +219,7 @@ export const Paywall = <TPackage,>({
   const bodyContent = isValueStep ? valueStep?.content : content;
   const shouldShowCloseButton =
     !isValueStep || valueStep?.closeButtonVisibility === "visible";
+  const shouldShowBackButton = shouldUseValueStep && currentStep === "purchase";
   const shouldShowLegalPrefix = hasRenewingSubscriptionPlan(plans);
   const initialTranslateY = initialTransition.interpolate({
     inputRange: [0, 1],
@@ -207,9 +228,7 @@ export const Paywall = <TPackage,>({
   const stepTranslateX = stepTransition.interpolate({
     inputRange: [0, 1],
     outputRange: [
-      transitionPhase === "exiting"
-        ? -STEP_TRANSITION_DISTANCE
-        : STEP_TRANSITION_DISTANCE,
+      getStepTransitionOffset(transitionPhase, transitionDirection),
       0,
     ],
   });
@@ -243,19 +262,24 @@ export const Paywall = <TPackage,>({
   useEffect(() => {
     isStepTransitioningRef.current = false;
     setTransitionPhase("idle");
+    setTransitionDirection("forward");
     stepTransition.setValue(1);
     setCurrentStep(shouldUseValueStep ? "value" : "purchase");
   }, [shouldUseValueStep, stepTransition]);
 
-  const handleShowPurchaseStep = () => {
-    if (isStepTransitioningRef.current || currentStep !== "value") return;
+  const transitionToStep = (
+    nextStep: PaywallStep,
+    direction: PaywallTransitionDirection,
+  ) => {
+    if (isStepTransitioningRef.current || currentStep === nextStep) return;
 
     if (!shouldAnimate) {
-      setCurrentStep("purchase");
+      setCurrentStep(nextStep);
       return;
     }
 
     isStepTransitioningRef.current = true;
+    setTransitionDirection(direction);
     setTransitionPhase("exiting");
     Animated.timing(stepTransition, {
       duration: STEP_TRANSITION_OUT_DURATION,
@@ -268,7 +292,7 @@ export const Paywall = <TPackage,>({
         return;
       }
 
-      setCurrentStep("purchase");
+      setCurrentStep(nextStep);
       requestAnimationFrame(() => {
         setTransitionPhase("entering");
         stepTransition.setValue(0);
@@ -285,8 +309,50 @@ export const Paywall = <TPackage,>({
     });
   };
 
+  const handleShowPurchaseStep = () => {
+    transitionToStep("purchase", "forward");
+  };
+
+  const handleShowValueStep = () => {
+    transitionToStep("value", "backward");
+  };
+
   return (
     <View style={[styles.root, { backgroundColor: theme.backgroundColor }]}>
+      {shouldShowBackButton && (
+        <TouchableOpacity
+          accessibilityLabel="Back to previous step"
+          accessibilityRole="button"
+          activeOpacity={0.7}
+          onPress={handleShowValueStep}
+          style={[styles.backButton, { top: Math.max(insets.top, 10) }]}
+        >
+          <View
+            style={[
+              styles.navIcon,
+              {
+                backgroundColor: NAV_ICON_BACKGROUND_COLOR,
+              },
+            ]}
+          >
+            <View
+              style={[
+                styles.backIconLine,
+                styles.backIconLineFirst,
+                { backgroundColor: theme.primaryTextColor },
+              ]}
+            />
+            <View
+              style={[
+                styles.backIconLine,
+                styles.backIconLineSecond,
+                { backgroundColor: theme.primaryTextColor },
+              ]}
+            />
+          </View>
+        </TouchableOpacity>
+      )}
+
       {shouldShowCloseButton && (
         <TouchableOpacity
           accessibilityLabel={
@@ -299,10 +365,9 @@ export const Paywall = <TPackage,>({
         >
           <View
             style={[
-              styles.closeIcon,
+              styles.navIcon,
               {
-                backgroundColor: theme.backgroundColor,
-                borderColor: theme.secondaryTextColor,
+                backgroundColor: NAV_ICON_BACKGROUND_COLOR,
               },
             ]}
           >
@@ -356,12 +421,21 @@ export const Paywall = <TPackage,>({
           </View>
 
           {!isValueStep && (
-            <PlanSelector
-              plans={plans}
-              selectedPlanId={resolvedSelectedPlanId}
-              theme={theme}
-              onSelectPlan={onSelectPlan}
-            />
+            <View style={styles.planSection}>
+              <PlanSelector
+                plans={plans}
+                selectedPlanId={resolvedSelectedPlanId}
+                theme={theme}
+                onSelectPlan={onSelectPlan}
+              />
+              {trialNotice && (
+                <TrialNotice
+                  title={trialNotice.title}
+                  description={trialNotice.description}
+                  theme={theme}
+                />
+              )}
+            </View>
           )}
 
           {bodyContent ? (
@@ -410,7 +484,6 @@ export const Paywall = <TPackage,>({
           {!isValueStep && (
             <LegalLinks
               copy={copy}
-              trialNotice={trialNotice}
               shouldShowLegalPrefix={shouldShowLegalPrefix}
               theme={theme}
               onRestore={onRestore}
@@ -517,6 +590,15 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
   },
+  backButton: {
+    alignItems: "center",
+    height: 44,
+    justifyContent: "center",
+    left: 10,
+    position: "absolute",
+    width: 44,
+    zIndex: 10,
+  },
   closeButton: {
     alignItems: "center",
     height: 44,
@@ -526,10 +608,9 @@ const styles = StyleSheet.create({
     width: 44,
     zIndex: 10,
   },
-  closeIcon: {
+  navIcon: {
     alignItems: "center",
     borderRadius: 17,
-    borderWidth: StyleSheet.hairlineWidth,
     height: 34,
     justifyContent: "center",
     width: 34,
@@ -545,6 +626,19 @@ const styles = StyleSheet.create({
   },
   closeIconLineSecond: {
     transform: [{ rotate: "-45deg" }],
+  },
+  backIconLine: {
+    borderRadius: 1,
+    height: 2,
+    left: 11,
+    position: "absolute",
+    width: 11,
+  },
+  backIconLineFirst: {
+    transform: [{ translateY: -3.5 }, { rotate: "-45deg" }],
+  },
+  backIconLineSecond: {
+    transform: [{ translateY: 3.5 }, { rotate: "45deg" }],
   },
   fixedFooter: {
     bottom: 0,
@@ -584,7 +678,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   content: {
-    gap: 22,
+    gap: 34,
   },
   hero: {
     overflow: "hidden",
@@ -596,6 +690,9 @@ const styles = StyleSheet.create({
   },
   valueBody: {
     gap: 34,
+  },
+  planSection: {
+    gap: 12,
   },
   header: {
     gap: 8,
@@ -615,10 +712,10 @@ const styles = StyleSheet.create({
   },
   benefits: {
     gap: 12,
-    paddingVertical: 8,
+    paddingVertical: 18,
   },
   contentSlot: {
-    paddingVertical: 8,
+    paddingVertical: 18,
     width: "100%",
   },
   benefitRow: {
