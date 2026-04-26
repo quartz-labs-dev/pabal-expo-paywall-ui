@@ -1,7 +1,7 @@
 # pabal-expo-paywall-ui
 
-Workspace for a RevenueCat-agnostic React Native paywall UI package and its mock
-playground app.
+Workspace for a RevenueCat-agnostic React Native paywall/profile UI package and
+its mock playground app.
 
 ## Project Structure
 

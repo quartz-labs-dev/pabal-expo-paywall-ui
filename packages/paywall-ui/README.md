@@ -166,8 +166,27 @@ Add this only when the app needs to show subscription status in profile/settings
 ```tsx
 import {
   ProfileSubscriptionSection,
+  type ProfileIdentifierItem,
   type ProfileSubscriptionConfig,
 } from "pabal-expo-paywall-ui";
+
+const profileIdentifiers: ProfileIdentifierItem[] = [
+  {
+    key: "anonymous-user-id",
+    label: "Anonymous User ID",
+    value: userId,
+  },
+  {
+    key: "revenuecat-id",
+    label: "RevenueCat ID",
+    value: customerInfo.originalAppUserId,
+  },
+];
+
+const copyProfileIdentifier = async (item: ProfileIdentifierItem) => {
+  if (!item.value) return;
+  await copyToClipboard(item.value);
+};
 
 const profileSubscriptionConfig = {
   benefits: paywallBenefits,
@@ -179,6 +198,17 @@ const profileSubscriptionConfig = {
     restorePurchasesButton: "Restore purchases",
   },
   headerIcon: <AppIcon />,
+  identifierSection: {
+    copy: {
+      copyButtonAccessibilityLabel: "Copy identifier",
+      hideButtonLabel: "Hide identifiers",
+      showButtonLabel: "Show identifiers",
+    },
+    defaultExpanded: true,
+    isEnabled: true,
+    items: profileIdentifiers,
+    onCopy: copyProfileIdentifier,
+  },
 } satisfies ProfileSubscriptionConfig;
 
 <ProfileSubscriptionSection
@@ -194,6 +224,11 @@ const profileSubscriptionConfig = {
 
 When `isSubscribed` is true, upgrade and restore actions are hidden. Subscription
 management remains visible.
+
+`identifierSection` renders the profile ID copy UI. `isEnabled` defaults to
+`true` when the section is provided; set `isEnabled: false` to hide the whole UI.
+The package does not import a clipboard dependency, so the consuming app owns
+`onCopy`.
 
 ## Validate
 

@@ -13,6 +13,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { getDefaultSelectedPlanId } from "./create-paywall-plans";
+import { ChevronLeftIcon, CloseIcon } from "./icons";
 import { LegalLinks } from "./LegalLinks";
 import { PlanSelector } from "./PlanSelector";
 import { PurchaseButton } from "./PurchaseButton";
@@ -335,20 +336,7 @@ export const Paywall = <TPackage,>({
               },
             ]}
           >
-            <View
-              style={[
-                styles.backIconLine,
-                styles.backIconLineFirst,
-                { backgroundColor: theme.primaryTextColor },
-              ]}
-            />
-            <View
-              style={[
-                styles.backIconLine,
-                styles.backIconLineSecond,
-                { backgroundColor: theme.primaryTextColor },
-              ]}
-            />
+            <ChevronLeftIcon color={theme.primaryTextColor} />
           </View>
         </TouchableOpacity>
       )}
@@ -371,20 +359,7 @@ export const Paywall = <TPackage,>({
               },
             ]}
           >
-            <View
-              style={[
-                styles.closeIconLine,
-                styles.closeIconLineFirst,
-                { backgroundColor: theme.primaryTextColor },
-              ]}
-            />
-            <View
-              style={[
-                styles.closeIconLine,
-                styles.closeIconLineSecond,
-                { backgroundColor: theme.primaryTextColor },
-              ]}
-            />
+            <CloseIcon color={theme.primaryTextColor} />
           </View>
         </TouchableOpacity>
       )}
@@ -615,31 +590,6 @@ const styles = StyleSheet.create({
     height: 34,
     justifyContent: "center",
     width: 34,
-  },
-  closeIconLine: {
-    borderRadius: 1,
-    height: 2,
-    position: "absolute",
-    width: 14,
-  },
-  closeIconLineFirst: {
-    transform: [{ rotate: "45deg" }],
-  },
-  closeIconLineSecond: {
-    transform: [{ rotate: "-45deg" }],
-  },
-  backIconLine: {
-    borderRadius: 1,
-    height: 2,
-    left: 11,
-    position: "absolute",
-    width: 11,
-  },
-  backIconLineFirst: {
-    transform: [{ translateY: -3.5 }, { rotate: "-45deg" }],
-  },
-  backIconLineSecond: {
-    transform: [{ translateY: 3.5 }, { rotate: "45deg" }],
   },
   fixedFooter: {
     bottom: 0,

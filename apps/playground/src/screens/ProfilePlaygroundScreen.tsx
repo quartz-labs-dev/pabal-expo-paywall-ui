@@ -45,6 +45,7 @@ export const ProfilePlaygroundScreen = ({
   const insets = useSafeAreaInsets();
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [showPromoCodeButton, setShowPromoCodeButton] = useState(true);
+  const [showProfileIdentifiers, setShowProfileIdentifiers] = useState(true);
   const [isUpgrading, setIsUpgrading] = useState(false);
   const [isManagingSubscription, setIsManagingSubscription] = useState(false);
   const [isRestoringPurchases, setIsRestoringPurchases] = useState(false);
@@ -74,6 +75,30 @@ export const ProfilePlaygroundScreen = ({
         selectedLocale,
       )
     : undefined;
+  const identifierSection = useMemo(() => {
+    return {
+      copy: {
+        copyButtonAccessibilityLabel: "Copy identifier",
+        hideButtonLabel: "Hide identifiers",
+        showButtonLabel: "Show identifiers",
+      },
+      defaultExpanded: true,
+      isEnabled: showProfileIdentifiers,
+      items: [
+        {
+          key: "anonymous-user-id",
+          label: "Anonymous User ID",
+          value: "bdac7af9-17c6-4930-b5ca-e1e4aa38e42d",
+        },
+        {
+          key: "revenuecat-id",
+          label: "RevenueCat ID",
+          value: "bdac7af9-17c6-4930-b5ca-e1e4aa38e42d",
+        },
+      ],
+      onCopy: () => undefined,
+    };
+  }, [showProfileIdentifiers]);
 
   const runLoadingState = async (
     setLoading: (isLoading: boolean) => void,
@@ -111,9 +136,16 @@ export const ProfilePlaygroundScreen = ({
           />
           <ToggleButton
             isSelected={showPromoCodeButton}
-            label={showPromoCodeButton ? "Promo shown" : "Promo hidden"}
+            label={showPromoCodeButton ? "Promo" : "No promo"}
             onPress={() =>
               setShowPromoCodeButton((previousValue) => !previousValue)
+            }
+          />
+          <ToggleButton
+            isSelected={showProfileIdentifiers}
+            label={showProfileIdentifiers ? "Identifiers" : "No identifiers"}
+            onPress={() =>
+              setShowProfileIdentifiers((previousValue) => !previousValue)
             }
           />
         </View>
@@ -122,6 +154,7 @@ export const ProfilePlaygroundScreen = ({
           {...profileSubscriptionBaseConfig}
           copy={profileCopy}
           headerIcon={<GoldenHorizonIcon isSubscribed={isSubscribed} />}
+          identifierSection={identifierSection}
           isManagingSubscription={isManagingSubscription}
           isRedeemingPromoCode={isRedeemingPromoCode}
           isRestoringPurchases={isRestoringPurchases}
@@ -195,6 +228,7 @@ const ToggleButton = ({ isSelected, label, onPress }: ToggleButtonProps) => {
       style={[styles.toggleButton, isSelected && styles.toggleButtonSelected]}
     >
       <Text
+        numberOfLines={1}
         style={[
           styles.toggleButtonText,
           isSelected && styles.toggleButtonTextSelected,
@@ -229,19 +263,21 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   controls: {
+    alignSelf: "stretch",
     flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 10,
+    gap: 8,
   },
   toggleButton: {
     backgroundColor: "#151D25",
     borderColor: "#2B3845",
     borderRadius: 8,
     borderWidth: 1,
-    flexGrow: 1,
+    flex: 1,
+    flexBasis: 0,
     minHeight: 44,
-    minWidth: 144,
-    paddingHorizontal: 14,
+    minWidth: 0,
+    overflow: "hidden",
+    paddingHorizontal: 8,
     paddingVertical: 11,
   },
   toggleButtonSelected: {
@@ -250,8 +286,10 @@ const styles = StyleSheet.create({
   },
   toggleButtonText: {
     color: "#B9C4CF",
-    fontSize: 14,
+    flexShrink: 1,
+    fontSize: 13,
     fontWeight: "900",
+    lineHeight: 17,
     textAlign: "center",
   },
   toggleButtonTextSelected: {

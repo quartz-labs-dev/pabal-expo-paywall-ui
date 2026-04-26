@@ -139,12 +139,38 @@ export interface ProfileSubscriptionCopy {
   redeemingPromoCodeButton?: string;
 }
 
+export interface ProfileIdentifierItem {
+  key: string;
+  label: string;
+  value?: string | null;
+  copyAccessibilityLabel?: string;
+}
+
+export interface ProfileIdentifiersCopy {
+  showButtonLabel: string;
+  hideButtonLabel: string;
+  copyButtonAccessibilityLabel: string;
+}
+
+export interface ProfileIdentifiersConfig {
+  copy: ProfileIdentifiersCopy;
+  defaultExpanded?: boolean;
+  isEnabled?: boolean;
+}
+
+export interface ProfileIdentifiersSectionProps
+  extends ProfileIdentifiersConfig {
+  items: ProfileIdentifierItem[];
+  onCopy?: (item: ProfileIdentifierItem) => Promise<void> | void;
+}
+
 export interface ProfileSubscriptionSectionProps {
   isSubscribed: boolean;
   benefits?: PaywallBenefit[];
   content?: ReactNode;
   copy: ProfileSubscriptionCopy;
   headerIcon?: ReactNode;
+  identifierSection?: ProfileIdentifiersSectionProps;
   theme?: Partial<PaywallTheme>;
   planLabel?: string;
   renewalLabel?: string;
@@ -164,6 +190,7 @@ export interface ProfileSubscriptionConfig {
   content?: ReactNode;
   copy: ProfileSubscriptionCopy;
   headerIcon?: ReactNode;
+  identifierSection?: ProfileIdentifiersSectionProps;
   theme?: Partial<PaywallTheme>;
 }
 

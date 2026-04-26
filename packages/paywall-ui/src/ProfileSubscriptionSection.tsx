@@ -6,6 +6,7 @@ import {
   type GestureResponderEvent,
 } from "react-native";
 
+import { ProfileIdentifiersSection } from "./ProfileIdentifiersSection";
 import { mergePaywallTheme } from "./theme";
 import type {
   PaywallBenefit,
@@ -31,6 +32,7 @@ export const ProfileSubscriptionSection = ({
   content,
   copy,
   headerIcon,
+  identifierSection,
   theme: themeOverride,
   planLabel,
   renewalLabel,
@@ -65,6 +67,9 @@ export const ProfileSubscriptionSection = ({
     Boolean(copy.redeemPromoCodeButton);
   const shouldShowBothSecondaryActions =
     shouldShowRestorePurchases && shouldShowPromoCode;
+  const shouldShowIdentifiers =
+    identifierSection?.isEnabled !== false &&
+    Boolean(identifierSection?.items.length);
   const cardAction = isSubscribed
     ? onManageSubscription
     : shouldShowUpgrade
@@ -75,251 +80,262 @@ export const ProfileSubscriptionSection = ({
     : isUpgrading;
 
   return (
-    <Pressable
-      accessibilityRole="button"
-      disabled={!cardAction || isCardActionDisabled}
-      onPress={cardAction}
-      style={[
-        styles.card,
-        {
-          backgroundColor: theme.surfaceColor,
-          opacity: isCardActionDisabled ? 0.82 : 1,
-        },
-      ]}
-    >
-      <View style={styles.headerSection}>
-        <View style={styles.statusHeader}>
-          {headerIcon && <View style={styles.headerIcon}>{headerIcon}</View>}
-          <View style={styles.statusTextGroup}>
-            <View style={styles.titleRow}>
-              <Text style={[styles.title, { color: theme.primaryTextColor }]}>
-                {statusTitle}
-              </Text>
-            </View>
-            <View style={styles.badgeRow}>
-              <View
-                style={[
-                  styles.badge,
-                  {
-                    backgroundColor: isSubscribed
-                      ? theme.selectedSurfaceColor
-                      : theme.backgroundColor,
-                  },
-                ]}
-              >
-                <Text
-                  style={[
-                    styles.badgeText,
-                    {
-                      color: isSubscribed
-                        ? theme.accentColor
-                        : theme.secondaryTextColor,
-                    },
-                  ]}
-                >
-                  {statusBadge}
-                </Text>
-              </View>
-            </View>
-            {statusSubtitle && (
-              <Text
-                style={[styles.subtitle, { color: theme.secondaryTextColor }]}
-              >
-                {statusSubtitle}
-              </Text>
-            )}
-          </View>
-        </View>
-
-        {(planLabel || renewalLabel) && (
-          <View
-            style={[
-              styles.planSummary,
-              {
-                backgroundColor: theme.backgroundColor,
-              },
-            ]}
-          >
-            {planLabel && (
-              <Text
-                style={[styles.planLabel, { color: theme.primaryTextColor }]}
-              >
-                {planLabel}
-              </Text>
-            )}
-            {renewalLabel && (
-              <Text
-                style={[
-                  styles.renewalLabel,
-                  { color: theme.secondaryTextColor },
-                ]}
-              >
-                {renewalLabel}
-              </Text>
-            )}
-          </View>
-        )}
-      </View>
-
-      <View
+    <View style={styles.section}>
+      <Pressable
+        accessibilityRole="button"
+        disabled={!cardAction || isCardActionDisabled}
+        onPress={cardAction}
         style={[
-          styles.contentPanel,
-          { backgroundColor: theme.backgroundColor },
+          styles.card,
+          {
+            backgroundColor: theme.surfaceColor,
+            opacity: isCardActionDisabled ? 0.82 : 1,
+          },
         ]}
       >
-        <View style={styles.contentInner}>
-          {content ? (
-            <View style={styles.contentSlot}>{content}</View>
-          ) : (
-            <View style={styles.benefitSection}>
-              {copy.benefitsTitle && (
+        <View style={styles.headerSection}>
+          <View style={styles.statusHeader}>
+            {headerIcon && <View style={styles.headerIcon}>{headerIcon}</View>}
+            <View style={styles.statusTextGroup}>
+              <View style={styles.titleRow}>
                 <Text
                   style={[
-                    styles.sectionTitle,
+                    styles.title,
                     { color: theme.primaryTextColor },
                   ]}
                 >
-                  {copy.benefitsTitle}
+                  {statusTitle}
+                </Text>
+              </View>
+              <View style={styles.badgeRow}>
+                <View
+                  style={[
+                    styles.badge,
+                    {
+                      backgroundColor: isSubscribed
+                        ? theme.selectedSurfaceColor
+                        : theme.backgroundColor,
+                    },
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.badgeText,
+                      {
+                        color: isSubscribed
+                          ? theme.accentColor
+                          : theme.secondaryTextColor,
+                      },
+                    ]}
+                  >
+                    {statusBadge}
+                  </Text>
+                </View>
+              </View>
+              {statusSubtitle && (
+                <Text
+                  style={[styles.subtitle, { color: theme.secondaryTextColor }]}
+                >
+                  {statusSubtitle}
                 </Text>
               )}
-              <View style={styles.benefits}>
-                {benefits.map((benefit, index) => {
-                  const title = getBenefitTitle(benefit);
-                  const description = getBenefitDescription(benefit);
-                  const icon = getBenefitIcon(benefit);
+            </View>
+          </View>
 
-                  return (
-                    <View key={`${title}-${index}`} style={styles.benefitRow}>
-                      <View
-                        style={[
-                          styles.benefitMark,
-                          { backgroundColor: theme.selectedSurfaceColor },
-                        ]}
-                      >
-                        {icon ? (
-                          icon
-                        ) : (
-                          <Text
-                            style={[
-                              styles.benefitMarkText,
-                              { color: theme.accentColor },
-                            ]}
-                          >
-                            +
-                          </Text>
-                        )}
-                      </View>
-                      <View style={styles.benefitCopy}>
-                        <Text
-                          style={[
-                            styles.benefitTitle,
-                            { color: theme.primaryTextColor },
-                          ]}
-                        >
-                          {title}
-                        </Text>
-                        {description && (
-                          <Text
-                            style={[
-                              styles.benefitDescription,
-                              { color: theme.secondaryTextColor },
-                            ]}
-                          >
-                            {description}
-                          </Text>
-                        )}
-                      </View>
-                    </View>
-                  );
-                })}
-              </View>
+          {(planLabel || renewalLabel) && (
+            <View
+              style={[
+                styles.planSummary,
+                {
+                  backgroundColor: theme.backgroundColor,
+                },
+              ]}
+            >
+              {planLabel && (
+                <Text
+                  style={[styles.planLabel, { color: theme.primaryTextColor }]}
+                >
+                  {planLabel}
+                </Text>
+              )}
+              {renewalLabel && (
+                <Text
+                  style={[
+                    styles.renewalLabel,
+                    { color: theme.secondaryTextColor },
+                  ]}
+                >
+                  {renewalLabel}
+                </Text>
+              )}
             </View>
           )}
+        </View>
 
-          <View style={styles.actions}>
-            {shouldShowUpgrade && (
-              <ProfileActionButton
-                disabled={isUpgrading}
-                label={
-                  isUpgrading
-                    ? copy.upgradingButton ?? copy.upgradeButton ?? ""
-                    : copy.upgradeButton ?? ""
-                }
-                theme={theme}
-                variant="primary"
-                onPress={onUpgrade}
-              />
-            )}
-
-            {shouldShowManageSubscription && (
-              <ProfileActionButton
-                disabled={isManagingSubscription}
-                label={
-                  isManagingSubscription
-                    ? copy.managingSubscriptionButton ??
-                      copy.manageSubscriptionButton
-                    : copy.manageSubscriptionButton
-                }
-                theme={theme}
-                variant="primary"
-                onPress={onManageSubscription}
-              />
-            )}
-
-            {(shouldShowRestorePurchases || shouldShowPromoCode) && (
-              <View style={styles.secondaryActions}>
-                {shouldShowPromoCode && (
-                  <View
+        <View
+          style={[
+            styles.contentPanel,
+            { backgroundColor: theme.backgroundColor },
+          ]}
+        >
+          <View style={styles.contentInner}>
+            {content ? (
+              <View style={styles.contentSlot}>{content}</View>
+            ) : (
+              <View style={styles.benefitSection}>
+                {copy.benefitsTitle && (
+                  <Text
                     style={[
-                      styles.secondaryActionItem,
-                      shouldShowBothSecondaryActions &&
-                        styles.secondaryActionStart,
+                      styles.sectionTitle,
+                      { color: theme.primaryTextColor },
                     ]}
                   >
-                    <ProfileActionButton
-                      disabled={isRedeemingPromoCode}
-                      label={
-                        isRedeemingPromoCode
-                          ? copy.redeemingPromoCodeButton ??
-                            copy.redeemPromoCodeButton ??
-                            ""
-                          : copy.redeemPromoCodeButton ?? ""
-                      }
-                      theme={theme}
-                      variant="text"
-                      onPress={onRedeemPromoCode}
-                    />
-                  </View>
+                    {copy.benefitsTitle}
+                  </Text>
                 )}
-                {shouldShowRestorePurchases && (
-                  <View
-                    style={[
-                      styles.secondaryActionItem,
-                      shouldShowBothSecondaryActions
-                        ? styles.secondaryActionEnd
-                        : styles.secondaryActionCenter,
-                    ]}
-                  >
-                    <ProfileActionButton
-                      disabled={isRestoringPurchases}
-                      label={
-                        isRestoringPurchases
-                          ? copy.restoringPurchasesButton ??
-                            copy.restorePurchasesButton
-                          : copy.restorePurchasesButton
-                      }
-                      theme={theme}
-                      variant="text"
-                      onPress={onRestorePurchases}
-                    />
-                  </View>
-                )}
+                <View style={styles.benefits}>
+                  {benefits.map((benefit, index) => {
+                    const title = getBenefitTitle(benefit);
+                    const description = getBenefitDescription(benefit);
+                    const icon = getBenefitIcon(benefit);
+
+                    return (
+                      <View key={`${title}-${index}`} style={styles.benefitRow}>
+                        <View
+                          style={[
+                            styles.benefitMark,
+                            { backgroundColor: theme.selectedSurfaceColor },
+                          ]}
+                        >
+                          {icon ? (
+                            icon
+                          ) : (
+                            <Text
+                              style={[
+                                styles.benefitMarkText,
+                                { color: theme.accentColor },
+                              ]}
+                            >
+                              +
+                            </Text>
+                          )}
+                        </View>
+                        <View style={styles.benefitCopy}>
+                          <Text
+                            style={[
+                              styles.benefitTitle,
+                              { color: theme.primaryTextColor },
+                            ]}
+                          >
+                            {title}
+                          </Text>
+                          {description && (
+                            <Text
+                              style={[
+                                styles.benefitDescription,
+                                { color: theme.secondaryTextColor },
+                              ]}
+                            >
+                              {description}
+                            </Text>
+                          )}
+                        </View>
+                      </View>
+                    );
+                  })}
+                </View>
               </View>
             )}
+
+            <View style={styles.actions}>
+              {shouldShowUpgrade && (
+                <ProfileActionButton
+                  disabled={isUpgrading}
+                  label={
+                    isUpgrading
+                      ? copy.upgradingButton ?? copy.upgradeButton ?? ""
+                      : copy.upgradeButton ?? ""
+                  }
+                  theme={theme}
+                  variant="primary"
+                  onPress={onUpgrade}
+                />
+              )}
+
+              {shouldShowManageSubscription && (
+                <ProfileActionButton
+                  disabled={isManagingSubscription}
+                  label={
+                    isManagingSubscription
+                      ? copy.managingSubscriptionButton ??
+                        copy.manageSubscriptionButton
+                      : copy.manageSubscriptionButton
+                  }
+                  theme={theme}
+                  variant="primary"
+                  onPress={onManageSubscription}
+                />
+              )}
+
+              {(shouldShowRestorePurchases || shouldShowPromoCode) && (
+                <View style={styles.secondaryActions}>
+                  {shouldShowPromoCode && (
+                    <View
+                      style={[
+                        styles.secondaryActionItem,
+                        shouldShowBothSecondaryActions &&
+                          styles.secondaryActionStart,
+                      ]}
+                    >
+                      <ProfileActionButton
+                        disabled={isRedeemingPromoCode}
+                        label={
+                          isRedeemingPromoCode
+                            ? copy.redeemingPromoCodeButton ??
+                              copy.redeemPromoCodeButton ??
+                              ""
+                            : copy.redeemPromoCodeButton ?? ""
+                        }
+                        theme={theme}
+                        variant="text"
+                        onPress={onRedeemPromoCode}
+                      />
+                    </View>
+                  )}
+                  {shouldShowRestorePurchases && (
+                    <View
+                      style={[
+                        styles.secondaryActionItem,
+                        shouldShowBothSecondaryActions
+                          ? styles.secondaryActionEnd
+                          : styles.secondaryActionCenter,
+                      ]}
+                    >
+                      <ProfileActionButton
+                        disabled={isRestoringPurchases}
+                        label={
+                          isRestoringPurchases
+                            ? copy.restoringPurchasesButton ??
+                              copy.restorePurchasesButton
+                            : copy.restorePurchasesButton
+                        }
+                        theme={theme}
+                        variant="text"
+                        onPress={onRestorePurchases}
+                      />
+                    </View>
+                  )}
+                </View>
+              )}
+            </View>
           </View>
         </View>
-      </View>
-    </Pressable>
+      </Pressable>
+
+      {identifierSection && shouldShowIdentifiers && (
+        <ProfileIdentifiersSection section={identifierSection} theme={theme} />
+      )}
+    </View>
   );
 };
 
@@ -374,6 +390,9 @@ const ProfileActionButton = ({
 };
 
 const styles = StyleSheet.create({
+  section: {
+    gap: 12,
+  },
   card: {
     borderCurve: "continuous",
     borderRadius: 8,
