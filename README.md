@@ -141,6 +141,21 @@ Scenarios available on the home screen:
 - monthly only
 - long localized price
 
+Mock RevenueCat data lives in:
+
+```txt
+apps/playground/src/fixtures/revenuecat-mock-data.ts
+```
+
+The mock follows the RevenueCat shape used by the React Native SDK:
+
+```txt
+PurchasesOfferings
+  current: PurchasesOffering
+    availablePackages: PurchasesPackage[]
+      product: PurchasesStoreProduct
+```
+
 What to verify on `/paywall`:
 
 - plan card rendering
