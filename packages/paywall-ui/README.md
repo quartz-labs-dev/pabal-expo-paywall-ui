@@ -130,6 +130,11 @@ When `valueStep` is present, `Paywall` defaults to a two-step flow:
 1. value step: no close button, no prices, no restore/legal links, compact right-aligned primary-color `nextButton`
 2. purchase step: close button visible, plan selector, restore/legal links, full-width purchase button
 
+The value step is app-configurable through `hero`, `valueStep.title`,
+`valueStep.subtitle`, `valueStep.benefits`, `valueStep.content`,
+`valueStep.nextButton`, `valueStep.nextButtonAccessibilityLabel`, and
+`valueStep.closeButtonVisibility`.
+
 Use `stepMode: "singleStep"` to opt out and render the classic one-step paywall
 while keeping the same config object.
 

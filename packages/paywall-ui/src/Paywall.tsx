@@ -143,7 +143,7 @@ export const Paywall = <TPackage,>({
       >
         <View style={[styles.hero, { height: heroHeight }]}>{hero}</View>
 
-        <View style={styles.body}>
+        <View style={[styles.body, isValueStep && styles.valueBody]}>
           <View style={styles.header}>
             <Text style={[styles.title, { color: theme.primaryTextColor }]}>
               {title}
@@ -362,6 +362,9 @@ const styles = StyleSheet.create({
   body: {
     gap: 24,
     paddingHorizontal: 20,
+  },
+  valueBody: {
+    gap: 34,
   },
   header: {
     gap: 8,
