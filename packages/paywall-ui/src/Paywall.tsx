@@ -1,9 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
+  Animated,
+  Easing,
   Pressable,
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   useWindowDimensions,
   View,
 } from "react-native";
@@ -22,6 +25,7 @@ import type {
 } from "./types";
 
 type PaywallStep = "value" | "purchase";
+type PaywallTransitionPhase = "idle" | "exiting" | "entering";
 
 const getSelectedPlan = <TPackage,>(
   plans: PaywallPlan<TPackage>[],
@@ -40,12 +44,18 @@ const FIXED_FOOTER_TOP_PADDING = 12;
 const FIXED_FOOTER_MIN_BOTTOM_PADDING = 12;
 const FIXED_FOOTER_SCROLL_GAP = 24;
 const DEFAULT_HERO_HEIGHT_RATIO = 0.2;
+const STEP_TRANSITION_OUT_DURATION = 180;
+const STEP_TRANSITION_IN_DURATION = 300;
+const STEP_TRANSITION_DISTANCE = 28;
+const INITIAL_TRANSITION_DURATION = 380;
+const INITIAL_TRANSITION_DISTANCE = 22;
 
 export const Paywall = <TPackage,>({
   plans,
   hero,
   heroHeightRatio = DEFAULT_HERO_HEIGHT_RATIO,
   stepMode = "twoStep",
+  animationMode = "default",
   valueStep,
   benefits = [],
   content,
@@ -65,9 +75,17 @@ export const Paywall = <TPackage,>({
   const insets = useSafeAreaInsets();
   const { height: windowHeight } = useWindowDimensions();
   const shouldUseValueStep = stepMode === "twoStep" && Boolean(valueStep);
+  const shouldAnimate = animationMode !== "none";
+  const initialTransition = useRef(
+    new Animated.Value(shouldAnimate ? 0 : 1),
+  ).current;
+  const stepTransition = useRef(new Animated.Value(1)).current;
+  const isStepTransitioningRef = useRef(false);
   const [currentStep, setCurrentStep] = useState<PaywallStep>(() =>
     shouldUseValueStep ? "value" : "purchase",
   );
+  const [transitionPhase, setTransitionPhase] =
+    useState<PaywallTransitionPhase>("idle");
   const selectedPlan = getSelectedPlan(plans, selectedPlanId);
   const resolvedSelectedPlanId = selectedPlan?.id;
   const heroHeight = Math.round(windowHeight * heroHeightRatio);
@@ -89,19 +107,100 @@ export const Paywall = <TPackage,>({
   const bodyContent = isValueStep ? valueStep?.content : content;
   const shouldShowCloseButton =
     !isValueStep || valueStep?.closeButtonVisibility === "visible";
+  const initialTranslateY = initialTransition.interpolate({
+    inputRange: [0, 1],
+    outputRange: [INITIAL_TRANSITION_DISTANCE, 0],
+  });
+  const stepTranslateX = stepTransition.interpolate({
+    inputRange: [0, 1],
+    outputRange: [
+      transitionPhase === "exiting"
+        ? -STEP_TRANSITION_DISTANCE
+        : STEP_TRANSITION_DISTANCE,
+      0,
+    ],
+  });
+  const animatedStepStyle = {
+    opacity: Animated.multiply(initialTransition, stepTransition),
+    transform: [
+      {
+        translateY: initialTranslateY,
+      },
+      {
+        translateX: stepTranslateX,
+      },
+    ],
+  };
 
   useEffect(() => {
+    if (!shouldAnimate) {
+      initialTransition.setValue(1);
+      return;
+    }
+
+    initialTransition.setValue(0);
+    Animated.timing(initialTransition, {
+      duration: INITIAL_TRANSITION_DURATION,
+      easing: Easing.out(Easing.cubic),
+      toValue: 1,
+      useNativeDriver: true,
+    }).start();
+  }, [initialTransition, shouldAnimate]);
+
+  useEffect(() => {
+    isStepTransitioningRef.current = false;
+    setTransitionPhase("idle");
+    stepTransition.setValue(1);
     setCurrentStep(shouldUseValueStep ? "value" : "purchase");
-  }, [shouldUseValueStep]);
+  }, [shouldUseValueStep, stepTransition]);
+
+  const handleShowPurchaseStep = () => {
+    if (isStepTransitioningRef.current || currentStep !== "value") return;
+
+    if (!shouldAnimate) {
+      setCurrentStep("purchase");
+      return;
+    }
+
+    isStepTransitioningRef.current = true;
+    setTransitionPhase("exiting");
+    Animated.timing(stepTransition, {
+      duration: STEP_TRANSITION_OUT_DURATION,
+      easing: Easing.out(Easing.cubic),
+      toValue: 0,
+      useNativeDriver: true,
+    }).start(({ finished }) => {
+      if (!finished) {
+        isStepTransitioningRef.current = false;
+        return;
+      }
+
+      setCurrentStep("purchase");
+      requestAnimationFrame(() => {
+        setTransitionPhase("entering");
+        stepTransition.setValue(0);
+        Animated.timing(stepTransition, {
+          duration: STEP_TRANSITION_IN_DURATION,
+          easing: Easing.out(Easing.cubic),
+          toValue: 1,
+          useNativeDriver: true,
+        }).start(() => {
+          isStepTransitioningRef.current = false;
+          setTransitionPhase("idle");
+        });
+      });
+    });
+  };
 
   return (
     <View style={[styles.root, { backgroundColor: theme.backgroundColor }]}>
       {shouldShowCloseButton && (
-        <Pressable
+        <TouchableOpacity
           accessibilityLabel={
             copy.closeButtonAccessibilityLabel ?? "Close paywall"
           }
           accessibilityRole="button"
+          activeOpacity={0.7}
           onPress={onClose}
           style={[styles.closeButton, { top: Math.max(insets.top, 10) }]}
         >
@@ -129,7 +228,7 @@ export const Paywall = <TPackage,>({
               ]}
             />
           </View>
-        </Pressable>
+        </TouchableOpacity>
       )}
 
       <ScrollView
@@ -143,7 +242,13 @@ export const Paywall = <TPackage,>({
       >
         <View style={[styles.hero, { height: heroHeight }]}>{hero}</View>
 
-        <View style={[styles.body, isValueStep && styles.valueBody]}>
+        <Animated.View
+          style={[
+            styles.body,
+            isValueStep && styles.valueBody,
+            animatedStepStyle,
+          ]}
+        >
           <View style={styles.header}>
             <Text style={[styles.title, { color: theme.primaryTextColor }]}>
               {title}
@@ -212,7 +317,7 @@ export const Paywall = <TPackage,>({
               onOpenPrivacy={onOpenPrivacy}
             />
           )}
-        </View>
+        </Animated.View>
       </ScrollView>
 
       <View
@@ -238,7 +343,7 @@ export const Paywall = <TPackage,>({
               accessibilityLabel={valueStep.nextButtonAccessibilityLabel}
               label={valueStep.nextButton}
               theme={theme}
-              onPress={() => setCurrentStep("purchase")}
+              onPress={handleShowPurchaseStep}
             />
           </View>
         ) : (

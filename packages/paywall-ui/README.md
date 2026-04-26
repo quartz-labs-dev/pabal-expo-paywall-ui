@@ -15,6 +15,7 @@ export { Paywall } from "@pabal/expo-paywall-ui";
 export { createPaywallPlans, getDefaultSelectedPlanId } from "@pabal/expo-paywall-ui";
 export type {
   CreatePaywallPlansOptions,
+  PaywallAnimationMode,
   PaywallBenefit,
   PaywallBenefitDetail,
   PaywallConfig,
@@ -50,6 +51,7 @@ RevenueCat package object. The app uses it when purchasing.
 
 ```ts
 type PaywallStepMode = "twoStep" | "singleStep";
+type PaywallAnimationMode = "default" | "none";
 
 interface PaywallValueStep {
   title: string;
@@ -73,6 +75,7 @@ import { type PaywallConfig } from "@pabal/expo-paywall-ui";
 const paywallConfig = {
   hero: <HeroImage />,
   heroHeightRatio: 0.2,
+  animationMode: "default",
   valueStep: {
     title: "Unlock the full app",
     subtitle: "See what Pro adds before choosing a plan.",
@@ -137,6 +140,9 @@ The value step is app-configurable through `hero`, `valueStep.title`,
 
 Use `stepMode: "singleStep"` to opt out and render the classic one-step paywall
 while keeping the same config object.
+
+Animations are enabled by default. Use `animationMode: "none"` to render the
+initial paywall and step changes immediately.
 
 Use `benefits: string[]` for the simplest built-in checklist. Use
 `benefits: [{ title, description }]` when each benefit needs supporting copy.

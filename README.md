@@ -188,6 +188,7 @@ import {
 const myAppPaywallConfig = {
   hero: <MyAppPaywallHero />,
   heroHeightRatio: 0.2,
+  animationMode: "default",
   valueStep: {
     title: "Unlock the full app",
     subtitle: "See the value first, then choose your plan.",
@@ -263,6 +264,9 @@ button visibility.
 
 Use `stepMode: "singleStep"` in the config when an app should render the classic
 one-step paywall.
+
+Animations are enabled by default. Use `animationMode: "none"` when an app
+should render the initial paywall and step changes immediately.
 
 Use `benefits: string[]` for a simple checklist, or
 `benefits: [{ title, description }]` when each item needs a title and supporting

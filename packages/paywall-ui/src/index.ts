@@ -2,6 +2,7 @@ export { createPaywallPlans, getDefaultSelectedPlanId } from "./create-paywall-p
 export { Paywall } from "./Paywall";
 export type {
   CreatePaywallPlansOptions,
+  PaywallAnimationMode,
   PaywallBenefit,
   PaywallBenefitDetail,
   PaywallConfig,

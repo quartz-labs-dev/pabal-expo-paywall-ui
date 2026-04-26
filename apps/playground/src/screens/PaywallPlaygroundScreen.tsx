@@ -11,6 +11,7 @@ import {
 
 import { getPackagesForScenario } from "../fixtures/paywall-plans";
 import type {
+  PlaygroundPaywallAnimation,
   PlaygroundPaywallFlow,
   PlaygroundScenario,
 } from "../types/playground";
@@ -88,12 +89,14 @@ const { planOptions: playgroundPlanOptions, ...playgroundPaywallProps } =
 interface PaywallPlaygroundScreenProps {
   scenario: PlaygroundScenario;
   paywallFlow: PlaygroundPaywallFlow;
+  paywallAnimation: PlaygroundPaywallAnimation;
   onClose: () => void;
 }
 
 export const PaywallPlaygroundScreen = ({
   scenario,
   paywallFlow,
+  paywallAnimation,
   onClose,
 }: PaywallPlaygroundScreenProps) => {
   const [selectedPlanId, setSelectedPlanId] = useState<string | undefined>();
@@ -130,6 +133,7 @@ export const PaywallPlaygroundScreen = ({
         {...playgroundPaywallProps}
         plans={plans}
         stepMode={paywallFlow}
+        animationMode={paywallAnimation}
         selectedPlanId={selectedPlanId}
         isPurchasing={isPurchasing}
         onSelectPlan={setSelectedPlanId}

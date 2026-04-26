@@ -9,6 +9,7 @@ import {
   scenarioLabels,
 } from "../fixtures/paywall-plans";
 import type {
+  PlaygroundPaywallAnimation,
   PlaygroundPaywallFlow,
   PlaygroundScenario,
 } from "../types/playground";
@@ -16,8 +17,12 @@ import type {
 interface HomeScreenProps {
   scenario: PlaygroundScenario;
   paywallFlow: PlaygroundPaywallFlow;
+  paywallAnimation: PlaygroundPaywallAnimation;
   onChangeScenario: (scenario: PlaygroundScenario) => void;
   onChangePaywallFlow: (paywallFlow: PlaygroundPaywallFlow) => void;
+  onChangePaywallAnimation: (
+    paywallAnimation: PlaygroundPaywallAnimation,
+  ) => void;
   onOpenPaywall: () => void;
 }
 
@@ -32,6 +37,16 @@ const paywallFlowDescriptions: Record<PlaygroundPaywallFlow, string> = {
     "Default value-first flow: value screen first, then plans and purchase.",
   singleStep: "Classic paywall: show plans and purchase UI immediately.",
 };
+const paywallAnimations: PlaygroundPaywallAnimation[] = ["default", "none"];
+const paywallAnimationLabels: Record<PlaygroundPaywallAnimation, string> = {
+  default: "Animated",
+  none: "No animation",
+};
+const paywallAnimationDescriptions: Record<PlaygroundPaywallAnimation, string> =
+  {
+    default: "Bottom-up entrance and side-to-side step transition.",
+    none: "Render paywall and step changes immediately.",
+  };
 const FIXED_FOOTER_BUTTON_HEIGHT = 54;
 const FIXED_FOOTER_TOP_PADDING = 12;
 const FIXED_FOOTER_MIN_BOTTOM_PADDING = 12;
@@ -40,8 +55,10 @@ const FIXED_FOOTER_SCROLL_GAP = 24;
 export const HomeScreen = ({
   scenario,
   paywallFlow,
+  paywallAnimation,
   onChangeScenario,
   onChangePaywallFlow,
+  onChangePaywallAnimation,
   onOpenPaywall,
 }: HomeScreenProps) => {
   const insets = useSafeAreaInsets();
@@ -159,6 +176,38 @@ export const HomeScreen = ({
           </View>
         </View>
 
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Animation</Text>
+          <View style={styles.segmentedList}>
+            {paywallAnimations.map((item) => {
+              const isSelected = item === paywallAnimation;
+
+              return (
+                <Pressable
+                  key={item}
+                  onPress={() => onChangePaywallAnimation(item)}
+                  style={[
+                    styles.flowOption,
+                    isSelected && styles.flowOptionSelected,
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.flowTitle,
+                      isSelected && styles.flowTitleSelected,
+                    ]}
+                  >
+                    {paywallAnimationLabels[item]}
+                  </Text>
+                  <Text style={styles.flowDescription}>
+                    {paywallAnimationDescriptions[item]}
+                  </Text>
+                </Pressable>
+              );
+            })}
+          </View>
+        </View>
+
         <View style={styles.preview}>
           <Text style={styles.previewTitle}>Selected offering preview</Text>
           {plans.map((plan) => (
@@ -172,6 +221,9 @@ export const HomeScreen = ({
           </Text>
           <Text style={styles.previewMeta}>
             Paywall flow: {paywallFlowLabels[paywallFlow]}
+          </Text>
+          <Text style={styles.previewMeta}>
+            Animation: {paywallAnimationLabels[paywallAnimation]}
           </Text>
         </View>
       </ScrollView>

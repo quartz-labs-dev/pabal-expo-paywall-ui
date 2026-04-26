@@ -37,6 +37,8 @@ export type PaywallBenefit = string | PaywallBenefitDetail;
 
 export type PaywallStepMode = "twoStep" | "singleStep";
 
+export type PaywallAnimationMode = "default" | "none";
+
 export interface PaywallValueStep {
   title: string;
   subtitle?: string;
@@ -65,6 +67,7 @@ export interface PaywallProps<TPackage = unknown> {
   hero: ReactNode;
   heroHeightRatio?: number;
   stepMode?: PaywallStepMode;
+  animationMode?: PaywallAnimationMode;
   valueStep?: PaywallValueStep;
   benefits?: PaywallBenefit[];
   content?: ReactNode;
@@ -85,6 +88,7 @@ export interface PaywallConfig {
   hero: ReactNode;
   heroHeightRatio?: number;
   stepMode?: PaywallStepMode;
+  animationMode?: PaywallAnimationMode;
   valueStep?: PaywallValueStep;
   benefits?: PaywallBenefit[];
   content?: ReactNode;

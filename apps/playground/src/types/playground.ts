@@ -8,3 +8,5 @@ export type PlaygroundScenario =
 export type PlaygroundRoute = "home" | "paywall";
 
 export type PlaygroundPaywallFlow = "twoStep" | "singleStep";
+
+export type PlaygroundPaywallAnimation = "default" | "none";
