@@ -1,42 +1,45 @@
 import { StyleSheet, View } from "react-native";
 
 interface CopyIconProps {
+  backgroundColor?: string;
   color: string;
 }
 
-export const CopyIcon = ({ color }: CopyIconProps) => {
+export const CopyIcon = ({
+  backgroundColor = "transparent",
+  color,
+}: CopyIconProps) => {
   return (
     <View style={styles.icon}>
       <View style={[styles.back, { borderColor: color }]} />
-      <View style={[styles.front, { borderColor: color }]} />
+      <View style={[styles.front, { backgroundColor, borderColor: color }]} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   icon: {
-    height: 24,
-    width: 24,
+    height: 20,
+    width: 20,
   },
   back: {
     borderCurve: "continuous",
-    borderRadius: 5,
+    borderRadius: 3,
     borderWidth: 2,
     height: 14,
-    left: 4,
+    left: 2,
     position: "absolute",
-    top: 3,
+    top: 2,
     width: 14,
   },
   front: {
-    backgroundColor: "transparent",
     borderCurve: "continuous",
-    borderRadius: 5,
+    borderRadius: 3,
     borderWidth: 2,
     height: 14,
-    left: 7,
+    left: 6,
     position: "absolute",
-    top: 7,
+    top: 6,
     width: 14,
   },
 });

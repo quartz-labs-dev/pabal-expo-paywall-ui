@@ -207,7 +207,10 @@ const ProfileIdentifierRow = ({
               },
             ]}
           >
-            <CopyIcon color={theme.secondaryTextColor} />
+            <CopyIcon
+              backgroundColor={theme.accentColor}
+              color={theme.accentColor}
+            />
           </Pressable>
         )}
       </View>
