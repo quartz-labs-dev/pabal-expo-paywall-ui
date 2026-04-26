@@ -173,7 +173,7 @@ import {
 const profileIdentifiers: ProfileIdentifierItem[] = [
   {
     key: "anonymous-user-id",
-    label: "Anonymous User ID",
+    label: "User ID",
     value: userId,
   },
   {
@@ -225,8 +225,8 @@ const profileSubscriptionConfig = {
 When `isSubscribed` is true, upgrade and restore actions are hidden. Subscription
 management remains visible.
 
-`identifierSection` renders the profile ID copy UI. `isEnabled` defaults to
-`true` when the section is provided; set `isEnabled: false` to hide the whole UI.
+`identifierSection` renders the profile ID copy UI. It is hidden by default; set
+`isEnabled: true` to show the whole UI.
 The package does not import a clipboard dependency, so the consuming app owns
 `onCopy`.
 

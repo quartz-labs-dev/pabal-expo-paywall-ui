@@ -45,7 +45,7 @@ export const ProfilePlaygroundScreen = ({
   const insets = useSafeAreaInsets();
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [showPromoCodeButton, setShowPromoCodeButton] = useState(true);
-  const [showProfileIdentifiers, setShowProfileIdentifiers] = useState(true);
+  const [showProfileIdentifiers, setShowProfileIdentifiers] = useState(false);
   const [isUpgrading, setIsUpgrading] = useState(false);
   const [isManagingSubscription, setIsManagingSubscription] = useState(false);
   const [isRestoringPurchases, setIsRestoringPurchases] = useState(false);
@@ -87,7 +87,7 @@ export const ProfilePlaygroundScreen = ({
       items: [
         {
           key: "anonymous-user-id",
-          label: "Anonymous User ID",
+          label: "User ID",
           value: "bdac7af9-17c6-4930-b5ca-e1e4aa38e42d",
         },
         {

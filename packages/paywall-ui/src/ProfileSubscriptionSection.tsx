@@ -68,7 +68,7 @@ export const ProfileSubscriptionSection = ({
   const shouldShowBothSecondaryActions =
     shouldShowRestorePurchases && shouldShowPromoCode;
   const shouldShowIdentifiers =
-    identifierSection?.isEnabled !== false &&
+    identifierSection?.isEnabled === true &&
     Boolean(identifierSection?.items.length);
   const cardAction = isSubscribed
     ? onManageSubscription
