@@ -118,6 +118,7 @@ const INITIAL_TRANSITION_DISTANCE = 22;
 const NAV_ICON_BACKGROUND_COLOR = "rgba(0, 0, 0, 0.22)";
 const NAV_ICON_COLOR = "#FFFFFF";
 const PAYWALL_HORIZONTAL_PADDING = 8;
+const PAYWALL_HEADER_HORIZONTAL_PADDING = 4;
 
 const getStepTransitionOffset = (
   phase: PaywallTransitionPhase,
@@ -609,7 +610,7 @@ const styles = StyleSheet.create({
   },
   header: {
     gap: 8,
-    paddingHorizontal: 8,
+    paddingHorizontal: PAYWALL_HEADER_HORIZONTAL_PADDING,
   },
   title: {
     fontSize: 26,
