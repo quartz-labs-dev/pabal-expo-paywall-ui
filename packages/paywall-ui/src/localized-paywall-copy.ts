@@ -113,7 +113,6 @@ export const getDefaultProfileSubscriptionCopy = (
     subscribedSubtitle: text.subscribedSubtitle,
     notSubscribedTitle: productName,
     subscribedBadge: "PRO",
-    notSubscribedBadge: text.freeBadge,
     benefitsTitle: text.benefitsTitle,
     upgradeButton: text.upgradeTo(productName),
     upgradingButton: text.openingPaywall,

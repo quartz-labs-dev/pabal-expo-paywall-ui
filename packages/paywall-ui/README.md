@@ -46,6 +46,7 @@ const paywallBenefits = [
     title: "Store-managed subscription",
     description: "Restore access on devices signed into the same store account.",
     icon: <StoreIcon />,
+    onClick: openSubscriptionHelp,
   },
 ];
 
@@ -76,8 +77,10 @@ const paywallConfig = {
 const { planOptions, ...paywallPresentation } = paywallConfig;
 ```
 
-Use `stepMode: "singleStep"` to skip the value step. Use `content` only when the
-app needs a custom React Native body instead of the built-in benefit list.
+Use `stepMode: "singleStep"` to skip the value step. Use `content` when the app
+needs a custom React Native body below the built-in benefit list.
+Add `onClick` to an object benefit when a row should open app-owned help or
+detail UI; clickable benefit titles render with an underline.
 
 ## Convert Offerings
 
@@ -153,7 +156,7 @@ entitlement refresh, and navigation belong inside the app's `onPurchase`.
 | Trial duration or no trial | `freeTrial` |
 | Top media | `hero`, `heroHeightRatio` |
 | Benefit rows | `benefits` |
-| Custom body layout | `content` |
+| Custom body below benefits | `content` |
 | RevenueCat package mapping | `planOptions.*PackageIds` |
 | Plan card order | `planOptions.displayOrder` |
 | Theme colors | `theme` |

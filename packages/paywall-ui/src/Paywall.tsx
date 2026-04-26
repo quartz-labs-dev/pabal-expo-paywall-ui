@@ -15,12 +15,12 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { getDefaultSelectedPlanId } from "./create-paywall-plans";
 import { ChevronLeftIcon, CloseIcon } from "./icons";
 import { LegalLinks } from "./LegalLinks";
+import { PaywallBenefitList } from "./PaywallBenefitList";
 import { PlanSelector } from "./PlanSelector";
 import { PurchaseButton } from "./PurchaseButton";
 import { mergePaywallTheme } from "./theme";
 import { TrialNotice } from "./TrialNotice";
 import type {
-  PaywallBenefit,
   PaywallFreeTrialConfig,
   PaywallPlan,
   PaywallProps,
@@ -38,14 +38,6 @@ const getSelectedPlan = <TPackage,>(
 ): PaywallPlan<TPackage> | undefined => {
   const fallbackPlanId = selectedPlanId ?? getDefaultSelectedPlanId(plans);
   return plans.find((plan) => plan.id === fallbackPlanId);
-};
-
-const getBenefitKey = (benefit: PaywallBenefit): string => {
-  return typeof benefit === "string" ? benefit : benefit.title;
-};
-
-const getBenefitIcon = (benefit: PaywallBenefit) => {
-  return typeof benefit === "string" ? undefined : benefit.icon;
 };
 
 const hasRenewingSubscriptionPlan = <TPackage,>(
@@ -117,9 +109,9 @@ const FIXED_FOOTER_BUTTON_HEIGHT = 52;
 const FIXED_FOOTER_TOP_PADDING = 12;
 const FIXED_FOOTER_MIN_BOTTOM_PADDING = 12;
 const FIXED_FOOTER_SCROLL_GAP = 24;
-const DEFAULT_HERO_HEIGHT_RATIO = 0.2;
-const STEP_TRANSITION_OUT_DURATION = 180;
-const STEP_TRANSITION_IN_DURATION = 300;
+const DEFAULT_HERO_HEIGHT_RATIO = 0.23;
+const STEP_TRANSITION_OUT_DURATION = 150;
+const STEP_TRANSITION_IN_DURATION = 250;
 const STEP_TRANSITION_DISTANCE = 28;
 const INITIAL_TRANSITION_DURATION = 380;
 const INITIAL_TRANSITION_DISTANCE = 22;
@@ -218,10 +210,13 @@ export const Paywall = <TPackage,>({
   const subtitle = isValueStep ? valueStep?.subtitle : copy.subtitle;
   const bodyBenefits = benefits;
   const bodyContent = isValueStep ? valueStep?.content : content;
+  const shouldHideBenefits = shouldUseValueStep && currentStep === "purchase";
+  const visibleBenefits = shouldHideBenefits ? [] : bodyBenefits;
   const shouldShowCloseButton =
     !isValueStep || valueStep?.closeButtonVisibility === "visible";
   const shouldShowBackButton = shouldUseValueStep && currentStep === "purchase";
   const shouldShowLegalPrefix = hasRenewingSubscriptionPlan(plans);
+  const shouldUseLargeBenefits = isValueStep;
   const initialTranslateY = initialTransition.interpolate({
     inputRange: [0, 1],
     outputRange: [INITIAL_TRANSITION_DISTANCE, 0],
@@ -414,48 +409,13 @@ export const Paywall = <TPackage,>({
             </View>
           )}
 
-          {bodyContent ? (
-            <View style={styles.contentSlot}>{bodyContent}</View>
-          ) : (
-            <View style={styles.benefits}>
-              {bodyBenefits.map((benefit, index) => (
-                <View
-                  key={`${getBenefitKey(benefit)}-${index}`}
-                  style={styles.benefitRow}
-                >
-                  {getBenefitIcon(benefit) ? (
-                    <View style={styles.benefitIcon}>
-                      {getBenefitIcon(benefit)}
-                    </View>
-                  ) : (
-                    <Text style={[styles.check, { color: theme.accentColor }]}>
-                      +
-                    </Text>
-                  )}
-                  <View style={styles.benefitTextGroup}>
-                    <Text
-                      style={[
-                        styles.benefitText,
-                        { color: theme.primaryTextColor },
-                      ]}
-                    >
-                      {typeof benefit === "string" ? benefit : benefit.title}
-                    </Text>
-                    {typeof benefit !== "string" && benefit.description && (
-                      <Text
-                        style={[
-                          styles.benefitDescription,
-                          { color: theme.secondaryTextColor },
-                        ]}
-                      >
-                        {benefit.description}
-                      </Text>
-                    )}
-                  </View>
-                </View>
-              ))}
-            </View>
-          )}
+          <PaywallBenefitList
+            benefits={visibleBenefits}
+            content={bodyContent}
+            size={shouldUseLargeBenefits ? "large" : "regular"}
+            theme={theme}
+            variant="plain"
+          />
 
           {!isValueStep && (
             <LegalLinks
@@ -660,43 +620,5 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     lineHeight: 22,
     textAlign: "center",
-  },
-  benefits: {
-    gap: 12,
-    paddingVertical: 18,
-  },
-  contentSlot: {
-    paddingVertical: 18,
-    width: "100%",
-  },
-  benefitRow: {
-    alignItems: "flex-start",
-    flexDirection: "row",
-    gap: 10,
-  },
-  check: {
-    fontSize: 16,
-    fontWeight: "900",
-    lineHeight: 22,
-  },
-  benefitIcon: {
-    alignItems: "center",
-    minHeight: 22,
-    justifyContent: "center",
-    width: 18,
-  },
-  benefitText: {
-    fontSize: 15,
-    fontWeight: "800",
-    lineHeight: 22,
-  },
-  benefitTextGroup: {
-    flex: 1,
-    gap: 2,
-  },
-  benefitDescription: {
-    fontSize: 13,
-    fontWeight: "500",
-    lineHeight: 19,
   },
 });

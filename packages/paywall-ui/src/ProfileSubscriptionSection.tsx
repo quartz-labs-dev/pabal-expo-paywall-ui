@@ -8,24 +8,12 @@ import {
 
 import { ProfileIdentifiersSection } from "./ProfileIdentifiersSection";
 import { getDefaultProfileIdentifiersCopy } from "./localized-paywall-copy";
+import { PaywallBenefitList } from "./PaywallBenefitList";
 import { mergePaywallTheme } from "./theme";
 import type {
-  PaywallBenefit,
   PaywallTheme,
   ProfileSubscriptionSectionProps,
 } from "./types";
-
-const getBenefitTitle = (benefit: PaywallBenefit): string => {
-  return typeof benefit === "string" ? benefit : benefit.title;
-};
-
-const getBenefitDescription = (benefit: PaywallBenefit): string | undefined => {
-  return typeof benefit === "string" ? undefined : benefit.description;
-};
-
-const getBenefitIcon = (benefit: PaywallBenefit) => {
-  return typeof benefit === "string" ? undefined : benefit.icon;
-};
 
 export const ProfileSubscriptionSection = ({
   isSubscribed,
@@ -57,7 +45,7 @@ export const ProfileSubscriptionSection = ({
     : copy.notSubscribedSubtitle;
   const statusBadge = isSubscribed
     ? copy.subscribedBadge ?? "PRO"
-    : copy.notSubscribedBadge ?? "FREE";
+    : copy.notSubscribedBadge;
   const shouldShowUpgrade =
     !isSubscribed && Boolean(onUpgrade) && Boolean(copy.upgradeButton);
   const shouldShowManageSubscription = isSubscribed;
@@ -118,31 +106,31 @@ export const ProfileSubscriptionSection = ({
                 >
                   {statusTitle}
                 </Text>
-              </View>
-              <View style={styles.badgeRow}>
-                <View
-                  style={[
-                    styles.badge,
-                    {
-                      backgroundColor: isSubscribed
-                        ? theme.selectedSurfaceColor
-                        : theme.backgroundColor,
-                    },
-                  ]}
-                >
-                  <Text
+                {statusBadge ? (
+                  <View
                     style={[
-                      styles.badgeText,
+                      styles.badge,
                       {
-                        color: isSubscribed
-                          ? theme.accentColor
-                          : theme.secondaryTextColor,
+                        backgroundColor: isSubscribed
+                          ? theme.selectedSurfaceColor
+                          : theme.backgroundColor,
                       },
                     ]}
                   >
-                    {statusBadge}
-                  </Text>
-                </View>
+                    <Text
+                      style={[
+                        styles.badgeText,
+                        {
+                          color: isSubscribed
+                            ? theme.accentColor
+                            : theme.secondaryTextColor,
+                        },
+                      ]}
+                    >
+                      {statusBadge}
+                    </Text>
+                  </View>
+                ) : null}
               </View>
               {statusSubtitle && (
                 <Text
@@ -191,73 +179,13 @@ export const ProfileSubscriptionSection = ({
           ]}
         >
           <View style={styles.contentInner}>
-            {content ? (
-              <View style={styles.contentSlot}>{content}</View>
-            ) : (
-              <View style={styles.benefitSection}>
-                {copy.benefitsTitle && (
-                  <Text
-                    style={[
-                      styles.sectionTitle,
-                      { color: theme.primaryTextColor },
-                    ]}
-                  >
-                    {copy.benefitsTitle}
-                  </Text>
-                )}
-                <View style={styles.benefits}>
-                  {benefits.map((benefit, index) => {
-                    const title = getBenefitTitle(benefit);
-                    const description = getBenefitDescription(benefit);
-                    const icon = getBenefitIcon(benefit);
-
-                    return (
-                      <View key={`${title}-${index}`} style={styles.benefitRow}>
-                        <View
-                          style={[
-                            styles.benefitMark,
-                            { backgroundColor: theme.selectedSurfaceColor },
-                          ]}
-                        >
-                          {icon ? (
-                            icon
-                          ) : (
-                            <Text
-                              style={[
-                                styles.benefitMarkText,
-                                { color: theme.accentColor },
-                              ]}
-                            >
-                              +
-                            </Text>
-                          )}
-                        </View>
-                        <View style={styles.benefitCopy}>
-                          <Text
-                            style={[
-                              styles.benefitTitle,
-                              { color: theme.primaryTextColor },
-                            ]}
-                          >
-                            {title}
-                          </Text>
-                          {description && (
-                            <Text
-                              style={[
-                                styles.benefitDescription,
-                                { color: theme.secondaryTextColor },
-                              ]}
-                            >
-                              {description}
-                            </Text>
-                          )}
-                        </View>
-                      </View>
-                    );
-                  })}
-                </View>
-              </View>
-            )}
+            <PaywallBenefitList
+              benefits={benefits}
+              content={content}
+              theme={theme}
+              title={copy.benefitsTitle}
+              variant="contained"
+            />
 
             <View style={styles.actions}>
               {shouldShowUpgrade && (
@@ -437,28 +365,27 @@ const styles = StyleSheet.create({
   titleRow: {
     alignItems: "center",
     flexDirection: "row",
-  },
-  badgeRow: {
-    alignItems: "center",
-    flexDirection: "row",
+    gap: 8,
+    justifyContent: "space-between",
+    minWidth: 0,
   },
   badge: {
-    alignSelf: "flex-start",
     borderRadius: 999,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
+    flexShrink: 0,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
   },
   badgeText: {
-    fontSize: 11,
+    fontSize: 10,
     fontWeight: "700",
     letterSpacing: 0,
   },
   title: {
     flexShrink: 1,
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "700",
     letterSpacing: 0,
-    lineHeight: 26,
+    lineHeight: 24,
   },
   subtitle: {
     flexShrink: 1,
@@ -490,54 +417,6 @@ const styles = StyleSheet.create({
   contentInner: {
     gap: 22,
     padding: 20,
-  },
-  contentSlot: {
-    width: "100%",
-  },
-  benefitSection: {
-    gap: 12,
-  },
-  sectionTitle: {
-    fontSize: 15,
-    fontWeight: "700",
-    lineHeight: 20,
-  },
-  benefits: {
-    gap: 12,
-  },
-  benefitRow: {
-    alignItems: "flex-start",
-    flexDirection: "row",
-    gap: 10,
-  },
-  benefitMark: {
-    alignItems: "center",
-    borderRadius: 8,
-    height: 24,
-    justifyContent: "center",
-    width: 24,
-  },
-  benefitMarkText: {
-    fontSize: 15,
-    fontWeight: "700",
-    lineHeight: 18,
-  },
-  benefitCopy: {
-    flex: 1,
-    gap: 2,
-    minWidth: 0,
-  },
-  benefitTitle: {
-    flexShrink: 1,
-    fontSize: 15,
-    fontWeight: "700",
-    lineHeight: 21,
-  },
-  benefitDescription: {
-    flexShrink: 1,
-    fontSize: 13,
-    fontWeight: "500",
-    lineHeight: 19,
   },
   actions: {
     gap: 10,

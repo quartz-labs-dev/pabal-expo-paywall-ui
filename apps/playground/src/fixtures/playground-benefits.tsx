@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 import type { PaywallBenefit } from "pabal-expo-paywall-ui";
 
 export const playgroundBenefits = [
@@ -6,6 +6,7 @@ export const playgroundBenefits = [
     title: "Home Screen Widget",
     description: "Keep your status visible from the home screen.",
     icon: <BenefitIcon label="W" />,
+    onClick: () => Alert.alert("Home Screen Widget benefit"),
   },
   {
     title: "Custom Location Settings",

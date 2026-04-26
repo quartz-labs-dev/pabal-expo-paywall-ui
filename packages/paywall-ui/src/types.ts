@@ -53,6 +53,7 @@ export interface PaywallBenefitDetail {
   title: string;
   description?: string;
   icon?: ReactNode;
+  onClick?: () => Promise<void> | void;
 }
 
 export type PaywallBenefit = string | PaywallBenefitDetail;

@@ -7,6 +7,7 @@ import {
   getDefaultPaywallCopy,
   getDefaultPaywallPlanOptions,
   getDefaultProfileIdentifiersCopy,
+  getDefaultProfileSubscriptionCopy,
   resolvePaywallTextLocale,
 } from "../src/localized-paywall-copy";
 import { UNIFIED_LOCALES } from "../src/unified-locales";
@@ -305,6 +306,24 @@ test("localizes profile identifier copy for every non-English paywall locale", (
     assert.match(copy.copyButtonAccessibilityLabel, /IDs/, locale);
     assert.match(copy.hideButtonLabel, /IDs/, locale);
     assert.match(copy.showButtonLabel, /IDs/, locale);
+  }
+});
+
+test("omits the free profile status badge by default", () => {
+  const copy = getDefaultProfileSubscriptionCopy("en", { productName: "Pro" });
+
+  assert.equal(copy.subscribedBadge, "PRO");
+  assert.equal(copy.notSubscribedBadge, undefined);
+});
+
+test("localizes profile upgrade button copy for every paywall locale", () => {
+  for (const locale of PAYWALL_TEXT_LOCALES) {
+    const copy = getDefaultProfileSubscriptionCopy(locale, {
+      productName: "Pro",
+    });
+
+    assert.ok(copy.upgradeButton?.includes("Pro"), locale);
+    assert.notEqual(copy.upgradeButton, "Pro", locale);
   }
 });
 

@@ -32,7 +32,7 @@ const en = createPaywallLocaleText({
     monthlyPricePrefix: "",
     renewsOnPrefix: "",
     savePrefix: "",
-    upgradePrefix: "",
+    upgradePrefix: "Upgrade to ",
     closeButtonAccessibilityLabel: "Close paywall",
     monthlyPriceSuffix: " / mo",
     pricePerAnnualPeriodSuffix: " / year",
