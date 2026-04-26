@@ -1,0 +1,12 @@
+node_modules
+dist
+dist-test
+**/dist
+**/dist-test
+.expo
+.expo-shared
+ios
+android
+coverage
+*.log
+.DS_Store

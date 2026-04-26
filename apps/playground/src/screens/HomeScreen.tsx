@@ -1,0 +1,247 @@
+import { createPaywallPlans, getDefaultSelectedPlanId } from "@pabal/expo-paywall-ui";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+
+import {
+  getPackagesForScenario,
+  scenarioDescriptions,
+  scenarioLabels,
+} from "../fixtures/paywall-plans";
+import type { PlaygroundScenario } from "../types/playground";
+
+interface HomeScreenProps {
+  scenario: PlaygroundScenario;
+  onChangeScenario: (scenario: PlaygroundScenario) => void;
+  onOpenPaywall: () => void;
+}
+
+const scenarios = Object.keys(scenarioLabels) as PlaygroundScenario[];
+
+export const HomeScreen = ({
+  scenario,
+  onChangeScenario,
+  onOpenPaywall,
+}: HomeScreenProps) => {
+  const plans = createPaywallPlans(getPackagesForScenario(scenario), {
+    annualBadgeText: "Best value",
+    annualTitle: "Yearly",
+    monthlyTitle: "Monthly",
+    recommendedPeriod: "annual",
+  });
+  const defaultPlanId = getDefaultSelectedPlanId(plans);
+
+  return (
+    <View style={styles.root}>
+      <ScrollView contentContainerStyle={styles.content}>
+        <View style={styles.header}>
+          <Text style={styles.eyebrow}>@pabal/expo-paywall-ui playground</Text>
+          <Text style={styles.title}>Choose test packages</Text>
+          <Text style={styles.subtitle}>
+            홈에서 offering 상태를 고르고 `/paywall` 화면에서 실제 페이월만
+            확인합니다.
+          </Text>
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Package scenario</Text>
+          <View style={styles.scenarioList}>
+            {scenarios.map((item) => {
+              const isSelected = item === scenario;
+
+              return (
+                <Pressable
+                  key={item}
+                  onPress={() => onChangeScenario(item)}
+                  style={[
+                    styles.scenarioCard,
+                    isSelected && styles.scenarioCardSelected,
+                  ]}
+                >
+                  <View style={styles.scenarioHeader}>
+                    <Text
+                      style={[
+                        styles.scenarioTitle,
+                        isSelected && styles.scenarioTitleSelected,
+                      ]}
+                    >
+                      {scenarioLabels[item]}
+                    </Text>
+                    <View
+                      style={[
+                        styles.radio,
+                        isSelected && styles.radioSelected,
+                      ]}
+                    >
+                      {isSelected && <View style={styles.radioDot} />}
+                    </View>
+                  </View>
+                  <Text style={styles.scenarioDescription}>
+                    {scenarioDescriptions[item]}
+                  </Text>
+                </Pressable>
+              );
+            })}
+          </View>
+        </View>
+
+        <View style={styles.preview}>
+          <Text style={styles.previewTitle}>Selected offering preview</Text>
+          {plans.map((plan) => (
+            <View key={plan.id} style={styles.previewRow}>
+              <Text style={styles.previewPlan}>{plan.title}</Text>
+              <Text style={styles.previewPrice}>{plan.priceText}</Text>
+            </View>
+          ))}
+          <Text style={styles.previewMeta}>
+            Default selected plan: {defaultPlanId ?? "none"}
+          </Text>
+        </View>
+
+        <Pressable onPress={onOpenPaywall} style={styles.cta}>
+          <Text style={styles.ctaText}>Open /paywall</Text>
+        </Pressable>
+      </ScrollView>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  root: {
+    backgroundColor: "#05080C",
+    flex: 1,
+  },
+  content: {
+    gap: 28,
+    padding: 20,
+    paddingTop: 72,
+  },
+  header: {
+    gap: 10,
+  },
+  eyebrow: {
+    color: "#5AC8B7",
+    fontSize: 12,
+    fontWeight: "900",
+    letterSpacing: 0,
+    textTransform: "uppercase",
+  },
+  title: {
+    color: "#F5F7FA",
+    fontSize: 34,
+    fontWeight: "900",
+    letterSpacing: 0,
+    lineHeight: 40,
+  },
+  subtitle: {
+    color: "#B9C4CF",
+    fontSize: 15,
+    lineHeight: 22,
+  },
+  section: {
+    gap: 12,
+  },
+  sectionTitle: {
+    color: "#F5F7FA",
+    fontSize: 17,
+    fontWeight: "900",
+  },
+  scenarioList: {
+    gap: 12,
+  },
+  scenarioCard: {
+    backgroundColor: "#151D25",
+    borderColor: "#2B3845",
+    borderRadius: 8,
+    borderWidth: 1,
+    gap: 8,
+    padding: 16,
+  },
+  scenarioCardSelected: {
+    backgroundColor: "#102A2A",
+    borderColor: "#5AC8B7",
+  },
+  scenarioHeader: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 12,
+  },
+  scenarioTitle: {
+    color: "#F5F7FA",
+    flexShrink: 1,
+    fontSize: 17,
+    fontWeight: "900",
+  },
+  scenarioTitleSelected: {
+    color: "#5AC8B7",
+  },
+  scenarioDescription: {
+    color: "#B9C4CF",
+    fontSize: 13,
+    lineHeight: 19,
+  },
+  radio: {
+    alignItems: "center",
+    borderColor: "#7F8B96",
+    borderRadius: 10,
+    borderWidth: 2,
+    height: 20,
+    justifyContent: "center",
+    width: 20,
+  },
+  radioSelected: {
+    borderColor: "#5AC8B7",
+  },
+  radioDot: {
+    backgroundColor: "#5AC8B7",
+    borderRadius: 5,
+    height: 8,
+    width: 8,
+  },
+  preview: {
+    backgroundColor: "#101820",
+    borderColor: "#2B3845",
+    borderRadius: 8,
+    borderWidth: 1,
+    gap: 10,
+    padding: 16,
+  },
+  previewTitle: {
+    color: "#F5F7FA",
+    fontSize: 15,
+    fontWeight: "900",
+  },
+  previewRow: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 12,
+  },
+  previewPlan: {
+    color: "#B9C4CF",
+    fontSize: 14,
+    fontWeight: "700",
+  },
+  previewPrice: {
+    color: "#F5F7FA",
+    fontSize: 14,
+    fontWeight: "900",
+  },
+  previewMeta: {
+    color: "#7F8B96",
+    fontSize: 12,
+    lineHeight: 18,
+  },
+  cta: {
+    alignItems: "center",
+    backgroundColor: "#5AC8B7",
+    borderRadius: 8,
+    justifyContent: "center",
+    minHeight: 54,
+    paddingHorizontal: 20,
+  },
+  ctaText: {
+    color: "#071312",
+    fontSize: 16,
+    fontWeight: "900",
+  },
+});

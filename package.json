@@ -1,0 +1,20 @@
+{
+  "name": "pabal-expo-paywall-ui",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "yarn@1.22.22",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "start": "yarn workspace playground start",
+    "dev": "yarn workspace playground start",
+    "ios": "yarn workspace playground ios",
+    "android": "yarn workspace playground android",
+    "web": "yarn workspace playground web",
+    "build": "yarn workspace @pabal/expo-paywall-ui build",
+    "typecheck": "yarn workspaces run typecheck",
+    "test": "yarn workspace @pabal/expo-paywall-ui test"
+  }
+}
