@@ -198,6 +198,10 @@ const profileSubscriptionConfig = {
     restorePurchasesButton: "Restore purchases",
   },
   headerIcon: <AppIcon />,
+  theme: {
+    ...paywallConfig.theme,
+    surfaceColor: "#151C24",
+  },
   identifierSection: {
     defaultExpanded: true,
     isEnabled: true,
@@ -220,6 +224,11 @@ const profileSubscriptionConfig = {
 
 When `isSubscribed` is true, upgrade and restore actions are hidden. Subscription
 management remains visible.
+
+Use `theme.surfaceColor` for the profile card background. If the profile UI is
+split between a lighter top card and a darker lower background, set
+`surfaceColor` to the lighter top card color and keep `backgroundColor` for the
+darker lower panel.
 
 `identifierSection` renders the profile IDs copy UI. It is hidden by default; set
 `isEnabled: true` to show the whole UI.
