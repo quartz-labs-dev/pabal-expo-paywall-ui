@@ -42,7 +42,7 @@ const getSelectedPlan = <TPackage,>(
 };
 
 const hasRenewingSubscriptionPlan = <TPackage,>(
-  plans: PaywallPlan<TPackage>[],
+  plans: PaywallPlan<TPackage>[]
 ): boolean => {
   return plans.some((plan) => plan.period !== "lifetime");
 };
@@ -54,7 +54,7 @@ const DEFAULT_TRIAL_DURATION: PaywallTrialDuration = {
 
 const resolveFreeTrialConfig = (
   freeTrial: boolean | PaywallFreeTrialConfig | undefined,
-  selectedPlan?: PaywallPlan,
+  selectedPlan?: PaywallPlan
 ): PaywallFreeTrialConfig | undefined => {
   if (freeTrial === false || selectedPlan?.period === "lifetime") {
     return undefined;
@@ -71,7 +71,7 @@ const resolveFreeTrialConfig = (
 };
 
 const formatFallbackTrialDuration = (
-  duration: PaywallTrialDuration,
+  duration: PaywallTrialDuration
 ): string => {
   const unit = duration.unit === "week" ? "week" : "day";
   const suffix = duration.value === 1 ? unit : `${unit}s`;
@@ -80,15 +80,18 @@ const formatFallbackTrialDuration = (
 
 const getTrialDurationText = (
   copy: PaywallProps["copy"],
-  duration: PaywallTrialDuration,
+  duration: PaywallTrialDuration
 ): string => {
-  return copy.formatTrialDuration?.(duration) ?? formatFallbackTrialDuration(duration);
+  return (
+    copy.formatTrialDuration?.(duration) ??
+    formatFallbackTrialDuration(duration)
+  );
 };
 
 const getTrialPriceDisclosure = (
   copy: PaywallProps["copy"],
   duration: PaywallTrialDuration,
-  pricePerPeriodText: string,
+  pricePerPeriodText: string
 ): string => {
   return (
     copy.formatTrialPriceDisclosure?.(duration, pricePerPeriodText) ??
@@ -98,7 +101,7 @@ const getTrialPriceDisclosure = (
 
 const getTrialIncludedTitle = (
   copy: PaywallProps["copy"],
-  duration: PaywallTrialDuration,
+  duration: PaywallTrialDuration
 ): string => {
   return (
     copy.formatTrialIncludedTitle?.(duration) ??
@@ -123,7 +126,7 @@ const PAYWALL_HEADER_HORIZONTAL_PADDING = 4;
 
 const getStepTransitionOffset = (
   phase: PaywallTransitionPhase,
-  direction: PaywallTransitionDirection,
+  direction: PaywallTransitionDirection
 ): number => {
   if (phase === "exiting") {
     return direction === "forward"
@@ -164,12 +167,12 @@ export const Paywall = <TPackage,>({
   const shouldUseValueStep = stepMode === "twoStep" && Boolean(valueStep);
   const shouldAnimate = animationMode !== "none";
   const initialTransition = useRef(
-    new Animated.Value(shouldAnimate ? 0 : 1),
+    new Animated.Value(shouldAnimate ? 0 : 1)
   ).current;
   const stepTransition = useRef(new Animated.Value(1)).current;
   const isStepTransitioningRef = useRef(false);
   const [currentStep, setCurrentStep] = useState<PaywallStep>(() =>
-    shouldUseValueStep ? "value" : "purchase",
+    shouldUseValueStep ? "value" : "purchase"
   );
   const [transitionPhase, setTransitionPhase] =
     useState<PaywallTransitionPhase>("idle");
@@ -184,7 +187,7 @@ export const Paywall = <TPackage,>({
       ? getTrialPriceDisclosure(
           copy,
           trialDuration,
-          selectedPlan.pricePerPeriodText ?? selectedPlan.priceText,
+          selectedPlan.pricePerPeriodText ?? selectedPlan.priceText
         )
       : undefined;
   const trialNotice =
@@ -199,10 +202,8 @@ export const Paywall = <TPackage,>({
     : copy.continueButton ?? "Continue";
   const heroHeight = Math.round(windowHeight * heroHeightRatio);
   const [measuredFooterHeight, setMeasuredFooterHeight] = useState(0);
-  const footerBottomPadding = Math.max(
-    insets.bottom,
-    FIXED_FOOTER_MIN_BOTTOM_PADDING
-  );
+  const footerBottomPadding =
+    Math.max(insets.bottom, FIXED_FOOTER_MIN_BOTTOM_PADDING) + 8;
   const fallbackFooterHeight =
     FIXED_FOOTER_TOP_PADDING + FIXED_FOOTER_BUTTON_HEIGHT + footerBottomPadding;
   const fixedFooterHeight = Math.max(
@@ -270,7 +271,7 @@ export const Paywall = <TPackage,>({
 
   const transitionToStep = (
     nextStep: PaywallStep,
-    direction: PaywallTransitionDirection,
+    direction: PaywallTransitionDirection
   ) => {
     if (isStepTransitioningRef.current || currentStep === nextStep) return;
 
