@@ -12,6 +12,7 @@ import {
 } from "../src/localized-paywall-copy";
 import { UNIFIED_LOCALES } from "../src/unified-locales";
 import type { PurchasesPackageLike } from "../src/types";
+import type { PaywallValueStepText } from "../src/locales/paywall";
 import assert from "node:assert/strict";
 import test from "node:test";
 
@@ -252,12 +253,23 @@ test("provides localized default plan copy from locale strings", () => {
   assert.equal(annualPlan?.monthlyPriceText, "월 KRW 6,667");
   assert.equal(lifetimePlan?.badgeText, "일회성 구매");
   assert.equal(
-    getDefaultPaywallCopy("ko-KR", { title: "Pro" }).nextButton,
-    "다음",
-  );
-  assert.equal(
     getDefaultPaywallCopy("ko-KR", { title: "Pro" }).continueButton,
     "계속",
+  );
+});
+
+test("keeps first-step next button copy package-owned", () => {
+  const copy = getDefaultPaywallCopy("ko-KR", {
+    title: "Pro",
+    nextButton: "Custom",
+    nextButtonAccessibilityLabel: "Custom accessibility label",
+  } as Parameters<typeof getDefaultPaywallCopy>[1] & PaywallValueStepText);
+  const valueStepCopy = copy as typeof copy & PaywallValueStepText;
+
+  assert.equal(valueStepCopy.nextButton, "다음");
+  assert.equal(
+    valueStepCopy.nextButtonAccessibilityLabel,
+    "요금제 선택으로 계속",
   );
 });
 

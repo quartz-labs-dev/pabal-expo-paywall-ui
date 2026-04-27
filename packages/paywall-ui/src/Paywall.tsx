@@ -15,6 +15,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { getDefaultSelectedPlanId } from "./create-paywall-plans";
 import { ChevronLeftIcon, CloseIcon } from "./icons";
 import { LegalLinks } from "./LegalLinks";
+import type { PaywallValueStepText } from "./locales/paywall";
 import { PaywallBenefitList } from "./PaywallBenefitList";
 import { PlanSelector } from "./PlanSelector";
 import { PurchaseButton } from "./PurchaseButton";
@@ -220,6 +221,7 @@ export const Paywall = <TPackage,>({
   const shouldShowBackButton = shouldUseValueStep && currentStep === "purchase";
   const shouldShowLegalPrefix = hasRenewingSubscriptionPlan(plans);
   const shouldUseLargeBenefits = isValueStep;
+  const valueStepCopy = copy as typeof copy & Partial<PaywallValueStepText>;
   const initialTranslateY = initialTransition.interpolate({
     inputRange: [0, 1],
     outputRange: [INITIAL_TRANSITION_DISTANCE, 0],
@@ -453,11 +455,8 @@ export const Paywall = <TPackage,>({
         {isValueStep && valueStep ? (
           <View style={styles.nextButtonRow}>
             <StepNextButton
-              accessibilityLabel={
-                valueStep.nextButtonAccessibilityLabel ??
-                copy.nextButtonAccessibilityLabel
-              }
-              label={valueStep.nextButton ?? copy.nextButton ?? "Next"}
+              accessibilityLabel={valueStepCopy.nextButtonAccessibilityLabel}
+              label={valueStepCopy.nextButton ?? "Next"}
               theme={theme}
               onPress={handleShowPurchaseStep}
             />

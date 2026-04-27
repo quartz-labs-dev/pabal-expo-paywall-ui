@@ -26,8 +26,10 @@ dependency.
 ## App Config
 
 Keep app-owned media, benefits, copy, plan mapping, and theme in one typed config.
-`valueStep` controls the first screen copy only. The paywall uses the top-level
-`benefits` list for both the value step and purchase step.
+`valueStep` controls the first screen title, subtitle, and body only. The first
+screen Next button label is localized by the package and is not app-configurable.
+The paywall uses the top-level `benefits` list for both the value step and
+purchase step.
 
 ```tsx
 import {

@@ -3,7 +3,11 @@ import {
   PAYWALL_TEXT_LOCALES,
   PAYWALL_VALUE_STEP_TEXT,
 } from "./locales/paywall";
-import type { PaywallText, PaywallTextLocale } from "./locales/paywall";
+import type {
+  PaywallText,
+  PaywallTextLocale,
+  PaywallValueStepText,
+} from "./locales/paywall";
 import type {
   CreatePaywallPlansOptions,
   PaywallCopy,
@@ -24,6 +28,19 @@ const isPaywallTextLocale = (locale: string): locale is PaywallTextLocale => {
 const getPaywallText = (locale?: string): PaywallText => {
   return PAYWALL_TEXT[resolvePaywallTextLocale(locale)];
 };
+
+interface DefaultPaywallCopyOverrides
+  extends Pick<PaywallCopy, "title">,
+    Partial<
+      Omit<
+        PaywallCopy,
+        "purchaseButton" | "restoreButton" | "termsText" | "title"
+      >
+    > {}
+
+interface UnsafeDefaultPaywallCopyOverrides
+  extends DefaultPaywallCopyOverrides,
+    Partial<PaywallValueStepText> {}
 
 export const resolvePaywallTextLocale = (
   locale?: string,
@@ -73,17 +90,16 @@ export const getDefaultPaywallPlanOptions = (
 
 export const getDefaultPaywallCopy = (
   locale: string | undefined,
-  copy: Pick<PaywallCopy, "title"> &
-    Partial<
-      Omit<
-        PaywallCopy,
-        "purchaseButton" | "restoreButton" | "termsText" | "title"
-      >
-    >,
+  copy: DefaultPaywallCopyOverrides,
 ): PaywallCopy => {
   const text = getPaywallText(locale);
+  const {
+    nextButton: _nextButton,
+    nextButtonAccessibilityLabel: _nextButtonAccessibilityLabel,
+    ...safeCopy
+  } = copy as UnsafeDefaultPaywallCopyOverrides;
 
-  return {
+  const localizedCopy: PaywallCopy & PaywallValueStepText = {
     purchaseButton: text.purchaseButton,
     continueButton: text.continueButton,
     purchasingButton: text.purchasingButton,
@@ -97,8 +113,10 @@ export const getDefaultPaywallCopy = (
     formatTrialPriceDisclosure: text.formatTrialPriceDisclosure,
     trialIncludedDescription: text.trialIncludedDescription,
     ...PAYWALL_VALUE_STEP_TEXT[resolvePaywallTextLocale(locale)],
-    ...copy,
+    ...safeCopy,
   };
+
+  return localizedCopy;
 };
 
 export const getDefaultProfileSubscriptionCopy = (

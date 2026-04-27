@@ -38,8 +38,6 @@ export interface PaywallCopy {
   privacyText: string;
   legalPrefix?: string;
   closeButtonAccessibilityLabel?: string;
-  nextButton?: string;
-  nextButtonAccessibilityLabel?: string;
   formatTrialDuration?: (duration: PaywallTrialDuration) => string;
   formatTrialPriceDisclosure?: (
     duration: PaywallTrialDuration,
@@ -66,8 +64,6 @@ export interface PaywallValueStep {
   title: string;
   subtitle?: string;
   content?: ReactNode;
-  nextButton?: string;
-  nextButtonAccessibilityLabel?: string;
   closeButtonVisibility?: "hidden" | "visible";
 }
 

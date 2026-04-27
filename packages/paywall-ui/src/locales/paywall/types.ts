@@ -1,4 +1,3 @@
-import type { PaywallCopy } from "../../types";
 import type {
   PaywallPlanPeriod,
   PaywallTrialDuration,
@@ -50,10 +49,10 @@ export interface PaywallText {
   upgradeTo: (productName: string) => string;
 }
 
-export interface PaywallValueStepText
-  extends Required<
-    Pick<PaywallCopy, "nextButton" | "nextButtonAccessibilityLabel">
-  > {}
+export interface PaywallValueStepText {
+  nextButton: string;
+  nextButtonAccessibilityLabel: string;
+}
 
 interface PaywallTextInput
   extends Omit<
