@@ -1,6 +1,6 @@
 {
   "name": "pabal-expo-paywall-ui",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "description": "RevenueCat-agnostic React Native paywall UI for Pabal apps.",
   "license": "MIT",
   "publishConfig": {
