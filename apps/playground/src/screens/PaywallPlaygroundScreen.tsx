@@ -37,8 +37,19 @@ const Hero = () => {
   );
 };
 
+const SupportAppLogo = () => {
+  return (
+    <View style={styles.supportAppLogo}>
+      <View style={styles.supportAppLogoSky} />
+      <View style={styles.supportAppLogoHorizon} />
+      <View style={styles.supportAppLogoGround} />
+    </View>
+  );
+};
+
 const playgroundPaywallConfig = {
   hero: <Hero />,
+  supportMessageIcon: <SupportAppLogo />,
   valueStep: {
     title: "Get the full Pabal experience",
     subtitle: "See the value first, then choose a plan on the next step.",
@@ -169,6 +180,7 @@ export const PaywallPlaygroundScreen = ({
         onSelectPlan={setSelectedPlanId}
         onPurchase={handlePurchase}
         onRestore={() => Alert.alert("Restore callback")}
+        onOpenDeveloperWebsite={() => Alert.alert("Developer website callback")}
         onClose={onClose}
         onOpenTerms={() => Alert.alert("Terms callback")}
         onOpenPrivacy={() => Alert.alert("Privacy callback")}
@@ -188,4 +200,22 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   heroImage: {},
+  supportAppLogo: {
+    borderRadius: 7,
+    height: 28,
+    overflow: "hidden",
+    width: 28,
+  },
+  supportAppLogoSky: {
+    backgroundColor: "#1987F3",
+    height: 12,
+  },
+  supportAppLogoHorizon: {
+    backgroundColor: "#9EE6DD",
+    height: 7,
+  },
+  supportAppLogoGround: {
+    backgroundColor: "#FFD86F",
+    flex: 1,
+  },
 });

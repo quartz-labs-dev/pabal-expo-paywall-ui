@@ -114,6 +114,7 @@ export const getDefaultPaywallCopy = (
     privacyText: text.privacyText,
     closeButtonAccessibilityLabel: text.closeButtonAccessibilityLabel,
     legalPrefix: text.subscriptionRenewsAutomatically,
+    supportMessageLabel: text.supportMessageLabel,
     supportMessage: text.paywallSupportMessage,
     formatTrialDuration: text.formatTrialDuration,
     formatTrialIncludedTitle: text.formatTrialIncludedTitle,
@@ -148,6 +149,7 @@ export const getDefaultProfileSubscriptionCopy = (
     restoringPurchasesButton: text.restoring,
     redeemPromoCodeButton: text.enterPromoCode,
     redeemingPromoCodeButton: text.opening,
+    supportMessageLabel: text.supportMessageLabel,
     supportMessage: text.profileSupportMessage,
   };
 };

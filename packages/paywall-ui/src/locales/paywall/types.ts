@@ -23,6 +23,7 @@ export interface PaywallText {
   privacyText: string;
   purchaseButton: string;
   purchasingButton: string;
+  supportMessageLabel: string;
   paywallSupportMessage: string;
   profileSupportMessage: string;
   subscriptionRenewsAutomatically: string;

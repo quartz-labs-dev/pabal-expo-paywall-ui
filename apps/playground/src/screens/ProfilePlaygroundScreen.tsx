@@ -7,7 +7,14 @@ import {
   type PaywallPlanPeriod,
 } from "pabal-expo-paywall-ui";
 import { useMemo, useState } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Alert,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { playgroundBenefits } from "../fixtures/playground-benefits";
@@ -21,6 +28,7 @@ const wait = (duration: number) => {
 
 const profileSubscriptionBaseConfig = {
   benefits: playgroundBenefits,
+  supportMessageIcon: <SupportAppLogo />,
 } satisfies Omit<ProfileSubscriptionConfig, "copy" | "headerIcon">;
 
 const profilePeriods: Record<PlaygroundScenario, PaywallPlanPeriod> = {
@@ -162,6 +170,9 @@ export const ProfilePlaygroundScreen = ({
           onManageSubscription={() =>
             runLoadingState(setIsManagingSubscription)
           }
+          onOpenDeveloperWebsite={() =>
+            Alert.alert("Developer website callback")
+          }
           onRedeemPromoCode={() => runLoadingState(setIsRedeemingPromoCode)}
           onRestorePurchases={() =>
             runLoadingState(setIsRestoringPurchases, () =>
@@ -207,6 +218,16 @@ function GoldenHorizonIcon({ isSubscribed }: GoldenHorizonIconProps) {
           <Text style={styles.appIconProBadgeText}>PRO</Text>
         </View>
       ) : null}
+    </View>
+  );
+}
+
+function SupportAppLogo() {
+  return (
+    <View style={styles.supportAppLogo}>
+      <View style={styles.supportAppLogoSky} />
+      <View style={styles.supportAppLogoHorizon} />
+      <View style={styles.supportAppLogoGround} />
     </View>
   );
 }
@@ -340,5 +361,23 @@ const styles = StyleSheet.create({
     fontSize: 8,
     fontWeight: "900",
     lineHeight: 10,
+  },
+  supportAppLogo: {
+    borderRadius: 7,
+    height: 28,
+    overflow: "hidden",
+    width: 28,
+  },
+  supportAppLogoSky: {
+    backgroundColor: "#1987F3",
+    height: 12,
+  },
+  supportAppLogoHorizon: {
+    backgroundColor: "#9EE6DD",
+    height: 7,
+  },
+  supportAppLogoGround: {
+    backgroundColor: "#FFD86F",
+    flex: 1,
   },
 });

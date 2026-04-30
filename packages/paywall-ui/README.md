@@ -54,6 +54,7 @@ const paywallBenefits = [
 
 const paywallConfig = {
   hero: <HeroImage />,
+  supportMessageIcon: <AppLogoIcon />,
   stepMode: "twoStep",
   freeTrial: { duration: { value: 7, unit: "day" } },
   valueStep: {
@@ -100,8 +101,10 @@ needs a custom React Native body below the built-in benefit list; in two-step
 mode, use `valueStep.content` for custom first-step body content.
 Use `reviewSection` for real user reviews on the purchase step. Its title is
 localized by the package and is not app-configurable.
-`getDefaultPaywallCopy()` includes a localized `copy.supportMessage` note below
-the plan area. Pass `supportMessage` only when the app needs to override it.
+`getDefaultPaywallCopy()` includes a localized developer note below the review
+section. Pass `supportMessage` only when the app needs to override it. Use
+`supportMessageIcon` for the app logo, and pass `onOpenDeveloperWebsite` when
+tapping the note should open the developer site.
 Use `*SelectedDescription` plan options for short app-owned comparison copy
 that appears only inside the currently selected plan card.
 Add `onClick` to an object benefit when a row should open app-owned help or
@@ -166,6 +169,7 @@ if (plans.length === 0) return <LoadingOrErrorState />;
   onRestore={async () => {
     await Purchases.restorePurchases();
   }}
+  onOpenDeveloperWebsite={openDeveloperWebsite}
   onClose={() => router.back()}
   onOpenTerms={openTerms}
   onOpenPrivacy={openPrivacy}
@@ -232,7 +236,9 @@ rebuilding the whole `copy` object every time the selected plan changes.
 | RevenueCat package mapping | `planOptions.*PackageIds` |
 | Plan card order | `planOptions.displayOrder` |
 | Selected-plan comparison copy | `planOptions.*SelectedDescription` |
-| App-owned support note | `copy.supportMessage` |
+| Localized support note | `copy.supportMessage` |
+| Support note logo | `supportMessageIcon` |
+| Developer site link | `onOpenDeveloperWebsite` |
 | Theme colors | `theme` |
 | Custom purchase button fill | `purchaseButtonBackground` |
 | Selected-plan CTA text | `copy.formatPurchaseButtonLabel` |
@@ -244,6 +250,7 @@ Add this only when the app needs to show subscription status in profile/settings
 ```tsx
 import {
   ProfileSubscriptionSection,
+  getDefaultProfileSubscriptionCopy,
   type ProfileIdentifierItem,
   type ProfileSubscriptionConfig,
 } from "pabal-expo-paywall-ui";
@@ -269,14 +276,15 @@ const copyProfileIdentifier = async (item: ProfileIdentifierItem) => {
 const profileSubscriptionConfig = {
   benefits: paywallBenefits,
   copy: {
+    ...getDefaultProfileSubscriptionCopy(appLocale, {
+      productName: "Golden Horizon Pro",
+    }),
     subscribedTitle: "Golden Horizon Pro",
     notSubscribedTitle: "Golden Horizon Pro",
-    subscribedSubtitle: "Thank you for your support!",
     notSubscribedSubtitle: "Unlock the full app experience.",
-    manageSubscriptionButton: "Manage subscription",
-    restorePurchasesButton: "Restore purchases",
   },
   headerIcon: <AppIcon />,
+  supportMessageIcon: <AppIcon size={28} />,
   theme: {
     ...paywallConfig.theme,
     surfaceColor: "#151C24",
@@ -297,6 +305,7 @@ const profileSubscriptionConfig = {
   renewalLabel={isPro ? "Managed by your store account" : undefined}
   onUpgrade={() => router.push("/paywall")}
   onManageSubscription={openStoreSubscriptionManagement}
+  onOpenDeveloperWebsite={openDeveloperWebsite}
   onRestorePurchases={restorePurchases}
 />;
 ```

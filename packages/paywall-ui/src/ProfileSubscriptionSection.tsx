@@ -9,6 +9,7 @@ import {
 import { ProfileIdentifiersSection } from "./ProfileIdentifiersSection";
 import { getDefaultProfileIdentifiersCopy } from "./localized-paywall-copy";
 import { PaywallBenefitList } from "./PaywallBenefitList";
+import { SupportMessageBubble } from "./SupportMessageBubble";
 import { mergePaywallTheme } from "./theme";
 import type {
   PaywallTheme,
@@ -21,6 +22,7 @@ export const ProfileSubscriptionSection = ({
   content,
   copy,
   headerIcon,
+  supportMessageIcon,
   identifierSection,
   locale,
   theme: themeOverride,
@@ -31,6 +33,7 @@ export const ProfileSubscriptionSection = ({
   isManagingSubscription = false,
   isRestoringPurchases = false,
   isRedeemingPromoCode = false,
+  onOpenDeveloperWebsite,
   onUpgrade,
   onManageSubscription,
   onRestorePurchases,
@@ -280,16 +283,15 @@ export const ProfileSubscriptionSection = ({
       )}
 
       {copy.supportMessage && (
-        <Text
-          style={[
-            styles.supportMessage,
-            {
-              color: theme.mutedTextColor,
-            },
-          ]}
-        >
-          {copy.supportMessage}
-        </Text>
+        <View style={styles.supportMessageContainer}>
+          <SupportMessageBubble
+            icon={supportMessageIcon}
+            label={copy.supportMessageLabel}
+            message={copy.supportMessage}
+            theme={theme}
+            onPress={onOpenDeveloperWebsite}
+          />
+        </View>
       )}
     </View>
   );
@@ -349,13 +351,8 @@ const styles = StyleSheet.create({
   section: {
     gap: 12,
   },
-  supportMessage: {
-    flexShrink: 1,
-    fontSize: 12,
-    fontWeight: "600",
-    lineHeight: 18,
-    paddingHorizontal: 8,
-    textAlign: "center",
+  supportMessageContainer: {
+    paddingTop: 2,
   },
   card: {
     borderCurve: "continuous",

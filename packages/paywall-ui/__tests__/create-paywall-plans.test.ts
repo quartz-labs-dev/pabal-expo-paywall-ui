@@ -328,6 +328,7 @@ test("provides localized support messages for paywall and profile", () => {
     paywallCopy.supportMessage,
     "유료 구독은 이 앱을 계속 만들고 개선하는 데 큰 도움이 됩니다. 구독하면 더 편한 기능, 안정적인 서비스, 꾸준한 업데이트를 먼저 누릴 수 있어요.",
   );
+  assert.equal(paywallCopy.supportMessageLabel, "개발자의 말");
   assert.equal(
     customPaywallCopy.supportMessage,
     "Your subscription supports future updates.",
@@ -336,6 +337,7 @@ test("provides localized support messages for paywall and profile", () => {
     profileCopy.supportMessage,
     "유료 구독은 이 앱을 계속 만들고 개선하는 데 큰 도움이 됩니다. 더 안정적인 서비스와 꾸준한 업데이트로 보답하겠습니다. 감사합니다!",
   );
+  assert.equal(profileCopy.supportMessageLabel, "개발자의 말");
 });
 
 test("localizes support messages for every non-English paywall locale", () => {
@@ -346,18 +348,22 @@ test("localizes support messages for every non-English paywall locale", () => {
     });
 
     assert.ok(paywallCopy.supportMessage, locale);
+    assert.ok(paywallCopy.supportMessageLabel, locale);
     assert.ok(profileCopy.supportMessage, locale);
+    assert.ok(profileCopy.supportMessageLabel, locale);
 
     if (locale === "en") continue;
 
+    assert.notEqual(paywallCopy.supportMessageLabel, "Developer's note", locale);
+    assert.notEqual(profileCopy.supportMessageLabel, "Developer's note", locale);
     assert.notEqual(
       paywallCopy.supportMessage,
-      "Paid subscriptions are a huge help in keeping this app alive and improving it. Subscribers get more convenient features, a stable service, and steady updates first.",
+      "Your subscription helps keep this app growing. Subscribers get smoother features, a more stable service, and steady updates first.",
       locale,
     );
     assert.notEqual(
       profileCopy.supportMessage,
-      "Paid subscriptions are a huge help in keeping this app alive and improving it. I will return your support with a more stable service and steady updates. Thank you!",
+      "Your subscription helps keep this app growing. I will keep returning that support with a more stable service and steady updates. Thank you!",
       locale,
     );
   }

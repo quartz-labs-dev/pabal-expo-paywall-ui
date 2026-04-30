@@ -31,6 +31,7 @@ const ko = createPaywallLocaleText({
     restoring: "복원 중...",
     subscriptionRenewsAutomatically: "구독은 자동으로 갱신됩니다.",
     subscribedSubtitle: "지원해 주셔서 감사합니다!",
+    supportMessageLabel: "개발자의 말",
     paywallSupportMessage: "유료 구독은 이 앱을 계속 만들고 개선하는 데 큰 도움이 됩니다. 구독하면 더 편한 기능, 안정적인 서비스, 꾸준한 업데이트를 먼저 누릴 수 있어요.",
     profileSupportMessage: "유료 구독은 이 앱을 계속 만들고 개선하는 데 큰 도움이 됩니다. 더 안정적인 서비스와 꾸준한 업데이트로 보답하겠습니다. 감사합니다!",
     termsText: "이용약관",

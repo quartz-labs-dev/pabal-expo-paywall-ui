@@ -44,6 +44,7 @@ export interface PaywallCopy {
   termsText: string;
   privacyText: string;
   legalPrefix?: string;
+  supportMessageLabel?: string;
   supportMessage?: string;
   closeButtonAccessibilityLabel?: string;
   formatTrialDuration?: (duration: PaywallTrialDuration) => string;
@@ -114,6 +115,7 @@ export interface PaywallProps<TPackage = unknown> {
   content?: ReactNode;
   reviewSection?: PaywallReviewSection;
   purchaseButtonBackground?: ReactNode;
+  supportMessageIcon?: ReactNode;
   copy: PaywallCopy;
   freeTrial?: boolean | PaywallFreeTrialConfig;
   selectedPlanId?: string;
@@ -122,6 +124,7 @@ export interface PaywallProps<TPackage = unknown> {
   onSelectPlan: (planId: string) => void;
   onPurchase: (plan: PaywallPlan<TPackage>) => Promise<void> | void;
   onRestore: () => Promise<void> | void;
+  onOpenDeveloperWebsite?: () => Promise<void> | void;
   onClose: () => void;
   onOpenTerms: () => void;
   onOpenPrivacy: () => void;
@@ -137,6 +140,7 @@ export interface PaywallConfig {
   content?: ReactNode;
   reviewSection?: PaywallReviewSection;
   purchaseButtonBackground?: ReactNode;
+  supportMessageIcon?: ReactNode;
   copy: PaywallCopy;
   freeTrial?: boolean | PaywallFreeTrialConfig;
   theme?: Partial<PaywallTheme>;
@@ -159,6 +163,7 @@ export interface ProfileSubscriptionCopy {
   restoringPurchasesButton?: string;
   redeemPromoCodeButton?: string;
   redeemingPromoCodeButton?: string;
+  supportMessageLabel?: string;
   supportMessage?: string;
 }
 
@@ -193,6 +198,7 @@ export interface ProfileSubscriptionSectionProps {
   content?: ReactNode;
   copy: ProfileSubscriptionCopy;
   headerIcon?: ReactNode;
+  supportMessageIcon?: ReactNode;
   identifierSection?: ProfileIdentifiersSectionProps;
   locale?: string;
   theme?: Partial<PaywallTheme>;
@@ -203,6 +209,7 @@ export interface ProfileSubscriptionSectionProps {
   isManagingSubscription?: boolean;
   isRestoringPurchases?: boolean;
   isRedeemingPromoCode?: boolean;
+  onOpenDeveloperWebsite?: () => Promise<void> | void;
   onUpgrade?: () => Promise<void> | void;
   onManageSubscription: () => Promise<void> | void;
   onRestorePurchases: () => Promise<void> | void;
@@ -214,9 +221,11 @@ export interface ProfileSubscriptionConfig {
   content?: ReactNode;
   copy: ProfileSubscriptionCopy;
   headerIcon?: ReactNode;
+  supportMessageIcon?: ReactNode;
   identifierSection?: ProfileIdentifiersSectionProps;
   locale?: string;
   theme?: Partial<PaywallTheme>;
+  onOpenDeveloperWebsite?: () => Promise<void> | void;
 }
 
 export interface PurchasesPackageLike {

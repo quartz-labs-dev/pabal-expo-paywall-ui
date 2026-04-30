@@ -23,6 +23,7 @@ import { PaywallBenefitList } from "./PaywallBenefitList";
 import { PaywallReviewSection } from "./PaywallReviewSection";
 import { PlanSelector } from "./PlanSelector";
 import { PurchaseButton } from "./PurchaseButton";
+import { SupportMessageBubble } from "./SupportMessageBubble";
 import { mergePaywallTheme } from "./theme";
 import { TrialNotice } from "./TrialNotice";
 import type {
@@ -154,6 +155,7 @@ export const Paywall = <TPackage,>({
   content,
   reviewSection,
   purchaseButtonBackground,
+  supportMessageIcon,
   copy,
   freeTrial = true,
   selectedPlanId,
@@ -162,6 +164,7 @@ export const Paywall = <TPackage,>({
   onSelectPlan,
   onPurchase,
   onRestore,
+  onOpenDeveloperWebsite,
   onClose,
   onOpenTerms,
   onOpenPrivacy,
@@ -434,27 +437,6 @@ export const Paywall = <TPackage,>({
             </View>
           )}
 
-          {!isValueStep && copy.supportMessage && (
-            <View
-              style={[
-                styles.supportMessage,
-                {
-                  backgroundColor: theme.surfaceColor,
-                  borderColor: theme.borderColor,
-                },
-              ]}
-            >
-              <Text
-                style={[
-                  styles.supportMessageText,
-                  { color: theme.secondaryTextColor },
-                ]}
-              >
-                {copy.supportMessage}
-              </Text>
-            </View>
-          )}
-
           <PaywallBenefitList
             benefits={visibleBenefits}
             content={bodyContent}
@@ -468,6 +450,16 @@ export const Paywall = <TPackage,>({
               reviews={reviewSection.reviews}
               theme={theme}
               title={reviewSectionCopy.reviewSectionTitle}
+            />
+          )}
+
+          {!isValueStep && copy.supportMessage && (
+            <SupportMessageBubble
+              icon={supportMessageIcon}
+              label={copy.supportMessageLabel}
+              message={copy.supportMessage}
+              theme={theme}
+              onPress={onOpenDeveloperWebsite}
             />
           )}
 
@@ -655,20 +647,6 @@ const styles = StyleSheet.create({
   },
   planSection: {
     gap: 12,
-  },
-  supportMessage: {
-    borderCurve: "continuous",
-    borderRadius: 8,
-    borderWidth: 1,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-  },
-  supportMessageText: {
-    flexShrink: 1,
-    fontSize: 13,
-    fontWeight: "600",
-    lineHeight: 19,
-    textAlign: "center",
   },
   header: {
     gap: 8,
