@@ -20,6 +20,8 @@
   "react-native": "src/index.ts",
   "source": "src/index.ts",
   "files": [
+    "LICENSE",
+    "README.md",
     "dist",
     "src"
   ],
