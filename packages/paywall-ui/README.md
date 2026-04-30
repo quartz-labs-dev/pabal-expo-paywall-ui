@@ -28,8 +28,8 @@ dependency.
 Keep app-owned media, benefits, copy, plan mapping, and theme in one typed config.
 `valueStep` controls the first screen title, subtitle, and body only. The first
 screen Next button label is localized by the package and is not app-configurable.
-The paywall uses the top-level `benefits` list for both the value step and
-purchase step.
+In two-step mode, the top-level `benefits` list and custom `content` body render
+on the value step only and are hidden on the purchase step.
 
 ```tsx
 import {
@@ -83,7 +83,8 @@ const { planOptions, ...paywallPresentation } = paywallConfig;
 ```
 
 Use `stepMode: "singleStep"` to skip the value step. Use `content` when the app
-needs a custom React Native body below the built-in benefit list.
+needs a custom React Native body below the built-in benefit list; in two-step
+mode, use `valueStep.content` for custom first-step body content.
 Add `onClick` to an object benefit when a row should open app-owned help or
 detail UI; clickable benefit titles render with an underline.
 

@@ -221,9 +221,13 @@ export const Paywall = <TPackage,>({
   const isValueStep = shouldUseValueStep && currentStep === "value";
   const title = isValueStep ? valueStep?.title : copy.title;
   const subtitle = isValueStep ? valueStep?.subtitle : copy.subtitle;
-  const bodyBenefits = benefits;
-  const bodyContent = isValueStep ? valueStep?.content : content;
   const shouldHideBenefits = shouldUseValueStep && currentStep === "purchase";
+  const bodyBenefits = benefits;
+  const bodyContent = shouldHideBenefits
+    ? undefined
+    : isValueStep
+      ? valueStep?.content
+      : content;
   const visibleBenefits = shouldHideBenefits ? [] : bodyBenefits;
   const shouldShowCloseButton =
     !isValueStep || valueStep?.closeButtonVisibility === "visible";
