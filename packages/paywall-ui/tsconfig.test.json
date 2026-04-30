@@ -11,6 +11,7 @@
     ]
   },
   "include": [
+    "src/color-utils.ts",
     "src/create-paywall-plans.ts",
     "src/types.ts",
     "__tests__"

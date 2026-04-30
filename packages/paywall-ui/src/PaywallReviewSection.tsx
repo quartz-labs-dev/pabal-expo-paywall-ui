@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
+import { getColorWithAlpha } from "./color-utils";
 import type {
   PaywallReview,
   PaywallReviewRating,
@@ -14,25 +15,6 @@ interface PaywallReviewSectionProps {
 }
 
 const MAX_RATING = 5;
-
-const getTransparentColor = (color: string, opacity: number): string => {
-  const normalizedColor = color.trim();
-  const shortHexMatch = normalizedColor.match(
-    /^#([a-f\d])([a-f\d])([a-f\d])$/i
-  );
-  const hexColor = shortHexMatch
-    ? `#${shortHexMatch[1]}${shortHexMatch[1]}${shortHexMatch[2]}${shortHexMatch[2]}${shortHexMatch[3]}${shortHexMatch[3]}`
-    : normalizedColor;
-  const hexMatch = hexColor.match(/^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i);
-
-  if (!hexMatch) return color;
-
-  const red = Number.parseInt(hexMatch[1] ?? "0", 16);
-  const green = Number.parseInt(hexMatch[2] ?? "0", 16);
-  const blue = Number.parseInt(hexMatch[3] ?? "0", 16);
-
-  return `rgba(${red}, ${green}, ${blue}, ${opacity})`;
-};
 
 const renderRating = (
   rating: PaywallReviewRating,
@@ -72,7 +54,7 @@ export const PaywallReviewSection = ({
         style={[
           styles.panel,
           {
-            backgroundColor: getTransparentColor(theme.accentColor, 0.09),
+            backgroundColor: getColorWithAlpha(theme.accentColor, 0.09),
           },
         ]}
       >
@@ -84,7 +66,7 @@ export const PaywallReviewSection = ({
               index > 0 && [
                 styles.reviewDivider,
                 {
-                  borderTopColor: getTransparentColor(
+                  borderTopColor: getColorWithAlpha(
                     theme.primaryTextColor,
                     0.1
                   ),

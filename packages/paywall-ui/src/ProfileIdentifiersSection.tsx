@@ -12,6 +12,7 @@ import {
   type GestureResponderEvent,
 } from "react-native";
 
+import { getColorWithAlpha } from "./color-utils";
 import { ChevronDownIcon, CopyIcon } from "./icons";
 import type {
   PaywallTheme,
@@ -26,29 +27,6 @@ if (
 ) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
-
-const getColorWithAlpha = (
-  color: string,
-  alpha: number,
-  fallback: string,
-): string => {
-  const normalizedColor = color.trim();
-  const shortHexMatch = normalizedColor.match(
-    /^#([a-f\d])([a-f\d])([a-f\d])$/i,
-  );
-  const hexColor = shortHexMatch
-    ? `#${shortHexMatch[1]}${shortHexMatch[1]}${shortHexMatch[2]}${shortHexMatch[2]}${shortHexMatch[3]}${shortHexMatch[3]}`
-    : normalizedColor;
-  const hexMatch = hexColor.match(/^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i);
-
-  if (!hexMatch) return fallback;
-
-  const red = Number.parseInt(hexMatch[1] ?? "0", 16);
-  const green = Number.parseInt(hexMatch[2] ?? "0", 16);
-  const blue = Number.parseInt(hexMatch[3] ?? "0", 16);
-
-  return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
-};
 
 interface ProfileIdentifiersSectionComponentProps {
   section: ProfileIdentifiersSectionProps & { copy: ProfileIdentifiersCopy };
