@@ -35,7 +35,6 @@ import type {
 } from "./types";
 
 type PaywallStep = "value" | "purchase";
-type PaywallTransitionPhase = "idle" | "exiting" | "entering";
 type PaywallTransitionDirection = "forward" | "backward";
 
 const getSelectedPlan = <TPackage,>(
@@ -119,9 +118,8 @@ const FIXED_FOOTER_TOP_PADDING = 12;
 const FIXED_FOOTER_MIN_BOTTOM_PADDING = 12;
 const FIXED_FOOTER_SCROLL_GAP = 24;
 const DEFAULT_HERO_HEIGHT_RATIO = 0.23;
-const STEP_TRANSITION_OUT_DURATION = 150;
-const STEP_TRANSITION_IN_DURATION = 250;
-const STEP_TRANSITION_DISTANCE = 28;
+const STEP_TRANSITION_DURATION = 180;
+const STEP_TRANSITION_DISTANCE = 16;
 const INITIAL_TRANSITION_DURATION = 380;
 const INITIAL_TRANSITION_DISTANCE = 22;
 const NAV_ICON_BACKGROUND_COLOR = "rgba(0, 0, 0, 0.22)";
@@ -130,15 +128,8 @@ const PAYWALL_HORIZONTAL_PADDING = 12;
 const PAYWALL_HEADER_HORIZONTAL_PADDING = 4;
 
 const getStepTransitionOffset = (
-  phase: PaywallTransitionPhase,
   direction: PaywallTransitionDirection
 ): number => {
-  if (phase === "exiting") {
-    return direction === "forward"
-      ? -STEP_TRANSITION_DISTANCE
-      : STEP_TRANSITION_DISTANCE;
-  }
-
   return direction === "forward"
     ? STEP_TRANSITION_DISTANCE
     : -STEP_TRANSITION_DISTANCE;
@@ -182,8 +173,6 @@ export const Paywall = <TPackage,>({
   const [currentStep, setCurrentStep] = useState<PaywallStep>(() =>
     shouldUseValueStep ? "value" : "purchase"
   );
-  const [transitionPhase, setTransitionPhase] =
-    useState<PaywallTransitionPhase>("idle");
   const [transitionDirection, setTransitionDirection] =
     useState<PaywallTransitionDirection>("forward");
   const selectedPlan = getSelectedPlan(plans, selectedPlanId);
@@ -251,10 +240,7 @@ export const Paywall = <TPackage,>({
   });
   const stepTranslateX = stepTransition.interpolate({
     inputRange: [0, 1],
-    outputRange: [
-      getStepTransitionOffset(transitionPhase, transitionDirection),
-      0,
-    ],
+    outputRange: [getStepTransitionOffset(transitionDirection), 0],
   });
   // Keep body visibility independent from step transitions. A cancelled native
   // opacity animation can otherwise leave the paywall content fully hidden.
@@ -294,7 +280,6 @@ export const Paywall = <TPackage,>({
 
   useEffect(() => {
     isStepTransitioningRef.current = false;
-    setTransitionPhase("idle");
     setTransitionDirection("forward");
     stepTransition.setValue(1);
     setCurrentStep(shouldUseValueStep ? "value" : "purchase");
@@ -313,35 +298,18 @@ export const Paywall = <TPackage,>({
 
     isStepTransitioningRef.current = true;
     setTransitionDirection(direction);
-    setTransitionPhase("exiting");
+    stepTransition.stopAnimation();
+    setCurrentStep(nextStep);
+    stepTransition.setValue(0);
+
     Animated.timing(stepTransition, {
-      duration: STEP_TRANSITION_OUT_DURATION,
+      duration: STEP_TRANSITION_DURATION,
       easing: Easing.out(Easing.cubic),
-      toValue: 0,
+      toValue: 1,
       useNativeDriver: true,
     }).start(({ finished }) => {
-      if (!finished) {
-        isStepTransitioningRef.current = false;
-        setTransitionPhase("idle");
-        stepTransition.setValue(1);
-        return;
-      }
-
-      setCurrentStep(nextStep);
-      requestAnimationFrame(() => {
-        setTransitionPhase("entering");
-        stepTransition.setValue(0);
-        Animated.timing(stepTransition, {
-          duration: STEP_TRANSITION_IN_DURATION,
-          easing: Easing.out(Easing.cubic),
-          toValue: 1,
-          useNativeDriver: true,
-        }).start(({ finished: didEnter }) => {
-          isStepTransitioningRef.current = false;
-          if (!didEnter) stepTransition.setValue(1);
-          setTransitionPhase("idle");
-        });
-      });
+      isStepTransitioningRef.current = false;
+      if (!finished) stepTransition.setValue(1);
     });
   };
 

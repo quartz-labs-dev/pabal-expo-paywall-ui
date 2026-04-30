@@ -19,3 +19,13 @@ test("keeps paywall body visibility independent from step transition animation",
   assert.match(animatedStepStyle[1] ?? "", /translateY: initialTranslateY/);
   assert.match(animatedStepStyle[1] ?? "", /translateX: stepTranslateX/);
 });
+
+test("keeps step transitions as a single slide-in animation", () => {
+  const source = readPaywallSource();
+
+  assert.doesNotMatch(source, /STEP_TRANSITION_OUT_DURATION/);
+  assert.doesNotMatch(source, /STEP_TRANSITION_IN_DURATION/);
+  assert.doesNotMatch(source, /requestAnimationFrame/);
+  assert.match(source, /const STEP_TRANSITION_DURATION = 180;/);
+  assert.match(source, /const STEP_TRANSITION_DISTANCE = 16;/);
+});
