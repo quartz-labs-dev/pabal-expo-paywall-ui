@@ -22,9 +22,11 @@ interface HomeScreenProps {
   paywallFlow: PlaygroundPaywallFlow;
   paywallAnimation: PlaygroundPaywallAnimation;
   freeTrialMode: PlaygroundFreeTrialMode;
+  isTrialEligible: boolean;
   onChangeScenario: (scenario: PlaygroundPackageScenario) => void;
   onChangeLocale: (locale: PlaygroundLocale) => void;
   onToggleLongPrice: (isEnabled: boolean) => void;
+  onToggleTrialEligibility: (isEligible: boolean) => void;
   onChangePaywallFlow: (paywallFlow: PlaygroundPaywallFlow) => void;
   onChangePaywallAnimation: (
     paywallAnimation: PlaygroundPaywallAnimation,
@@ -84,9 +86,11 @@ export const HomeScreen = ({
   paywallFlow,
   paywallAnimation,
   freeTrialMode,
+  isTrialEligible,
   onChangeScenario,
   onChangeLocale,
   onToggleLongPrice,
+  onToggleTrialEligibility,
   onChangePaywallFlow,
   onChangePaywallAnimation,
   onChangeFreeTrialMode,
@@ -274,6 +278,48 @@ export const HomeScreen = ({
               );
             })}
           </View>
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Customer state</Text>
+          <Pressable
+            accessibilityRole="switch"
+            accessibilityState={{ checked: isTrialEligible }}
+            onPress={() => onToggleTrialEligibility(!isTrialEligible)}
+            style={[
+              styles.trialEligibilityCard,
+              isTrialEligible && styles.trialEligibilityCardSelected,
+            ]}
+          >
+            <View style={styles.trialEligibilityHeader}>
+              <Text
+                style={[
+                  styles.trialEligibilityTitle,
+                  isTrialEligible && styles.trialEligibilityTitleSelected,
+                ]}
+              >
+                {isTrialEligible ? "Trial eligible" : "Previously subscribed"}
+              </Text>
+              <View
+                style={[
+                  styles.switchTrack,
+                  isTrialEligible && styles.switchTrackOn,
+                ]}
+              >
+                <View
+                  style={[
+                    styles.switchThumb,
+                    isTrialEligible && styles.switchThumbOn,
+                  ]}
+                />
+              </View>
+            </View>
+            <Text style={styles.trialEligibilityDescription}>
+              {isTrialEligible
+                ? "App passes the selected trial duration to the shared paywall."
+                : "App passes freeTrial=false, so the CTA uses selected-plan price."}
+            </Text>
+          </Pressable>
         </View>
       </ScrollView>
 
@@ -522,6 +568,39 @@ const styles = StyleSheet.create({
   flowDescription: {
     color: "#B9C4CF",
     flexShrink: 1,
+    fontSize: 12,
+    lineHeight: 17,
+  },
+  trialEligibilityCard: {
+    backgroundColor: "#151D25",
+    borderColor: "#2B3845",
+    borderRadius: 8,
+    borderWidth: 1,
+    gap: 8,
+    minHeight: 86,
+    padding: 12,
+  },
+  trialEligibilityCardSelected: {
+    backgroundColor: "#102A2A",
+    borderColor: "#5AC8B7",
+  },
+  trialEligibilityHeader: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 12,
+    justifyContent: "space-between",
+  },
+  trialEligibilityTitle: {
+    color: "#F5F7FA",
+    flexShrink: 1,
+    fontSize: 14,
+    fontWeight: "900",
+  },
+  trialEligibilityTitleSelected: {
+    color: "#5AC8B7",
+  },
+  trialEligibilityDescription: {
+    color: "#B9C4CF",
     fontSize: 12,
     lineHeight: 17,
   },

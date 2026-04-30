@@ -197,9 +197,17 @@ export const Paywall = <TPackage,>({
           description: copy.trialIncludedDescription,
         }
       : undefined;
-  const purchaseButtonLabel = trialDuration
+  const defaultPurchaseButtonLabel = trialDuration
     ? copy.purchaseButton
     : copy.continueButton ?? "Continue";
+  const purchaseButtonLabel =
+    selectedPlan && copy.formatPurchaseButtonLabel
+      ? copy.formatPurchaseButtonLabel({
+          hasFreeTrial: Boolean(trialDuration),
+          plan: selectedPlan,
+          trialDuration,
+        })
+      : defaultPurchaseButtonLabel;
   const heroHeight = Math.round(windowHeight * heroHeightRatio);
   const [measuredFooterHeight, setMeasuredFooterHeight] = useState(0);
   const footerBottomPadding =

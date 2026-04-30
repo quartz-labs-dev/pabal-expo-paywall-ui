@@ -27,6 +27,12 @@ export interface PaywallPlan<TPackage = unknown> {
   rawPackage: TPackage;
 }
 
+export interface PaywallPurchaseButtonLabelContext<TPackage = unknown> {
+  plan: PaywallPlan<TPackage>;
+  hasFreeTrial: boolean;
+  trialDuration?: PaywallTrialDuration;
+}
+
 export interface PaywallCopy {
   title: string;
   subtitle?: string;
@@ -42,6 +48,9 @@ export interface PaywallCopy {
   formatTrialPriceDisclosure?: (
     duration: PaywallTrialDuration,
     pricePerPeriodText: string
+  ) => string;
+  formatPurchaseButtonLabel?: (
+    context: PaywallPurchaseButtonLabelContext
   ) => string;
   formatTrialIncludedTitle?: (duration: PaywallTrialDuration) => string;
   trialIncludedDescription?: string;

@@ -49,6 +49,7 @@ export default function App() {
     useState<PlaygroundPaywallAnimation>("default");
   const [freeTrialMode, setFreeTrialMode] =
     useState<PlaygroundFreeTrialMode>("sevenDays");
+  const [isTrialEligible, setIsTrialEligible] = useState(true);
   const [selectedLocale, setSelectedLocale] =
     useState<PlaygroundLocale>("en-US");
 
@@ -83,6 +84,7 @@ export default function App() {
           paywallFlow={paywallFlow}
           paywallAnimation={paywallAnimation}
           freeTrialMode={freeTrialMode}
+          isTrialEligible={isTrialEligible}
           onClose={() => navigate("home")}
         />
       ) : route === "profile" ? (
@@ -99,8 +101,10 @@ export default function App() {
           paywallFlow={paywallFlow}
           paywallAnimation={paywallAnimation}
           freeTrialMode={freeTrialMode}
+          isTrialEligible={isTrialEligible}
           onChangeScenario={setScenario}
           onToggleLongPrice={setIsLongPriceEnabled}
+          onToggleTrialEligibility={setIsTrialEligible}
           onChangeLocale={setSelectedLocale}
           onChangePaywallFlow={setPaywallFlow}
           onChangePaywallAnimation={setPaywallAnimation}

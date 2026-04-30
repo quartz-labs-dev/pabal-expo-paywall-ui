@@ -23,6 +23,7 @@ export type {
   PaywallPlan,
   PaywallPlanPeriod,
   PaywallProps,
+  PaywallPurchaseButtonLabelContext,
   PaywallStepMode,
   PaywallTheme,
   PaywallTrialDuration,

@@ -64,6 +64,9 @@ const paywallConfig = {
   copy: getDefaultPaywallCopy(undefined, {
     title: "Upgrade to Pro",
     subtitle: "Get the full app experience.",
+    formatPurchaseButtonLabel: ({ plan, hasFreeTrial }) => {
+      return hasFreeTrial ? "Start 7-day free trial" : `Start for ${plan.priceText}`;
+    },
   }),
   planOptions: {
     ...getDefaultPaywallPlanOptions(),
@@ -126,11 +129,14 @@ import {
 } from "pabal-expo-paywall-ui";
 
 const [selectedPlanId, setSelectedPlanId] = useState(defaultSelectedPlanId);
+const isEligibleForIntroOffer = useIntroOfferEligibility(customerInfo);
+const freeTrial = isEligibleForIntroOffer ? paywallConfig.freeTrial : false;
 
 if (plans.length === 0) return <LoadingOrErrorState />;
 
 <Paywall
   {...paywallPresentation}
+  freeTrial={freeTrial}
   plans={plans}
   selectedPlanId={selectedPlanId ?? getDefaultSelectedPlanId(plans)}
   onSelectPlan={setSelectedPlanId}
@@ -149,6 +155,49 @@ if (plans.length === 0) return <LoadingOrErrorState />;
 Purchase success, cancellation, failure handling, analytics, toast, widget sync,
 entitlement refresh, and navigation belong inside the app's `onPurchase`.
 
+### Dynamic purchase button labels
+
+Use `copy.formatPurchaseButtonLabel` when the CTA depends on the selected plan
+or trial eligibility. The consuming app still owns the RevenueCat/customer logic
+that decides whether a user can receive a trial. Users who already used a trial
+or subscribed before should pass `freeTrial={false}`. The paywall then calls the
+formatter with the selected `plan`, `hasFreeTrial`, and `trialDuration`.
+
+```tsx
+const copy = getDefaultPaywallCopy(locale, {
+  title: "Upgrade to Pro",
+  formatPurchaseButtonLabel: ({ plan, hasFreeTrial, trialDuration }) => {
+    if (hasFreeTrial && trialDuration) {
+      const unit = trialDuration.unit === "week" ? "week" : "day";
+      return `Start ${trialDuration.value}-${unit} free trial`;
+    }
+
+    return `Start for ${plan.priceText}`;
+  },
+});
+
+const freeTrial = isEligibleForIntroOffer
+  ? { duration: { value: 7, unit: "day" } }
+  : false;
+
+<Paywall
+  copy={copy}
+  freeTrial={freeTrial}
+  plans={plans}
+  selectedPlanId={selectedPlanId}
+  onSelectPlan={setSelectedPlanId}
+  onPurchase={purchasePlan}
+  onRestore={restorePurchases}
+  onClose={closePaywall}
+  onOpenTerms={openTerms}
+  onOpenPrivacy={openPrivacy}
+/>
+```
+
+For example, an app can show `Start 7-day free trial` to users who have never
+subscribed and `Start for $9.99` to expired or returning users, without
+rebuilding the whole `copy` object every time the selected plan changes.
+
 ## Options
 
 | Need | Use |
@@ -163,6 +212,7 @@ entitlement refresh, and navigation belong inside the app's `onPurchase`.
 | Plan card order | `planOptions.displayOrder` |
 | Theme colors | `theme` |
 | Custom purchase button fill | `purchaseButtonBackground` |
+| Selected-plan CTA text | `copy.formatPurchaseButtonLabel` |
 
 ## Profile Section
 

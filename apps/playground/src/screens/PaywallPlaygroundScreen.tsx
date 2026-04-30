@@ -9,6 +9,7 @@ import {
   type PaywallConfig,
   type PaywallFreeTrialConfig,
   type PaywallPlan,
+  type PaywallTrialDuration,
   type PurchasesPackageLike,
 } from "pabal-expo-paywall-ui";
 
@@ -56,15 +57,28 @@ interface PaywallPlaygroundScreenProps {
   paywallFlow: PlaygroundPaywallFlow;
   paywallAnimation: PlaygroundPaywallAnimation;
   freeTrialMode: PlaygroundFreeTrialMode;
+  isTrialEligible: boolean;
   onClose: () => void;
 }
 
 const getFreeTrialConfig = (
   mode: PlaygroundFreeTrialMode,
+  isTrialEligible: boolean,
 ): boolean | PaywallFreeTrialConfig => {
+  if (!isTrialEligible) return false;
   if (mode === "none") return false;
   if (mode === "twoWeeks") return { duration: { value: 2, unit: "week" } };
   return true;
+};
+
+const formatTrialDurationLabel = (
+  trialDuration: PaywallTrialDuration | undefined,
+): string => {
+  const duration = trialDuration ?? { value: 7, unit: "day" };
+  const unit = duration.unit === "week" ? "week" : "day";
+  const unitLabel = duration.value === 1 ? unit : `${unit}s`;
+
+  return `${duration.value} ${unitLabel}`;
 };
 
 export const PaywallPlaygroundScreen = ({
@@ -73,6 +87,7 @@ export const PaywallPlaygroundScreen = ({
   paywallFlow,
   paywallAnimation,
   freeTrialMode,
+  isTrialEligible,
   onClose,
 }: PaywallPlaygroundScreenProps) => {
   const [selectedPlanId, setSelectedPlanId] = useState<string | undefined>();
@@ -89,6 +104,15 @@ export const PaywallPlaygroundScreen = ({
     return getDefaultPaywallCopy(selectedLocale, {
       title: "Upgrade to Pro",
       subtitle: "Unlock every feature.",
+      formatPurchaseButtonLabel: ({ plan, hasFreeTrial, trialDuration }) => {
+        if (hasFreeTrial) {
+          return `${formatTrialDurationLabel(trialDuration)} free, then ${
+            plan.priceText
+          }`;
+        }
+
+        return `Start ${plan.title} for ${plan.priceText}`;
+      },
     });
   }, [selectedLocale]);
 
@@ -118,7 +142,7 @@ export const PaywallPlaygroundScreen = ({
         plans={plans}
         stepMode={paywallFlow}
         animationMode={paywallAnimation}
-        freeTrial={getFreeTrialConfig(freeTrialMode)}
+        freeTrial={getFreeTrialConfig(freeTrialMode, isTrialEligible)}
         selectedPlanId={selectedPlanId}
         isPurchasing={isPurchasing}
         onSelectPlan={setSelectedPlanId}
