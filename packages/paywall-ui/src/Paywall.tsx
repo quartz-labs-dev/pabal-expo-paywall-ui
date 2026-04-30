@@ -256,8 +256,9 @@ export const Paywall = <TPackage,>({
       0,
     ],
   });
+  // Keep body visibility independent from step transitions. A cancelled native
+  // opacity animation can otherwise leave the paywall content fully hidden.
   const animatedStepStyle = {
-    opacity: Animated.multiply(initialTransition, stepTransition),
     transform: [
       {
         translateY: initialTranslateY,
@@ -275,12 +276,20 @@ export const Paywall = <TPackage,>({
     }
 
     initialTransition.setValue(0);
-    Animated.timing(initialTransition, {
+    const animation = Animated.timing(initialTransition, {
       duration: INITIAL_TRANSITION_DURATION,
       easing: Easing.out(Easing.cubic),
       toValue: 1,
       useNativeDriver: true,
-    }).start();
+    });
+
+    animation.start(({ finished }) => {
+      if (!finished) initialTransition.setValue(1);
+    });
+
+    return () => {
+      animation.stop();
+    };
   }, [initialTransition, shouldAnimate]);
 
   useEffect(() => {
@@ -313,6 +322,8 @@ export const Paywall = <TPackage,>({
     }).start(({ finished }) => {
       if (!finished) {
         isStepTransitioningRef.current = false;
+        setTransitionPhase("idle");
+        stepTransition.setValue(1);
         return;
       }
 
@@ -325,8 +336,9 @@ export const Paywall = <TPackage,>({
           easing: Easing.out(Easing.cubic),
           toValue: 1,
           useNativeDriver: true,
-        }).start(() => {
+        }).start(({ finished: didEnter }) => {
           isStepTransitioningRef.current = false;
+          if (!didEnter) stepTransition.setValue(1);
           setTransitionPhase("idle");
         });
       });
