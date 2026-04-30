@@ -3,6 +3,15 @@
   "version": "1.1.9",
   "description": "RevenueCat-agnostic React Native paywall UI for Pabal apps.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quartz-labs-dev/pabal-expo-paywall-ui.git",
+    "directory": "packages/paywall-ui"
+  },
+  "bugs": {
+    "url": "https://github.com/quartz-labs-dev/pabal-expo-paywall-ui/issues"
+  },
+  "homepage": "https://github.com/quartz-labs-dev/pabal-expo-paywall-ui#readme",
   "publishConfig": {
     "access": "public"
   },
