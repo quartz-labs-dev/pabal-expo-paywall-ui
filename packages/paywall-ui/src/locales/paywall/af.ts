@@ -29,7 +29,7 @@ const af = createPaywallLocaleText({
     purchasingButton: "Verwerk",
     restoreButton: "Herstel aankope",
     restoring: "Herstel...",
-    subscriptionRenewsAutomatically: "Intekening hernu outomaties.",
+    subscriptionRenewsAutomatically: "Betalings word veilig deur die winkel bestuur. Outomatiese betalings kan binne 7 dae gekanselleer word. As outomatiese hernuwing nie minstens 24 uur voor die einde van die intekeningstydperk afgeskakel word nie, sal jou rekening outomaties gehef word.",
     subscribedSubtitle: "Dankie vir jou ondersteuning!",
     supportMessageLabel: "Van die ontwikkelaar",
     paywallSupportMessage: "'n Betaalde intekening help baie om hierdie app aan die gang te hou en beter te maak. Intekenaars kry geriefliker funksies, 'n stabieler diens en gereelde opdaterings eerste.",

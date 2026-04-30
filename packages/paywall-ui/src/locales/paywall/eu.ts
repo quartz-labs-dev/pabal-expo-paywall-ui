@@ -29,7 +29,7 @@ const eu = createPaywallLocaleText({
     purchasingButton: "Prozesatzen",
     restoreButton: "Berrezarri erosketak",
     restoring: "Berrezartzen...",
-    subscriptionRenewsAutomatically: "Harpidetza automatikoki berritzen da.",
+    subscriptionRenewsAutomatically: "Ordainketak dendak modu seguruan kudeatzen ditu. Ordainketa automatikoak 7 eguneko epean bertan behera utz daitezke. Harpidetza-aldia amaitu baino gutxienez 24 ordu lehenago berritze automatikoa desaktibatzen ez bada, zure kontuan automatikoki kobratuko da.",
     subscribedSubtitle: "Eskerrik asko zure laguntzagatik!",
     supportMessageLabel: "Garatzailearen oharra",
     paywallSupportMessage: "Ordainpeko harpidetzak asko laguntzen du aplikazio hau bizirik mantentzen eta hobetzen. Harpidedunek lehenago jasotzen dituzte funtzio erosoagoak, zerbitzu egonkorragoa eta etengabeko eguneraketak.",

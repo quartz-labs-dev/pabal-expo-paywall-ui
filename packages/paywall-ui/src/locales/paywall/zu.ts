@@ -29,7 +29,7 @@ const zu = createPaywallLocaleText({
     purchasingButton: "Iyacubungula",
     restoreButton: "Buyisela okuthengiwe",
     restoring: "Iyabuyisela...",
-    subscriptionRenewsAutomatically: "Ukubhalisa kuvuselelwa ngokuzenzakalelayo.",
+    subscriptionRenewsAutomatically: "Izinkokhelo zilawulwa ngokuphephile isitolo. Izinkokhelo ezizenzakalelayo zingakhanselwa zingakapheli izinsuku ezingu-7. Uma ukuvuselelwa okuzenzakalelayo kungacinywa okungenani amahora angu-24 ngaphambi kokuphela kwesikhathi sokubhalisa, i-akhawunti yakho izokhokhiswa ngokuzenzakalelayo.",
     subscribedSubtitle: "Siyabonga ngokweseka kwakho!",
     supportMessageLabel: "Kusuka kunjiniyela",
     paywallSupportMessage: "Ukubhalisa okukhokhelwayo kusiza kakhulu ukuthi lolu hlelo lokusebenza luqhubeke futhi lube ngcono. Ababhalisile bathola kuqala izici ezilula kakhulu, isevisi ezinzile kakhulu nezibuyekezo eziqhubekayo.",

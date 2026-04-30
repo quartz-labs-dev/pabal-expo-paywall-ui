@@ -29,7 +29,7 @@ const it = createPaywallLocaleText({
     purchasingButton: "Elaborazione",
     restoreButton: "Ripristina acquisti",
     restoring: "Ripristino...",
-    subscriptionRenewsAutomatically: "L'abbonamento si rinnova automaticamente.",
+    subscriptionRenewsAutomatically: "I pagamenti sono gestiti in modo sicuro dallo store. I pagamenti automatici possono essere annullati entro 7 giorni. Se il rinnovo automatico non viene disattivato almeno 24 ore prima della fine del periodo di abbonamento, il tuo account verrà addebitato automaticamente.",
     subscribedSubtitle: "Grazie per il supporto!",
     supportMessageLabel: "Dal developer",
     paywallSupportMessage: "L’abbonamento a pagamento aiuta molto a tenere viva questa app e a migliorarla. Gli abbonati ricevono per primi funzioni più comode, un servizio più stabile e aggiornamenti costanti.",

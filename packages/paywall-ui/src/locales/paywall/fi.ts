@@ -29,7 +29,7 @@ const fi = createPaywallLocaleText({
     purchasingButton: "Käsitellään",
     restoreButton: "Palauta ostot",
     restoring: "Palautetaan...",
-    subscriptionRenewsAutomatically: "Tilaus uusiutuu automaattisesti.",
+    subscriptionRenewsAutomatically: "Maksuja hallinnoi turvallisesti kauppa. Automaattiset maksut voi peruuttaa 7 päivän kuluessa. Jos automaattista uusimista ei poisteta käytöstä vähintään 24 tuntia ennen tilausjakson päättymistä, tiliäsi veloitetaan automaattisesti.",
     subscribedSubtitle: "Kiitos tuestasi!",
     supportMessageLabel: "Kehittäjältä",
     paywallSupportMessage: "Maksullinen tilaus auttaa pitämään tämän sovelluksen elossa ja kehittämään sitä paremmaksi. Tilaajat saavat ensin sujuvammat ominaisuudet, vakaamman palvelun ja säännölliset päivitykset.",

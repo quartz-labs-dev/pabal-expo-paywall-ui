@@ -29,7 +29,7 @@ const ja = createPaywallLocaleText({
     purchasingButton: "処理中",
     restoreButton: "購入を復元",
     restoring: "復元中...",
-    subscriptionRenewsAutomatically: "サブスクリプションは自動更新されます。",
+    subscriptionRenewsAutomatically: "お支払いはストアで安全に管理されます。自動決済は7日以内にキャンセルできます。サブスクリプション期間終了の24時間前までに自動更新をオフにしない場合、アカウントに自動的に請求されます。",
     subscribedSubtitle: "ご支援ありがとうございます！",
     supportMessageLabel: "開発者より",
     paywallSupportMessage: "有料サブスクリプションは、このアプリを続けて改善していく大きな支えになります。登録すると、より使いやすい機能、安定したサービス、継続的なアップデートをいち早く利用できます。",

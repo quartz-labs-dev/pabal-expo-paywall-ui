@@ -29,7 +29,7 @@ const zhHans = createPaywallLocaleText({
     purchasingButton: "处理中",
     restoreButton: "恢复购买",
     restoring: "正在恢复...",
-    subscriptionRenewsAutomatically: "订阅会自动续订。",
+    subscriptionRenewsAutomatically: "付款由商店安全管理。自动付款可在 7 天内取消。如果未在订阅期结束前至少 24 小时关闭自动续订，系统将自动从你的账户扣款。",
     subscribedSubtitle: "感谢你的支持！",
     supportMessageLabel: "开发者的话",
     paywallSupportMessage: "付费订阅能帮助这款应用持续运行并变得更好。订阅用户可以优先使用更顺手的功能、更稳定的服务和持续更新。",

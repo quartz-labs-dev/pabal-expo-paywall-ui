@@ -369,6 +369,36 @@ test("localizes support messages for every non-English paywall locale", () => {
   }
 });
 
+test("localizes legal renewal copy for every non-English paywall locale", () => {
+  for (const locale of PAYWALL_TEXT_LOCALES) {
+    const copy = getDefaultPaywallCopy(locale, { title: "Pro" });
+
+    assert.ok(copy.legalPrefix, locale);
+    assert.match(copy.legalPrefix, /[.!?。！？։।።။។។۔؟]$/u, locale);
+
+    if (locale === "en") {
+      assert.equal(
+        copy.legalPrefix,
+        "Payments are securely managed by the store. Automatic payments can be cancelled within 7 days. If automatic renewal is not turned off at least 24 hours before the subscription period ends, your account will be charged automatically.",
+      );
+      continue;
+    }
+
+    if (locale === "ko") {
+      assert.equal(
+        copy.legalPrefix,
+        "결제는 스토어에서 안전하게 관리됩니다. 자동 결제는 7일 내 취소 가능합니다. 구독기간 만료 시점으로부터 24시간 전까지 자동 갱신을 해지하지 않으면 사용자의 계정으로 자동 청구됩니다.",
+      );
+    }
+
+    assert.notEqual(
+      copy.legalPrefix,
+      "Payments are securely managed by the store. Automatic payments can be cancelled within 7 days. If automatic renewal is not turned off at least 24 hours before the subscription period ends, your account will be charged automatically.",
+      locale,
+    );
+  }
+});
+
 test("resolves every unified non-English locale without falling back to English", () => {
   for (const locale of UNIFIED_LOCALES) {
     const resolvedLocale = resolvePaywallTextLocale(locale);

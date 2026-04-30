@@ -29,7 +29,7 @@ const tr = createPaywallLocaleText({
     purchasingButton: "İşleniyor",
     restoreButton: "Satın alımları geri yükle",
     restoring: "Geri yükleniyor...",
-    subscriptionRenewsAutomatically: "Abonelik otomatik olarak yenilenir.",
+    subscriptionRenewsAutomatically: "Ödemeler mağaza tarafından güvenli şekilde yönetilir. Otomatik ödemeler 7 gün içinde iptal edilebilir. Abonelik dönemi sona ermeden en az 24 saat önce otomatik yenileme kapatılmazsa hesabınızdan otomatik olarak ücret alınır.",
     subscribedSubtitle: "Desteğiniz için teşekkürler!",
     supportMessageLabel: "Geliştiriciden",
     paywallSupportMessage: "Ücretli abonelik, bu uygulamanın yaşamaya ve gelişmeye devam etmesine büyük destek olur. Aboneler daha kullanışlı özelliklere, daha kararlı bir hizmete ve düzenli güncellemelere önce erişir.",

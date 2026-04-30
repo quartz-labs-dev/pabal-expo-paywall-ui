@@ -29,7 +29,7 @@ const et = createPaywallLocaleText({
     purchasingButton: "Töötlemine",
     restoreButton: "Taasta ostud",
     restoring: "Taastamine...",
-    subscriptionRenewsAutomatically: "Tellimus uueneb automaatselt.",
+    subscriptionRenewsAutomatically: "Makseid haldab turvaliselt pood. Automaatseid makseid saab tühistada 7 päeva jooksul. Kui automaatset uuendamist ei lülitata välja vähemalt 24 tundi enne tellimusperioodi lõppu, võetakse teie kontolt tasu automaatselt.",
     subscribedSubtitle: "Täname toetuse eest!",
     supportMessageLabel: "Arendajalt",
     paywallSupportMessage: "Tasuline tellimus aitab seda rakendust töös hoida ja paremaks teha. Tellijad saavad esimesena mugavamad funktsioonid, stabiilsema teenuse ja regulaarsed uuendused.",

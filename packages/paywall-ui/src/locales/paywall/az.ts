@@ -29,7 +29,7 @@ const az = createPaywallLocaleText({
     purchasingButton: "İşlənir",
     restoreButton: "Satınalmaları bərpa et",
     restoring: "Bərpa olunur...",
-    subscriptionRenewsAutomatically: "Abunəlik avtomatik yenilənir.",
+    subscriptionRenewsAutomatically: "Ödənişlər mağaza tərəfindən təhlükəsiz idarə olunur. Avtomatik ödənişlər 7 gün ərzində ləğv edilə bilər. Abunəlik müddəti bitməzdən ən azı 24 saat əvvəl avtomatik yenilənmə dayandırılmasa, hesabınızdan avtomatik ödəniş tutulacaq.",
     subscribedSubtitle: "Dəstəyiniz üçün təşəkkürlər!",
     supportMessageLabel: "Tərtibatçıdan",
     paywallSupportMessage: "Ödənişli abunəlik bu tətbiqi yaşatmağa və yaxşılaşdırmağa böyük dəstəkdir. Abunəçilər daha rahat funksiyaları, daha sabit xidməti və müntəzəm yeniləmələri ilk əldə edirlər.",

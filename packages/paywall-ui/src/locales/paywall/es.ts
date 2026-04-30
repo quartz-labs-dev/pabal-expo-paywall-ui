@@ -29,7 +29,7 @@ const es = createPaywallLocaleText({
     purchasingButton: "Procesando",
     restoreButton: "Restaurar compras",
     restoring: "Restaurando...",
-    subscriptionRenewsAutomatically: "La suscripción se renueva automáticamente.",
+    subscriptionRenewsAutomatically: "Los pagos se gestionan de forma segura a través de la tienda. Los pagos automáticos pueden cancelarse en un plazo de 7 días. Si la renovación automática no se desactiva al menos 24 horas antes de que termine el periodo de suscripción, se cargará automáticamente a tu cuenta.",
     subscribedSubtitle: "¡Gracias por tu apoyo!",
     supportMessageLabel: "Del desarrollador",
     paywallSupportMessage: "Tu suscripción ayuda mucho a mantener y mejorar esta app. Las personas suscritas reciben primero funciones más cómodas, un servicio más estable y actualizaciones constantes.",

@@ -29,7 +29,7 @@ const hu = createPaywallLocaleText({
     purchasingButton: "Feldolgozás",
     restoreButton: "Vásárlások visszaállítása",
     restoring: "Visszaállítás...",
-    subscriptionRenewsAutomatically: "Az előfizetés automatikusan megújul.",
+    subscriptionRenewsAutomatically: "A fizetéseket biztonságosan az áruház kezeli. Az automatikus fizetések 7 napon belül lemondhatók. Ha az automatikus megújítást nem kapcsolod ki legalább 24 órával az előfizetési időszak vége előtt, a fiókodat automatikusan megterheljük.",
     subscribedSubtitle: "Köszönjük a támogatást!",
     supportMessageLabel: "A fejlesztőtől",
     paywallSupportMessage: "A fizetős előfizetés sokat segít abban, hogy ez az alkalmazás tovább működjön és fejlődjön. Az előfizetők kapják meg először a kényelmesebb funkciókat, a stabilabb szolgáltatást és a rendszeres frissítéseket.",

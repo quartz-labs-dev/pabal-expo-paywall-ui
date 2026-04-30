@@ -29,7 +29,7 @@ const rm = createPaywallLocaleText({
     purchasingButton: "Elavuraziun",
     restoreButton: "Restaurar cumpras",
     restoring: "Restaurescha...",
-    subscriptionRenewsAutomatically: "L’abunament sa renovescha automaticamain.",
+    subscriptionRenewsAutomatically: "Ils pajaments vegnan administrads en moda segira dal store. Pajaments automatics pon vegnir annullads entaifer 7 dis. Sche la renovaziun automatica na vegn betg deactivada almain 24 uras avant la fin da la perioda d'abunament, vegn tes conto chargià automaticamain.",
     subscribedSubtitle: "Grazia per tes sustegn!",
     supportMessageLabel: "Dal sviluppader",
     paywallSupportMessage: "In abunament pajà gida fitg a mantegnair questa app viva ed a meglierarla. Abunents survegnan l’emprim funcziuns pli praticas, in servetsch pli stabil ed actualisaziuns regularas.",

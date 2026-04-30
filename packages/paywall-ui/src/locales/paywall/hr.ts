@@ -29,7 +29,7 @@ const hr = createPaywallLocaleText({
     purchasingButton: "Obrada",
     restoreButton: "Vrati kupnje",
     restoring: "Vraćanje...",
-    subscriptionRenewsAutomatically: "Pretplata se automatski obnavlja.",
+    subscriptionRenewsAutomatically: "Plaćanjima sigurno upravlja trgovina. Automatska plaćanja mogu se otkazati u roku od 7 dana. Ako se automatska obnova ne isključi najmanje 24 sata prije završetka razdoblja pretplate, vaš će se račun automatski teretiti.",
     subscribedSubtitle: "Hvala na podršci!",
     supportMessageLabel: "Od developera",
     paywallSupportMessage: "Plaćena pretplata puno pomaže da ova aplikacija nastavi živjeti i postajati bolja. Pretplatnici prvi dobivaju praktičnije značajke, stabilniju uslugu i redovita ažuriranja.",

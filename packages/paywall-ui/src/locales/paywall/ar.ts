@@ -29,7 +29,7 @@ const ar = createPaywallLocaleText({
     purchasingButton: "جار المعالجة",
     restoreButton: "استعادة المشتريات",
     restoring: "جار الاستعادة...",
-    subscriptionRenewsAutomatically: "يتجدد الاشتراك تلقائيًا.",
+    subscriptionRenewsAutomatically: "تُدار المدفوعات بأمان عبر المتجر. يمكن إلغاء الدفعات التلقائية خلال 7 أيام. إذا لم يتم إيقاف التجديد التلقائي قبل 24 ساعة على الأقل من نهاية مدة الاشتراك، فسيتم تحصيل الرسوم تلقائيًا من حسابك.",
     subscribedSubtitle: "شكرًا لدعمك!",
     supportMessageLabel: "من المطوّر",
     paywallSupportMessage: "يساعد الاشتراك المدفوع كثيرًا في استمرار تطوير هذا التطبيق وتحسينه. المشتركون يحصلون أولًا على ميزات أسهل استخدامًا وخدمة أكثر استقرارًا وتحديثات مستمرة.",

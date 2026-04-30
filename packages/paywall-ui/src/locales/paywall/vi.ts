@@ -29,7 +29,7 @@ const vi = createPaywallLocaleText({
     purchasingButton: "Đang xử lý",
     restoreButton: "Khôi phục giao dịch mua",
     restoring: "Đang khôi phục...",
-    subscriptionRenewsAutomatically: "Đăng ký tự động gia hạn.",
+    subscriptionRenewsAutomatically: "Thanh toán được cửa hàng quản lý an toàn. Có thể hủy thanh toán tự động trong vòng 7 ngày. Nếu không tắt gia hạn tự động ít nhất 24 giờ trước khi thời hạn đăng ký kết thúc, tài khoản của bạn sẽ tự động bị tính phí.",
     subscribedSubtitle: "Cảm ơn bạn đã hỗ trợ!",
     supportMessageLabel: "Từ nhà phát triển",
     paywallSupportMessage: "Gói đăng ký trả phí giúp ứng dụng này tiếp tục phát triển và ngày càng tốt hơn. Người đăng ký sẽ được dùng trước các tính năng tiện lợi hơn, dịch vụ ổn định hơn và các bản cập nhật đều đặn.",

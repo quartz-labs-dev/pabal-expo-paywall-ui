@@ -29,7 +29,7 @@ const lt = createPaywallLocaleText({
     purchasingButton: "Apdorojama",
     restoreButton: "Atkurti pirkinius",
     restoring: "Atkuriama...",
-    subscriptionRenewsAutomatically: "Prenumerata atnaujinama automatiškai.",
+    subscriptionRenewsAutomatically: "Mokėjimus saugiai tvarko parduotuvė. Automatinius mokėjimus galima atšaukti per 7 dienas. Jei automatinis atnaujinimas nebus išjungtas likus bent 24 valandoms iki prenumeratos laikotarpio pabaigos, mokestis iš jūsų paskyros bus nuskaičiuotas automatiškai.",
     subscribedSubtitle: "Ačiū už palaikymą!",
     supportMessageLabel: "Kūrėjo žinutė",
     paywallSupportMessage: "Mokama prenumerata labai padeda šiai programėlei gyvuoti ir tobulėti. Prenumeratoriai pirmieji gauna patogesnes funkcijas, stabilesnę paslaugą ir reguliarius atnaujinimus.",

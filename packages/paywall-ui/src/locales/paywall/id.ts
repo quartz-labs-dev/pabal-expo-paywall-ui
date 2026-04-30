@@ -29,7 +29,7 @@ const id = createPaywallLocaleText({
     purchasingButton: "Memproses",
     restoreButton: "Pulihkan pembelian",
     restoring: "Memulihkan...",
-    subscriptionRenewsAutomatically: "Langganan diperpanjang otomatis.",
+    subscriptionRenewsAutomatically: "Pembayaran dikelola dengan aman oleh toko. Pembayaran otomatis dapat dibatalkan dalam 7 hari. Jika perpanjangan otomatis tidak dimatikan setidaknya 24 jam sebelum periode langganan berakhir, akun Anda akan ditagih secara otomatis.",
     subscribedSubtitle: "Terima kasih atas dukungan Anda!",
     supportMessageLabel: "Dari pengembang",
     paywallSupportMessage: "Langganan berbayar sangat membantu menjaga aplikasi ini tetap berjalan dan terus membaik. Pelanggan mendapat fitur yang lebih nyaman, layanan yang lebih stabil, dan pembaruan rutin lebih dulu.",

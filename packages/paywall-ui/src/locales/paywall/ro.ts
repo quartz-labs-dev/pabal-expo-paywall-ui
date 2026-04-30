@@ -29,7 +29,7 @@ const ro = createPaywallLocaleText({
     purchasingButton: "Se procesează",
     restoreButton: "Restaurează achizițiile",
     restoring: "Se restaurează...",
-    subscriptionRenewsAutomatically: "Abonamentul se reînnoiește automat.",
+    subscriptionRenewsAutomatically: "Plățile sunt gestionate în siguranță de magazin. Plățile automate pot fi anulate în termen de 7 zile. Dacă reînnoirea automată nu este dezactivată cu cel puțin 24 de ore înainte de sfârșitul perioadei de abonament, contul tău va fi taxat automat.",
     subscribedSubtitle: "Mulțumim pentru susținere!",
     supportMessageLabel: "De la dezvoltator",
     paywallSupportMessage: "Abonamentul plătit ajută mult ca această aplicație să continue și să devină mai bună. Abonații primesc primii funcții mai comode, un serviciu mai stabil și actualizări regulate.",

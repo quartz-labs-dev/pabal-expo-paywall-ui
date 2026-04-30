@@ -29,7 +29,7 @@ const sk = createPaywallLocaleText({
     purchasingButton: "Spracúva sa",
     restoreButton: "Obnoviť nákupy",
     restoring: "Obnovuje sa...",
-    subscriptionRenewsAutomatically: "Predplatné sa obnovuje automaticky.",
+    subscriptionRenewsAutomatically: "Platby bezpečne spravuje obchod. Automatické platby možno zrušiť do 7 dní. Ak automatické obnovenie nevypnete aspoň 24 hodín pred koncom obdobia predplatného, váš účet bude automaticky zaúčtovaný.",
     subscribedSubtitle: "Ďakujeme za podporu!",
     supportMessageLabel: "Od vývojára",
     paywallSupportMessage: "Platené predplatné výrazne pomáha udržiavať túto aplikáciu a ďalej ju zlepšovať. Predplatitelia získajú ako prví pohodlnejšie funkcie, stabilnejšiu službu a pravidelné aktualizácie.",

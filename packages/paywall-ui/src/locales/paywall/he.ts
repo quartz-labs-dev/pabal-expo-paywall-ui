@@ -29,7 +29,7 @@ const he = createPaywallLocaleText({
     purchasingButton: "מעבד",
     restoreButton: "שחזר רכישות",
     restoring: "משחזר...",
-    subscriptionRenewsAutomatically: "המנוי מתחדש אוטומטית.",
+    subscriptionRenewsAutomatically: "התשלומים מנוהלים באופן מאובטח דרך החנות. ניתן לבטל תשלומים אוטומטיים בתוך 7 ימים. אם החידוש האוטומטי לא יכובה לפחות 24 שעות לפני סיום תקופת המינוי, חשבונך יחויב באופן אוטומטי.",
     subscribedSubtitle: "תודה על התמיכה שלך!",
     supportMessageLabel: "מהמפתח",
     paywallSupportMessage: "מינוי בתשלום עוזר מאוד להמשיך להחזיק ולשפר את האפליקציה הזו. מנויים מקבלים קודם תכונות נוחות יותר, שירות יציב יותר ועדכונים שוטפים.",

@@ -29,7 +29,7 @@ const lv = createPaywallLocaleText({
     purchasingButton: "Apstrāde",
     restoreButton: "Atjaunot pirkumus",
     restoring: "Atjauno...",
-    subscriptionRenewsAutomatically: "Abonements tiek atjaunots automātiski.",
+    subscriptionRenewsAutomatically: "Maksājumus droši pārvalda veikals. Automātiskos maksājumus var atcelt 7 dienu laikā. Ja automātiskā atjaunošana netiek izslēgta vismaz 24 stundas pirms abonementa perioda beigām, no jūsu konta maksa tiks iekasēta automātiski.",
     subscribedSubtitle: "Paldies par atbalstu!",
     supportMessageLabel: "No izstrādātāja",
     paywallSupportMessage: "Maksas abonements ļoti palīdz uzturēt un uzlabot šo lietotni. Abonenti pirmie saņem ērtākas funkcijas, stabilāku pakalpojumu un regulārus atjauninājumus.",

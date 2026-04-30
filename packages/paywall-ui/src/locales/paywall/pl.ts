@@ -29,7 +29,7 @@ const pl = createPaywallLocaleText({
     purchasingButton: "Przetwarzanie",
     restoreButton: "Przywróć zakupy",
     restoring: "Przywracanie...",
-    subscriptionRenewsAutomatically: "Subskrypcja odnawia się automatycznie.",
+    subscriptionRenewsAutomatically: "Płatności są bezpiecznie obsługiwane przez sklep. Płatności automatyczne można anulować w ciągu 7 dni. Jeśli automatyczne odnowienie nie zostanie wyłączone co najmniej 24 godziny przed końcem okresu subskrypcji, Twoje konto zostanie automatycznie obciążone.",
     subscribedSubtitle: "Dziękujemy za wsparcie!",
     supportMessageLabel: "Od twórcy",
     paywallSupportMessage: "Płatna subskrypcja bardzo pomaga utrzymać tę aplikację i dalej ją ulepszać. Subskrybenci jako pierwsi dostają wygodniejsze funkcje, stabilniejszą usługę i regularne aktualizacje.",

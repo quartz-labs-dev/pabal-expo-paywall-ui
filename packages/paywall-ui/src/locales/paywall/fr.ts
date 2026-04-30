@@ -29,7 +29,7 @@ const fr = createPaywallLocaleText({
     purchasingButton: "Traitement",
     restoreButton: "Restaurer les achats",
     restoring: "Restauration...",
-    subscriptionRenewsAutomatically: "L'abonnement se renouvelle automatiquement.",
+    subscriptionRenewsAutomatically: "Les paiements sont gérés en toute sécurité par la boutique. Les paiements automatiques peuvent être annulés sous 7 jours. Si le renouvellement automatique n’est pas désactivé au moins 24 heures avant la fin de la période d’abonnement, votre compte sera automatiquement débité.",
     subscribedSubtitle: "Merci pour votre soutien !",
     supportMessageLabel: "Mot du développeur",
     paywallSupportMessage: "Votre abonnement aide beaucoup à faire vivre cette app et à l’améliorer. Les abonnés profitent en premier de fonctions plus pratiques, d’un service plus stable et de mises à jour régulières.",

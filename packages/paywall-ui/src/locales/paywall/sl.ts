@@ -29,7 +29,7 @@ const sl = createPaywallLocaleText({
     purchasingButton: "Obdelava",
     restoreButton: "Obnovi nakupe",
     restoring: "Obnavljanje...",
-    subscriptionRenewsAutomatically: "Naročnina se samodejno podaljša.",
+    subscriptionRenewsAutomatically: "Plačila varno upravlja trgovina. Samodejna plačila je mogoče preklicati v 7 dneh. Če samodejne obnove ne izklopite vsaj 24 ur pred koncem obdobja naročnine, bo vaš račun samodejno bremenjen.",
     subscribedSubtitle: "Hvala za podporo!",
     supportMessageLabel: "Od razvijalca",
     paywallSupportMessage: "Plačljiva naročnina zelo pomaga, da ta aplikacija ostane živa in postaja boljša. Naročniki prvi prejmejo priročnejše funkcije, stabilnejšo storitev in redne posodobitve.",

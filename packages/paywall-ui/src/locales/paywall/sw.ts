@@ -29,7 +29,7 @@ const sw = createPaywallLocaleText({
     purchasingButton: "Inachakata",
     restoreButton: "Rejesha manunuzi",
     restoring: "Inarejesha...",
-    subscriptionRenewsAutomatically: "Usajili hujisasisha kiotomatiki.",
+    subscriptionRenewsAutomatically: "Malipo yanasimamiwa kwa usalama na duka. Malipo ya kiotomatiki yanaweza kughairiwa ndani ya siku 7. Ikiwa usasishaji wa kiotomatiki hautazimwa angalau saa 24 kabla ya kipindi cha usajili kuisha, akaunti yako itatozwa kiotomatiki.",
     subscribedSubtitle: "Asante kwa msaada wako!",
     supportMessageLabel: "Kutoka kwa msanidi",
     paywallSupportMessage: "Usajili wa kulipia husaidia sana kuifanya programu hii iendelee na kuwa bora zaidi. Wanaojisajili hupata kwanza vipengele rahisi zaidi, huduma thabiti zaidi na masasisho ya mara kwa mara.",

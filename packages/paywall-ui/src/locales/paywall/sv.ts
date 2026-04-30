@@ -29,7 +29,7 @@ const sv = createPaywallLocaleText({
     purchasingButton: "Bearbetar",
     restoreButton: "Återställ köp",
     restoring: "Återställer...",
-    subscriptionRenewsAutomatically: "Prenumerationen förnyas automatiskt.",
+    subscriptionRenewsAutomatically: "Betalningar hanteras säkert av butiken. Automatiska betalningar kan avbrytas inom 7 dagar. Om automatisk förnyelse inte stängs av minst 24 timmar innan prenumerationsperioden löper ut kommer ditt konto att debiteras automatiskt.",
     subscribedSubtitle: "Tack för ditt stöd!",
     supportMessageLabel: "Från utvecklaren",
     paywallSupportMessage: "En betald prenumeration hjälper mycket med att hålla den här appen igång och göra den bättre. Prenumeranter får först smidigare funktioner, en stabilare tjänst och regelbundna uppdateringar.",

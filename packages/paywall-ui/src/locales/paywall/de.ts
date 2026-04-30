@@ -29,7 +29,7 @@ const de = createPaywallLocaleText({
     purchasingButton: "Verarbeitung",
     restoreButton: "Käufe wiederherstellen",
     restoring: "Wiederherstellung...",
-    subscriptionRenewsAutomatically: "Das Abonnement verlängert sich automatisch.",
+    subscriptionRenewsAutomatically: "Zahlungen werden sicher über den Store verwaltet. Automatische Zahlungen können innerhalb von 7 Tagen gekündigt werden. Wenn die automatische Verlängerung nicht mindestens 24 Stunden vor Ablauf des Abonnementzeitraums deaktiviert wird, wird dein Konto automatisch belastet.",
     subscribedSubtitle: "Danke für deine Unterstützung!",
     supportMessageLabel: "Vom Entwickler",
     paywallSupportMessage: "Ein kostenpflichtiges Abo hilft sehr dabei, diese App weiterzuführen und zu verbessern. Abonnenten erhalten bequemere Funktionen, einen stabileren Dienst und regelmäßige Updates zuerst.",

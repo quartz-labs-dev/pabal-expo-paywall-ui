@@ -29,7 +29,7 @@ const is = createPaywallLocaleText({
     purchasingButton: "Vinnsla",
     restoreButton: "Endurheimta kaup",
     restoring: "Endurheimtir...",
-    subscriptionRenewsAutomatically: "Áskrift endurnýjast sjálfkrafa.",
+    subscriptionRenewsAutomatically: "Greiðslur eru örugglega meðhöndlaðar af versluninni. Hægt er að hætta við sjálfvirkar greiðslur innan 7 daga. Ef sjálfvirk endurnýjun er ekki slökkt að minnsta kosti 24 klukkustundum áður en áskriftartímabilinu lýkur verður reikningurinn þinn skuldfærður sjálfkrafa.",
     subscribedSubtitle: "Takk fyrir stuðninginn!",
     supportMessageLabel: "Frá þróunaraðila",
     paywallSupportMessage: "Greidd áskrift hjálpar mikið við að halda þessu appi gangandi og gera það betra. Áskrifendur fá fyrst þægilegri eiginleika, stöðugri þjónustu og reglulegar uppfærslur.",

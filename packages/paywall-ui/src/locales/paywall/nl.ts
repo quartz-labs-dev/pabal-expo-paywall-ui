@@ -29,7 +29,7 @@ const nl = createPaywallLocaleText({
     purchasingButton: "Verwerken",
     restoreButton: "Aankopen herstellen",
     restoring: "Herstellen...",
-    subscriptionRenewsAutomatically: "Abonnement wordt automatisch verlengd.",
+    subscriptionRenewsAutomatically: "Betalingen worden veilig beheerd door de store. Automatische betalingen kunnen binnen 7 dagen worden geannuleerd. Als automatische verlenging niet minstens 24 uur voor het einde van de abonnementsperiode wordt uitgezet, wordt je account automatisch belast.",
     subscribedSubtitle: "Bedankt voor je steun!",
     supportMessageLabel: "Van de ontwikkelaar",
     paywallSupportMessage: "Een betaald abonnement helpt enorm om deze app draaiend te houden en beter te maken. Abonnees krijgen handigere functies, een stabielere service en regelmatige updates als eerste.",

@@ -29,7 +29,7 @@ const sq = createPaywallLocaleText({
     purchasingButton: "Po përpunohet",
     restoreButton: "Rikthe blerjet",
     restoring: "Po rikthehet...",
-    subscriptionRenewsAutomatically: "Abonimi rinovohet automatikisht.",
+    subscriptionRenewsAutomatically: "Pagesat menaxhohen në mënyrë të sigurt nga dyqani. Pagesat automatike mund të anulohen brenda 7 ditëve. Nëse rinovimi automatik nuk çaktivizohet të paktën 24 orë para përfundimit të periudhës së abonimit, llogaria juaj do të tarifohet automatikisht.",
     subscribedSubtitle: "Faleminderit për mbështetjen!",
     supportMessageLabel: "Nga zhvilluesi",
     paywallSupportMessage: "Abonimi me pagesë ndihmon shumë që ky aplikacion të vazhdojë dhe të bëhet më i mirë. Abonentët marrin të parët funksione më të përshtatshme, shërbim më të qëndrueshëm dhe përditësime të rregullta.",

@@ -29,7 +29,7 @@ const am = createPaywallLocaleText({
     purchasingButton: "በሂደት ላይ",
     restoreButton: "ግዢዎችን መልስ",
     restoring: "በመመለስ ላይ...",
-    subscriptionRenewsAutomatically: "ምዝገባው በራስ-ሰር ይታደሳል።",
+    subscriptionRenewsAutomatically: "ክፍያዎች በመደብሩ በደህንነት ይተዳደራሉ። ራስ-ሰር ክፍያዎችን በ7 ቀናት ውስጥ መሰረዝ ይቻላል። የምዝገባ ጊዜው ከማብቃቱ ቢያንስ 24 ሰዓታት በፊት ራስ-ሰር እድሳት ካልተሰረዘ፣ መለያዎ በራስ-ሰር ይከፈላል።",
     subscribedSubtitle: "ስለ ድጋፍዎ እናመሰግናለን!",
     supportMessageLabel: "ከአበልጻጊው",
     paywallSupportMessage: "የተከፈለ ምዝገባ ይህን መተግበሪያ ቀጥሎ ለመገንባት እና ለማሻሻል ትልቅ ድጋፍ ነው። ሲመዘገቡ የበለጠ ምቹ ባህሪያትን፣ የተረጋጋ አገልግሎትን እና ቀጣይ ዝማኔዎችን ቀድመው ያገኛሉ።",

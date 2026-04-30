@@ -29,7 +29,7 @@ const fil = createPaywallLocaleText({
     purchasingButton: "Pinoproseso",
     restoreButton: "I-restore ang mga pagbili",
     restoring: "Nire-restore...",
-    subscriptionRenewsAutomatically: "Awtomatikong nire-renew ang subscription.",
+    subscriptionRenewsAutomatically: "Ligtas na pinamamahalaan ng store ang mga bayad. Maaaring kanselahin ang awtomatikong pagbabayad sa loob ng 7 araw. Kung hindi io-off ang awtomatikong pag-renew nang hindi bababa sa 24 oras bago matapos ang subscription period, awtomatikong sisingilin ang iyong account.",
     subscribedSubtitle: "Salamat sa iyong suporta!",
     supportMessageLabel: "Mula sa developer",
     paywallSupportMessage: "Malaking tulong ang paid subscription para mapanatili at mapaganda pa ang app na ito. Nauunang makuha ng subscribers ang mas maginhawang features, mas stable na serbisyo, at tuloy-tuloy na updates.",
