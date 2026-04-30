@@ -1,5 +1,8 @@
 # pabal-expo-paywall-ui
 
+<img width="2000" height="1501" alt="CleanShot 2026-04-30 at 15 08 51" src="https://github.com/user-attachments/assets/9894a2a2-865c-44e0-89d5-d9f35e850424" />
+
+
 Workspace for a RevenueCat-agnostic React Native paywall/profile UI package and
 its mock playground app.
 
