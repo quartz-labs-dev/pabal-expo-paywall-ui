@@ -14,7 +14,7 @@
     "android": "yarn workspace playground android",
     "web": "yarn workspace playground web",
     "build": "yarn workspace pabal-expo-paywall-ui build",
-    "publish:paywall": "yarn workspace pabal-expo-paywall-ui publish --new-version $(node -p \"require('./packages/paywall-ui/package.json').version\") --access public --registry https://registry.npmjs.org",
+    "publish:paywall": "cd packages/paywall-ui && npm publish",
     "typecheck": "yarn workspaces run typecheck",
     "test": "yarn workspace pabal-expo-paywall-ui test"
   }
