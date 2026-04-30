@@ -31,6 +31,8 @@ const si = createPaywallLocaleText({
     restoring: "ප්‍රතිසාධනය වෙමින්...",
     subscriptionRenewsAutomatically: "දායකත්වය ස්වයංක්‍රීයව අලුත් වේ.",
     subscribedSubtitle: "ඔබගේ සහයෝගයට ස්තූතියි!",
+    paywallSupportMessage: "ගෙවීම් සහිත දායකත්වය මෙම යෙදුම දිගටම ගොඩනැගීමට හා වැඩිදියුණු කිරීමට විශාල උපකාරයකි. දායක වුවහොත් වඩා පහසු විශේෂාංග, ස්ථාවර සේවාව සහ අඛණ්ඩ යාවත්කාලීන පළමුව ලබාගත හැක.",
+    profileSupportMessage: "ගෙවීම් සහිත දායකත්වය මෙම යෙදුම දිගටම ගොඩනැගීමට හා වැඩිදියුණු කිරීමට විශාල උපකාරයකි. වඩා ස්ථාවර සේවාවක් සහ අඛණ්ඩ යාවත්කාලීනවලින් ප්‍රතිඵල ලබාදෙන්නෙමු. ස්තුතියි!",
     termsText: "නියමයන්",
     closeButtonAccessibilityLabel: "ගෙවීම් පිටුව වසන්න",
     monthlyPriceSuffix: "",

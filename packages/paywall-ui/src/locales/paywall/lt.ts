@@ -31,6 +31,8 @@ const lt = createPaywallLocaleText({
     restoring: "Atkuriama...",
     subscriptionRenewsAutomatically: "Prenumerata atnaujinama automatiškai.",
     subscribedSubtitle: "Ačiū už palaikymą!",
+    paywallSupportMessage: "Mokama prenumerata labai padeda toliau kurti ir gerinti šią programėlę. Prenumeratoriai pirmieji gauna patogesnes funkcijas, stabilią paslaugą ir reguliarius atnaujinimus.",
+    profileSupportMessage: "Mokama prenumerata labai padeda toliau kurti ir gerinti šią programėlę. Atsidėkosime stabilesne paslauga ir reguliariais atnaujinimais. Ačiū!",
     termsText: "Sąlygos",
     closeButtonAccessibilityLabel: "Uždaryti mokėjimo ekraną",
     monthlyPriceSuffix: "",

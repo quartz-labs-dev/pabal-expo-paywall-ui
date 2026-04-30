@@ -31,6 +31,8 @@ const zhHant = createPaywallLocaleText({
     restoring: "正在恢復...",
     subscriptionRenewsAutomatically: "訂閱會自動續訂。",
     subscribedSubtitle: "感謝你的支持！",
+    paywallSupportMessage: "付費訂閱對持續打造和改進這款 App 有很大幫助。訂閱後，你可以優先使用更方便的功能、穩定的服務和持續更新。",
+    profileSupportMessage: "付費訂閱對持續打造和改進這款 App 有很大幫助。我們會用更穩定的服務和持續更新來回饋你。謝謝！",
     termsText: "條款",
     renewsOnPrefix: "",
     closeButtonAccessibilityLabel: "關閉付費頁",

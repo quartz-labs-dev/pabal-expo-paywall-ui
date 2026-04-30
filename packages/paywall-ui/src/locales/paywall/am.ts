@@ -31,6 +31,8 @@ const am = createPaywallLocaleText({
     restoring: "በመመለስ ላይ...",
     subscriptionRenewsAutomatically: "ምዝገባው በራስ-ሰር ይታደሳል።",
     subscribedSubtitle: "ስለ ድጋፍዎ እናመሰግናለን!",
+    paywallSupportMessage: "የተከፈለ ምዝገባ ይህን መተግበሪያ መቀጠል እና ማሻሻል ለማስቻል ትልቅ እገዛ ነው። ሲመዘገቡ የበለጠ ምቹ ባህሪያትን፣ የተረጋጋ አገልግሎትን እና ቀጣይ ዝማኔዎችን በመጀመሪያ ያገኛሉ።",
+    profileSupportMessage: "የተከፈለ ምዝገባ ይህን መተግበሪያ መቀጠል እና ማሻሻል ለማስቻል ትልቅ እገዛ ነው። በተረጋጋ አገልግሎት እና ቀጣይ ዝማኔዎች እመልሳለሁ። እናመሰግናለን!",
     termsText: "ውሎች",
     closeButtonAccessibilityLabel: "የክፍያ ገጹን ዝጋ",
     monthlyPriceSuffix: "",

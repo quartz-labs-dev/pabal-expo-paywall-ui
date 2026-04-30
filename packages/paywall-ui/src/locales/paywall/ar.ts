@@ -31,6 +31,8 @@ const ar = createPaywallLocaleText({
     restoring: "جار الاستعادة...",
     subscriptionRenewsAutomatically: "يتجدد الاشتراك تلقائيًا.",
     subscribedSubtitle: "شكرًا لدعمك!",
+    paywallSupportMessage: "يساعد الاشتراك المدفوع كثيرًا في مواصلة بناء هذا التطبيق وتحسينه. عند الاشتراك، ستحصل أولًا على ميزات أكثر راحة وخدمة مستقرة وتحديثات مستمرة.",
+    profileSupportMessage: "يساعد الاشتراك المدفوع كثيرًا في مواصلة بناء هذا التطبيق وتحسينه. سنرد دعمك بخدمة أكثر استقرارًا وتحديثات مستمرة. شكرًا لك!",
     termsText: "الشروط",
     closeButtonAccessibilityLabel: "إغلاق صفحة الدفع",
     monthlyPriceSuffix: "",

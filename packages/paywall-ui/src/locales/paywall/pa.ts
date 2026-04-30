@@ -31,6 +31,8 @@ const pa = createPaywallLocaleText({
     restoring: "ਮੁੜ ਪ੍ਰਾਪਤ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ...",
     subscriptionRenewsAutomatically: "ਸਬਸਕ੍ਰਿਪਸ਼ਨ ਆਪਣੇ ਆਪ ਨਵੀਕਰਿਤ ਹੁੰਦੀ ਹੈ।",
     subscribedSubtitle: "ਤੁਹਾਡੇ ਸਮਰਥਨ ਲਈ ਧੰਨਵਾਦ!",
+    paywallSupportMessage: "ਪੇਡ ਸਬਸਕ੍ਰਿਪਸ਼ਨ ਇਸ ਐਪ ਨੂੰ ਲਗਾਤਾਰ ਬਣਾਉਣ ਅਤੇ ਸੁਧਾਰਨ ਵਿੱਚ ਬਹੁਤ ਮਦਦ ਕਰਦੀ ਹੈ। ਸਬਸਕ੍ਰਾਈਬ ਕਰਨ ਤੇ ਤੁਹਾਨੂੰ ਹੋਰ ਸੁਵਿਧਾਜਨਕ ਫੀਚਰ, ਸਥਿਰ ਸੇਵਾ ਅਤੇ ਨਿਯਮਿਤ ਅਪਡੇਟ ਪਹਿਲਾਂ ਮਿਲਣਗੇ।",
+    profileSupportMessage: "ਪੇਡ ਸਬਸਕ੍ਰਿਪਸ਼ਨ ਇਸ ਐਪ ਨੂੰ ਲਗਾਤਾਰ ਬਣਾਉਣ ਅਤੇ ਸੁਧਾਰਨ ਵਿੱਚ ਬਹੁਤ ਮਦਦ ਕਰਦੀ ਹੈ। ਅਸੀਂ ਹੋਰ ਸਥਿਰ ਸੇਵਾ ਅਤੇ ਨਿਯਮਿਤ ਅਪਡੇਟਾਂ ਨਾਲ ਤੁਹਾਡੇ ਸਮਰਥਨ ਦਾ ਜਵਾਬ ਦੇਵਾਂਗੇ। ਧੰਨਵਾਦ!",
     termsText: "ਸ਼ਰਤਾਂ",
     closeButtonAccessibilityLabel: "ਭੁਗਤਾਨ ਪੇਜ ਬੰਦ ਕਰੋ",
     monthlyPriceSuffix: "",

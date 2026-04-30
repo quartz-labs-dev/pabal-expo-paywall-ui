@@ -31,6 +31,8 @@ const af = createPaywallLocaleText({
     restoring: "Herstel...",
     subscriptionRenewsAutomatically: "Intekening hernu outomaties.",
     subscribedSubtitle: "Dankie vir jou ondersteuning!",
+    paywallSupportMessage: "N betaalde intekening help baie om hierdie app aan te hou bou en verbeter. As jy inteken, kry jy geriefliker funksies, n stabiele diens en gereelde opdaterings eerste.",
+    profileSupportMessage: "N betaalde intekening help baie om hierdie app aan te hou bou en verbeter. Ek sal dit teruggee met n stabieler diens en gereelde opdaterings. Dankie!",
     termsText: "Bepalings",
     closeButtonAccessibilityLabel: "Maak betaalskerm toe",
     monthlyPriceSuffix: "",

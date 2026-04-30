@@ -314,6 +314,55 @@ test("keeps purchase-step review section title package-owned", () => {
   assert.equal(reviewCopy.reviewSectionTitle, "사용자 리뷰");
 });
 
+test("provides localized support messages for paywall and profile", () => {
+  const paywallCopy = getDefaultPaywallCopy("ko-KR", { title: "Pro" });
+  const customPaywallCopy = getDefaultPaywallCopy("ko-KR", {
+    title: "Pro",
+    supportMessage: "Your subscription supports future updates.",
+  });
+  const profileCopy = getDefaultProfileSubscriptionCopy("ko-KR", {
+    productName: "Pro",
+  });
+
+  assert.equal(
+    paywallCopy.supportMessage,
+    "유료 구독은 이 앱을 계속 만들고 개선하는 데 큰 도움이 됩니다. 구독하면 더 편한 기능, 안정적인 서비스, 꾸준한 업데이트를 먼저 누릴 수 있어요.",
+  );
+  assert.equal(
+    customPaywallCopy.supportMessage,
+    "Your subscription supports future updates.",
+  );
+  assert.equal(
+    profileCopy.supportMessage,
+    "유료 구독은 이 앱을 계속 만들고 개선하는 데 큰 도움이 됩니다. 더 안정적인 서비스와 꾸준한 업데이트로 보답하겠습니다. 감사합니다!",
+  );
+});
+
+test("localizes support messages for every non-English paywall locale", () => {
+  for (const locale of PAYWALL_TEXT_LOCALES) {
+    const paywallCopy = getDefaultPaywallCopy(locale, { title: "Pro" });
+    const profileCopy = getDefaultProfileSubscriptionCopy(locale, {
+      productName: "Pro",
+    });
+
+    assert.ok(paywallCopy.supportMessage, locale);
+    assert.ok(profileCopy.supportMessage, locale);
+
+    if (locale === "en") continue;
+
+    assert.notEqual(
+      paywallCopy.supportMessage,
+      "Paid subscriptions are a huge help in keeping this app alive and improving it. Subscribers get more convenient features, a stable service, and steady updates first.",
+      locale,
+    );
+    assert.notEqual(
+      profileCopy.supportMessage,
+      "Paid subscriptions are a huge help in keeping this app alive and improving it. I will return your support with a more stable service and steady updates. Thank you!",
+      locale,
+    );
+  }
+});
+
 test("resolves every unified non-English locale without falling back to English", () => {
   for (const locale of UNIFIED_LOCALES) {
     const resolvedLocale = resolvePaywallTextLocale(locale);

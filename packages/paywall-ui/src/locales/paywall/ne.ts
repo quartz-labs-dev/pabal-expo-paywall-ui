@@ -31,6 +31,8 @@ const ne = createPaywallLocaleText({
     restoring: "पुनर्स्थापना हुँदैछ...",
     subscriptionRenewsAutomatically: "सदस्यता स्वतः नवीकरण हुन्छ।",
     subscribedSubtitle: "तपाईंको समर्थनका लागि धन्यवाद!",
+    paywallSupportMessage: "सशुल्क सदस्यताले यो एपलाई निरन्तर बनाउन र सुधार गर्न धेरै मद्दत गर्छ। सदस्यता लिएपछि तपाईंले थप सुविधाजनक सुविधाहरू, स्थिर सेवा र नियमित अपडेटहरू पहिले पाउनुहुनेछ।",
+    profileSupportMessage: "सशुल्क सदस्यताले यो एपलाई निरन्तर बनाउन र सुधार गर्न धेरै मद्दत गर्छ। हामी अझ स्थिर सेवा र नियमित अपडेटहरूद्वारा तपाईंको समर्थनको कदर गर्नेछौं। धन्यवाद!",
     termsText: "सर्तहरू",
     closeButtonAccessibilityLabel: "भुक्तानी पृष्ठ बन्द गर्नुहोस्",
     monthlyPriceSuffix: "",

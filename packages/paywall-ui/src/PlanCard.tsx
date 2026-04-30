@@ -27,7 +27,18 @@ export const PlanCard = <TPackage,>({
     new Animated.Value(selectedDescription ? 1 : 0),
   ).current;
   const badgeShine = useRef(new Animated.Value(0)).current;
+  const annualBorderGlow = useRef(new Animated.Value(0)).current;
   const shouldAnimateBadge = shouldAnimate && Boolean(plan.badgeText);
+  const shouldHighlightAnnualPlan = isSelected && plan.period === "annual";
+  const shouldAnimateAnnualGlow = shouldAnimate && shouldHighlightAnnualPlan;
+  const annualBorderGlowOpacity = annualBorderGlow.interpolate({
+    inputRange: [0, 0.5, 1],
+    outputRange: [0.18, 0.48, 0.18],
+  });
+  const annualBorderGlowScale = annualBorderGlow.interpolate({
+    inputRange: [0, 0.5, 1],
+    outputRange: [1, 1.015, 1],
+  });
   const badgeShineTranslateX = badgeShine.interpolate({
     inputRange: [0, 1],
     outputRange: [-42, 96],
@@ -81,6 +92,38 @@ export const PlanCard = <TPackage,>({
     };
   }, [badgeShine, shouldAnimateBadge]);
 
+  useEffect(() => {
+    if (!shouldAnimateAnnualGlow) {
+      annualBorderGlow.stopAnimation();
+      annualBorderGlow.setValue(0);
+      return;
+    }
+
+    const animation = Animated.loop(
+      Animated.sequence([
+        Animated.timing(annualBorderGlow, {
+          duration: 1200,
+          easing: Easing.inOut(Easing.cubic),
+          toValue: 1,
+          useNativeDriver: true,
+        }),
+        Animated.timing(annualBorderGlow, {
+          duration: 1200,
+          easing: Easing.inOut(Easing.cubic),
+          toValue: 0,
+          useNativeDriver: true,
+        }),
+      ]),
+    );
+
+    annualBorderGlow.setValue(0);
+    animation.start();
+
+    return () => {
+      animation.stop();
+    };
+  }, [annualBorderGlow, shouldAnimateAnnualGlow]);
+
   return (
     <Pressable
       accessibilityLabel={[
@@ -105,10 +148,24 @@ export const PlanCard = <TPackage,>({
           borderColor: isSelected
             ? theme.selectedBorderColor
             : theme.borderColor,
-          borderWidth: isSelected ? 1.5 : 1,
+          borderWidth: shouldHighlightAnnualPlan ? 2 : isSelected ? 1.5 : 1,
         },
       ]}
     >
+      {shouldHighlightAnnualPlan && (
+        <Animated.View
+          pointerEvents="none"
+          style={[
+            styles.annualGlow,
+            {
+              borderColor: theme.selectedBorderColor,
+              opacity: annualBorderGlowOpacity,
+              transform: [{ scale: annualBorderGlowScale }],
+            },
+          ]}
+        />
+      )}
+
       <View
         style={[
           styles.radio,
@@ -174,9 +231,6 @@ export const PlanCard = <TPackage,>({
             ]}
           >
             <Text
-              adjustsFontSizeToFit
-              minimumFontScale={0.82}
-              numberOfLines={1}
               style={[styles.price, { color: theme.primaryTextColor }]}
             >
               {priceParts ? (
@@ -246,8 +300,19 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 12,
     minHeight: 92,
+    overflow: "visible",
     paddingHorizontal: 16,
     paddingVertical: 16,
+    position: "relative",
+  },
+  annualGlow: {
+    borderRadius: 10,
+    borderWidth: 3,
+    bottom: -3,
+    left: -3,
+    position: "absolute",
+    right: -3,
+    top: -3,
   },
   pressed: {
     opacity: 0.86,
@@ -311,16 +376,13 @@ const styles = StyleSheet.create({
   priceRow: {
     alignItems: "baseline",
     flexDirection: "row",
-    flexWrap: "wrap",
     gap: 7,
     minHeight: 30,
   },
   price: {
-    flexShrink: 1,
     fontSize: 24,
     fontWeight: "900",
     lineHeight: 30,
-    maxWidth: "100%",
   },
   monthlyPrice: {
     flexShrink: 1,

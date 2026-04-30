@@ -31,6 +31,8 @@ const ms = createPaywallLocaleText({
     restoring: "Memulihkan...",
     subscriptionRenewsAutomatically: "Langganan diperbaharui secara automatik.",
     subscribedSubtitle: "Terima kasih atas sokongan anda!",
+    paywallSupportMessage: "Langganan berbayar sangat membantu untuk terus membina dan menambah baik aplikasi ini. Dengan melanggan, anda akan menerima ciri yang lebih mudah, perkhidmatan stabil dan kemas kini berterusan terlebih dahulu.",
+    profileSupportMessage: "Langganan berbayar sangat membantu untuk terus membina dan menambah baik aplikasi ini. Kami akan membalasnya dengan perkhidmatan yang lebih stabil dan kemas kini berterusan. Terima kasih!",
     termsText: "Terma",
     closeButtonAccessibilityLabel: "Tutup halaman pembayaran",
     monthlyPriceSuffix: "",

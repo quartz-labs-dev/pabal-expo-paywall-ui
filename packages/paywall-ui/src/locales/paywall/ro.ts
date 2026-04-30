@@ -31,6 +31,8 @@ const ro = createPaywallLocaleText({
     restoring: "Se restaurează...",
     subscriptionRenewsAutomatically: "Abonamentul se reînnoiește automat.",
     subscribedSubtitle: "Mulțumim pentru susținere!",
+    paywallSupportMessage: "Abonamentul plătit ajută mult la continuarea construirii și îmbunătățirii acestei aplicații. Abonații primesc primii funcții mai comode, un serviciu stabil și actualizări constante.",
+    profileSupportMessage: "Abonamentul plătit ajută mult la continuarea construirii și îmbunătățirii acestei aplicații. Vom răsplăti sprijinul printr-un serviciu mai stabil și actualizări constante. Mulțumim!",
     termsText: "Termeni",
     closeButtonAccessibilityLabel: "Închide ecranul de plată",
     monthlyPriceSuffix: "",

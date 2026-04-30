@@ -31,6 +31,8 @@ const is = createPaywallLocaleText({
     restoring: "Endurheimtir...",
     subscriptionRenewsAutomatically: "Áskrift endurnýjast sjálfkrafa.",
     subscribedSubtitle: "Takk fyrir stuðninginn!",
+    paywallSupportMessage: "Greidd áskrift hjálpar mikið við að halda áfram að byggja og bæta þetta app. Með áskrift færðu fyrst þægilegri eiginleika, stöðuga þjónustu og reglulegar uppfærslur.",
+    profileSupportMessage: "Greidd áskrift hjálpar mikið við að halda áfram að byggja og bæta þetta app. Við endurgjöldum með stöðugri þjónustu og reglulegum uppfærslum. Takk!",
     termsText: "Skilmálar",
     closeButtonAccessibilityLabel: "Loka greiðslusíðu",
     monthlyPriceSuffix: "",

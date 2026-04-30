@@ -31,6 +31,8 @@ const hu = createPaywallLocaleText({
     restoring: "Visszaállítás...",
     subscriptionRenewsAutomatically: "Az előfizetés automatikusan megújul.",
     subscribedSubtitle: "Köszönjük a támogatást!",
+    paywallSupportMessage: "A fizetős előfizetés nagy segítség abban, hogy tovább építsük és fejlesszük ezt az alkalmazást. Előfizetőként először kapsz kényelmesebb funkciókat, stabil szolgáltatást és rendszeres frissítéseket.",
+    profileSupportMessage: "A fizetős előfizetés nagy segítség abban, hogy tovább építsük és fejlesszük ezt az alkalmazást. Stabilabb szolgáltatással és rendszeres frissítésekkel háláljuk meg. Köszönjük!",
     termsText: "Feltételek",
     closeButtonAccessibilityLabel: "Fizetési képernyő bezárása",
     monthlyPriceSuffix: "",

@@ -31,6 +31,8 @@ const mk = createPaywallLocaleText({
     restoring: "Се враќа...",
     subscriptionRenewsAutomatically: "Претплатата се обновува автоматски.",
     subscribedSubtitle: "Ви благодариме за поддршката!",
+    paywallSupportMessage: "Платената претплата многу помага да продолжиме да ја создаваме и подобруваме оваа апликација. Со претплата први ќе добиете попрактични функции, стабилна услуга и редовни ажурирања.",
+    profileSupportMessage: "Платената претплата многу помага да продолжиме да ја создаваме и подобруваме оваа апликација. Ќе возвратиме со постабилна услуга и редовни ажурирања. Ви благодариме!",
     termsText: "Услови",
     closeButtonAccessibilityLabel: "Затвори paywall",
     monthlyPriceSuffix: "",

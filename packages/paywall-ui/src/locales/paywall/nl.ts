@@ -31,6 +31,8 @@ const nl = createPaywallLocaleText({
     restoring: "Herstellen...",
     subscriptionRenewsAutomatically: "Abonnement wordt automatisch verlengd.",
     subscribedSubtitle: "Bedankt voor je steun!",
+    paywallSupportMessage: "Een betaald abonnement helpt enorm om deze app te blijven bouwen en verbeteren. Als abonnee krijg je handigere functies, een stabiele service en regelmatige updates als eerste.",
+    profileSupportMessage: "Een betaald abonnement helpt enorm om deze app te blijven bouwen en verbeteren. We geven dat terug met een stabielere service en regelmatige updates. Bedankt!",
     termsText: "Voorwaarden",
     closeButtonAccessibilityLabel: "Betaalscherm sluiten",
     monthlyPriceSuffix: "",

@@ -31,6 +31,8 @@ const pl = createPaywallLocaleText({
     restoring: "Przywracanie...",
     subscriptionRenewsAutomatically: "Subskrypcja odnawia się automatycznie.",
     subscribedSubtitle: "Dziękujemy za wsparcie!",
+    paywallSupportMessage: "Płatna subskrypcja bardzo pomaga dalej tworzyć i ulepszać tę aplikację. Subskrybenci jako pierwsi otrzymują wygodniejsze funkcje, stabilną usługę i regularne aktualizacje.",
+    profileSupportMessage: "Płatna subskrypcja bardzo pomaga dalej tworzyć i ulepszać tę aplikację. Odwdzięczymy się stabilniejszą usługą i regularnymi aktualizacjami. Dziękujemy!",
     termsText: "Warunki",
     closeButtonAccessibilityLabel: "Zamknij paywall",
     monthlyPriceSuffix: "",

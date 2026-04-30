@@ -31,6 +31,8 @@ const vi = createPaywallLocaleText({
     restoring: "Đang khôi phục...",
     subscriptionRenewsAutomatically: "Đăng ký tự động gia hạn.",
     subscribedSubtitle: "Cảm ơn bạn đã hỗ trợ!",
+    paywallSupportMessage: "Gói đăng ký trả phí giúp ích rất nhiều để tiếp tục xây dựng và cải thiện ứng dụng này. Khi đăng ký, bạn sẽ được dùng trước các tính năng tiện lợi hơn, dịch vụ ổn định và các bản cập nhật đều đặn.",
+    profileSupportMessage: "Gói đăng ký trả phí giúp ích rất nhiều để tiếp tục xây dựng và cải thiện ứng dụng này. Chúng tôi sẽ đáp lại bằng dịch vụ ổn định hơn và các bản cập nhật đều đặn. Cảm ơn bạn!",
     termsText: "Điều khoản",
     closeButtonAccessibilityLabel: "Đóng trang thanh toán",
     monthlyPriceSuffix: "",

@@ -31,6 +31,8 @@ const he = createPaywallLocaleText({
     restoring: "משחזר...",
     subscriptionRenewsAutomatically: "המנוי מתחדש אוטומטית.",
     subscribedSubtitle: "תודה על התמיכה שלך!",
+    paywallSupportMessage: "מינוי בתשלום עוזר מאוד להמשיך לבנות ולשפר את האפליקציה הזו. עם מינוי תקבלו קודם תכונות נוחות יותר, שירות יציב ועדכונים שוטפים.",
+    profileSupportMessage: "מינוי בתשלום עוזר מאוד להמשיך לבנות ולשפר את האפליקציה הזו. נחזיר על התמיכה עם שירות יציב יותר ועדכונים שוטפים. תודה!",
     termsText: "תנאים",
     closeButtonAccessibilityLabel: "סגירת מסך התשלום",
     monthlyPriceSuffix: "",

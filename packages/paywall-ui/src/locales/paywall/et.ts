@@ -31,6 +31,8 @@ const et = createPaywallLocaleText({
     restoring: "Taastamine...",
     subscriptionRenewsAutomatically: "Tellimus uueneb automaatselt.",
     subscribedSubtitle: "Täname toetuse eest!",
+    paywallSupportMessage: "Tasuline tellimus aitab palju kaasa selle rakenduse edasiarendamisele ja parandamisele. Tellijad saavad esimesena mugavamad funktsioonid, stabiilse teenuse ja regulaarsed uuendused.",
+    profileSupportMessage: "Tasuline tellimus aitab palju kaasa selle rakenduse edasiarendamisele ja parandamisele. Vastame sellele stabiilsema teenuse ja regulaarsete uuendustega. Aitäh!",
     termsText: "Tingimused",
     closeButtonAccessibilityLabel: "Sulge makseleht",
     monthlyPriceSuffix: "",

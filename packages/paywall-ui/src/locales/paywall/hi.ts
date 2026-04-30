@@ -31,6 +31,8 @@ const hi = createPaywallLocaleText({
     restoring: "पुनर्स्थापित हो रहा है...",
     subscriptionRenewsAutomatically: "सदस्यता अपने आप नवीनीकृत होती है।",
     subscribedSubtitle: "आपके समर्थन के लिए धन्यवाद!",
+    paywallSupportMessage: "पेड सब्सक्रिप्शन इस ऐप को लगातार बनाने और बेहतर करने में बहुत मदद करता है। सब्सक्राइब करने पर आपको अधिक सुविधाजनक फीचर, स्थिर सेवा और नियमित अपडेट पहले मिलेंगे।",
+    profileSupportMessage: "पेड सब्सक्रिप्शन इस ऐप को लगातार बनाने और बेहतर करने में बहुत मदद करता है। हम अधिक स्थिर सेवा और नियमित अपडेट के साथ आपका समर्थन लौटाएंगे। धन्यवाद!",
     termsText: "शर्तें",
     closeButtonAccessibilityLabel: "पेमेंट पेज बंद करें",
     monthlyPriceSuffix: "",

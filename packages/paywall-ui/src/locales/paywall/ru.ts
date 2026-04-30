@@ -31,6 +31,8 @@ const ru = createPaywallLocaleText({
     restoring: "Восстановление...",
     subscriptionRenewsAutomatically: "Подписка продлевается автоматически.",
     subscribedSubtitle: "Спасибо за поддержку!",
+    paywallSupportMessage: "Платная подписка очень помогает продолжать создавать и улучшать это приложение. С подпиской вы первыми получите более удобные функции, стабильный сервис и регулярные обновления.",
+    profileSupportMessage: "Платная подписка очень помогает продолжать создавать и улучшать это приложение. Мы отблагодарим вас более стабильным сервисом и регулярными обновлениями. Спасибо!",
     termsText: "Условия",
     closeButtonAccessibilityLabel: "Закрыть paywall",
     monthlyPriceSuffix: "",

@@ -31,6 +31,8 @@ const ur = createPaywallLocaleText({
     restoring: "بحال ہو رہا ہے...",
     subscriptionRenewsAutomatically: "سبسکرپشن خودکار طور پر تجدید ہوتی ہے۔",
     subscribedSubtitle: "آپ کی حمایت کا شکریہ!",
+    paywallSupportMessage: "بامعاوضہ سبسکرپشن اس ایپ کو مسلسل بنانے اور بہتر بنانے میں بہت مدد دیتی ہے۔ سبسکرائب کرنے پر آپ کو زیادہ آسان فیچرز، مستحکم سروس اور مسلسل اپ ڈیٹس پہلے ملیں گی۔",
+    profileSupportMessage: "بامعاوضہ سبسکرپشن اس ایپ کو مسلسل بنانے اور بہتر بنانے میں بہت مدد دیتی ہے۔ ہم زیادہ مستحکم سروس اور مسلسل اپ ڈیٹس کے ساتھ آپ کے تعاون کا جواب دیں گے۔ شکریہ!",
     termsText: "شرائط",
     closeButtonAccessibilityLabel: "ادائیگی کا صفحہ بند کریں",
     monthlyPriceSuffix: "",

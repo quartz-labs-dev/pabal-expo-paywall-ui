@@ -31,6 +31,8 @@ const tr = createPaywallLocaleText({
     restoring: "Geri yükleniyor...",
     subscriptionRenewsAutomatically: "Abonelik otomatik olarak yenilenir.",
     subscribedSubtitle: "Desteğiniz için teşekkürler!",
+    paywallSupportMessage: "Ücretli abonelik, bu uygulamayı geliştirmeye ve iyileştirmeye devam etmek için büyük destek sağlar. Abone olduğunuzda daha kullanışlı özelliklere, kararlı bir hizmete ve düzenli güncellemelere önce siz erişirsiniz.",
+    profileSupportMessage: "Ücretli abonelik, bu uygulamayı geliştirmeye ve iyileştirmeye devam etmek için büyük destek sağlar. Daha kararlı bir hizmet ve düzenli güncellemelerle karşılığını vereceğiz. Teşekkürler!",
     termsText: "Şartlar",
     closeButtonAccessibilityLabel: "Ödeme sayfasını kapat",
     monthlyPriceSuffix: "",

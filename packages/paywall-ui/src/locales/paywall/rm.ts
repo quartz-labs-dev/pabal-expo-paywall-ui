@@ -31,6 +31,8 @@ const rm = createPaywallLocaleText({
     restoring: "Restaurescha...",
     subscriptionRenewsAutomatically: "L’abunament sa renovescha automaticamain.",
     subscribedSubtitle: "Grazia per tes sustegn!",
+    paywallSupportMessage: "In abunament pajà gida fitg a cuntinuar da construir e meglierar questa app. Cun in abunament survegns ti l’emprim funcziuns pli praticas, in servetsch stabil ed actualisaziuns regularas.",
+    profileSupportMessage: "In abunament pajà gida fitg a cuntinuar da construir e meglierar questa app. Nus returnain quai cun in servetsch pli stabil ed actualisaziuns regularas. Grazia!",
     termsText: "Cundiziuns",
     closeButtonAccessibilityLabel: "Serrar la pagina da pajament",
     monthlyPriceSuffix: "",

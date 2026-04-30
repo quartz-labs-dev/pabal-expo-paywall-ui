@@ -31,6 +31,8 @@ const sl = createPaywallLocaleText({
     restoring: "Obnavljanje...",
     subscriptionRenewsAutomatically: "Naročnina se samodejno podaljša.",
     subscribedSubtitle: "Hvala za podporo!",
+    paywallSupportMessage: "Plačljiva naročnina zelo pomaga, da lahko še naprej gradimo in izboljšujemo to aplikacijo. Naročniki prvi prejmejo priročnejše funkcije, stabilno storitev in redne posodobitve.",
+    profileSupportMessage: "Plačljiva naročnina zelo pomaga, da lahko še naprej gradimo in izboljšujemo to aplikacijo. Oddolžili se bomo s stabilnejšo storitvijo in rednimi posodobitvami. Hvala!",
     termsText: "Pogoji",
     closeButtonAccessibilityLabel: "Zapri paywall",
     monthlyPriceSuffix: "",

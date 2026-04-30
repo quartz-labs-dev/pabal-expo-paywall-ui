@@ -31,6 +31,8 @@ const uk = createPaywallLocaleText({
     restoring: "Відновлення...",
     subscriptionRenewsAutomatically: "Підписка поновлюється автоматично.",
     subscribedSubtitle: "Дякуємо за підтримку!",
+    paywallSupportMessage: "Платна підписка дуже допомагає й надалі створювати та покращувати цей застосунок. З підпискою ви першими отримуватимете зручніші функції, стабільний сервіс і регулярні оновлення.",
+    profileSupportMessage: "Платна підписка дуже допомагає й надалі створювати та покращувати цей застосунок. Ми віддячимо стабільнішим сервісом і регулярними оновленнями. Дякуємо!",
     termsText: "Умови",
     closeButtonAccessibilityLabel: "Закрити paywall",
     monthlyPriceSuffix: "",

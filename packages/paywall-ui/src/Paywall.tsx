@@ -434,6 +434,27 @@ export const Paywall = <TPackage,>({
             </View>
           )}
 
+          {!isValueStep && copy.supportMessage && (
+            <View
+              style={[
+                styles.supportMessage,
+                {
+                  backgroundColor: theme.surfaceColor,
+                  borderColor: theme.borderColor,
+                },
+              ]}
+            >
+              <Text
+                style={[
+                  styles.supportMessageText,
+                  { color: theme.secondaryTextColor },
+                ]}
+              >
+                {copy.supportMessage}
+              </Text>
+            </View>
+          )}
+
           <PaywallBenefitList
             benefits={visibleBenefits}
             content={bodyContent}
@@ -634,6 +655,20 @@ const styles = StyleSheet.create({
   },
   planSection: {
     gap: 12,
+  },
+  supportMessage: {
+    borderCurve: "continuous",
+    borderRadius: 8,
+    borderWidth: 1,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+  },
+  supportMessageText: {
+    flexShrink: 1,
+    fontSize: 13,
+    fontWeight: "600",
+    lineHeight: 19,
+    textAlign: "center",
   },
   header: {
     gap: 8,

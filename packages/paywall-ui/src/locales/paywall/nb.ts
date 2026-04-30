@@ -31,6 +31,8 @@ const nb = createPaywallLocaleText({
     restoring: "Gjenoppretter...",
     subscriptionRenewsAutomatically: "Abonnementet fornyes automatisk.",
     subscribedSubtitle: "Takk for støtten!",
+    paywallSupportMessage: "Et betalt abonnement hjelper mye med å fortsette å bygge og forbedre denne appen. Som abonnent får du mer praktiske funksjoner, en stabil tjeneste og jevnlige oppdateringer først.",
+    profileSupportMessage: "Et betalt abonnement hjelper mye med å fortsette å bygge og forbedre denne appen. Vi gir tilbake med en mer stabil tjeneste og jevnlige oppdateringer. Takk!",
     termsText: "Vilkår",
     closeButtonAccessibilityLabel: "Lukk betalingsside",
     monthlyPriceSuffix: "",

@@ -31,6 +31,8 @@ const ca = createPaywallLocaleText({
     restoring: "Restaurant...",
     subscriptionRenewsAutomatically: "La subscripció es renova automàticament.",
     subscribedSubtitle: "Gràcies pel teu suport!",
+    paywallSupportMessage: "La subscripció de pagament ajuda molt a continuar creant i millorant aquesta app. Si t’hi subscrius, rebràs abans funcions més còmodes, un servei estable i actualitzacions constants.",
+    profileSupportMessage: "La subscripció de pagament ajuda molt a continuar creant i millorant aquesta app. Ho retornarem amb un servei més estable i actualitzacions constants. Gràcies!",
     termsText: "Condicions",
     closeButtonAccessibilityLabel: "Tanca la pantalla de pagament",
     monthlyPriceSuffix: "",

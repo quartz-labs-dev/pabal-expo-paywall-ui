@@ -31,6 +31,8 @@ const be = createPaywallLocaleText({
     restoring: "Аднаўленне...",
     subscriptionRenewsAutomatically: "Падпіска абнаўляецца аўтаматычна.",
     subscribedSubtitle: "Дзякуй за падтрымку!",
+    paywallSupportMessage: "Платная падпіска вельмі дапамагае працягваць ствараць і паляпшаць гэту праграму. З падпіскай вы першымі атрымаеце больш зручныя функцыі, стабільны сэрвіс і рэгулярныя абнаўленні.",
+    profileSupportMessage: "Платная падпіска вельмі дапамагае працягваць ствараць і паляпшаць гэту праграму. Мы аддзячым больш стабільным сэрвісам і рэгулярнымі абнаўленнямі. Дзякуй!",
     termsText: "Умовы",
     closeButtonAccessibilityLabel: "Закрыць старонку аплаты",
     monthlyPriceSuffix: "",

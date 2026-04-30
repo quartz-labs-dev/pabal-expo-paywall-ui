@@ -31,6 +31,8 @@ const fa = createPaywallLocaleText({
     restoring: "در حال بازیابی...",
     subscriptionRenewsAutomatically: "اشتراک به‌صورت خودکار تمدید می‌شود.",
     subscribedSubtitle: "از حمایت شما سپاسگزاریم!",
+    paywallSupportMessage: "اشتراک پولی کمک بزرگی برای ادامه ساخت و بهبود این برنامه است. با اشتراک، زودتر به قابلیت‌های راحت‌تر، سرویس پایدار و به‌روزرسانی‌های منظم دسترسی خواهید داشت.",
+    profileSupportMessage: "اشتراک پولی کمک بزرگی برای ادامه ساخت و بهبود این برنامه است. با سرویسی پایدارتر و به‌روزرسانی‌های منظم جبران خواهیم کرد. سپاسگزاریم!",
     termsText: "شرایط",
     closeButtonAccessibilityLabel: "بستن صفحه پرداخت",
     monthlyPriceSuffix: "",

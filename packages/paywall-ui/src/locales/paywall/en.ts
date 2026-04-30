@@ -31,6 +31,8 @@ const en = createPaywallLocaleText({
     restoring: "Restoring...",
     subscriptionRenewsAutomatically: "Subscription renews automatically.",
     subscribedSubtitle: "Thank you for your support!",
+    paywallSupportMessage: "Paid subscriptions are a huge help in keeping this app alive and improving it. Subscribers get more convenient features, a stable service, and steady updates first.",
+    profileSupportMessage: "Paid subscriptions are a huge help in keeping this app alive and improving it. I will return your support with a more stable service and steady updates. Thank you!",
     termsText: "Terms",
     monthlyPricePrefix: "",
     renewsOnPrefix: "",

@@ -31,6 +31,8 @@ const sv = createPaywallLocaleText({
     restoring: "Återställer...",
     subscriptionRenewsAutomatically: "Prenumerationen förnyas automatiskt.",
     subscribedSubtitle: "Tack för ditt stöd!",
+    paywallSupportMessage: "En betald prenumeration hjälper mycket med att fortsätta bygga och förbättra den här appen. Som prenumerant får du först smidigare funktioner, en stabil tjänst och regelbundna uppdateringar.",
+    profileSupportMessage: "En betald prenumeration hjälper mycket med att fortsätta bygga och förbättra den här appen. Vi ger tillbaka med en stabilare tjänst och regelbundna uppdateringar. Tack!",
     termsText: "Villkor",
     closeButtonAccessibilityLabel: "Stäng betalvägg",
     monthlyPriceSuffix: "",

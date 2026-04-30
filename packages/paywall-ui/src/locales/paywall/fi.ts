@@ -31,6 +31,8 @@ const fi = createPaywallLocaleText({
     restoring: "Palautetaan...",
     subscriptionRenewsAutomatically: "Tilaus uusiutuu automaattisesti.",
     subscribedSubtitle: "Kiitos tuestasi!",
+    paywallSupportMessage: "Maksullinen tilaus auttaa paljon tämän sovelluksen kehittämisessä ja parantamisessa. Tilaajana saat ensin kätevämpiä ominaisuuksia, vakaan palvelun ja säännölliset päivitykset.",
+    profileSupportMessage: "Maksullinen tilaus auttaa paljon tämän sovelluksen kehittämisessä ja parantamisessa. Kiitämme tuesta vakaammalla palvelulla ja säännöllisillä päivityksillä. Kiitos!",
     termsText: "Ehdot",
     closeButtonAccessibilityLabel: "Sulje maksumuuri",
     monthlyPriceSuffix: "",

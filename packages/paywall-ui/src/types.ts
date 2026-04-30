@@ -44,6 +44,7 @@ export interface PaywallCopy {
   termsText: string;
   privacyText: string;
   legalPrefix?: string;
+  supportMessage?: string;
   closeButtonAccessibilityLabel?: string;
   formatTrialDuration?: (duration: PaywallTrialDuration) => string;
   formatTrialPriceDisclosure?: (
@@ -158,6 +159,7 @@ export interface ProfileSubscriptionCopy {
   restoringPurchasesButton?: string;
   redeemPromoCodeButton?: string;
   redeemingPromoCodeButton?: string;
+  supportMessage?: string;
 }
 
 export interface ProfileIdentifierItem {

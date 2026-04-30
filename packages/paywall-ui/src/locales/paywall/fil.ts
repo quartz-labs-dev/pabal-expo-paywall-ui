@@ -31,6 +31,8 @@ const fil = createPaywallLocaleText({
     restoring: "Nire-restore...",
     subscriptionRenewsAutomatically: "Awtomatikong nire-renew ang subscription.",
     subscribedSubtitle: "Salamat sa iyong suporta!",
+    paywallSupportMessage: "Malaking tulong ang paid subscription para patuloy na mabuo at mapaganda ang app na ito. Kapag nag-subscribe ka, mauuna mong makuha ang mas maginhawang features, stable na serbisyo, at tuloy-tuloy na updates.",
+    profileSupportMessage: "Malaking tulong ang paid subscription para patuloy na mabuo at mapaganda ang app na ito. Susuklian namin ito ng mas stable na serbisyo at tuloy-tuloy na updates. Salamat!",
     termsText: "Mga Tuntunin",
     closeButtonAccessibilityLabel: "Isara ang paywall",
     monthlyPriceSuffix: "",

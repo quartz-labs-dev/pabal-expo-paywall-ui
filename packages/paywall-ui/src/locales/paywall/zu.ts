@@ -31,6 +31,8 @@ const zu = createPaywallLocaleText({
     restoring: "Iyabuyisela...",
     subscriptionRenewsAutomatically: "Ukubhalisa kuvuselelwa ngokuzenzakalelayo.",
     subscribedSubtitle: "Siyabonga ngokweseka kwakho!",
+    paywallSupportMessage: "Ukubhalisa okukhokhelwayo kusiza kakhulu ukuqhubeka nokwakha nokuthuthukisa lolu hlelo lokusebenza. Uma ubhalisa, uzothola kuqala izici ezilula kakhulu, isevisi ezinzile nezibuyekezo eziqhubekayo.",
+    profileSupportMessage: "Ukubhalisa okukhokhelwayo kusiza kakhulu ukuqhubeka nokwakha nokuthuthukisa lolu hlelo lokusebenza. Sizobuyisela ngesevisi ezinzile kakhulu nezibuyekezo eziqhubekayo. Siyabonga!",
     termsText: "Imigomo",
     closeButtonAccessibilityLabel: "Vala ikhasi lokukhokha",
     monthlyPriceSuffix: "",

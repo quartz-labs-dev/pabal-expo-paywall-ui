@@ -31,6 +31,8 @@ const sw = createPaywallLocaleText({
     restoring: "Inarejesha...",
     subscriptionRenewsAutomatically: "Usajili hujisasisha kiotomatiki.",
     subscribedSubtitle: "Asante kwa msaada wako!",
+    paywallSupportMessage: "Usajili wa kulipia husaidia sana kuendelea kujenga na kuboresha programu hii. Ukijisajili, utapata kwanza vipengele rahisi zaidi, huduma thabiti na masasisho ya mara kwa mara.",
+    profileSupportMessage: "Usajili wa kulipia husaidia sana kuendelea kujenga na kuboresha programu hii. Tutarudisha msaada wako kwa huduma thabiti zaidi na masasisho ya mara kwa mara. Asante!",
     termsText: "Masharti",
     closeButtonAccessibilityLabel: "Funga ukurasa wa malipo",
     monthlyPriceSuffix: "",

@@ -31,6 +31,8 @@ const lv = createPaywallLocaleText({
     restoring: "Atjauno...",
     subscriptionRenewsAutomatically: "Abonements tiek atjaunots automātiski.",
     subscribedSubtitle: "Paldies par atbalstu!",
+    paywallSupportMessage: "Maksas abonements ļoti palīdz turpināt veidot un uzlabot šo lietotni. Abonējot jūs pirmie saņemsiet ērtākas funkcijas, stabilu pakalpojumu un regulārus atjauninājumus.",
+    profileSupportMessage: "Maksas abonements ļoti palīdz turpināt veidot un uzlabot šo lietotni. Mēs atbildēsim ar stabilāku pakalpojumu un regulāriem atjauninājumiem. Paldies!",
     termsText: "Noteikumi",
     closeButtonAccessibilityLabel: "Aizvērt maksājuma lapu",
     monthlyPriceSuffix: "",

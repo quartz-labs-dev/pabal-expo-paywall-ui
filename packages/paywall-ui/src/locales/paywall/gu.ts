@@ -31,6 +31,8 @@ const gu = createPaywallLocaleText({
     restoring: "પુનઃસ્થાપિત થઈ રહ્યું છે...",
     subscriptionRenewsAutomatically: "સબ્સ્ક્રિપ્શન આપમેળે રિન્યૂ થાય છે.",
     subscribedSubtitle: "તમારા સમર્થન માટે આભાર!",
+    paywallSupportMessage: "પેઇડ સબ્સ્ક્રિપ્શન આ એપને સતત બનાવવા અને સુધારવામાં ખૂબ મદદરૂપ છે. સબ્સ્ક્રાઇબ કરશો તો તમને વધુ અનુકૂળ સુવિધાઓ, સ્થિર સેવા અને નિયમિત અપડેટ્સ પહેલાં મળશે.",
+    profileSupportMessage: "પેઇડ સબ્સ્ક્રિપ્શન આ એપને સતત બનાવવા અને સુધારવામાં ખૂબ મદદરૂપ છે. વધુ સ્થિર સેવા અને નિયમિત અપડેટ્સથી અમે તેનો પ્રતિસાદ આપશું. આભાર!",
     termsText: "શરતો",
     closeButtonAccessibilityLabel: "પેમેન્ટ પેજ બંધ કરો",
     monthlyPriceSuffix: "",

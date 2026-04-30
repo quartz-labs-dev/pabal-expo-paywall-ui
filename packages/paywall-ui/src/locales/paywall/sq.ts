@@ -31,6 +31,8 @@ const sq = createPaywallLocaleText({
     restoring: "Po rikthehet...",
     subscriptionRenewsAutomatically: "Abonimi rinovohet automatikisht.",
     subscribedSubtitle: "Faleminderit për mbështetjen!",
+    paywallSupportMessage: "Abonimi me pagesë ndihmon shumë që ta vazhdojmë ndërtimin dhe përmirësimin e këtij aplikacioni. Me abonim, do të merrni të parët funksione më të përshtatshme, shërbim të qëndrueshëm dhe përditësime të vazhdueshme.",
+    profileSupportMessage: "Abonimi me pagesë ndihmon shumë që ta vazhdojmë ndërtimin dhe përmirësimin e këtij aplikacioni. Do ta shpërblejmë me një shërbim më të qëndrueshëm dhe përditësime të vazhdueshme. Faleminderit!",
     termsText: "Kushtet",
     closeButtonAccessibilityLabel: "Mbyll faqen e pagesës",
     monthlyPriceSuffix: "",

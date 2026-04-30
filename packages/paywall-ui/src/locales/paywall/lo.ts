@@ -31,6 +31,8 @@ const lo = createPaywallLocaleText({
     restoring: "ກໍາລັງກູ້ຄືນ...",
     subscriptionRenewsAutomatically: "ການສະໝັກຈະຕໍ່ອາຍຸອັດຕະໂນມັດ.",
     subscribedSubtitle: "ຂອບໃຈສໍາລັບການສະໜັບສະໜູນ!",
+    paywallSupportMessage: "ການສະໝັກໃຊ້ແບບຈ່າຍເງິນຊ່ວຍໄດ້ຫຼາຍໃນການສືບຕໍ່ສ້າງ ແລະປັບປຸງແອັບນີ້. ເມື່ອສະໝັກໃຊ້ ທ່ານຈະໄດ້ຮັບຟີເຈີທີ່ສະດວກກວ່າ, ບໍລິການທີ່ໝັ້ນຄົງ ແລະອັບເດດຕໍ່ເນື່ອງກ່ອນ.",
+    profileSupportMessage: "ການສະໝັກໃຊ້ແບບຈ່າຍເງິນຊ່ວຍໄດ້ຫຼາຍໃນການສືບຕໍ່ສ້າງ ແລະປັບປຸງແອັບນີ້. ພວກເຮົາຈະຕອບແທນດ້ວຍບໍລິການທີ່ໝັ້ນຄົງກວ່າ ແລະອັບເດດຕໍ່ເນື່ອງ. ຂອບໃຈ!",
     termsText: "ເງື່ອນໄຂ",
     closeButtonAccessibilityLabel: "ປິດໜ້າຈ່າຍເງິນ",
     monthlyPriceSuffix: "",

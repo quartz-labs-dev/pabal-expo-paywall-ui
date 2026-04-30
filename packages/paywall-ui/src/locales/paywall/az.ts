@@ -31,6 +31,8 @@ const az = createPaywallLocaleText({
     restoring: "Bərpa olunur...",
     subscriptionRenewsAutomatically: "Abunəlik avtomatik yenilənir.",
     subscribedSubtitle: "Dəstəyiniz üçün təşəkkürlər!",
+    paywallSupportMessage: "Ödənişli abunəlik bu tətbiqi davamlı qurmaq və təkmilləşdirmək üçün böyük köməkdir. Abunə olsanız, daha rahat funksiyaları, sabit xidməti və müntəzəm yeniləmələri ilk siz əldə edəcəksiniz.",
+    profileSupportMessage: "Ödənişli abunəlik bu tətbiqi davamlı qurmaq və təkmilləşdirmək üçün böyük köməkdir. Daha sabit xidmət və müntəzəm yeniləmələrlə qarşılığını verəcəyik. Təşəkkür edirik!",
     termsText: "Şərtlər",
     closeButtonAccessibilityLabel: "Ödəniş səhifəsini bağla",
     monthlyPriceSuffix: "",

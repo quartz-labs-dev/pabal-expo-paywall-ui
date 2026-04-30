@@ -278,6 +278,19 @@ export const ProfileSubscriptionSection = ({
           theme={theme}
         />
       )}
+
+      {copy.supportMessage && (
+        <Text
+          style={[
+            styles.supportMessage,
+            {
+              color: theme.mutedTextColor,
+            },
+          ]}
+        >
+          {copy.supportMessage}
+        </Text>
+      )}
     </View>
   );
 };
@@ -335,6 +348,14 @@ const ProfileActionButton = ({
 const styles = StyleSheet.create({
   section: {
     gap: 12,
+  },
+  supportMessage: {
+    flexShrink: 1,
+    fontSize: 12,
+    fontWeight: "600",
+    lineHeight: 18,
+    paddingHorizontal: 8,
+    textAlign: "center",
   },
   card: {
     borderCurve: "continuous",

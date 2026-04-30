@@ -31,6 +31,8 @@ const cs = createPaywallLocaleText({
     restoring: "Obnovování...",
     subscriptionRenewsAutomatically: "Předplatné se obnovuje automaticky.",
     subscribedSubtitle: "Děkujeme za podporu!",
+    paywallSupportMessage: "Placené předplatné výrazně pomáhá dál vytvářet a zlepšovat tuto aplikaci. S předplatným získáte jako první pohodlnější funkce, stabilní službu a pravidelné aktualizace.",
+    profileSupportMessage: "Placené předplatné výrazně pomáhá dál vytvářet a zlepšovat tuto aplikaci. Odvděčíme se stabilnější službou a pravidelnými aktualizacemi. Děkujeme!",
     termsText: "Podmínky",
     closeButtonAccessibilityLabel: "Zavřít paywall",
     monthlyPriceSuffix: "",

@@ -31,6 +31,8 @@ const da = createPaywallLocaleText({
     restoring: "Gendanner...",
     subscriptionRenewsAutomatically: "Abonnementet fornyes automatisk.",
     subscribedSubtitle: "Tak for din støtte!",
+    paywallSupportMessage: "Et betalt abonnement hjælper meget med at fortsætte med at bygge og forbedre denne app. Som abonnent får du først mere praktiske funktioner, en stabil tjeneste og løbende opdateringer.",
+    profileSupportMessage: "Et betalt abonnement hjælper meget med at fortsætte med at bygge og forbedre denne app. Vi giver igen med en mere stabil tjeneste og løbende opdateringer. Tak!",
     termsText: "Vilkår",
     closeButtonAccessibilityLabel: "Luk betalingsskærm",
     monthlyPriceSuffix: "",

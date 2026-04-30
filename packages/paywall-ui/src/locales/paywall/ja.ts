@@ -31,6 +31,8 @@ const ja = createPaywallLocaleText({
     restoring: "復元中...",
     subscriptionRenewsAutomatically: "サブスクリプションは自動更新されます。",
     subscribedSubtitle: "ご支援ありがとうございます！",
+    paywallSupportMessage: "有料サブスクリプションは、このアプリを作り続け、改善していく大きな支えになります。登録すると、より便利な機能、安定したサービス、継続的なアップデートをいち早く利用できます。",
+    profileSupportMessage: "有料サブスクリプションは、このアプリを作り続け、改善していく大きな支えになります。より安定したサービスと継続的なアップデートでお返しします。ありがとうございます！",
     termsText: "利用規約",
     renewsOnPrefix: "",
     closeButtonAccessibilityLabel: "ペイウォールを閉じる",
