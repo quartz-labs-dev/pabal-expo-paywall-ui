@@ -5,6 +5,9 @@ const da = createPaywallLocaleText({
     nextButton: "Næste",
     nextButtonAccessibilityLabel: "Fortsæt til valg af plan",
   },
+  reviewSection: {
+    reviewSectionTitle: "Brugeranmeldelser",
+  },
   text: {
     annualPlanTitle: "Årlig",
     benefitsTitle: "Dine Pro-fordele",

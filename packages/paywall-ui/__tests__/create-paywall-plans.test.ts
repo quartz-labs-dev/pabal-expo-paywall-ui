@@ -12,7 +12,10 @@ import {
 } from "../src/localized-paywall-copy";
 import { UNIFIED_LOCALES } from "../src/unified-locales";
 import type { PurchasesPackageLike } from "../src/types";
-import type { PaywallValueStepText } from "../src/locales/paywall";
+import type {
+  PaywallReviewSectionText,
+  PaywallValueStepText,
+} from "../src/locales/paywall";
 import assert from "node:assert/strict";
 import test from "node:test";
 
@@ -124,6 +127,34 @@ test("supports custom lifetime plan copy", () => {
   assert.equal(lifetimePlan?.title, "Lifetime access");
   assert.equal(lifetimePlan?.isRecommended, false);
   assert.equal(getDefaultSelectedPlanId(plans), "$rc_lifetime");
+});
+
+test("supports selected-only plan descriptions from app config", () => {
+  const plans = createPaywallPlans(
+    [
+      makePackage("$rc_monthly", 4.99, "$4.99"),
+      makePackage("$rc_annual", 29.99, "$29.99"),
+      makePackage("$rc_lifetime", 99.99, "$99.99"),
+    ],
+    {
+      annualSelectedDescription: "About 90% less than a guided aurora tour.",
+      lifetimeSelectedDescription: "One payment, no renewal.",
+      monthlySelectedDescription: "Flexible access without annual commitment.",
+    },
+  );
+
+  assert.equal(
+    plans.find((plan) => plan.period === "annual")?.selectedDescription,
+    "About 90% less than a guided aurora tour.",
+  );
+  assert.equal(
+    plans.find((plan) => plan.period === "lifetime")?.selectedDescription,
+    "One payment, no renewal.",
+  );
+  assert.equal(
+    plans.find((plan) => plan.period === "monthly")?.selectedDescription,
+    "Flexible access without annual commitment.",
+  );
 });
 
 test("formats high-value annual prices without cents", () => {
@@ -273,6 +304,16 @@ test("keeps first-step next button copy package-owned", () => {
   );
 });
 
+test("keeps purchase-step review section title package-owned", () => {
+  const copy = getDefaultPaywallCopy("ko-KR", {
+    title: "Pro",
+    reviewSectionTitle: "Custom reviews",
+  } as Parameters<typeof getDefaultPaywallCopy>[1] & PaywallReviewSectionText);
+  const reviewCopy = copy as typeof copy & PaywallReviewSectionText;
+
+  assert.equal(reviewCopy.reviewSectionTitle, "사용자 리뷰");
+});
+
 test("resolves every unified non-English locale without falling back to English", () => {
   for (const locale of UNIFIED_LOCALES) {
     const resolvedLocale = resolvePaywallTextLocale(locale);
@@ -301,6 +342,20 @@ test("localizes continue button copy for every non-English paywall locale", () =
     }
 
     assert.notEqual(copy.continueButton, "Continue", locale);
+  }
+});
+
+test("localizes review section title for every non-English paywall locale", () => {
+  for (const locale of PAYWALL_TEXT_LOCALES) {
+    const copy = getDefaultPaywallCopy(locale, { title: "Pro" });
+    const reviewCopy = copy as typeof copy & PaywallReviewSectionText;
+
+    if (locale === "en") {
+      assert.equal(reviewCopy.reviewSectionTitle, "User reviews");
+      continue;
+    }
+
+    assert.notEqual(reviewCopy.reviewSectionTitle, "User reviews", locale);
   }
 });
 

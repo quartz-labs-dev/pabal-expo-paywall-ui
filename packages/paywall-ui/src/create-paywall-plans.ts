@@ -189,6 +189,11 @@ export const createPaywallPlans = <TPackage extends PurchasesPackageLike>(
           ? options.lifetimeDescription
           : options.monthlyDescription) ??
         pack.product.description,
+      selectedDescription: isAnnual
+        ? options.annualSelectedDescription
+        : isLifetime
+        ? options.lifetimeSelectedDescription
+        : options.monthlySelectedDescription,
       isRecommended: period === DEFAULT_RECOMMENDED_PERIOD,
       rawPackage: pack,
     });

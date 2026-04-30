@@ -5,6 +5,9 @@ const cs = createPaywallLocaleText({
     nextButton: "Další",
     nextButtonAccessibilityLabel: "Pokračovat k výběru tarifu",
   },
+  reviewSection: {
+    reviewSectionTitle: "Uživatelské recenze",
+  },
   text: {
     annualPlanTitle: "Roční",
     benefitsTitle: "Výhody Pro",

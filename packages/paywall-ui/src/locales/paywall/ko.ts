@@ -5,6 +5,9 @@ const ko = createPaywallLocaleText({
     nextButton: "다음",
     nextButtonAccessibilityLabel: "요금제 선택으로 계속",
   },
+  reviewSection: {
+    reviewSectionTitle: "사용자 리뷰",
+  },
   text: {
     annualPlanTitle: "연간",
     benefitsTitle: "Pro 혜택",

@@ -23,6 +23,7 @@ export interface PaywallPlan<TPackage = unknown> {
   discountText?: string;
   badgeText?: string;
   description?: string;
+  selectedDescription?: string;
   isRecommended?: boolean;
   rawPackage: TPackage;
 }
@@ -76,6 +77,18 @@ export interface PaywallValueStep {
   closeButtonVisibility?: "hidden" | "visible";
 }
 
+export type PaywallReviewRating = 1 | 2 | 3 | 4 | 5;
+
+export interface PaywallReview {
+  quote: string;
+  author?: string;
+  rating?: PaywallReviewRating;
+}
+
+export interface PaywallReviewSection {
+  reviews: PaywallReview[];
+}
+
 export interface PaywallTheme {
   backgroundColor: string;
   surfaceColor: string;
@@ -98,6 +111,7 @@ export interface PaywallProps<TPackage = unknown> {
   valueStep?: PaywallValueStep;
   benefits?: PaywallBenefit[];
   content?: ReactNode;
+  reviewSection?: PaywallReviewSection;
   purchaseButtonBackground?: ReactNode;
   copy: PaywallCopy;
   freeTrial?: boolean | PaywallFreeTrialConfig;
@@ -120,6 +134,7 @@ export interface PaywallConfig {
   valueStep?: PaywallValueStep;
   benefits?: PaywallBenefit[];
   content?: ReactNode;
+  reviewSection?: PaywallReviewSection;
   purchaseButtonBackground?: ReactNode;
   copy: PaywallCopy;
   freeTrial?: boolean | PaywallFreeTrialConfig;
@@ -228,6 +243,9 @@ export interface CreatePaywallPlansOptions {
   monthlyDescription?: string;
   annualDescription?: string;
   lifetimeDescription?: string;
+  monthlySelectedDescription?: string;
+  annualSelectedDescription?: string;
+  lifetimeSelectedDescription?: string;
   annualBadgeText?: string;
   lifetimeBadgeText?: string;
   formatDiscountText?: (discountPercentage: number) => string;

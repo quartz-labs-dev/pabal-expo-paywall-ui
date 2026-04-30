@@ -5,6 +5,9 @@ const ja = createPaywallLocaleText({
     nextButton: "次へ",
     nextButtonAccessibilityLabel: "プラン選択へ進む",
   },
+  reviewSection: {
+    reviewSectionTitle: "ユーザーレビュー",
+  },
   text: {
     annualPlanTitle: "年額",
     benefitsTitle: "Pro特典",

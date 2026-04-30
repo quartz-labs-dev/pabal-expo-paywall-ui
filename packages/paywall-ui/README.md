@@ -61,6 +61,15 @@ const paywallConfig = {
     subtitle: "See what Pro adds before choosing a plan.",
   },
   benefits: paywallBenefits,
+  reviewSection: {
+    reviews: [
+      {
+        rating: 5,
+        quote: "The widget is exactly what I needed for quick daily checks.",
+        author: "App Store review",
+      },
+    ],
+  },
   copy: getDefaultPaywallCopy(undefined, {
     title: "Upgrade to Pro",
     subtitle: "Get the full app experience.",
@@ -70,6 +79,10 @@ const paywallConfig = {
   }),
   planOptions: {
     ...getDefaultPaywallPlanOptions(),
+    annualSelectedDescription:
+      "About 90% less than a guided aurora hunt.",
+    monthlySelectedDescription:
+      "Flexible access without annual commitment.",
     displayOrder: ["annual", "monthly"],
   },
   theme: {
@@ -85,6 +98,10 @@ const { planOptions, ...paywallPresentation } = paywallConfig;
 Use `stepMode: "singleStep"` to skip the value step. Use `content` when the app
 needs a custom React Native body below the built-in benefit list; in two-step
 mode, use `valueStep.content` for custom first-step body content.
+Use `reviewSection` for real user reviews on the purchase step. Its title is
+localized by the package and is not app-configurable.
+Use `*SelectedDescription` plan options for short app-owned comparison copy
+that appears only inside the currently selected plan card.
 Add `onClick` to an object benefit when a row should open app-owned help or
 detail UI; clickable benefit titles render with an underline.
 
@@ -209,8 +226,10 @@ rebuilding the whole `copy` object every time the selected plan changes.
 | Top media | `hero`, `heroHeightRatio` |
 | Benefit rows | `benefits` |
 | Custom body below benefits | `content` |
+| Purchase-step user reviews | `reviewSection` |
 | RevenueCat package mapping | `planOptions.*PackageIds` |
 | Plan card order | `planOptions.displayOrder` |
+| Selected-plan comparison copy | `planOptions.*SelectedDescription` |
 | Theme colors | `theme` |
 | Custom purchase button fill | `purchaseButtonBackground` |
 | Selected-plan CTA text | `copy.formatPurchaseButtonLabel` |

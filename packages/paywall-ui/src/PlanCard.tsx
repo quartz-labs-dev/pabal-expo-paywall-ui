@@ -19,12 +19,40 @@ export const PlanCard = <TPackage,>({
   onPress,
 }: PlanCardProps<TPackage>) => {
   const priceParts = splitPriceText(plan.priceText);
+  const selectedDescription =
+    isSelected && plan.selectedDescription
+      ? plan.selectedDescription
+      : undefined;
+  const selectedDescriptionProgress = useRef(
+    new Animated.Value(selectedDescription ? 1 : 0),
+  ).current;
   const badgeShine = useRef(new Animated.Value(0)).current;
   const shouldAnimateBadge = shouldAnimate && Boolean(plan.badgeText);
   const badgeShineTranslateX = badgeShine.interpolate({
     inputRange: [0, 1],
     outputRange: [-42, 96],
   });
+  const priceTranslateY = selectedDescriptionProgress.interpolate({
+    inputRange: [0, 1],
+    outputRange: [8, 0],
+  });
+  const selectedDescriptionOpacity = selectedDescriptionProgress.interpolate({
+    inputRange: [0, 0.35, 1],
+    outputRange: [0, 0, 1],
+  });
+  const selectedDescriptionTranslateY = selectedDescriptionProgress.interpolate({
+    inputRange: [0, 1],
+    outputRange: [-2, 0],
+  });
+
+  useEffect(() => {
+    Animated.timing(selectedDescriptionProgress, {
+      duration: shouldAnimate ? 180 : 0,
+      easing: Easing.out(Easing.cubic),
+      toValue: selectedDescription ? 1 : 0,
+      useNativeDriver: true,
+    }).start();
+  }, [selectedDescription, selectedDescriptionProgress, shouldAnimate]);
 
   useEffect(() => {
     if (!shouldAnimateBadge) {
@@ -60,6 +88,7 @@ export const PlanCard = <TPackage,>({
         plan.priceText,
         plan.monthlyPriceText,
         plan.badgeText,
+        selectedDescription,
       ]
         .filter(Boolean)
         .join(", ")}
@@ -137,34 +166,72 @@ export const PlanCard = <TPackage,>({
           )}
         </View>
 
-        <View style={styles.priceRow}>
-          <Text
-            adjustsFontSizeToFit
-            minimumFontScale={0.82}
-            numberOfLines={1}
-            style={[styles.price, { color: theme.primaryTextColor }]}
+        <View style={styles.priceBlock}>
+          <Animated.View
+            style={[
+              styles.priceRow,
+              { transform: [{ translateY: priceTranslateY }] },
+            ]}
           >
-            {priceParts ? (
-              <>
-                {priceParts.prefix && (
-                  <Text style={styles.priceCurrency}>{priceParts.prefix}</Text>
-                )}
-                {priceParts.amount}
-                {priceParts.suffix && (
-                  <Text style={styles.priceCurrency}>{priceParts.suffix}</Text>
-                )}
-              </>
-            ) : (
-              plan.priceText
-            )}
-          </Text>
-          {plan.monthlyPriceText && (
             <Text
+              adjustsFontSizeToFit
+              minimumFontScale={0.82}
               numberOfLines={1}
-              style={[styles.monthlyPrice, { color: theme.secondaryTextColor }]}
+              style={[styles.price, { color: theme.primaryTextColor }]}
             >
-              {plan.monthlyPriceText}
+              {priceParts ? (
+                <>
+                  {priceParts.prefix && (
+                    <Text style={styles.priceCurrency}>
+                      {priceParts.prefix}
+                    </Text>
+                  )}
+                  {priceParts.amount}
+                  {priceParts.suffix && (
+                    <Text style={styles.priceCurrency}>
+                      {priceParts.suffix}
+                    </Text>
+                  )}
+                </>
+              ) : (
+                plan.priceText
+              )}
             </Text>
+            {plan.monthlyPriceText && (
+              <Text
+                numberOfLines={1}
+                style={[
+                  styles.monthlyPrice,
+                  { color: theme.secondaryTextColor },
+                ]}
+              >
+                {plan.monthlyPriceText}
+              </Text>
+            )}
+          </Animated.View>
+
+          {plan.selectedDescription && (
+            <Animated.View
+              style={[
+                styles.selectedDescriptionSlot,
+                {
+                  opacity: selectedDescriptionOpacity,
+                  transform: [
+                    { translateY: selectedDescriptionTranslateY },
+                  ],
+                },
+              ]}
+            >
+              <Text
+                numberOfLines={1}
+                style={[
+                  styles.selectedDescription,
+                  { color: theme.secondaryTextColor },
+                ]}
+              >
+                {plan.selectedDescription}
+              </Text>
+            </Animated.View>
           )}
         </View>
       </View>
@@ -237,17 +304,23 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     lineHeight: 13,
   },
+  priceBlock: {
+    gap: 5,
+    minHeight: 51,
+  },
   priceRow: {
     alignItems: "baseline",
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 7,
+    minHeight: 30,
   },
   price: {
     flexShrink: 1,
     fontSize: 24,
     fontWeight: "900",
     lineHeight: 30,
+    maxWidth: "100%",
   },
   monthlyPrice: {
     flexShrink: 1,
@@ -259,6 +332,16 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: "600",
     lineHeight: 24,
+  },
+  selectedDescriptionSlot: {
+    height: 16,
+    justifyContent: "center",
+  },
+  selectedDescription: {
+    flexShrink: 1,
+    fontSize: 12,
+    fontWeight: "700",
+    lineHeight: 16,
   },
 });
 

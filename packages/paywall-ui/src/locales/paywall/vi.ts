@@ -5,6 +5,9 @@ const vi = createPaywallLocaleText({
     nextButton: "Tiếp theo",
     nextButtonAccessibilityLabel: "Tiếp tục đến lựa chọn gói",
   },
+  reviewSection: {
+    reviewSectionTitle: "Đánh giá của người dùng",
+  },
   text: {
     annualPlanTitle: "Hàng năm",
     benefitsTitle: "Quyền lợi Pro của bạn",

@@ -5,6 +5,9 @@ const fil = createPaywallLocaleText({
     nextButton: "Susunod",
     nextButtonAccessibilityLabel: "Magpatuloy sa pagpili ng plano",
   },
+  reviewSection: {
+    reviewSectionTitle: "Mga review ng user",
+  },
   text: {
     annualPlanTitle: "Taunan",
     benefitsTitle: "Mga benepisyo ng Pro mo",

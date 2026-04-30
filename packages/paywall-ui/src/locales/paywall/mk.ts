@@ -5,6 +5,9 @@ const mk = createPaywallLocaleText({
     nextButton: "Следно",
     nextButtonAccessibilityLabel: "Продолжи кон избор на план",
   },
+  reviewSection: {
+    reviewSectionTitle: "Рецензии од корисници",
+  },
   text: {
     annualPlanTitle: "Годишно",
     benefitsTitle: "Вашите Pro придобивки",

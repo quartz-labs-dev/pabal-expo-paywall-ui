@@ -5,6 +5,9 @@ const ptBr = createPaywallLocaleText({
     nextButton: "Avançar",
     nextButtonAccessibilityLabel: "Continuar para a escolha do plano",
   },
+  reviewSection: {
+    reviewSectionTitle: "Avaliações de usuários",
+  },
   text: {
     annualPlanTitle: "Anual",
     benefitsTitle: "Seus benefícios Pro",

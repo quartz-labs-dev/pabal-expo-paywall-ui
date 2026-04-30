@@ -1,9 +1,11 @@
 import {
+  PAYWALL_REVIEW_SECTION_TEXT,
   PAYWALL_TEXT,
   PAYWALL_TEXT_LOCALES,
   PAYWALL_VALUE_STEP_TEXT,
 } from "./locales/paywall";
 import type {
+  PaywallReviewSectionText,
   PaywallText,
   PaywallTextLocale,
   PaywallValueStepText,
@@ -40,6 +42,7 @@ interface DefaultPaywallCopyOverrides
 
 interface UnsafeDefaultPaywallCopyOverrides
   extends DefaultPaywallCopyOverrides,
+    Partial<PaywallReviewSectionText>,
     Partial<PaywallValueStepText> {}
 
 export const resolvePaywallTextLocale = (
@@ -96,10 +99,13 @@ export const getDefaultPaywallCopy = (
   const {
     nextButton: _nextButton,
     nextButtonAccessibilityLabel: _nextButtonAccessibilityLabel,
+    reviewSectionTitle: _reviewSectionTitle,
     ...safeCopy
   } = copy as UnsafeDefaultPaywallCopyOverrides;
 
-  const localizedCopy: PaywallCopy & PaywallValueStepText = {
+  const localizedCopy: PaywallCopy &
+    PaywallReviewSectionText &
+    PaywallValueStepText = {
     purchaseButton: text.purchaseButton,
     continueButton: text.continueButton,
     purchasingButton: text.purchasingButton,
@@ -113,6 +119,7 @@ export const getDefaultPaywallCopy = (
     formatTrialPriceDisclosure: text.formatTrialPriceDisclosure,
     trialIncludedDescription: text.trialIncludedDescription,
     ...PAYWALL_VALUE_STEP_TEXT[resolvePaywallTextLocale(locale)],
+    ...PAYWALL_REVIEW_SECTION_TEXT[resolvePaywallTextLocale(locale)],
     ...safeCopy,
   };
 

@@ -15,8 +15,12 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { getDefaultSelectedPlanId } from "./create-paywall-plans";
 import { ChevronLeftIcon, CloseIcon } from "./icons";
 import { LegalLinks } from "./LegalLinks";
-import type { PaywallValueStepText } from "./locales/paywall";
+import type {
+  PaywallReviewSectionText,
+  PaywallValueStepText,
+} from "./locales/paywall";
 import { PaywallBenefitList } from "./PaywallBenefitList";
+import { PaywallReviewSection } from "./PaywallReviewSection";
 import { PlanSelector } from "./PlanSelector";
 import { PurchaseButton } from "./PurchaseButton";
 import { mergePaywallTheme } from "./theme";
@@ -148,6 +152,7 @@ export const Paywall = <TPackage,>({
   valueStep,
   benefits = [],
   content,
+  reviewSection,
   purchaseButtonBackground,
   copy,
   freeTrial = true,
@@ -235,6 +240,8 @@ export const Paywall = <TPackage,>({
   const shouldShowLegalPrefix = hasRenewingSubscriptionPlan(plans);
   const shouldUseLargeBenefits = isValueStep;
   const valueStepCopy = copy as typeof copy & Partial<PaywallValueStepText>;
+  const reviewSectionCopy = copy as typeof copy &
+    Partial<PaywallReviewSectionText>;
   const initialTranslateY = initialTransition.interpolate({
     inputRange: [0, 1],
     outputRange: [INITIAL_TRANSITION_DISTANCE, 0],
@@ -434,6 +441,14 @@ export const Paywall = <TPackage,>({
             theme={theme}
             variant="plain"
           />
+
+          {!isValueStep && reviewSection && (
+            <PaywallReviewSection
+              reviews={reviewSection.reviews}
+              theme={theme}
+              title={reviewSectionCopy.reviewSectionTitle}
+            />
+          )}
 
           {!isValueStep && (
             <LegalLinks

@@ -44,6 +44,20 @@ const playgroundPaywallConfig = {
     subtitle: "See the value first, then choose a plan on the next step.",
   },
   benefits: playgroundBenefits,
+  reviewSection: {
+    reviews: [
+      {
+        rating: 5,
+        quote: "The widget is exactly what I needed for quick aurora checks.",
+        author: "App Store review",
+      },
+      {
+        rating: 5,
+        quote: "Clean, fast, and useful every time the sky starts moving.",
+        author: "App Store review",
+      },
+    ],
+  },
   theme: {
     accentColor: "#5AC8B7",
     backgroundColor: "#05080C",
@@ -96,7 +110,14 @@ export const PaywallPlaygroundScreen = ({
   const plans = useMemo(() => {
     return createPaywallPlans(
       getPackagesForScenario(scenario),
-      getDefaultPaywallPlanOptions(selectedLocale),
+      {
+        ...getDefaultPaywallPlanOptions(selectedLocale),
+        annualSelectedDescription:
+          "About 90% less than a guided aurora hunt.",
+        lifetimeSelectedDescription: "One payment for every aurora season.",
+        monthlySelectedDescription:
+          "Flexible access for your next aurora window.",
+      },
     );
   }, [scenario, selectedLocale]);
 

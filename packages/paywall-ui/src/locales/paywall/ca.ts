@@ -5,6 +5,9 @@ const ca = createPaywallLocaleText({
     nextButton: "Següent",
     nextButtonAccessibilityLabel: "Continua a la selecció del pla",
   },
+  reviewSection: {
+    reviewSectionTitle: "Ressenyes d'usuaris",
+  },
   text: {
     annualPlanTitle: "Anual",
     benefitsTitle: "Els teus avantatges Pro",

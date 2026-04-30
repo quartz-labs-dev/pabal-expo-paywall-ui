@@ -5,6 +5,9 @@ const ka = createPaywallLocaleText({
     nextButton: "შემდეგი",
     nextButtonAccessibilityLabel: "გაგრძელება გეგმის არჩევაზე",
   },
+  reviewSection: {
+    reviewSectionTitle: "მომხმარებელთა შეფასებები",
+  },
   text: {
     annualPlanTitle: "წლიური",
     benefitsTitle: "თქვენი Pro უპირატესობები",

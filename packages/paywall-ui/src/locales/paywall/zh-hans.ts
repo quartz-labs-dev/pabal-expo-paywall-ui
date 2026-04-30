@@ -5,6 +5,9 @@ const zhHans = createPaywallLocaleText({
     nextButton: "下一步",
     nextButtonAccessibilityLabel: "继续选择方案",
   },
+  reviewSection: {
+    reviewSectionTitle: "用户评价",
+  },
   text: {
     annualPlanTitle: "年度",
     benefitsTitle: "Pro 权益",

@@ -5,6 +5,9 @@ const af = createPaywallLocaleText({
     nextButton: "Volgende",
     nextButtonAccessibilityLabel: "Gaan voort na plankeuse",
   },
+  reviewSection: {
+    reviewSectionTitle: "Gebruikersresensies",
+  },
   text: {
     annualPlanTitle: "Yearliks",
     benefitsTitle: "Jou Pro-voordele",

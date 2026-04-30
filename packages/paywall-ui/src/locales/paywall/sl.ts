@@ -5,6 +5,9 @@ const sl = createPaywallLocaleText({
     nextButton: "Naprej",
     nextButtonAccessibilityLabel: "Nadaljuj na izbiro paketa",
   },
+  reviewSection: {
+    reviewSectionTitle: "Mnenja uporabnikov",
+  },
   text: {
     annualPlanTitle: "Letno",
     benefitsTitle: "Prednosti Pro",

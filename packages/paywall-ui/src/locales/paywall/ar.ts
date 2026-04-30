@@ -5,6 +5,9 @@ const ar = createPaywallLocaleText({
     nextButton: "التالي",
     nextButtonAccessibilityLabel: "المتابعة إلى اختيار الخطة",
   },
+  reviewSection: {
+    reviewSectionTitle: "آراء المستخدمين",
+  },
   text: {
     annualPlanTitle: "سنوي",
     benefitsTitle: "مزايا Pro",
