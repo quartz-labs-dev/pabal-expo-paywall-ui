@@ -56,6 +56,7 @@ const paywallConfig = {
   hero: <HeroImage />,
   supportMessageIcon: <AppLogoIcon />,
   stepMode: "twoStep",
+  animationMode: "default",
   freeTrial: { duration: { value: 7, unit: "day" } },
   valueStep: {
     title: "Unlock the full app",
@@ -96,9 +97,12 @@ const paywallConfig = {
 const { planOptions, ...paywallPresentation } = paywallConfig;
 ```
 
-Use `stepMode: "singleStep"` to skip the value step. Use `content` when the app
-needs a custom React Native body below the built-in benefit list; in two-step
-mode, use `valueStep.content` for custom first-step body content.
+Use `stepMode: "singleStep"` to skip the value step. `animationMode` defaults
+to `"default"` for the moving entrance and step transition. Use `"opacity"` for
+fade-only paywall transitions, or `"none"` to render paywall and step changes
+immediately. Use `content` when the app needs a custom React Native body below
+the built-in benefit list; in two-step mode, use `valueStep.content` for custom
+first-step body content.
 Use `reviewSection` for real user reviews on the purchase step. Its title is
 localized by the package and is not app-configurable.
 `getDefaultPaywallCopy()` includes a localized developer note below the review
@@ -227,6 +231,7 @@ rebuilding the whole `copy` object every time the selected plan changes.
 | Need | Use |
 | --- | --- |
 | Two-step or one-step flow | `stepMode` |
+| Fade-only transition | `animationMode: "opacity"` |
 | Disable motion | `animationMode: "none"` |
 | Trial duration or no trial | `freeTrial` |
 | Top media | `hero`, `heroHeightRatio` |

@@ -7,23 +7,37 @@ const readPaywallSource = (): string => {
   return readFileSync(join(process.cwd(), "src", "Paywall.tsx"), "utf8");
 };
 
-test("keeps paywall body visibility independent from step transition animation", () => {
+test("keeps default paywall body animation as movement without opacity", () => {
   const source = readPaywallSource();
-  const animatedStepStyle = /const animatedStepStyle = \{([\s\S]*?)\n  \};/.exec(
-    source,
-  );
+  const animatedMovementStyle =
+    /const animatedMovementStyle = shouldAnimateMovement([\s\S]*?)\n  const animatedOpacityStyle =/.exec(
+      source,
+    );
 
-  assert.ok(animatedStepStyle, "animatedStepStyle should exist");
-  assert.doesNotMatch(animatedStepStyle[1] ?? "", /\bopacity\s*:/);
-  assert.doesNotMatch(
-    source,
-    /Animated\.multiply\(initialTransition, stepTransition\)/
-  );
+  assert.ok(animatedMovementStyle, "animatedMovementStyle should exist");
+  assert.doesNotMatch(animatedMovementStyle[1] ?? "", /\bopacity\s*:/);
   assert.match(
     source,
     /const bodyTranslateY = Animated\.add\(initialTranslateY, stepTranslateY\);/
   );
-  assert.match(animatedStepStyle[1] ?? "", /translateY: bodyTranslateY/);
+  assert.match(animatedMovementStyle[1] ?? "", /translateY: bodyTranslateY/);
+});
+
+test("supports opacity-only paywall body animation without movement", () => {
+  const source = readPaywallSource();
+  const animatedOpacityStyle =
+    /const animatedOpacityStyle = shouldAnimateOpacity([\s\S]*?)\n\n  useEffect/.exec(
+      source,
+    );
+
+  assert.ok(animatedOpacityStyle, "animatedOpacityStyle should exist");
+  assert.match(source, /const shouldAnimateOpacity = animationMode === "opacity";/);
+  assert.match(
+    source,
+    /const bodyOpacity = Animated\.multiply\(initialTransition, stepTransition\);/
+  );
+  assert.match(animatedOpacityStyle[1] ?? "", /\bopacity: bodyOpacity/);
+  assert.doesNotMatch(animatedOpacityStyle[1] ?? "", /\btransform\s*:/);
 });
 
 test("keeps step transitions as a single vertical settle animation", () => {

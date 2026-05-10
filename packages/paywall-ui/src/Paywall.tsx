@@ -155,6 +155,8 @@ export const Paywall = <TPackage,>({
   const { height: windowHeight } = useWindowDimensions();
   const shouldUseValueStep = stepMode === "twoStep" && Boolean(valueStep);
   const shouldAnimate = animationMode !== "none";
+  const shouldAnimateMovement = animationMode === "default";
+  const shouldAnimateOpacity = animationMode === "opacity";
   const initialTransition = useRef(
     new Animated.Value(shouldAnimate ? 0 : 1)
   ).current;
@@ -231,15 +233,21 @@ export const Paywall = <TPackage,>({
     outputRange: [8, 0],
   });
   const bodyTranslateY = Animated.add(initialTranslateY, stepTranslateY);
-  // Keep body visibility independent from step transitions. A cancelled native
-  // opacity animation can otherwise leave the paywall content fully hidden.
-  const animatedStepStyle = {
-    transform: [
-      {
-        translateY: bodyTranslateY,
-      },
-    ],
-  };
+  const bodyOpacity = Animated.multiply(initialTransition, stepTransition);
+  const animatedMovementStyle = shouldAnimateMovement
+    ? {
+        transform: [
+          {
+            translateY: bodyTranslateY,
+          },
+        ],
+      }
+    : undefined;
+  const animatedOpacityStyle = shouldAnimateOpacity
+    ? {
+        opacity: bodyOpacity,
+      }
+    : undefined;
 
   useEffect(() => {
     if (!shouldAnimate) {
@@ -363,7 +371,8 @@ export const Paywall = <TPackage,>({
           style={[
             styles.body,
             isValueStep && styles.valueBody,
-            animatedStepStyle,
+            animatedMovementStyle,
+            animatedOpacityStyle,
           ]}
         >
           <View style={styles.header}>

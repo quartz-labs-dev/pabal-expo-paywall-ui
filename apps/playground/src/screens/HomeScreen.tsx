@@ -49,14 +49,20 @@ const paywallFlowDescriptions: Record<PlaygroundPaywallFlow, string> = {
     "Default value-first flow: value screen first, then plans and purchase.",
   singleStep: "Classic paywall: show plans and purchase UI immediately.",
 };
-const paywallAnimations: PlaygroundPaywallAnimation[] = ["default", "none"];
+const paywallAnimations: PlaygroundPaywallAnimation[] = [
+  "default",
+  "opacity",
+  "none",
+];
 const paywallAnimationLabels: Record<PlaygroundPaywallAnimation, string> = {
-  default: "Animated",
+  default: "Move",
+  opacity: "Fade",
   none: "No animation",
 };
 const paywallAnimationDescriptions: Record<PlaygroundPaywallAnimation, string> =
   {
-    default: "Bottom-up entrance and side-to-side step transition.",
+    default: "Default bottom-up entrance and vertical step settle.",
+    opacity: "Fade paywall entrance and step changes without movement.",
     none: "Render paywall and step changes immediately.",
   };
 const freeTrialModes: PlaygroundFreeTrialMode[] = [

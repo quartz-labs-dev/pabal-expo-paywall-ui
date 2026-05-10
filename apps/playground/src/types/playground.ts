@@ -16,7 +16,7 @@ export type PlaygroundRoute = "home" | "paywall" | "profile";
 
 export type PlaygroundPaywallFlow = "twoStep" | "singleStep";
 
-export type PlaygroundPaywallAnimation = "default" | "none";
+export type PlaygroundPaywallAnimation = "default" | "opacity" | "none";
 
 export type PlaygroundFreeTrialMode = "sevenDays" | "twoWeeks" | "none";
 

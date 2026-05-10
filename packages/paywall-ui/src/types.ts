@@ -70,7 +70,7 @@ export type PaywallBenefit = string | PaywallBenefitDetail;
 
 export type PaywallStepMode = "twoStep" | "singleStep";
 
-export type PaywallAnimationMode = "default" | "none";
+export type PaywallAnimationMode = "default" | "opacity" | "none";
 
 export interface PaywallValueStep {
   title: string;
