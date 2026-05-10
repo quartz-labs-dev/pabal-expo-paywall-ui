@@ -35,7 +35,6 @@ import type {
 } from "./types";
 
 type PaywallStep = "value" | "purchase";
-type PaywallTransitionDirection = "forward" | "backward";
 
 const getSelectedPlan = <TPackage,>(
   plans: PaywallPlan<TPackage>[],
@@ -118,22 +117,13 @@ const FIXED_FOOTER_TOP_PADDING = 12;
 const FIXED_FOOTER_MIN_BOTTOM_PADDING = 12;
 const FIXED_FOOTER_SCROLL_GAP = 24;
 const DEFAULT_HERO_HEIGHT_RATIO = 0.23;
-const STEP_TRANSITION_DURATION = 180;
-const STEP_TRANSITION_DISTANCE = 16;
-const INITIAL_TRANSITION_DURATION = 380;
+const STEP_TRANSITION_DURATION = 240;
+const INITIAL_TRANSITION_DURATION = 460;
 const INITIAL_TRANSITION_DISTANCE = 22;
 const NAV_ICON_BACKGROUND_COLOR = "rgba(0, 0, 0, 0.22)";
 const NAV_ICON_COLOR = "#FFFFFF";
 const PAYWALL_HORIZONTAL_PADDING = 12;
 const PAYWALL_HEADER_HORIZONTAL_PADDING = 4;
-
-const getStepTransitionOffset = (
-  direction: PaywallTransitionDirection
-): number => {
-  return direction === "forward"
-    ? STEP_TRANSITION_DISTANCE
-    : -STEP_TRANSITION_DISTANCE;
-};
 
 export const Paywall = <TPackage,>({
   plans,
@@ -173,8 +163,6 @@ export const Paywall = <TPackage,>({
   const [currentStep, setCurrentStep] = useState<PaywallStep>(() =>
     shouldUseValueStep ? "value" : "purchase"
   );
-  const [transitionDirection, setTransitionDirection] =
-    useState<PaywallTransitionDirection>("forward");
   const selectedPlan = getSelectedPlan(plans, selectedPlanId);
   const resolvedSelectedPlanId = selectedPlan?.id;
   const freeTrialConfig = resolveFreeTrialConfig(freeTrial, selectedPlan);
@@ -238,19 +226,17 @@ export const Paywall = <TPackage,>({
     inputRange: [0, 1],
     outputRange: [INITIAL_TRANSITION_DISTANCE, 0],
   });
-  const stepTranslateX = stepTransition.interpolate({
+  const stepTranslateY = stepTransition.interpolate({
     inputRange: [0, 1],
-    outputRange: [getStepTransitionOffset(transitionDirection), 0],
+    outputRange: [8, 0],
   });
+  const bodyTranslateY = Animated.add(initialTranslateY, stepTranslateY);
   // Keep body visibility independent from step transitions. A cancelled native
   // opacity animation can otherwise leave the paywall content fully hidden.
   const animatedStepStyle = {
     transform: [
       {
-        translateY: initialTranslateY,
-      },
-      {
-        translateX: stepTranslateX,
+        translateY: bodyTranslateY,
       },
     ],
   };
@@ -280,15 +266,11 @@ export const Paywall = <TPackage,>({
 
   useEffect(() => {
     isStepTransitioningRef.current = false;
-    setTransitionDirection("forward");
     stepTransition.setValue(1);
     setCurrentStep(shouldUseValueStep ? "value" : "purchase");
   }, [shouldUseValueStep, stepTransition]);
 
-  const transitionToStep = (
-    nextStep: PaywallStep,
-    direction: PaywallTransitionDirection
-  ) => {
+  const transitionToStep = (nextStep: PaywallStep) => {
     if (isStepTransitioningRef.current || currentStep === nextStep) return;
 
     if (!shouldAnimate) {
@@ -297,7 +279,6 @@ export const Paywall = <TPackage,>({
     }
 
     isStepTransitioningRef.current = true;
-    setTransitionDirection(direction);
     stepTransition.stopAnimation();
     setCurrentStep(nextStep);
     stepTransition.setValue(0);
@@ -314,11 +295,11 @@ export const Paywall = <TPackage,>({
   };
 
   const handleShowPurchaseStep = () => {
-    transitionToStep("purchase", "forward");
+    transitionToStep("purchase");
   };
 
   const handleShowValueStep = () => {
-    transitionToStep("value", "backward");
+    transitionToStep("value");
   };
 
   return (
