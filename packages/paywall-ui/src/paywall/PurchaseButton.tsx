@@ -8,7 +8,7 @@ import {
   View,
 } from "react-native";
 
-import type { PaywallTheme } from "./types";
+import type { PaywallTheme } from "../types";
 
 interface PurchaseButtonProps {
   label: string;

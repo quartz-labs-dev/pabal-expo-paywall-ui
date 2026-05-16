@@ -1,4 +1,4 @@
-export { createPaywallPlans, getDefaultSelectedPlanId } from "./create-paywall-plans";
+export { createPaywallPlans, getDefaultSelectedPlanId } from "./paywall/create-paywall-plans";
 export {
   getDefaultPaywallCopy,
   getDefaultPaywallPlanOptions,
@@ -9,14 +9,14 @@ export {
   getDefaultReviewRequestModalCopy,
   PAYWALL_TEXT_LOCALES,
   resolvePaywallTextLocale,
-} from "./localized-paywall-copy";
-export { Paywall } from "./Paywall";
-export { ProfileSubscriptionSection } from "./ProfileSubscriptionSection";
+} from "./locales/localized-paywall-copy";
+export { Paywall } from "./paywall/Paywall";
+export { ProfileSubscriptionSection } from "./profile/ProfileSubscriptionSection";
 export {
   ReviewRequestModal,
   defaultReviewRequestProfileImage,
-} from "./ReviewRequestModal";
-export { isUnifiedLocale, UNIFIED_LOCALES } from "./unified-locales";
+} from "./review-request/ReviewRequestModal";
+export { isUnifiedLocale, UNIFIED_LOCALES } from "./locales/unified-locales";
 export type {
   CreatePaywallPlansOptions,
   PaywallAnimationMode,
@@ -55,5 +55,5 @@ export type {
   ReviewRequestModalProps,
   ReviewRequestModalStyleOverrides,
 } from "./types";
-export type { PaywallTextLocale } from "./localized-paywall-copy";
-export type { UnifiedLocale } from "./unified-locales";
+export type { PaywallTextLocale } from "./locales/localized-paywall-copy";
+export type { UnifiedLocale } from "./locales/unified-locales";

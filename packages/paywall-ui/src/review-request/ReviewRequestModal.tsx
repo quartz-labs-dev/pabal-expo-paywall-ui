@@ -12,9 +12,9 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { getColorWithAlpha } from "./color-utils";
-import { mergePaywallTheme } from "./theme";
-import type { PaywallTheme, ReviewRequestModalProps } from "./types";
+import { getColorWithAlpha } from "../shared/color-utils";
+import { mergePaywallTheme } from "../shared/theme";
+import type { PaywallTheme, ReviewRequestModalProps } from "../types";
 
 export const defaultReviewRequestProfileImage =
   require("./assets/retriever.webp") as ImageSourcePropType;

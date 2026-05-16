@@ -8,7 +8,7 @@ import {
   type ImageSourcePropType,
 } from "react-native";
 
-import type { PaywallTheme } from "./types";
+import type { PaywallTheme } from "../types";
 
 const defaultSupportMessageIconSource =
   require("./assets/retriever.webp") as ImageSourcePropType;

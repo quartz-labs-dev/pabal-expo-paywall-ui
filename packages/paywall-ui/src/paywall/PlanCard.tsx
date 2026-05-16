@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Animated, Easing, Pressable, StyleSheet, Text, View } from "react-native";
 
-import type { PaywallPlan, PaywallTheme } from "./types";
+import type { PaywallPlan, PaywallTheme } from "../types";
 
 interface PlanCardProps<TPackage> {
   plan: PaywallPlan<TPackage>;

@@ -7,15 +7,15 @@ import {
 } from "react-native";
 
 import { ProfileIdentifiersSection } from "./ProfileIdentifiersSection";
-import { getDefaultProfileIdentifiersCopy } from "./localized-paywall-copy";
-import { PaywallBenefitList } from "./PaywallBenefitList";
+import { getDefaultProfileIdentifiersCopy } from "../locales/localized-paywall-copy";
+import { PaywallBenefitList } from "../paywall/PaywallBenefitList";
 import { ProfileBenefitUsageList } from "./ProfileBenefitUsageList";
-import { SupportMessageBubble } from "./SupportMessageBubble";
-import { mergePaywallTheme } from "./theme";
+import { SupportMessageBubble } from "../paywall/SupportMessageBubble";
+import { mergePaywallTheme } from "../shared/theme";
 import type {
   PaywallTheme,
   ProfileSubscriptionSectionProps,
-} from "./types";
+} from "../types";
 
 export const ProfileSubscriptionSection = ({
   isSubscribed,

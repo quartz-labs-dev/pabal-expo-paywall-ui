@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-import type { PaywallTheme, ProfileBenefitUsageSection } from "./types";
+import type { PaywallTheme, ProfileBenefitUsageSection } from "../types";
 
 interface ProfileBenefitUsageListProps {
   section: ProfileBenefitUsageSection;

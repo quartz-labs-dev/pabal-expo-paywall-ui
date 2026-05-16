@@ -12,12 +12,12 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { getDefaultSelectedPlanId } from "./create-paywall-plans";
-import { ChevronLeftIcon, CloseIcon } from "./icons";
+import { ChevronLeftIcon, CloseIcon } from "../shared/icons";
 import { LegalLinks } from "./LegalLinks";
 import type {
   PaywallReviewSectionText,
   PaywallValueStepText,
-} from "./locales/paywall";
+} from "../locales/paywall";
 import { PaywallBenefitList } from "./PaywallBenefitList";
 import { PaywallFeatureComparison } from "./PaywallFeatureComparison";
 import {
@@ -28,7 +28,7 @@ import { PaywallReviewSection } from "./PaywallReviewSection";
 import { PlanSelector } from "./PlanSelector";
 import { PurchaseButton } from "./PurchaseButton";
 import { SupportMessageBubble } from "./SupportMessageBubble";
-import { mergePaywallTheme } from "./theme";
+import { mergePaywallTheme } from "../shared/theme";
 import { TrialNotice } from "./TrialNotice";
 import type {
   PaywallFreeTrialConfig,
@@ -36,7 +36,7 @@ import type {
   PaywallProps,
   PaywallTheme,
   PaywallTrialDuration,
-} from "./types";
+} from "../types";
 
 type PaywallStep = "value" | "purchase";
 

@@ -12,14 +12,14 @@ import {
   type GestureResponderEvent,
 } from "react-native";
 
-import { getColorWithAlpha } from "./color-utils";
-import { ChevronDownIcon, CopyIcon } from "./icons";
+import { getColorWithAlpha } from "../shared/color-utils";
+import { ChevronDownIcon, CopyIcon } from "../shared/icons";
 import type {
   PaywallTheme,
   ProfileIdentifierItem,
   ProfileIdentifiersCopy,
   ProfileIdentifiersSectionProps,
-} from "./types";
+} from "../types";
 
 if (
   Platform.OS === "android" &&

@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native";
 
 import { PlanCard } from "./PlanCard";
-import type { PaywallPlan, PaywallTheme } from "./types";
+import type { PaywallPlan, PaywallTheme } from "../types";
 
 interface PlanSelectorProps<TPackage> {
   plans: PaywallPlan<TPackage>[];

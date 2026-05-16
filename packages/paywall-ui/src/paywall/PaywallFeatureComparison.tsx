@@ -1,11 +1,11 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-import { getColorWithAlpha } from "./color-utils";
+import { getColorWithAlpha } from "../shared/color-utils";
 import type {
   PaywallFeatureComparison as PaywallFeatureComparisonConfig,
   PaywallFeatureComparisonCell,
   PaywallTheme,
-} from "./types";
+} from "../types";
 
 interface PaywallFeatureComparisonProps {
   comparison: PaywallFeatureComparisonConfig;

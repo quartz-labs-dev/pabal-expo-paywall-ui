@@ -3,13 +3,13 @@ import {
   PAYWALL_TEXT,
   PAYWALL_TEXT_LOCALES,
   PAYWALL_VALUE_STEP_TEXT,
-} from "./locales/paywall";
+} from "./paywall";
 import type {
   PaywallReviewSectionText,
   PaywallText,
   PaywallTextLocale,
   PaywallValueStepText,
-} from "./locales/paywall";
+} from "./paywall";
 import type {
   CreatePaywallPlansOptions,
   PaywallCopy,
@@ -17,11 +17,11 @@ import type {
   ProfileIdentifiersCopy,
   ProfileSubscriptionCopy,
   ReviewRequestModalCopy,
-} from "./types";
+} from "../types";
 import {
   getReviewRequestModalCopy,
   type ReviewRequestModalCopyOptions,
-} from "./locales/review-request-modal";
+} from "./review-request-modal";
 
 export { PAYWALL_TEXT_LOCALES };
 export type { PaywallTextLocale };

@@ -3,7 +3,7 @@ import type {
   PaywallPlan,
   PaywallPlanPeriod,
   PurchasesPackageLike,
-} from "./types";
+} from "../types";
 
 const DEFAULT_MONTHLY_PACKAGE_IDS = ["$rc_monthly"];
 const DEFAULT_ANNUAL_PACKAGE_IDS = ["$rc_annual"];

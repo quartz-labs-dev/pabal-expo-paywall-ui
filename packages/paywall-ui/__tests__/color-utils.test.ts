@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { getColorWithAlpha } from "../src/color-utils";
+import { getColorWithAlpha } from "../src/shared/color-utils";
 
 test("applies alpha to hex colors", () => {
   assert.equal(getColorWithAlpha("#5AC8B7", 0.09), "rgba(90, 200, 183, 0.09)");

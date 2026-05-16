@@ -1,7 +1,7 @@
 import {
   createPaywallPlans,
   getDefaultSelectedPlanId,
-} from "../src/create-paywall-plans";
+} from "../src/paywall/create-paywall-plans";
 import {
   PAYWALL_TEXT_LOCALES,
   getDefaultPaywallCopy,
@@ -10,8 +10,8 @@ import {
   getDefaultProfileSubscriptionCopy,
   getDefaultReviewRequestModalCopy,
   resolvePaywallTextLocale,
-} from "../src/localized-paywall-copy";
-import { UNIFIED_LOCALES } from "../src/unified-locales";
+} from "../src/locales/localized-paywall-copy";
+import { UNIFIED_LOCALES } from "../src/locales/unified-locales";
 import type { PurchasesPackageLike } from "../src/types";
 import type {
   PaywallReviewSectionText,

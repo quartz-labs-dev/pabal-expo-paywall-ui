@@ -1,12 +1,12 @@
 import type { ReactNode } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-import { getColorWithAlpha } from "./color-utils";
+import { getColorWithAlpha } from "../shared/color-utils";
 import type {
   PaywallReview,
   PaywallReviewRating,
   PaywallTheme,
-} from "./types";
+} from "../types";
 
 interface PaywallReviewSectionProps {
   reviews: PaywallReview[];

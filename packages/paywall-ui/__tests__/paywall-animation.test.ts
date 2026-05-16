@@ -4,7 +4,10 @@ import { join } from "node:path";
 import test from "node:test";
 
 const readPaywallSource = (): string => {
-  return readFileSync(join(process.cwd(), "src", "Paywall.tsx"), "utf8");
+  return readFileSync(
+    join(process.cwd(), "src", "paywall", "Paywall.tsx"),
+    "utf8",
+  );
 };
 
 const readTypesSource = (): string => {
@@ -13,42 +16,42 @@ const readTypesSource = (): string => {
 
 const readPaywallAnimationSource = (): string => {
   return readFileSync(
-    join(process.cwd(), "src", "paywall-animation.ts"),
+    join(process.cwd(), "src", "paywall", "paywall-animation.ts"),
     "utf8",
   );
 };
 
 const readFeatureComparisonSource = (): string => {
   return readFileSync(
-    join(process.cwd(), "src", "PaywallFeatureComparison.tsx"),
+    join(process.cwd(), "src", "paywall", "PaywallFeatureComparison.tsx"),
     "utf8",
   );
 };
 
 const readProfileSubscriptionSource = (): string => {
   return readFileSync(
-    join(process.cwd(), "src", "ProfileSubscriptionSection.tsx"),
+    join(process.cwd(), "src", "profile", "ProfileSubscriptionSection.tsx"),
     "utf8",
   );
 };
 
 const readProfileBenefitUsageSource = (): string => {
   return readFileSync(
-    join(process.cwd(), "src", "ProfileBenefitUsageList.tsx"),
+    join(process.cwd(), "src", "profile", "ProfileBenefitUsageList.tsx"),
     "utf8",
   );
 };
 
 const readSupportMessageBubbleSource = (): string => {
   return readFileSync(
-    join(process.cwd(), "src", "SupportMessageBubble.tsx"),
+    join(process.cwd(), "src", "paywall", "SupportMessageBubble.tsx"),
     "utf8",
   );
 };
 
 const readReviewRequestModalSource = (): string => {
   return readFileSync(
-    join(process.cwd(), "src", "ReviewRequestModal.tsx"),
+    join(process.cwd(), "src", "review-request", "ReviewRequestModal.tsx"),
     "utf8",
   );
 };

@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-import type { PaywallBenefit, PaywallTheme } from "./types";
+import type { PaywallBenefit, PaywallTheme } from "../types";
 
 interface PaywallBenefitListProps {
   benefits: PaywallBenefit[];

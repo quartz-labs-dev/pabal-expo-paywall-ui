@@ -1,4 +1,4 @@
-import type { PaywallTheme } from "./types";
+import type { PaywallTheme } from "../types";
 
 export const defaultPaywallTheme: PaywallTheme = {
   backgroundColor: "#0B1117",

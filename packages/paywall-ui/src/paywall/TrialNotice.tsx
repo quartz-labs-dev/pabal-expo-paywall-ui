@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 
-import { getColorWithAlpha } from "./color-utils";
-import type { PaywallTheme } from "./types";
+import { getColorWithAlpha } from "../shared/color-utils";
+import type { PaywallTheme } from "../types";
 
 export interface TrialNoticeProps {
   title: string;

@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-import type { PaywallCopy, PaywallTheme } from "./types";
+import type { PaywallCopy, PaywallTheme } from "../types";
 
 interface LegalLinksProps {
   copy: PaywallCopy;
