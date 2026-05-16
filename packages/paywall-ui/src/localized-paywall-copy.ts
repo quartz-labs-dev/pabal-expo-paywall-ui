@@ -16,7 +16,12 @@ import type {
   PaywallPlanPeriod,
   ProfileIdentifiersCopy,
   ProfileSubscriptionCopy,
+  ReviewRequestModalCopy,
 } from "./types";
+import {
+  getReviewRequestModalCopy,
+  type ReviewRequestModalCopyOptions,
+} from "./locales/review-request-modal";
 
 export { PAYWALL_TEXT_LOCALES };
 export type { PaywallTextLocale };
@@ -164,6 +169,13 @@ export const getDefaultProfileIdentifiersCopy = (
     hideButtonLabel: text.hideIdentifiersButton,
     showButtonLabel: text.showIdentifiersButton,
   };
+};
+
+export const getDefaultReviewRequestModalCopy = (
+  locale?: string,
+  options: ReviewRequestModalCopyOptions = {},
+): ReviewRequestModalCopy => {
+  return getReviewRequestModalCopy(resolvePaywallTextLocale(locale), options);
 };
 
 export const getDefaultProfilePlanLabel = (

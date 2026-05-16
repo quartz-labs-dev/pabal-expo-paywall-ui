@@ -1,6 +1,17 @@
 import { useState } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Alert,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import {
+  ReviewRequestModal,
+  getDefaultReviewRequestModalCopy,
+} from "pabal-expo-paywall-ui";
 
 import { LocaleSelector } from "../components/LocaleSelector";
 import {
@@ -105,6 +116,7 @@ export const HomeScreen = ({
 }: HomeScreenProps) => {
   const insets = useSafeAreaInsets();
   const [measuredFooterHeight, setMeasuredFooterHeight] = useState(0);
+  const [isReviewRequestVisible, setIsReviewRequestVisible] = useState(false);
   const footerBottomPadding = Math.max(
     insets.bottom,
     FIXED_FOOTER_MIN_BOTTOM_PADDING,
@@ -135,6 +147,23 @@ export const HomeScreen = ({
           <Text style={styles.subtitle}>
             Pick packages, locale, flow, then inspect the shared screens.
           </Text>
+        </View>
+
+        <View style={styles.reviewPromptCard}>
+          <View style={styles.reviewPromptCopy}>
+            <Text style={styles.reviewPromptKicker}>Shared modal</Text>
+            <Text style={styles.reviewPromptTitle}>Review request prompt</Text>
+            <Text style={styles.reviewPromptDescription}>
+              Preview the reusable app-rating modal with app-owned callbacks.
+            </Text>
+          </View>
+          <Pressable
+            accessibilityRole="button"
+            onPress={() => setIsReviewRequestVisible(true)}
+            style={styles.reviewPromptButton}
+          >
+            <Text style={styles.reviewPromptButtonText}>Open modal</Text>
+          </Pressable>
         </View>
 
         <LocaleSelector
@@ -349,6 +378,35 @@ export const HomeScreen = ({
           </Pressable>
         </View>
       </View>
+
+      <ReviewRequestModal
+        copy={getDefaultReviewRequestModalCopy(selectedLocale, {
+          developerName: "Quartz",
+        })}
+        developerName="Quartz"
+        theme={{
+          accentColor: "#FF7A45",
+          accentTextColor: "#FFFFFF",
+          backgroundColor: "#F7F8FA",
+          borderColor: "#DDE3EA",
+          mutedTextColor: "#7B8491",
+          primaryTextColor: "#1D2430",
+          secondaryTextColor: "#596273",
+          selectedBorderColor: "#FF7A45",
+          selectedSurfaceColor: "#FFF1EA",
+          surfaceColor: "#FFFFFF",
+        }}
+        visible={isReviewRequestVisible}
+        onDismiss={() => setIsReviewRequestVisible(false)}
+        onRequestFeedback={() => {
+          setIsReviewRequestVisible(false);
+          Alert.alert("Feedback callback");
+        }}
+        onRequestReview={() => {
+          setIsReviewRequestVisible(false);
+          Alert.alert("Store review callback");
+        }}
+      />
     </View>
   );
 };
@@ -428,6 +486,59 @@ const styles = StyleSheet.create({
   },
   section: {
     gap: 10,
+  },
+  reviewPromptCard: {
+    alignItems: "center",
+    backgroundColor: "#101820",
+    borderColor: "#2B3845",
+    borderRadius: 8,
+    borderWidth: 1,
+    flexDirection: "row",
+    gap: 14,
+    justifyContent: "space-between",
+    paddingHorizontal: 14,
+    paddingVertical: 14,
+  },
+  reviewPromptCopy: {
+    flex: 1,
+    gap: 3,
+    minWidth: 0,
+  },
+  reviewPromptKicker: {
+    color: "#5AC8B7",
+    fontSize: 11,
+    fontWeight: "900",
+    letterSpacing: 0,
+    textTransform: "uppercase",
+  },
+  reviewPromptTitle: {
+    color: "#F5F7FA",
+    flexShrink: 1,
+    fontSize: 16,
+    fontWeight: "900",
+    lineHeight: 21,
+  },
+  reviewPromptDescription: {
+    color: "#B9C4CF",
+    flexShrink: 1,
+    fontSize: 12,
+    fontWeight: "600",
+    lineHeight: 17,
+  },
+  reviewPromptButton: {
+    alignItems: "center",
+    backgroundColor: "#F5F7FA",
+    borderRadius: 8,
+    justifyContent: "center",
+    minHeight: 40,
+    paddingHorizontal: 13,
+    paddingVertical: 9,
+  },
+  reviewPromptButtonText: {
+    color: "#05080C",
+    fontSize: 12,
+    fontWeight: "900",
+    lineHeight: 16,
   },
   sectionHeaderRow: {
     alignItems: "center",

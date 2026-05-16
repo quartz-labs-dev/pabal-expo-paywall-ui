@@ -8,6 +8,7 @@ import {
   getDefaultPaywallPlanOptions,
   getDefaultProfileIdentifiersCopy,
   getDefaultProfileSubscriptionCopy,
+  getDefaultReviewRequestModalCopy,
   resolvePaywallTextLocale,
 } from "../src/localized-paywall-copy";
 import { UNIFIED_LOCALES } from "../src/unified-locales";
@@ -441,6 +442,46 @@ test("localizes review section title for every non-English paywall locale", () =
     }
 
     assert.notEqual(reviewCopy.reviewSectionTitle, "User reviews", locale);
+  }
+});
+
+test("localizes review request modal copy for every non-English paywall locale", () => {
+  for (const locale of PAYWALL_TEXT_LOCALES) {
+    const copy = getDefaultReviewRequestModalCopy(locale, {
+      developerName: "Quartz",
+    });
+
+    assert.ok(copy.title, locale);
+    assert.ok(copy.message, locale);
+    assert.ok(copy.satisfiedButton, locale);
+    assert.ok(copy.feedbackButton, locale);
+    assert.ok(copy.laterButton, locale);
+    assert.ok(copy.profileImageAccessibilityLabel, locale);
+    assert.match(copy.title ?? "", /Quartz/, locale);
+
+    if (locale === "en") {
+      assert.equal(copy.title, "Hi, I'm Quartz, the developer of the app 👋");
+      assert.equal(
+        copy.message,
+        "If the app has been useful, a quick rating helps. If something feels off, send feedback instead.",
+      );
+      assert.equal(copy.satisfiedButton, "Rate the app");
+      assert.equal(copy.feedbackButton, "Send feedback");
+      assert.equal(copy.laterButton, "Later");
+      continue;
+    }
+
+    assert.notEqual(
+      copy.title,
+      "Hi, I'm Quartz, the developer of the app 👋",
+      locale,
+    );
+    assert.notEqual(
+      copy.message,
+      "If the app has been useful, a quick rating helps. If something feels off, send feedback instead.",
+      locale,
+    );
+    assert.notEqual(copy.satisfiedButton, "Rate the app", locale);
   }
 });
 

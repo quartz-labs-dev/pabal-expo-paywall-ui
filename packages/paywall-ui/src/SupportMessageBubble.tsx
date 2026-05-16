@@ -1,7 +1,17 @@
 import type { ReactNode } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  type ImageSourcePropType,
+} from "react-native";
 
 import type { PaywallTheme } from "./types";
+
+const defaultSupportMessageIconSource =
+  require("./assets/retriever.webp") as ImageSourcePropType;
 
 interface SupportMessageBubbleProps {
   icon?: ReactNode;
@@ -18,6 +28,14 @@ export const SupportMessageBubble = ({
   theme,
   onPress,
 }: SupportMessageBubbleProps) => {
+  const resolvedIcon = icon ?? (
+    <Image
+      accessibilityIgnoresInvertColors
+      source={defaultSupportMessageIconSource}
+      style={styles.defaultIconImage}
+    />
+  );
+
   return (
     <Pressable
       accessibilityLabel={label ? `${label}. ${message}` : message}
@@ -31,19 +49,17 @@ export const SupportMessageBubble = ({
         },
       ]}
     >
-      {icon && (
-        <View
-          style={[
-            styles.icon,
-            {
-              backgroundColor: theme.selectedSurfaceColor,
-              borderColor: theme.borderColor,
-            },
-          ]}
-        >
-          {icon}
-        </View>
-      )}
+      <View
+        style={[
+          styles.icon,
+          {
+            backgroundColor: theme.selectedSurfaceColor,
+            borderColor: theme.borderColor,
+          },
+        ]}
+      >
+        {resolvedIcon}
+      </View>
 
       <View
         style={[
@@ -54,17 +70,15 @@ export const SupportMessageBubble = ({
           },
         ]}
       >
-        {icon && (
-          <View
-            style={[
-              styles.tail,
-              {
-                backgroundColor: theme.surfaceColor,
-                borderColor: theme.borderColor,
-              },
-            ]}
-          />
-        )}
+        <View
+          style={[
+            styles.tail,
+            {
+              backgroundColor: theme.surfaceColor,
+              borderColor: theme.borderColor,
+            },
+          ]}
+        />
         {label && (
           <Text style={[styles.label, { color: theme.accentColor }]}>
             {label}
@@ -95,6 +109,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
     overflow: "hidden",
     width: 34,
+  },
+  defaultIconImage: {
+    height: "100%",
+    width: "100%",
   },
   label: {
     fontSize: 11,

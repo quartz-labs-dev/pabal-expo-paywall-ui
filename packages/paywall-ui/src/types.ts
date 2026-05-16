@@ -1,4 +1,11 @@
 import type { ReactNode } from "react";
+import type {
+  ImageSourcePropType,
+  ImageStyle,
+  StyleProp,
+  TextStyle,
+  ViewStyle,
+} from "react-native";
 
 export type PaywallPlanPeriod = "monthly" | "annual" | "lifetime";
 
@@ -136,6 +143,52 @@ export interface PaywallTheme {
   accentColor: string;
   accentTextColor: string;
   mutedTextColor: string;
+}
+
+export interface ReviewRequestModalCopy {
+  title?: string;
+  message: string;
+  satisfiedButton: string;
+  feedbackButton: string;
+  laterButton: string;
+  profileImageAccessibilityLabel?: string;
+  playButtonAccessibilityLabel?: string;
+}
+
+export interface ReviewRequestModalStyleOverrides {
+  backdrop?: StyleProp<ViewStyle>;
+  card?: StyleProp<ViewStyle>;
+  copyGroup?: StyleProp<ViewStyle>;
+  title?: StyleProp<TextStyle>;
+  message?: StyleProp<TextStyle>;
+  profileButton?: StyleProp<ViewStyle>;
+  profileImage?: StyleProp<ImageStyle>;
+  playButton?: StyleProp<ViewStyle>;
+  playTriangle?: StyleProp<ViewStyle>;
+  actionGroup?: StyleProp<ViewStyle>;
+  primaryButton?: StyleProp<ViewStyle>;
+  primaryButtonText?: StyleProp<TextStyle>;
+  secondaryButton?: StyleProp<ViewStyle>;
+  secondaryButtonText?: StyleProp<TextStyle>;
+  laterButton?: StyleProp<ViewStyle>;
+  laterButtonText?: StyleProp<TextStyle>;
+}
+
+export interface ReviewRequestModalProps {
+  visible: boolean;
+  copy: ReviewRequestModalCopy;
+  developerName?: string;
+  profileImageSource?: ImageSourcePropType;
+  styles?: ReviewRequestModalStyleOverrides;
+  theme?: Partial<PaywallTheme>;
+  isRequestingReview?: boolean;
+  isRequestingFeedback?: boolean;
+  isDismissing?: boolean;
+  showPlayButton?: boolean;
+  onRequestReview: () => Promise<void> | void;
+  onRequestFeedback: () => Promise<void> | void;
+  onDismiss: () => Promise<void> | void;
+  onPressProfileMessage?: () => Promise<void> | void;
 }
 
 export interface PaywallProps<TPackage = unknown> {

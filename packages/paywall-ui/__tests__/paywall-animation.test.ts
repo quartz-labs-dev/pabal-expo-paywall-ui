@@ -39,6 +39,24 @@ const readProfileBenefitUsageSource = (): string => {
   );
 };
 
+const readSupportMessageBubbleSource = (): string => {
+  return readFileSync(
+    join(process.cwd(), "src", "SupportMessageBubble.tsx"),
+    "utf8",
+  );
+};
+
+const readReviewRequestModalSource = (): string => {
+  return readFileSync(
+    join(process.cwd(), "src", "ReviewRequestModal.tsx"),
+    "utf8",
+  );
+};
+
+const readIndexSource = (): string => {
+  return readFileSync(join(process.cwd(), "src", "index.ts"), "utf8");
+};
+
 test("keeps default paywall body animation as movement without opacity", () => {
   const source = readPaywallSource();
   const animatedMovementStyle =
@@ -146,4 +164,35 @@ test("keeps profile benefit list and usage modes explicit", () => {
   assert.match(typesSource, /title: string/);
   assert.match(typesSource, /titleContent\?: ReactNode/);
   assert.doesNotMatch(usageSource, /item\.icon/);
+});
+
+test("keeps review request modal app-owned and reusable", () => {
+  const modalSource = readReviewRequestModalSource();
+  const typesSource = readTypesSource();
+  const indexSource = readIndexSource();
+
+  assert.match(modalSource, /<Modal/);
+  assert.match(modalSource, /defaultReviewRequestProfileImage/);
+  assert.match(modalSource, /assets\/retriever\.webp/);
+  assert.match(modalSource, /onRequestReview/);
+  assert.match(modalSource, /onRequestFeedback/);
+  assert.match(modalSource, /onDismiss/);
+  assert.match(modalSource, /styleOverrides\?\.card/);
+  assert.match(modalSource, /styleOverrides\?\.primaryButton/);
+  assert.doesNotMatch(modalSource, /react-native-purchases/);
+  assert.doesNotMatch(modalSource, /react-native-purchases-ui/);
+  assert.doesNotMatch(modalSource, /requestReview/);
+  assert.match(typesSource, /interface ReviewRequestModalCopy/);
+  assert.match(typesSource, /interface ReviewRequestModalProps/);
+  assert.match(typesSource, /interface ReviewRequestModalStyleOverrides/);
+  assert.match(indexSource, /ReviewRequestModal/);
+  assert.match(indexSource, /defaultReviewRequestProfileImage/);
+});
+
+test("uses retriever as the default developer note icon", () => {
+  const source = readSupportMessageBubbleSource();
+
+  assert.match(source, /assets\/retriever\.webp/);
+  assert.match(source, /const resolvedIcon = icon \?\?/);
+  assert.match(source, /source=\{defaultSupportMessageIconSource\}/);
 });

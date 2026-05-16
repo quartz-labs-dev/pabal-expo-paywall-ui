@@ -58,7 +58,6 @@ const profileSubscriptionBaseConfig = {
       },
     ],
   },
-  supportMessageIcon: <SupportAppLogo />,
 } satisfies Omit<ProfileSubscriptionConfig, "copy" | "headerIcon">;
 
 const profilePeriods: Record<PlaygroundScenario, PaywallPlanPeriod> = {
@@ -264,16 +263,6 @@ function GoldenHorizonIcon({ isSubscribed }: GoldenHorizonIconProps) {
   );
 }
 
-function SupportAppLogo() {
-  return (
-    <View style={styles.supportAppLogo}>
-      <View style={styles.supportAppLogoSky} />
-      <View style={styles.supportAppLogoHorizon} />
-      <View style={styles.supportAppLogoGround} />
-    </View>
-  );
-}
-
 interface ProfileUsageTitleProps {
   badge?: string;
   title: string;
@@ -423,24 +412,6 @@ const styles = StyleSheet.create({
     fontSize: 8,
     fontWeight: "900",
     lineHeight: 10,
-  },
-  supportAppLogo: {
-    borderRadius: 7,
-    height: 28,
-    overflow: "hidden",
-    width: 28,
-  },
-  supportAppLogoSky: {
-    backgroundColor: "#1987F3",
-    height: 12,
-  },
-  supportAppLogoHorizon: {
-    backgroundColor: "#9EE6DD",
-    height: 7,
-  },
-  supportAppLogoGround: {
-    backgroundColor: "#FFD86F",
-    flex: 1,
   },
   profileUsageTitle: {
     alignItems: "center",
