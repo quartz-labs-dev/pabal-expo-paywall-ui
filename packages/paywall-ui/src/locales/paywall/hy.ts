@@ -5,9 +5,6 @@ const hy = createPaywallLocaleText({
     nextButton: "Հաջորդը",
     nextButtonAccessibilityLabel: "Շարունակել դեպի պլանի ընտրություն",
   },
-  reviewSection: {
-    reviewSectionTitle: "Օգտատերերի կարծիքներ",
-  },
   text: {
     annualPlanTitle: "Տարեկան",
     benefitsTitle: "Ձեր Pro առավելությունները",

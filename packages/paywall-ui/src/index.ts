@@ -6,16 +6,11 @@ export {
   getDefaultProfilePlanLabel,
   getDefaultProfileRenewalLabel,
   getDefaultProfileSubscriptionCopy,
-  getDefaultReviewRequestModalCopy,
   PAYWALL_TEXT_LOCALES,
   resolvePaywallTextLocale,
 } from "./locales/localized-paywall-copy";
 export { Paywall } from "./paywall/Paywall";
 export { ProfileSubscriptionSection } from "./profile/ProfileSubscriptionSection";
-export {
-  ReviewRequestModal,
-  defaultReviewRequestProfileImage,
-} from "./review-request/ReviewRequestModal";
 export { isUnifiedLocale, UNIFIED_LOCALES } from "./locales/unified-locales";
 export type {
   CreatePaywallPlansOptions,
@@ -32,9 +27,6 @@ export type {
   PaywallPlanPeriod,
   PaywallProps,
   PaywallPurchaseButtonLabelContext,
-  PaywallReview,
-  PaywallReviewRating,
-  PaywallReviewSection,
   PaywallStepMode,
   PaywallTheme,
   PaywallTrialDuration,
@@ -51,9 +43,6 @@ export type {
   ProfileSubscriptionConfig,
   ProfileSubscriptionSectionProps,
   PurchasesPackageLike,
-  ReviewRequestModalCopy,
-  ReviewRequestModalProps,
-  ReviewRequestModalStyleOverrides,
 } from "./types";
 export type { PaywallTextLocale } from "./locales/localized-paywall-copy";
 export type { UnifiedLocale } from "./locales/unified-locales";

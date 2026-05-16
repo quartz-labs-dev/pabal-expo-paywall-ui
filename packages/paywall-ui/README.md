@@ -56,12 +56,11 @@ const paywallBenefits = [
 const featureComparison = {
   freeColumnTitle: "Free",
   paidColumnTitle: "Pro",
-  highlightedColumn: "none",
   rows: [
     {
       id: "premium-widget",
       label: "Home Screen Widget",
-      labelContent: <FeatureTitle title="Home Screen Widget" badge="New" />,
+      labelContent: <FeatureTitle title="Home Screen Widget" />,
       free: { kind: "excluded", accessibilityLabel: "Not included" },
       paid: { kind: "included", accessibilityLabel: "Included" },
       onPress: openWidgetDetails,
@@ -69,8 +68,8 @@ const featureComparison = {
     {
       id: "saved-locations",
       label: "Custom locations",
-      free: { kind: "text", text: "1 place", tone: "muted" },
-      paid: { kind: "text", text: "Unlimited", tone: "accent" },
+      free: { kind: "text", text: "3" },
+      paid: { kind: "text", text: "\u221e" },
     },
   ],
 } satisfies PaywallFeatureComparison;
@@ -87,15 +86,6 @@ const paywallConfig = {
   },
   benefits: paywallBenefits,
   featureComparison,
-  reviewSection: {
-    reviews: [
-      {
-        rating: 5,
-        quote: "The widget is exactly what I needed for quick daily checks.",
-        author: "App Store review",
-      },
-    ],
-  },
   copy: getDefaultPaywallCopy(undefined, {
     title: "Upgrade to Pro",
     subtitle: "Get the full app experience.",
@@ -135,12 +125,10 @@ Feature comparison cells are explicit: `{ kind: "included" }` renders a check,
 renders app-provided usage copy as-is.
 Feature row titles keep a required plain `label` for accessibility and may pass
 `labelContent` when the app needs a custom React Native title component.
-Use `reviewSection` for real user reviews on the purchase step. Its title is
-localized by the package and is not app-configurable.
-`getDefaultPaywallCopy()` includes a localized developer note below the review
-section. Pass `supportMessage` only when the app needs to override it. The note
-uses the bundled retriever image by default; pass `supportMessageIcon` when an
-app needs its own icon. Pass `onOpenDeveloperWebsite` when tapping the note
+`getDefaultPaywallCopy()` includes a localized developer note below the content.
+Pass `supportMessage` only when the app needs to override it. Pass
+`supportMessageIcon` when an app needs to show its own icon. Pass
+`onOpenDeveloperWebsite` when tapping the note
 should open the developer site.
 Use `*SelectedDescription` plan options for short app-owned comparison copy
 that appears only inside the currently selected plan card.
@@ -271,7 +259,6 @@ rebuilding the whole `copy` object every time the selected plan changes.
 | Benefit rows | `benefits` |
 | Free/Pro feature table | `featureComparison` |
 | Custom body below benefits | `content` |
-| Purchase-step user reviews | `reviewSection` |
 | RevenueCat package mapping | `planOptions.*PackageIds` |
 | Plan card order | `planOptions.displayOrder` |
 | Selected-plan comparison copy | `planOptions.*SelectedDescription` |
@@ -281,50 +268,6 @@ rebuilding the whole `copy` object every time the selected plan changes.
 | Theme colors | `theme` |
 | Custom purchase button fill | `purchaseButtonBackground` |
 | Selected-plan CTA text | `copy.formatPurchaseButtonLabel` |
-
-## Review Request Modal
-
-Use this when an app wants a reusable, developer-led review prompt after a
-positive moment. The package owns only the UI. The consuming app owns when to
-show it, App Store or Play Store review APIs, feedback navigation, cooldowns,
-and analytics.
-
-```tsx
-import {
-  ReviewRequestModal,
-  getDefaultReviewRequestModalCopy,
-} from "pabal-expo-paywall-ui";
-
-<ReviewRequestModal
-  copy={getDefaultReviewRequestModalCopy(appLocale, {
-    developerName: "Quartz",
-  })}
-  developerName="Quartz"
-  styles={{
-    card: { maxWidth: 360 },
-    primaryButton: { backgroundColor: "#111827" },
-  }}
-  visible={isReviewPromptVisible}
-  onDismiss={() => setIsReviewPromptVisible(false)}
-  onRequestFeedback={() => {
-    setIsReviewPromptVisible(false);
-    router.push("/feedback");
-  }}
-  onRequestReview={async () => {
-    setIsReviewPromptVisible(false);
-    await requestStoreReview();
-  }}
-/>;
-```
-
-The default profile image is `packages/paywall-ui/src/assets/retriever.webp`.
-Pass `profileImageSource` if an app needs its own developer photo.
-`getDefaultReviewRequestModalCopy()` returns localized default copy for every
-paywall text locale. Pass a custom `copy` when an app needs different wording.
-Use `styles` for slot-level overrides when an app needs a different modal
-treatment. Slots include `backdrop`, `card`, `title`, `message`,
-`profileImage`, `actionGroup`, `primaryButton`, `secondaryButton`, and
-`laterButton` plus matching button text slots.
 
 ## Profile Section
 

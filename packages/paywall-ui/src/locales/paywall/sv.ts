@@ -5,9 +5,6 @@ const sv = createPaywallLocaleText({
     nextButton: "Nästa",
     nextButtonAccessibilityLabel: "Fortsätt till planval",
   },
-  reviewSection: {
-    reviewSectionTitle: "Användarrecensioner",
-  },
   text: {
     annualPlanTitle: "Årlig",
     benefitsTitle: "Dina Pro-förmåner",

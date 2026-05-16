@@ -38,19 +38,13 @@ const Hero = () => {
 };
 
 interface FeatureTitleProps {
-  badge?: string;
   title: string;
 }
 
-const FeatureTitle = ({ badge, title }: FeatureTitleProps) => {
+const FeatureTitle = ({ title }: FeatureTitleProps) => {
   return (
     <View style={styles.featureTitle}>
       <Text style={styles.featureTitleText}>{title}</Text>
-      {badge ? (
-        <View style={styles.featureTitleBadge}>
-          <Text style={styles.featureTitleBadgeText}>{badge}</Text>
-        </View>
-      ) : null}
     </View>
   );
 };
@@ -65,12 +59,11 @@ const playgroundPaywallConfig = {
   featureComparison: {
     freeColumnTitle: "Free",
     paidColumnTitle: "Pro",
-    highlightedColumn: "none",
     rows: [
       {
         id: "home-screen-widget",
         label: "Home Screen Widget",
-        labelContent: <FeatureTitle badge="NEW" title="Home Screen Widget" />,
+        labelContent: <FeatureTitle title="Home Screen Widget" />,
         free: { kind: "excluded", accessibilityLabel: "Not included" },
         paid: { kind: "included", accessibilityLabel: "Included" },
         onPress: () => Alert.alert("Home Screen Widget details"),
@@ -78,8 +71,8 @@ const playgroundPaywallConfig = {
       {
         id: "custom-locations",
         label: "Custom Location Settings",
-        free: { kind: "text", text: "1 saved place", tone: "muted" },
-        paid: { kind: "text", text: "Unlimited", tone: "accent" },
+        free: { kind: "text", text: "3" },
+        paid: { kind: "text", text: "\u221e" },
       },
       {
         id: "custom-colors",
@@ -88,19 +81,23 @@ const playgroundPaywallConfig = {
         paid: { kind: "included", accessibilityLabel: "Included" },
         onPress: () => Alert.alert("Color palette details"),
       },
-    ],
-  },
-  reviewSection: {
-    reviews: [
       {
-        rating: 5,
-        quote: "The widget is exactly what I needed for quick aurora checks.",
-        author: "App Store review",
+        id: "forecast-alerts",
+        label: "Forecast Alerts",
+        free: { kind: "text", text: "1" },
+        paid: { kind: "text", text: "\u221e" },
       },
       {
-        rating: 5,
-        quote: "Clean, fast, and useful every time the sky starts moving.",
-        author: "App Store review",
+        id: "saved-notes",
+        label: "Saved Notes",
+        free: { kind: "text", text: "5" },
+        paid: { kind: "text", text: "\u221e" },
+      },
+      {
+        id: "advanced-maps",
+        label: "Advanced Map Layers",
+        free: { kind: "text", text: "0" },
+        paid: { kind: "text", text: "6" },
       },
     ],
   },
@@ -249,17 +246,5 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     lineHeight: 19,
     textDecorationLine: "underline",
-  },
-  featureTitleBadge: {
-    backgroundColor: "rgba(90, 200, 183, 0.16)",
-    borderRadius: 5,
-    paddingHorizontal: 5,
-    paddingVertical: 2,
-  },
-  featureTitleBadgeText: {
-    color: "#5AC8B7",
-    fontSize: 9,
-    fontWeight: "800",
-    lineHeight: 11,
   },
 });

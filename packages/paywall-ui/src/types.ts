@@ -1,11 +1,4 @@
 import type { ReactNode } from "react";
-import type {
-  ImageSourcePropType,
-  ImageStyle,
-  StyleProp,
-  TextStyle,
-  ViewStyle,
-} from "react-native";
 
 export type PaywallPlanPeriod = "monthly" | "annual" | "lifetime";
 
@@ -87,7 +80,6 @@ export type PaywallFeatureComparisonCell =
   | {
       kind: "text";
       text: string;
-      tone?: "default" | "accent" | "muted";
     };
 
 export interface PaywallFeatureComparisonRow {
@@ -104,8 +96,6 @@ export interface PaywallFeatureComparison {
   featureColumnTitle?: string;
   freeColumnTitle: string;
   paidColumnTitle: string;
-  paidBadge?: ReactNode;
-  highlightedColumn?: "paid" | "none";
   rows: PaywallFeatureComparisonRow[];
 }
 
@@ -118,18 +108,6 @@ export interface PaywallValueStep {
   subtitle?: string;
   content?: ReactNode;
   closeButtonVisibility?: "hidden" | "visible";
-}
-
-export type PaywallReviewRating = 1 | 2 | 3 | 4 | 5;
-
-export interface PaywallReview {
-  quote: string;
-  author?: string;
-  rating?: PaywallReviewRating;
-}
-
-export interface PaywallReviewSection {
-  reviews: PaywallReview[];
 }
 
 export interface PaywallTheme {
@@ -145,52 +123,6 @@ export interface PaywallTheme {
   mutedTextColor: string;
 }
 
-export interface ReviewRequestModalCopy {
-  title?: string;
-  message: string;
-  satisfiedButton: string;
-  feedbackButton: string;
-  laterButton: string;
-  profileImageAccessibilityLabel?: string;
-  playButtonAccessibilityLabel?: string;
-}
-
-export interface ReviewRequestModalStyleOverrides {
-  backdrop?: StyleProp<ViewStyle>;
-  card?: StyleProp<ViewStyle>;
-  copyGroup?: StyleProp<ViewStyle>;
-  title?: StyleProp<TextStyle>;
-  message?: StyleProp<TextStyle>;
-  profileButton?: StyleProp<ViewStyle>;
-  profileImage?: StyleProp<ImageStyle>;
-  playButton?: StyleProp<ViewStyle>;
-  playTriangle?: StyleProp<ViewStyle>;
-  actionGroup?: StyleProp<ViewStyle>;
-  primaryButton?: StyleProp<ViewStyle>;
-  primaryButtonText?: StyleProp<TextStyle>;
-  secondaryButton?: StyleProp<ViewStyle>;
-  secondaryButtonText?: StyleProp<TextStyle>;
-  laterButton?: StyleProp<ViewStyle>;
-  laterButtonText?: StyleProp<TextStyle>;
-}
-
-export interface ReviewRequestModalProps {
-  visible: boolean;
-  copy: ReviewRequestModalCopy;
-  developerName?: string;
-  profileImageSource?: ImageSourcePropType;
-  styles?: ReviewRequestModalStyleOverrides;
-  theme?: Partial<PaywallTheme>;
-  isRequestingReview?: boolean;
-  isRequestingFeedback?: boolean;
-  isDismissing?: boolean;
-  showPlayButton?: boolean;
-  onRequestReview: () => Promise<void> | void;
-  onRequestFeedback: () => Promise<void> | void;
-  onDismiss: () => Promise<void> | void;
-  onPressProfileMessage?: () => Promise<void> | void;
-}
-
 export interface PaywallProps<TPackage = unknown> {
   plans: PaywallPlan<TPackage>[];
   hero: ReactNode;
@@ -201,7 +133,6 @@ export interface PaywallProps<TPackage = unknown> {
   benefits?: PaywallBenefit[];
   featureComparison?: PaywallFeatureComparison;
   content?: ReactNode;
-  reviewSection?: PaywallReviewSection;
   purchaseButtonBackground?: ReactNode;
   supportMessageIcon?: ReactNode;
   copy: PaywallCopy;
@@ -227,7 +158,6 @@ export interface PaywallConfig {
   benefits?: PaywallBenefit[];
   featureComparison?: PaywallFeatureComparison;
   content?: ReactNode;
-  reviewSection?: PaywallReviewSection;
   purchaseButtonBackground?: ReactNode;
   supportMessageIcon?: ReactNode;
   copy: PaywallCopy;

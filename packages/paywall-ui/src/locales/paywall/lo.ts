@@ -5,9 +5,6 @@ const lo = createPaywallLocaleText({
     nextButton: "ຕໍ່ໄປ",
     nextButtonAccessibilityLabel: "ດໍາເນີນຕໍ່ໄປການເລືອກແຜນ",
   },
-  reviewSection: {
-    reviewSectionTitle: "ຣີວິວຈາກຜູ້ໃຊ້",
-  },
   text: {
     annualPlanTitle: "ລາຍປີ",
     benefitsTitle: "ສິດປະໂຫຍດ Pro ຂອງທ່ານ",

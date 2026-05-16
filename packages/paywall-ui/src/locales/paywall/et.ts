@@ -5,9 +5,6 @@ const et = createPaywallLocaleText({
     nextButton: "Järgmine",
     nextButtonAccessibilityLabel: "Jätka paketi valikusse",
   },
-  reviewSection: {
-    reviewSectionTitle: "Kasutajate arvustused",
-  },
   text: {
     annualPlanTitle: "Aastane",
     benefitsTitle: "Pro eelised",

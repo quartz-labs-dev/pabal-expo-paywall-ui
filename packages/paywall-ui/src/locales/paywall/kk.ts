@@ -5,9 +5,6 @@ const kk = createPaywallLocaleText({
     nextButton: "Келесі",
     nextButtonAccessibilityLabel: "Жоспар таңдауға өту",
   },
-  reviewSection: {
-    reviewSectionTitle: "Пайдаланушы пікірлері",
-  },
   text: {
     annualPlanTitle: "Жылдық",
     benefitsTitle: "Pro артықшылықтарыңыз",

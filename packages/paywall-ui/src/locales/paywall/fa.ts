@@ -5,9 +5,6 @@ const fa = createPaywallLocaleText({
     nextButton: "بعدی",
     nextButtonAccessibilityLabel: "ادامه به انتخاب طرح",
   },
-  reviewSection: {
-    reviewSectionTitle: "نظرات کاربران",
-  },
   text: {
     annualPlanTitle: "سالانه",
     benefitsTitle: "مزایای Pro شما",

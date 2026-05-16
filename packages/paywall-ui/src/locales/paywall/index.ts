@@ -73,7 +73,6 @@ import zhHant from "./zh-hant";
 import zu from "./zu";
 import type {
   PaywallLocaleText,
-  PaywallReviewSectionText,
   PaywallText,
   PaywallValueStepText,
 } from "./types";
@@ -243,15 +242,4 @@ export const PAYWALL_VALUE_STEP_TEXT = Object.fromEntries(
   ]),
 ) as Record<PaywallTextLocale, PaywallValueStepText>;
 
-export const PAYWALL_REVIEW_SECTION_TEXT = Object.fromEntries(
-  PAYWALL_TEXT_LOCALES.map((locale) => [
-    locale,
-    PAYWALL_LOCALE_TEXT[locale].reviewSection,
-  ]),
-) as Record<PaywallTextLocale, PaywallReviewSectionText>;
-
-export type {
-  PaywallReviewSectionText,
-  PaywallText,
-  PaywallValueStepText,
-} from "./types";
+export type { PaywallText, PaywallValueStepText } from "./types";

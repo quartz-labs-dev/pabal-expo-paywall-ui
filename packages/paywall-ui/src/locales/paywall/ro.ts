@@ -5,9 +5,6 @@ const ro = createPaywallLocaleText({
     nextButton: "Următorul",
     nextButtonAccessibilityLabel: "Continuați la alegerea planului",
   },
-  reviewSection: {
-    reviewSectionTitle: "Recenzii ale utilizatorilor",
-  },
   text: {
     annualPlanTitle: "Anual",
     benefitsTitle: "Beneficiile Pro",

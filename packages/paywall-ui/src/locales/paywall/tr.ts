@@ -5,9 +5,6 @@ const tr = createPaywallLocaleText({
     nextButton: "İleri",
     nextButtonAccessibilityLabel: "Plan seçimine devam et",
   },
-  reviewSection: {
-    reviewSectionTitle: "Kullanıcı yorumları",
-  },
   text: {
     annualPlanTitle: "Yıllık",
     benefitsTitle: "Pro avantajları",

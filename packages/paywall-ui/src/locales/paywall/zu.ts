@@ -5,9 +5,6 @@ const zu = createPaywallLocaleText({
     nextButton: "Okulandelayo",
     nextButtonAccessibilityLabel: "Qhubekela ekukhetheni uhlelo",
   },
-  reviewSection: {
-    reviewSectionTitle: "Izibuyekezo zabasebenzisi",
-  },
   text: {
     annualPlanTitle: "Ngonyaka",
     benefitsTitle: "Izinzuzo zakho ze-Pro",

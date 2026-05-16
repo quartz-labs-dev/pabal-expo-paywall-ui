@@ -14,17 +14,13 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { getDefaultSelectedPlanId } from "./create-paywall-plans";
 import { ChevronLeftIcon, CloseIcon } from "../shared/icons";
 import { LegalLinks } from "./LegalLinks";
-import type {
-  PaywallReviewSectionText,
-  PaywallValueStepText,
-} from "../locales/paywall";
+import type { PaywallValueStepText } from "../locales/paywall";
 import { PaywallBenefitList } from "./PaywallBenefitList";
 import { PaywallFeatureComparison } from "./PaywallFeatureComparison";
 import {
   createContentRiseTranslateY,
   startContentRiseTransition,
 } from "./paywall-animation";
-import { PaywallReviewSection } from "./PaywallReviewSection";
 import { PlanSelector } from "./PlanSelector";
 import { PurchaseButton } from "./PurchaseButton";
 import { SupportMessageBubble } from "./SupportMessageBubble";
@@ -136,7 +132,6 @@ export const Paywall = <TPackage,>({
   benefits = [],
   featureComparison,
   content,
-  reviewSection,
   purchaseButtonBackground,
   supportMessageIcon,
   copy,
@@ -225,8 +220,6 @@ export const Paywall = <TPackage,>({
   const shouldUseLargeBenefits = isValueStep;
   const shouldShowFeatureComparison = Boolean(featureComparison?.rows.length);
   const valueStepCopy = copy as typeof copy & Partial<PaywallValueStepText>;
-  const reviewSectionCopy = copy as typeof copy &
-    Partial<PaywallReviewSectionText>;
   const initialTranslateY = createContentRiseTranslateY(initialTransition);
   const stepTranslateY = createContentRiseTranslateY(stepTransition);
   const bodyTranslateY = Animated.add(initialTranslateY, stepTranslateY);
@@ -416,14 +409,6 @@ export const Paywall = <TPackage,>({
 
           {shouldShowFeatureComparison && !shouldHideBenefits && bodyContent && (
             <View style={styles.customContent}>{bodyContent}</View>
-          )}
-
-          {!isValueStep && reviewSection && (
-            <PaywallReviewSection
-              reviews={reviewSection.reviews}
-              theme={theme}
-              title={reviewSectionCopy.reviewSectionTitle}
-            />
           )}
 
           {!isValueStep && copy.supportMessage && (

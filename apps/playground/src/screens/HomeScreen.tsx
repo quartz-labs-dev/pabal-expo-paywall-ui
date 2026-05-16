@@ -1,6 +1,5 @@
 import { type ReactNode, useState } from "react";
 import {
-  Alert,
   Modal,
   Pressable,
   ScrollView,
@@ -9,10 +8,6 @@ import {
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import {
-  ReviewRequestModal,
-  getDefaultReviewRequestModalCopy,
-} from "pabal-expo-paywall-ui";
 
 import { LocaleSelector } from "../components/LocaleSelector";
 import { packageScenarioLabels } from "../fixtures/paywall-plans";
@@ -94,7 +89,6 @@ export const HomeScreen = ({
   const insets = useSafeAreaInsets();
   const [isPaywallSettingsVisible, setIsPaywallSettingsVisible] =
     useState(false);
-  const [isReviewRequestVisible, setIsReviewRequestVisible] = useState(false);
   const closePaywallSettings = () => setIsPaywallSettingsVisible(false);
 
   return (
@@ -127,17 +121,6 @@ export const HomeScreen = ({
           <Text style={styles.sectionTitle}>Profile</Text>
           <Pressable onPress={onOpenProfile} style={styles.secondaryAction}>
             <Text style={styles.secondaryActionText}>Open /profile</Text>
-          </Pressable>
-        </View>
-
-        <View style={styles.sharedSection}>
-          <Text style={styles.sectionTitle}>Review modal</Text>
-          <Pressable
-            accessibilityRole="button"
-            onPress={() => setIsReviewRequestVisible(true)}
-            style={styles.secondaryAction}
-          >
-            <Text style={styles.secondaryActionText}>Open modal</Text>
           </Pressable>
         </View>
 
@@ -186,35 +169,6 @@ export const HomeScreen = ({
           onToggleTrialEligibility={onToggleTrialEligibility}
         />
       </SettingsModal>
-
-      <ReviewRequestModal
-        copy={getDefaultReviewRequestModalCopy(selectedLocale, {
-          developerName: "Quartz",
-        })}
-        developerName="Quartz"
-        theme={{
-          accentColor: "#FF7A45",
-          accentTextColor: "#FFFFFF",
-          backgroundColor: "#F7F8FA",
-          borderColor: "#DDE3EA",
-          mutedTextColor: "#7B8491",
-          primaryTextColor: "#1D2430",
-          secondaryTextColor: "#596273",
-          selectedBorderColor: "#FF7A45",
-          selectedSurfaceColor: "#FFF1EA",
-          surfaceColor: "#FFFFFF",
-        }}
-        visible={isReviewRequestVisible}
-        onDismiss={() => setIsReviewRequestVisible(false)}
-        onRequestFeedback={() => {
-          setIsReviewRequestVisible(false);
-          Alert.alert("Feedback callback");
-        }}
-        onRequestReview={() => {
-          setIsReviewRequestVisible(false);
-          Alert.alert("Store review callback");
-        }}
-      />
     </View>
   );
 };

@@ -5,9 +5,6 @@ const sq = createPaywallLocaleText({
     nextButton: "Tjetër",
     nextButtonAccessibilityLabel: "Vazhdo te zgjedhja e planit",
   },
-  reviewSection: {
-    reviewSectionTitle: "Vlerësime nga përdoruesit",
-  },
   text: {
     annualPlanTitle: "Vjetor",
     benefitsTitle: "Përfitimet tuaja Pro",

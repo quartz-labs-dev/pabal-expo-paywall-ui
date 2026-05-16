@@ -5,9 +5,6 @@ const hu = createPaywallLocaleText({
     nextButton: "Tovább",
     nextButtonAccessibilityLabel: "Tovább a csomag kiválasztásához",
   },
-  reviewSection: {
-    reviewSectionTitle: "Felhasználói vélemények",
-  },
   text: {
     annualPlanTitle: "Éves",
     benefitsTitle: "Pro előnyök",

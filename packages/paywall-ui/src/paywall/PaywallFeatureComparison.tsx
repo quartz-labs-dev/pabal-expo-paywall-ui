@@ -14,17 +14,14 @@ interface PaywallFeatureComparisonProps {
 
 const CHECK_MARK = "\u2713";
 const EXCLUDED_MARK = "\u2013";
+const FREE_COLUMN_TEXT_COLOR = "#FFFFFF";
 
 const getCellTextColor = (
-  cell: PaywallFeatureComparisonCell,
+  column: "free" | "paid",
   theme: PaywallTheme,
 ): string => {
-  if (cell.kind === "included") return theme.accentColor;
-  if (cell.kind === "excluded") return theme.mutedTextColor;
-  if (cell.tone === "accent") return theme.accentColor;
-  if (cell.tone === "muted") return theme.mutedTextColor;
-
-  return theme.primaryTextColor;
+  if (column === "free") return FREE_COLUMN_TEXT_COLOR;
+  return theme.accentColor;
 };
 
 const getCellAccessibilityLabel = (
@@ -39,6 +36,7 @@ const getCellAccessibilityLabel = (
 
 const renderCellContent = (
   cell: PaywallFeatureComparisonCell,
+  column: "free" | "paid",
   theme: PaywallTheme,
 ) => {
   const label =
@@ -54,7 +52,7 @@ const renderCellContent = (
       style={[
         styles.cellText,
         cell.kind !== "text" && styles.symbolText,
-        { color: getCellTextColor(cell, theme) },
+        { color: getCellTextColor(column, theme) },
       ]}
     >
       {label}
@@ -66,11 +64,6 @@ export const PaywallFeatureComparison = ({
   comparison,
   theme,
 }: PaywallFeatureComparisonProps) => {
-  const isPaidHighlighted = comparison.highlightedColumn === "paid";
-  const paidColumnBackgroundColor = isPaidHighlighted
-    ? getColorWithAlpha(theme.accentColor, 0.12, theme.selectedSurfaceColor)
-    : "transparent";
-
   if (comparison.rows.length === 0) return null;
 
   return (
@@ -118,33 +111,21 @@ export const PaywallFeatureComparison = ({
             ]}
           >
             <Text
-              style={[styles.headerText, { color: theme.secondaryTextColor }]}
+              style={[styles.headerText, { color: FREE_COLUMN_TEXT_COLOR }]}
             >
               {comparison.freeColumnTitle}
             </Text>
           </View>
-          <View
-            style={[
-              styles.headerPlan,
-              styles.paidHeader,
-              {
-                backgroundColor: paidColumnBackgroundColor,
-              },
-            ]}
-          >
-            {comparison.paidBadge ? (
-              comparison.paidBadge
-            ) : (
-              <Text
-                style={[
-                  styles.headerText,
-                  styles.paidHeaderText,
-                  { color: theme.accentColor },
-                ]}
-              >
-                {comparison.paidColumnTitle}
-              </Text>
-            )}
+          <View style={[styles.headerPlan, styles.paidHeader]}>
+            <Text
+              style={[
+                styles.headerText,
+                styles.paidHeaderText,
+                { color: theme.accentColor },
+              ]}
+            >
+              {comparison.paidColumnTitle}
+            </Text>
           </View>
         </View>
 
@@ -181,17 +162,11 @@ export const PaywallFeatureComparison = ({
               ) : (
                 <View style={styles.featureButton}>{featureLabel}</View>
               )}
-              <View style={styles.cell}>{renderCellContent(row.free, theme)}</View>
-              <View
-                style={[
-                  styles.cell,
-                  isLastRow && styles.paidCellLast,
-                  {
-                    backgroundColor: paidColumnBackgroundColor,
-                  },
-                ]}
-              >
-                {renderCellContent(row.paid, theme)}
+              <View style={styles.cell}>
+                {renderCellContent(row.free, "free", theme)}
+              </View>
+              <View style={[styles.cell, isLastRow && styles.paidCellLast]}>
+                {renderCellContent(row.paid, "paid", theme)}
               </View>
             </View>
           );
@@ -223,9 +198,9 @@ const styles = StyleSheet.create({
     minHeight: 34,
   },
   headerText: {
-    fontSize: 13,
+    fontSize: 15,
     fontWeight: "700",
-    lineHeight: 18,
+    lineHeight: 20,
     textAlign: "center",
   },
   headerFeature: {
@@ -248,7 +223,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 8,
   },
   paidHeaderText: {
-    fontSize: 14,
+    fontSize: 16,
   },
   row: {
     alignItems: "center",
@@ -288,9 +263,9 @@ const styles = StyleSheet.create({
   },
   cellText: {
     flexShrink: 1,
-    fontSize: 11,
-    fontWeight: "600",
-    lineHeight: 15,
+    fontSize: 13,
+    fontWeight: "800",
+    lineHeight: 17,
     textAlign: "center",
   },
   symbolText: {

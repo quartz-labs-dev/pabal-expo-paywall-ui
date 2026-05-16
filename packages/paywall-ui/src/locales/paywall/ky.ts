@@ -5,9 +5,6 @@ const ky = createPaywallLocaleText({
     nextButton: "Кийинки",
     nextButtonAccessibilityLabel: "Планды тандоого өтүү",
   },
-  reviewSection: {
-    reviewSectionTitle: "Колдонуучулардын пикирлери",
-  },
   text: {
     annualPlanTitle: "Жылдык",
     benefitsTitle: "Pro артыкчылыктарыңыз",

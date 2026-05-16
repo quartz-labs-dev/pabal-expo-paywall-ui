@@ -57,10 +57,6 @@ export interface PaywallValueStepText {
   nextButtonAccessibilityLabel: string;
 }
 
-export interface PaywallReviewSectionText {
-  reviewSectionTitle: string;
-}
-
 interface PaywallTextInput
   extends Omit<
     PaywallText,
@@ -113,7 +109,6 @@ interface PaywallTextInput
 export interface PaywallLocaleText {
   text: PaywallText;
   valueStep: PaywallValueStepText;
-  reviewSection: PaywallReviewSectionText;
 }
 
 const getDefaultTrialUnitLabel = (
@@ -182,11 +177,9 @@ const createPaywallText = (text: PaywallTextInput): PaywallText => {
 export const createPaywallLocaleText = (localeText: {
   text: PaywallTextInput;
   valueStep: PaywallValueStepText;
-  reviewSection: PaywallReviewSectionText;
 }): PaywallLocaleText => {
   return {
     text: createPaywallText(localeText.text),
     valueStep: localeText.valueStep,
-    reviewSection: localeText.reviewSection,
   };
 };

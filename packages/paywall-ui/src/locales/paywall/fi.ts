@@ -5,9 +5,6 @@ const fi = createPaywallLocaleText({
     nextButton: "Seuraava",
     nextButtonAccessibilityLabel: "Jatka paketin valintaan",
   },
-  reviewSection: {
-    reviewSectionTitle: "Käyttäjäarvostelut",
-  },
   text: {
     annualPlanTitle: "Vuosittain",
     benefitsTitle: "Pro-edut",

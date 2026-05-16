@@ -5,9 +5,6 @@ const th = createPaywallLocaleText({
     nextButton: "ถัดไป",
     nextButtonAccessibilityLabel: "ไปต่อที่การเลือกแผน",
   },
-  reviewSection: {
-    reviewSectionTitle: "รีวิวจากผู้ใช้",
-  },
   text: {
     annualPlanTitle: "รายปี",
     benefitsTitle: "สิทธิประโยชน์ Pro ของคุณ",

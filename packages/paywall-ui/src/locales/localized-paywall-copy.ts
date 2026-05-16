@@ -1,11 +1,9 @@
 import {
-  PAYWALL_REVIEW_SECTION_TEXT,
   PAYWALL_TEXT,
   PAYWALL_TEXT_LOCALES,
   PAYWALL_VALUE_STEP_TEXT,
 } from "./paywall";
 import type {
-  PaywallReviewSectionText,
   PaywallText,
   PaywallTextLocale,
   PaywallValueStepText,
@@ -16,13 +14,7 @@ import type {
   PaywallPlanPeriod,
   ProfileIdentifiersCopy,
   ProfileSubscriptionCopy,
-  ReviewRequestModalCopy,
 } from "../types";
-import {
-  getReviewRequestModalCopy,
-  type ReviewRequestModalCopyOptions,
-} from "./review-request-modal";
-
 export { PAYWALL_TEXT_LOCALES };
 export type { PaywallTextLocale };
 
@@ -47,7 +39,6 @@ interface DefaultPaywallCopyOverrides
 
 interface UnsafeDefaultPaywallCopyOverrides
   extends DefaultPaywallCopyOverrides,
-    Partial<PaywallReviewSectionText>,
     Partial<PaywallValueStepText> {}
 
 export const resolvePaywallTextLocale = (
@@ -104,13 +95,10 @@ export const getDefaultPaywallCopy = (
   const {
     nextButton: _nextButton,
     nextButtonAccessibilityLabel: _nextButtonAccessibilityLabel,
-    reviewSectionTitle: _reviewSectionTitle,
     ...safeCopy
   } = copy as UnsafeDefaultPaywallCopyOverrides;
 
-  const localizedCopy: PaywallCopy &
-    PaywallReviewSectionText &
-    PaywallValueStepText = {
+  const localizedCopy: PaywallCopy & PaywallValueStepText = {
     purchaseButton: text.purchaseButton,
     continueButton: text.continueButton,
     purchasingButton: text.purchasingButton,
@@ -126,7 +114,6 @@ export const getDefaultPaywallCopy = (
     formatTrialPriceDisclosure: text.formatTrialPriceDisclosure,
     trialIncludedDescription: text.trialIncludedDescription,
     ...PAYWALL_VALUE_STEP_TEXT[resolvePaywallTextLocale(locale)],
-    ...PAYWALL_REVIEW_SECTION_TEXT[resolvePaywallTextLocale(locale)],
     ...safeCopy,
   };
 
@@ -169,13 +156,6 @@ export const getDefaultProfileIdentifiersCopy = (
     hideButtonLabel: text.hideIdentifiersButton,
     showButtonLabel: text.showIdentifiersButton,
   };
-};
-
-export const getDefaultReviewRequestModalCopy = (
-  locale?: string,
-  options: ReviewRequestModalCopyOptions = {},
-): ReviewRequestModalCopy => {
-  return getReviewRequestModalCopy(resolvePaywallTextLocale(locale), options);
 };
 
 export const getDefaultProfilePlanLabel = (

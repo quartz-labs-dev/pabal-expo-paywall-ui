@@ -36,9 +36,7 @@ const profileSubscriptionBaseConfig = {
       {
         id: "home-screen-widget",
         title: "Home Screen Widget",
-        titleContent: (
-          <ProfileUsageTitle badge="Widget" title="Home Screen Widget" />
-        ),
+        titleContent: <ProfileUsageTitle title="Home Screen Widget" />,
         usageText: "Off",
         proLimitText: "Included",
         onPress: () => Alert.alert("Home Screen Widget details"),
@@ -264,19 +262,13 @@ function GoldenHorizonIcon({ isSubscribed }: GoldenHorizonIconProps) {
 }
 
 interface ProfileUsageTitleProps {
-  badge?: string;
   title: string;
 }
 
-function ProfileUsageTitle({ badge, title }: ProfileUsageTitleProps) {
+function ProfileUsageTitle({ title }: ProfileUsageTitleProps) {
   return (
     <View style={styles.profileUsageTitle}>
       <Text style={styles.profileUsageTitleText}>{title}</Text>
-      {badge ? (
-        <View style={styles.profileUsageTitleBadge}>
-          <Text style={styles.profileUsageTitleBadgeText}>{badge}</Text>
-        </View>
-      ) : null}
     </View>
   );
 }
@@ -427,17 +419,5 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     lineHeight: 18,
     textDecorationLine: "underline",
-  },
-  profileUsageTitleBadge: {
-    backgroundColor: "rgba(90, 200, 183, 0.16)",
-    borderRadius: 5,
-    paddingHorizontal: 5,
-    paddingVertical: 2,
-  },
-  profileUsageTitleBadgeText: {
-    color: "#5AC8B7",
-    fontSize: 9,
-    fontWeight: "800",
-    lineHeight: 11,
   },
 });
