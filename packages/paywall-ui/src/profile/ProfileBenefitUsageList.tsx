@@ -121,9 +121,9 @@ const styles = StyleSheet.create({
   },
   headerText: {
     flexShrink: 1,
-    fontSize: 11,
-    fontWeight: "700",
-    lineHeight: 15,
+    fontSize: 13,
+    fontWeight: "600",
+    lineHeight: 17,
     textAlign: "center",
   },
   row: {
@@ -160,9 +160,9 @@ const styles = StyleSheet.create({
   },
   valueText: {
     flexShrink: 1,
-    fontSize: 11,
+    fontSize: 13,
     fontWeight: "600",
-    lineHeight: 15,
+    lineHeight: 17,
     textAlign: "center",
   },
 });
