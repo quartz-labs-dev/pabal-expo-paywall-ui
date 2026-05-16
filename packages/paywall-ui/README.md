@@ -61,8 +61,10 @@ const featureComparison = {
     {
       id: "premium-widget",
       label: "Home Screen Widget",
+      labelContent: <FeatureTitle title="Home Screen Widget" badge="New" />,
       free: { kind: "excluded", accessibilityLabel: "Not included" },
       paid: { kind: "included", accessibilityLabel: "Included" },
+      onPress: openWidgetDetails,
     },
     {
       id: "saved-locations",
@@ -131,6 +133,8 @@ for custom first-step body content.
 Feature comparison cells are explicit: `{ kind: "included" }` renders a check,
 `{ kind: "excluded" }` renders a dash, and `{ kind: "text", text: "Unlimited" }`
 renders app-provided usage copy as-is.
+Feature row titles keep a required plain `label` for accessibility and may pass
+`labelContent` when the app needs a custom React Native title component.
 Use `reviewSection` for real user reviews on the purchase step. Its title is
 localized by the package and is not app-configurable.
 `getDefaultPaywallCopy()` includes a localized developer note below the review
@@ -285,6 +289,7 @@ Add this only when the app needs to show subscription status in profile/settings
 import {
   ProfileSubscriptionSection,
   getDefaultProfileSubscriptionCopy,
+  type ProfileBenefitUsageSection,
   type ProfileIdentifierItem,
   type ProfileSubscriptionConfig,
 } from "pabal-expo-paywall-ui";
@@ -307,8 +312,31 @@ const copyProfileIdentifier = async (item: ProfileIdentifierItem) => {
   await copyToClipboard(item.value);
 };
 
+const profileBenefitUsageSection = {
+  usageColumnTitle: "Usage",
+  proLimitColumnTitle: "Pro",
+  items: [
+    {
+      id: "premium-widget",
+      title: "Home Screen Widget",
+      titleContent: <FeatureTitle title="Home Screen Widget" />,
+      usageText: "Off",
+      proLimitText: "Included",
+      onPress: openWidgetDetails,
+    },
+    {
+      id: "saved-locations",
+      title: "Custom locations",
+      usageText: "1 place",
+      proLimitText: "Unlimited",
+    },
+  ],
+} satisfies ProfileBenefitUsageSection;
+
 const profileSubscriptionConfig = {
   benefits: paywallBenefits,
+  benefitDisplayMode: "list",
+  benefitUsageSection: profileBenefitUsageSection,
   copy: {
     ...getDefaultProfileSubscriptionCopy(appLocale, {
       productName: "Golden Horizon Pro",
@@ -334,6 +362,7 @@ const profileSubscriptionConfig = {
 
 <ProfileSubscriptionSection
   {...profileSubscriptionConfig}
+  benefitDisplayMode={profileBenefitDisplayMode}
   isSubscribed={isPro}
   planLabel={isPro ? "Annual Pro" : undefined}
   renewalLabel={isPro ? "Managed by your store account" : undefined}
@@ -346,6 +375,14 @@ const profileSubscriptionConfig = {
 
 When `isSubscribed` is true, upgrade and restore actions are hidden. Subscription
 management remains visible.
+
+Use `benefitDisplayMode: "list"` for the current profile benefit list. Use
+`benefitDisplayMode: "usage"` with `benefitUsageSection` when the profile should
+show title, current usage, and Pro allocation columns. Each usage item keeps a
+required plain `title` for accessibility and may pass `titleContent` when the app
+needs a custom React Native title component. If usage mode is
+selected but `benefitUsageSection.items` is empty, the component falls back to
+the list mode so the profile does not render an empty benefits area.
 
 Prefer using the same profile title in both states, formatted as the app name
 plus `Pro` (for example, `Golden Horizon Pro`). Put subscription state in the

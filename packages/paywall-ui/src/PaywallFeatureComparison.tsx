@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { getColorWithAlpha } from "./color-utils";
 import type {
@@ -150,14 +150,37 @@ export const PaywallFeatureComparison = ({
 
         {comparison.rows.map((row, index) => {
           const isLastRow = index === comparison.rows.length - 1;
+          const featureLabel = row.labelContent ?? (
+            <Text
+              style={[
+                styles.featureLabel,
+                row.onPress && styles.clickableFeatureLabel,
+                { color: theme.primaryTextColor },
+              ]}
+            >
+              {row.label}
+            </Text>
+          );
 
           return (
             <View key={row.id} style={styles.row}>
-              <Text
-                style={[styles.featureLabel, { color: theme.primaryTextColor }]}
-              >
-                {row.label}
-              </Text>
+              {row.onPress ? (
+                <Pressable
+                  accessibilityLabel={row.label}
+                  accessibilityRole="button"
+                  onPress={() => {
+                    void row.onPress?.();
+                  }}
+                  style={({ pressed }) => [
+                    styles.featureButton,
+                    pressed && styles.pressedFeatureButton,
+                  ]}
+                >
+                  {featureLabel}
+                </Pressable>
+              ) : (
+                <View style={styles.featureButton}>{featureLabel}</View>
+              )}
               <View style={styles.cell}>{renderCellContent(row.free, theme)}</View>
               <View
                 style={[
@@ -233,13 +256,24 @@ const styles = StyleSheet.create({
     minHeight: 44,
   },
   featureLabel: {
-    flex: 1,
     flexShrink: 1,
     fontSize: 14,
     fontWeight: "600",
     lineHeight: 19,
     minWidth: 0,
+  },
+  clickableFeatureLabel: {
+    textDecorationLine: "underline",
+  },
+  featureButton: {
+    flex: 1,
+    justifyContent: "center",
+    minHeight: 44,
+    minWidth: 0,
     paddingRight: 10,
+  },
+  pressedFeatureButton: {
+    opacity: 0.72,
   },
   cell: {
     alignItems: "center",

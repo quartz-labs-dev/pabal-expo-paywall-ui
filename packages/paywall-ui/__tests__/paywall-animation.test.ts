@@ -7,6 +7,10 @@ const readPaywallSource = (): string => {
   return readFileSync(join(process.cwd(), "src", "Paywall.tsx"), "utf8");
 };
 
+const readTypesSource = (): string => {
+  return readFileSync(join(process.cwd(), "src", "types.ts"), "utf8");
+};
+
 const readPaywallAnimationSource = (): string => {
   return readFileSync(
     join(process.cwd(), "src", "paywall-animation.ts"),
@@ -17,6 +21,20 @@ const readPaywallAnimationSource = (): string => {
 const readFeatureComparisonSource = (): string => {
   return readFileSync(
     join(process.cwd(), "src", "PaywallFeatureComparison.tsx"),
+    "utf8",
+  );
+};
+
+const readProfileSubscriptionSource = (): string => {
+  return readFileSync(
+    join(process.cwd(), "src", "ProfileSubscriptionSection.tsx"),
+    "utf8",
+  );
+};
+
+const readProfileBenefitUsageSource = (): string => {
+  return readFileSync(
+    join(process.cwd(), "src", "ProfileBenefitUsageList.tsx"),
     "utf8",
   );
 };
@@ -88,6 +106,7 @@ test("keeps step transitions as a single vertical settle animation", () => {
 test("renders feature comparison cells from explicit cell kinds", () => {
   const paywallSource = readPaywallSource();
   const featureComparisonSource = readFeatureComparisonSource();
+  const typesSource = readTypesSource();
 
   assert.match(
     paywallSource,
@@ -100,4 +119,31 @@ test("renders feature comparison cells from explicit cell kinds", () => {
   assert.match(featureComparisonSource, /kind === "included"/);
   assert.match(featureComparisonSource, /kind === "excluded"/);
   assert.match(featureComparisonSource, /cell\.text/);
+  assert.match(featureComparisonSource, /accessibilityRole="button"/);
+  assert.match(featureComparisonSource, /accessibilityLabel=\{row\.label\}/);
+  assert.match(featureComparisonSource, /row\.onPress/);
+  assert.match(typesSource, /label: string/);
+  assert.match(typesSource, /labelContent\?: ReactNode/);
+});
+
+test("keeps profile benefit list and usage modes explicit", () => {
+  const profileSource = readProfileSubscriptionSource();
+  const usageSource = readProfileBenefitUsageSource();
+  const typesSource = readTypesSource();
+
+  assert.match(
+    profileSource,
+    /benefitDisplayMode === "usage" &&\s+Boolean\(benefitUsageSection\?\.items\.length\)/,
+  );
+  assert.match(profileSource, /<PaywallBenefitList/);
+  assert.match(profileSource, /<ProfileBenefitUsageList/);
+  assert.match(usageSource, /usageColumnTitle/);
+  assert.match(usageSource, /proLimitColumnTitle/);
+  assert.match(usageSource, /proLimitText/);
+  assert.match(usageSource, /accessibilityRole="button"/);
+  assert.match(usageSource, /accessibilityLabel=\{item\.title\}/);
+  assert.match(usageSource, /item\.onPress/);
+  assert.match(typesSource, /title: string/);
+  assert.match(typesSource, /titleContent\?: ReactNode/);
+  assert.doesNotMatch(usageSource, /item\.icon/);
 });

@@ -9,6 +9,7 @@ import {
 import { ProfileIdentifiersSection } from "./ProfileIdentifiersSection";
 import { getDefaultProfileIdentifiersCopy } from "./localized-paywall-copy";
 import { PaywallBenefitList } from "./PaywallBenefitList";
+import { ProfileBenefitUsageList } from "./ProfileBenefitUsageList";
 import { SupportMessageBubble } from "./SupportMessageBubble";
 import { mergePaywallTheme } from "./theme";
 import type {
@@ -19,6 +20,8 @@ import type {
 export const ProfileSubscriptionSection = ({
   isSubscribed,
   benefits = [],
+  benefitDisplayMode = "list",
+  benefitUsageSection,
   content,
   copy,
   headerIcon,
@@ -60,6 +63,9 @@ export const ProfileSubscriptionSection = ({
     Boolean(copy.redeemPromoCodeButton);
   const shouldShowBothSecondaryActions =
     shouldShowRestorePurchases && shouldShowPromoCode;
+  const shouldShowUsageBenefits =
+    benefitDisplayMode === "usage" &&
+    Boolean(benefitUsageSection?.items.length);
   const shouldShowIdentifiers =
     identifierSection?.isEnabled === true &&
     Boolean(identifierSection?.items.length);
@@ -182,13 +188,24 @@ export const ProfileSubscriptionSection = ({
           ]}
         >
           <View style={styles.contentInner}>
-            <PaywallBenefitList
-              benefits={benefits}
-              content={content}
-              theme={theme}
-              title={copy.benefitsTitle}
-              variant="contained"
-            />
+            {shouldShowUsageBenefits && benefitUsageSection ? (
+              <>
+                <ProfileBenefitUsageList
+                  section={benefitUsageSection}
+                  theme={theme}
+                  title={copy.benefitsTitle}
+                />
+                {content && <View style={styles.customContent}>{content}</View>}
+              </>
+            ) : (
+              <PaywallBenefitList
+                benefits={benefits}
+                content={content}
+                theme={theme}
+                title={copy.benefitsTitle}
+                variant="contained"
+              />
+            )}
 
             <View style={styles.actions}>
               {shouldShowUpgrade && (
@@ -435,6 +452,9 @@ const styles = StyleSheet.create({
   contentInner: {
     gap: 22,
     padding: 20,
+  },
+  customContent: {
+    width: "100%",
   },
   actions: {
     gap: 10,

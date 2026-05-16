@@ -4,6 +4,7 @@ import {
   getDefaultProfileRenewalLabel,
   getDefaultProfileSubscriptionCopy,
   type ProfileSubscriptionConfig,
+  type ProfileBenefitDisplayMode,
   type PaywallPlanPeriod,
 } from "pabal-expo-paywall-ui";
 import { useMemo, useState } from "react";
@@ -28,6 +29,35 @@ const wait = (duration: number) => {
 
 const profileSubscriptionBaseConfig = {
   benefits: playgroundBenefits,
+  benefitUsageSection: {
+    usageColumnTitle: "Usage",
+    proLimitColumnTitle: "Pro",
+    items: [
+      {
+        id: "home-screen-widget",
+        title: "Home Screen Widget",
+        titleContent: (
+          <ProfileUsageTitle badge="Widget" title="Home Screen Widget" />
+        ),
+        usageText: "Off",
+        proLimitText: "Included",
+        onPress: () => Alert.alert("Home Screen Widget details"),
+      },
+      {
+        id: "custom-locations",
+        title: "Custom Location Settings",
+        usageText: "1 saved",
+        proLimitText: "Unlimited",
+      },
+      {
+        id: "custom-colors",
+        title: "Custom Color Palette Settings",
+        usageText: "Default",
+        proLimitText: "Unlimited",
+        onPress: () => Alert.alert("Color palette details"),
+      },
+    ],
+  },
   supportMessageIcon: <SupportAppLogo />,
 } satisfies Omit<ProfileSubscriptionConfig, "copy" | "headerIcon">;
 
@@ -54,6 +84,8 @@ export const ProfilePlaygroundScreen = ({
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [showPromoCodeButton, setShowPromoCodeButton] = useState(true);
   const [showProfileIdentifiers, setShowProfileIdentifiers] = useState(false);
+  const [benefitDisplayMode, setBenefitDisplayMode] =
+    useState<ProfileBenefitDisplayMode>("list");
   const [isUpgrading, setIsUpgrading] = useState(false);
   const [isManagingSubscription, setIsManagingSubscription] = useState(false);
   const [isRestoringPurchases, setIsRestoringPurchases] = useState(false);
@@ -151,10 +183,20 @@ export const ProfilePlaygroundScreen = ({
               setShowProfileIdentifiers((previousValue) => !previousValue)
             }
           />
+          <ToggleButton
+            isSelected={benefitDisplayMode === "usage"}
+            label={benefitDisplayMode === "usage" ? "Usage" : "List"}
+            onPress={() =>
+              setBenefitDisplayMode((previousMode) =>
+                previousMode === "usage" ? "list" : "usage",
+              )
+            }
+          />
         </View>
 
         <ProfileSubscriptionSection
           {...profileSubscriptionBaseConfig}
+          benefitDisplayMode={benefitDisplayMode}
           copy={profileCopy}
           headerIcon={<GoldenHorizonIcon isSubscribed={isSubscribed} />}
           identifierSection={identifierSection}
@@ -232,6 +274,24 @@ function SupportAppLogo() {
   );
 }
 
+interface ProfileUsageTitleProps {
+  badge?: string;
+  title: string;
+}
+
+function ProfileUsageTitle({ badge, title }: ProfileUsageTitleProps) {
+  return (
+    <View style={styles.profileUsageTitle}>
+      <Text style={styles.profileUsageTitleText}>{title}</Text>
+      {badge ? (
+        <View style={styles.profileUsageTitleBadge}>
+          <Text style={styles.profileUsageTitleBadgeText}>{badge}</Text>
+        </View>
+      ) : null}
+    </View>
+  );
+}
+
 interface ToggleButtonProps {
   isSelected: boolean;
   label: string;
@@ -282,6 +342,7 @@ const styles = StyleSheet.create({
   controls: {
     alignSelf: "stretch",
     flexDirection: "row",
+    flexWrap: "wrap",
     gap: 8,
   },
   toggleButton: {
@@ -291,8 +352,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     flex: 1,
     flexBasis: 0,
+    maxWidth: "48%",
     minHeight: 44,
-    minWidth: 0,
+    minWidth: 112,
     overflow: "hidden",
     paddingHorizontal: 8,
     paddingVertical: 11,
@@ -379,5 +441,32 @@ const styles = StyleSheet.create({
   supportAppLogoGround: {
     backgroundColor: "#FFD86F",
     flex: 1,
+  },
+  profileUsageTitle: {
+    alignItems: "center",
+    flexDirection: "row",
+    flexShrink: 1,
+    flexWrap: "wrap",
+    gap: 6,
+  },
+  profileUsageTitleText: {
+    color: "#F5F7FA",
+    flexShrink: 1,
+    fontSize: 13,
+    fontWeight: "700",
+    lineHeight: 18,
+    textDecorationLine: "underline",
+  },
+  profileUsageTitleBadge: {
+    backgroundColor: "rgba(90, 200, 183, 0.16)",
+    borderRadius: 5,
+    paddingHorizontal: 5,
+    paddingVertical: 2,
+  },
+  profileUsageTitleBadgeText: {
+    color: "#5AC8B7",
+    fontSize: 9,
+    fontWeight: "800",
+    lineHeight: 11,
   },
 });

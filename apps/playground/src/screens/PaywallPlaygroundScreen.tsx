@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Alert, ImageBackground, StyleSheet, View } from "react-native";
+import { Alert, ImageBackground, StyleSheet, Text, View } from "react-native";
 import {
   Paywall,
   createPaywallPlans,
@@ -47,6 +47,24 @@ const SupportAppLogo = () => {
   );
 };
 
+interface FeatureTitleProps {
+  badge?: string;
+  title: string;
+}
+
+const FeatureTitle = ({ badge, title }: FeatureTitleProps) => {
+  return (
+    <View style={styles.featureTitle}>
+      <Text style={styles.featureTitleText}>{title}</Text>
+      {badge ? (
+        <View style={styles.featureTitleBadge}>
+          <Text style={styles.featureTitleBadgeText}>{badge}</Text>
+        </View>
+      ) : null}
+    </View>
+  );
+};
+
 const playgroundPaywallConfig = {
   hero: <Hero />,
   supportMessageIcon: <SupportAppLogo />,
@@ -63,8 +81,10 @@ const playgroundPaywallConfig = {
       {
         id: "home-screen-widget",
         label: "Home Screen Widget",
+        labelContent: <FeatureTitle badge="NEW" title="Home Screen Widget" />,
         free: { kind: "excluded", accessibilityLabel: "Not included" },
         paid: { kind: "included", accessibilityLabel: "Included" },
+        onPress: () => Alert.alert("Home Screen Widget details"),
       },
       {
         id: "custom-locations",
@@ -77,6 +97,7 @@ const playgroundPaywallConfig = {
         label: "Custom Color Palette Settings",
         free: { kind: "excluded", accessibilityLabel: "Not included" },
         paid: { kind: "included", accessibilityLabel: "Included" },
+        onPress: () => Alert.alert("Color palette details"),
       },
     ],
   },
@@ -242,5 +263,32 @@ const styles = StyleSheet.create({
   supportAppLogoGround: {
     backgroundColor: "#FFD86F",
     flex: 1,
+  },
+  featureTitle: {
+    alignItems: "center",
+    flexDirection: "row",
+    flexShrink: 1,
+    flexWrap: "wrap",
+    gap: 6,
+  },
+  featureTitleText: {
+    color: "#F5F7FA",
+    flexShrink: 1,
+    fontSize: 14,
+    fontWeight: "600",
+    lineHeight: 19,
+    textDecorationLine: "underline",
+  },
+  featureTitleBadge: {
+    backgroundColor: "rgba(90, 200, 183, 0.16)",
+    borderRadius: 5,
+    paddingHorizontal: 5,
+    paddingVertical: 2,
+  },
+  featureTitleBadgeText: {
+    color: "#5AC8B7",
+    fontSize: 9,
+    fontWeight: "800",
+    lineHeight: 11,
   },
 });

@@ -86,8 +86,10 @@ export type PaywallFeatureComparisonCell =
 export interface PaywallFeatureComparisonRow {
   id: string;
   label: string;
+  labelContent?: ReactNode;
   free: PaywallFeatureComparisonCell;
   paid: PaywallFeatureComparisonCell;
+  onPress?: () => Promise<void> | void;
 }
 
 export interface PaywallFeatureComparison {
@@ -201,6 +203,23 @@ export interface ProfileSubscriptionCopy {
   supportMessage?: string;
 }
 
+export type ProfileBenefitDisplayMode = "list" | "usage";
+
+export interface ProfileBenefitUsageItem {
+  id: string;
+  title: string;
+  titleContent?: ReactNode;
+  usageText: string;
+  proLimitText: string;
+  onPress?: () => Promise<void> | void;
+}
+
+export interface ProfileBenefitUsageSection {
+  usageColumnTitle: string;
+  proLimitColumnTitle: string;
+  items: ProfileBenefitUsageItem[];
+}
+
 export interface ProfileIdentifierItem {
   key: string;
   label: string;
@@ -229,6 +248,8 @@ export interface ProfileIdentifiersSectionProps
 export interface ProfileSubscriptionSectionProps {
   isSubscribed: boolean;
   benefits?: PaywallBenefit[];
+  benefitDisplayMode?: ProfileBenefitDisplayMode;
+  benefitUsageSection?: ProfileBenefitUsageSection;
   content?: ReactNode;
   copy: ProfileSubscriptionCopy;
   headerIcon?: ReactNode;
@@ -252,6 +273,8 @@ export interface ProfileSubscriptionSectionProps {
 
 export interface ProfileSubscriptionConfig {
   benefits?: PaywallBenefit[];
+  benefitDisplayMode?: ProfileBenefitDisplayMode;
+  benefitUsageSection?: ProfileBenefitUsageSection;
   content?: ReactNode;
   copy: ProfileSubscriptionCopy;
   headerIcon?: ReactNode;
