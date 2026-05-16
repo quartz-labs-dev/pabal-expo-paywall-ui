@@ -7,6 +7,13 @@ const readPaywallSource = (): string => {
   return readFileSync(join(process.cwd(), "src", "Paywall.tsx"), "utf8");
 };
 
+const readPaywallAnimationSource = (): string => {
+  return readFileSync(
+    join(process.cwd(), "src", "paywall-animation.ts"),
+    "utf8",
+  );
+};
+
 test("keeps default paywall body animation as movement without opacity", () => {
   const source = readPaywallSource();
   const animatedMovementStyle =
@@ -42,14 +49,31 @@ test("supports opacity-only paywall body animation without movement", () => {
 
 test("keeps step transitions as a single vertical settle animation", () => {
   const source = readPaywallSource();
+  const animationSource = readPaywallAnimationSource();
 
+  assert.doesNotMatch(source, /STEP_TRANSITION_DURATION/);
   assert.doesNotMatch(source, /STEP_TRANSITION_OUT_DURATION/);
   assert.doesNotMatch(source, /STEP_TRANSITION_IN_DURATION/);
-  assert.doesNotMatch(source, /STEP_TRANSITION_DISTANCE/);
   assert.doesNotMatch(source, /translateX: stepTranslateX/);
   assert.doesNotMatch(source, /requestAnimationFrame/);
-  assert.match(source, /const STEP_TRANSITION_DURATION = 240;/);
-  assert.match(source, /const INITIAL_TRANSITION_DURATION = 460;/);
-  assert.match(source, /const stepTranslateY = stepTransition\.interpolate/);
-  assert.match(source, /outputRange: \[8, 0\]/);
+  assert.match(
+    source,
+    /const stepTranslateY = createContentRiseTranslateY\(stepTransition\);/,
+  );
+  assert.match(
+    source,
+    /startContentRiseTransition\(stepTransition, \(\{ finished \}\) =>/,
+  );
+  assert.match(
+    animationSource,
+    /const CONTENT_RISE_TRANSITION_DURATION = 500;/,
+  );
+  assert.match(
+    animationSource,
+    /const CONTENT_RISE_TRANSITION_DISTANCE = 20;/,
+  );
+  assert.match(
+    animationSource,
+    /outputRange: \[CONTENT_RISE_TRANSITION_DISTANCE, 0\]/,
+  );
 });

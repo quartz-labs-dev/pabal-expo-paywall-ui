@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import {
   Animated,
-  Easing,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -20,6 +19,10 @@ import type {
   PaywallValueStepText,
 } from "./locales/paywall";
 import { PaywallBenefitList } from "./PaywallBenefitList";
+import {
+  createContentRiseTranslateY,
+  startContentRiseTransition,
+} from "./paywall-animation";
 import { PaywallReviewSection } from "./PaywallReviewSection";
 import { PlanSelector } from "./PlanSelector";
 import { PurchaseButton } from "./PurchaseButton";
@@ -117,9 +120,6 @@ const FIXED_FOOTER_TOP_PADDING = 12;
 const FIXED_FOOTER_MIN_BOTTOM_PADDING = 12;
 const FIXED_FOOTER_SCROLL_GAP = 24;
 const DEFAULT_HERO_HEIGHT_RATIO = 0.23;
-const STEP_TRANSITION_DURATION = 240;
-const INITIAL_TRANSITION_DURATION = 460;
-const INITIAL_TRANSITION_DISTANCE = 22;
 const NAV_ICON_BACKGROUND_COLOR = "rgba(0, 0, 0, 0.22)";
 const NAV_ICON_COLOR = "#FFFFFF";
 const PAYWALL_HORIZONTAL_PADDING = 12;
@@ -224,14 +224,8 @@ export const Paywall = <TPackage,>({
   const valueStepCopy = copy as typeof copy & Partial<PaywallValueStepText>;
   const reviewSectionCopy = copy as typeof copy &
     Partial<PaywallReviewSectionText>;
-  const initialTranslateY = initialTransition.interpolate({
-    inputRange: [0, 1],
-    outputRange: [INITIAL_TRANSITION_DISTANCE, 0],
-  });
-  const stepTranslateY = stepTransition.interpolate({
-    inputRange: [0, 1],
-    outputRange: [8, 0],
-  });
+  const initialTranslateY = createContentRiseTranslateY(initialTransition);
+  const stepTranslateY = createContentRiseTranslateY(stepTransition);
   const bodyTranslateY = Animated.add(initialTranslateY, stepTranslateY);
   const bodyOpacity = Animated.multiply(initialTransition, stepTransition);
   const animatedMovementStyle = shouldAnimateMovement
@@ -256,16 +250,12 @@ export const Paywall = <TPackage,>({
     }
 
     initialTransition.setValue(0);
-    const animation = Animated.timing(initialTransition, {
-      duration: INITIAL_TRANSITION_DURATION,
-      easing: Easing.out(Easing.cubic),
-      toValue: 1,
-      useNativeDriver: true,
-    });
-
-    animation.start(({ finished }) => {
-      if (!finished) initialTransition.setValue(1);
-    });
+    const animation = startContentRiseTransition(
+      initialTransition,
+      ({ finished }) => {
+        if (!finished) initialTransition.setValue(1);
+      }
+    );
 
     return () => {
       animation.stop();
@@ -291,12 +281,7 @@ export const Paywall = <TPackage,>({
     setCurrentStep(nextStep);
     stepTransition.setValue(0);
 
-    Animated.timing(stepTransition, {
-      duration: STEP_TRANSITION_DURATION,
-      easing: Easing.out(Easing.cubic),
-      toValue: 1,
-      useNativeDriver: true,
-    }).start(({ finished }) => {
+    startContentRiseTransition(stepTransition, ({ finished }) => {
       isStepTransitioningRef.current = false;
       if (!finished) stepTransition.setValue(1);
     });
