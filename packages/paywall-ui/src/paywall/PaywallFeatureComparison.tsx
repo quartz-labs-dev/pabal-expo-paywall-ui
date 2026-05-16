@@ -14,13 +14,12 @@ interface PaywallFeatureComparisonProps {
 
 const CHECK_MARK = "\u2713";
 const EXCLUDED_MARK = "\u2013";
-const FREE_COLUMN_TEXT_COLOR = "#FFFFFF";
 
 const getCellTextColor = (
   column: "free" | "paid",
   theme: PaywallTheme,
 ): string => {
-  if (column === "free") return FREE_COLUMN_TEXT_COLOR;
+  if (column === "free") return theme.primaryTextColor;
   return theme.accentColor;
 };
 
@@ -111,7 +110,7 @@ export const PaywallFeatureComparison = ({
             ]}
           >
             <Text
-              style={[styles.headerText, { color: FREE_COLUMN_TEXT_COLOR }]}
+              style={[styles.headerText, { color: theme.primaryTextColor }]}
             >
               {comparison.freeColumnTitle}
             </Text>

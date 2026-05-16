@@ -2,8 +2,6 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import type { PaywallTheme, ProfileBenefitUsageSection } from "../types";
 
-const VALUE_COLUMN_TEXT_COLOR = "#FFFFFF";
-
 interface ProfileBenefitUsageListProps {
   section: ProfileBenefitUsageSection;
   theme: PaywallTheme;
@@ -30,7 +28,7 @@ export const ProfileBenefitUsageList = ({
           <View style={styles.featureHeader} />
           <View style={styles.valueHeader}>
             <Text
-              style={[styles.headerText, { color: VALUE_COLUMN_TEXT_COLOR }]}
+              style={[styles.headerText, { color: theme.primaryTextColor }]}
             >
               {section.usageColumnTitle}
             </Text>
@@ -76,7 +74,7 @@ export const ProfileBenefitUsageList = ({
               )}
               <View style={styles.valueCell}>
                 <Text
-                  style={[styles.valueText, { color: VALUE_COLUMN_TEXT_COLOR }]}
+                  style={[styles.valueText, { color: theme.primaryTextColor }]}
                 >
                   {item.usageText}
                 </Text>
