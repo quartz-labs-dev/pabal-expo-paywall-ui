@@ -55,6 +55,31 @@ const playgroundPaywallConfig = {
     subtitle: "See the value first, then choose a plan on the next step.",
   },
   benefits: playgroundBenefits,
+  featureComparison: {
+    freeColumnTitle: "Free",
+    paidColumnTitle: "Pro",
+    highlightedColumn: "none",
+    rows: [
+      {
+        id: "home-screen-widget",
+        label: "Home Screen Widget",
+        free: { kind: "excluded", accessibilityLabel: "Not included" },
+        paid: { kind: "included", accessibilityLabel: "Included" },
+      },
+      {
+        id: "custom-locations",
+        label: "Custom Location Settings",
+        free: { kind: "text", text: "1 saved place", tone: "muted" },
+        paid: { kind: "text", text: "Unlimited", tone: "accent" },
+      },
+      {
+        id: "custom-colors",
+        label: "Custom Color Palette Settings",
+        free: { kind: "excluded", accessibilityLabel: "Not included" },
+        paid: { kind: "included", accessibilityLabel: "Included" },
+      },
+    ],
+  },
   reviewSection: {
     reviews: [
       {

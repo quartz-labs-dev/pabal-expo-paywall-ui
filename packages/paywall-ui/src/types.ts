@@ -68,6 +68,38 @@ export interface PaywallBenefitDetail {
 
 export type PaywallBenefit = string | PaywallBenefitDetail;
 
+export type PaywallFeatureComparisonCell =
+  | {
+      kind: "included";
+      accessibilityLabel?: string;
+    }
+  | {
+      kind: "excluded";
+      accessibilityLabel?: string;
+    }
+  | {
+      kind: "text";
+      text: string;
+      tone?: "default" | "accent" | "muted";
+    };
+
+export interface PaywallFeatureComparisonRow {
+  id: string;
+  label: string;
+  free: PaywallFeatureComparisonCell;
+  paid: PaywallFeatureComparisonCell;
+}
+
+export interface PaywallFeatureComparison {
+  title?: string;
+  featureColumnTitle?: string;
+  freeColumnTitle: string;
+  paidColumnTitle: string;
+  paidBadge?: ReactNode;
+  highlightedColumn?: "paid" | "none";
+  rows: PaywallFeatureComparisonRow[];
+}
+
 export type PaywallStepMode = "twoStep" | "singleStep";
 
 export type PaywallAnimationMode = "default" | "opacity" | "none";
@@ -112,6 +144,7 @@ export interface PaywallProps<TPackage = unknown> {
   animationMode?: PaywallAnimationMode;
   valueStep?: PaywallValueStep;
   benefits?: PaywallBenefit[];
+  featureComparison?: PaywallFeatureComparison;
   content?: ReactNode;
   reviewSection?: PaywallReviewSection;
   purchaseButtonBackground?: ReactNode;
@@ -137,6 +170,7 @@ export interface PaywallConfig {
   animationMode?: PaywallAnimationMode;
   valueStep?: PaywallValueStep;
   benefits?: PaywallBenefit[];
+  featureComparison?: PaywallFeatureComparison;
   content?: ReactNode;
   reviewSection?: PaywallReviewSection;
   purchaseButtonBackground?: ReactNode;

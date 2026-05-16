@@ -19,6 +19,7 @@ import type {
   PaywallValueStepText,
 } from "./locales/paywall";
 import { PaywallBenefitList } from "./PaywallBenefitList";
+import { PaywallFeatureComparison } from "./PaywallFeatureComparison";
 import {
   createContentRiseTranslateY,
   startContentRiseTransition,
@@ -133,6 +134,7 @@ export const Paywall = <TPackage,>({
   animationMode = "default",
   valueStep,
   benefits = [],
+  featureComparison,
   content,
   reviewSection,
   purchaseButtonBackground,
@@ -221,6 +223,7 @@ export const Paywall = <TPackage,>({
   const shouldShowBackButton = shouldUseValueStep && currentStep === "purchase";
   const shouldShowLegalPrefix = hasRenewingSubscriptionPlan(plans);
   const shouldUseLargeBenefits = isValueStep;
+  const shouldShowFeatureComparison = Boolean(featureComparison?.rows.length);
   const valueStepCopy = copy as typeof copy & Partial<PaywallValueStepText>;
   const reviewSectionCopy = copy as typeof copy &
     Partial<PaywallReviewSectionText>;
@@ -393,12 +396,27 @@ export const Paywall = <TPackage,>({
           )}
 
           <PaywallBenefitList
-            benefits={visibleBenefits}
-            content={bodyContent}
+            benefits={shouldShowFeatureComparison ? [] : visibleBenefits}
+            content={
+              shouldShowFeatureComparison && !shouldHideBenefits
+                ? undefined
+                : bodyContent
+            }
             size={shouldUseLargeBenefits ? "large" : "regular"}
             theme={theme}
             variant="plain"
           />
+
+          {featureComparison && shouldShowFeatureComparison && !shouldHideBenefits && (
+            <PaywallFeatureComparison
+              comparison={featureComparison}
+              theme={theme}
+            />
+          )}
+
+          {shouldShowFeatureComparison && !shouldHideBenefits && bodyContent && (
+            <View style={styles.customContent}>{bodyContent}</View>
+          )}
 
           {!isValueStep && reviewSection && (
             <PaywallReviewSection
@@ -596,6 +614,9 @@ const styles = StyleSheet.create({
   body: {
     gap: 24,
     paddingHorizontal: PAYWALL_HORIZONTAL_PADDING,
+  },
+  customContent: {
+    width: "100%",
   },
   valueBody: {
     gap: 34,

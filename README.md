@@ -17,7 +17,7 @@ pabal-expo-paywall-ui/
 
   packages/
     paywall-ui/
-      # Published package source.
+      # Published package source, including paywall/profile UI contracts.
       # See packages/paywall-ui/README.md for the UI prop contract and usage.
 ```
 

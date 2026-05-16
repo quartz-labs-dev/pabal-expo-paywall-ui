@@ -14,6 +14,13 @@ const readPaywallAnimationSource = (): string => {
   );
 };
 
+const readFeatureComparisonSource = (): string => {
+  return readFileSync(
+    join(process.cwd(), "src", "PaywallFeatureComparison.tsx"),
+    "utf8",
+  );
+};
+
 test("keeps default paywall body animation as movement without opacity", () => {
   const source = readPaywallSource();
   const animatedMovementStyle =
@@ -76,4 +83,21 @@ test("keeps step transitions as a single vertical settle animation", () => {
     animationSource,
     /outputRange: \[CONTENT_RISE_TRANSITION_DISTANCE, 0\]/,
   );
+});
+
+test("renders feature comparison cells from explicit cell kinds", () => {
+  const paywallSource = readPaywallSource();
+  const featureComparisonSource = readFeatureComparisonSource();
+
+  assert.match(
+    paywallSource,
+    /const shouldShowFeatureComparison = Boolean\(featureComparison\?\.rows\.length\);/,
+  );
+  assert.match(
+    paywallSource,
+    /benefits=\{shouldShowFeatureComparison \? \[\] : visibleBenefits\}/,
+  );
+  assert.match(featureComparisonSource, /kind === "included"/);
+  assert.match(featureComparisonSource, /kind === "excluded"/);
+  assert.match(featureComparisonSource, /cell\.text/);
 });

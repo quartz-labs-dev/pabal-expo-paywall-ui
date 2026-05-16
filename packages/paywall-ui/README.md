@@ -36,6 +36,7 @@ import {
   getDefaultPaywallCopy,
   getDefaultPaywallPlanOptions,
   type PaywallConfig,
+  type PaywallFeatureComparison,
 } from "pabal-expo-paywall-ui";
 
 const paywallBenefits = [
@@ -52,6 +53,26 @@ const paywallBenefits = [
   },
 ];
 
+const featureComparison = {
+  freeColumnTitle: "Free",
+  paidColumnTitle: "Pro",
+  highlightedColumn: "none",
+  rows: [
+    {
+      id: "premium-widget",
+      label: "Home Screen Widget",
+      free: { kind: "excluded", accessibilityLabel: "Not included" },
+      paid: { kind: "included", accessibilityLabel: "Included" },
+    },
+    {
+      id: "saved-locations",
+      label: "Custom locations",
+      free: { kind: "text", text: "1 place", tone: "muted" },
+      paid: { kind: "text", text: "Unlimited", tone: "accent" },
+    },
+  ],
+} satisfies PaywallFeatureComparison;
+
 const paywallConfig = {
   hero: <HeroImage />,
   supportMessageIcon: <AppLogoIcon />,
@@ -63,6 +84,7 @@ const paywallConfig = {
     subtitle: "See what Pro adds before choosing a plan.",
   },
   benefits: paywallBenefits,
+  featureComparison,
   reviewSection: {
     reviews: [
       {
@@ -100,9 +122,15 @@ const { planOptions, ...paywallPresentation } = paywallConfig;
 Use `stepMode: "singleStep"` to skip the value step. `animationMode` defaults
 to `"default"` for the moving entrance and step transition. Use `"opacity"` for
 fade-only paywall transitions, or `"none"` to render paywall and step changes
-immediately. Use `content` when the app needs a custom React Native body below
-the built-in benefit list; in two-step mode, use `valueStep.content` for custom
-first-step body content.
+immediately. Use `featureComparison` when the paywall should compare Free and
+Pro access in a table instead of rendering the built-in benefit list. Profile
+subscription sections continue to use `benefits`.
+Use `content` when the app needs a custom React Native body below the built-in
+benefit list or feature comparison; in two-step mode, use `valueStep.content`
+for custom first-step body content.
+Feature comparison cells are explicit: `{ kind: "included" }` renders a check,
+`{ kind: "excluded" }` renders a dash, and `{ kind: "text", text: "Unlimited" }`
+renders app-provided usage copy as-is.
 Use `reviewSection` for real user reviews on the purchase step. Its title is
 localized by the package and is not app-configurable.
 `getDefaultPaywallCopy()` includes a localized developer note below the review
@@ -236,6 +264,7 @@ rebuilding the whole `copy` object every time the selected plan changes.
 | Trial duration or no trial | `freeTrial` |
 | Top media | `hero`, `heroHeightRatio` |
 | Benefit rows | `benefits` |
+| Free/Pro feature table | `featureComparison` |
 | Custom body below benefits | `content` |
 | Purchase-step user reviews | `reviewSection` |
 | RevenueCat package mapping | `planOptions.*PackageIds` |
