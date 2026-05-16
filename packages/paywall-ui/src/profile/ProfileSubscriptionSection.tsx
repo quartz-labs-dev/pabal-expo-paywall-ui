@@ -79,19 +79,15 @@ export const ProfileSubscriptionSection = ({
           },
         }
       : undefined;
-  const cardAction = isSubscribed
-    ? onManageSubscription
-    : shouldShowUpgrade
+  const cardAction = !isSubscribed && shouldShowUpgrade
     ? onUpgrade
     : undefined;
-  const isCardActionDisabled = isSubscribed
-    ? isManagingSubscription
-    : isUpgrading;
+  const isCardActionDisabled = !isSubscribed && isUpgrading;
 
   return (
     <View style={styles.section}>
       <Pressable
-        accessibilityRole="button"
+        accessibilityRole={cardAction ? "button" : undefined}
         disabled={!cardAction || isCardActionDisabled}
         onPress={cardAction}
         style={[
