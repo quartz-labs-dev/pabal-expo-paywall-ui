@@ -10,3 +10,4 @@ android
 coverage
 *.log
 .DS_Store
+.gstack/
