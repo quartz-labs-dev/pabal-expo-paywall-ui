@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { type ReactNode, useState } from "react";
 import {
   Alert,
+  Modal,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -14,10 +15,7 @@ import {
 } from "pabal-expo-paywall-ui";
 
 import { LocaleSelector } from "../components/LocaleSelector";
-import {
-  packageScenarioDescriptions,
-  packageScenarioLabels,
-} from "../fixtures/paywall-plans";
+import { packageScenarioLabels } from "../fixtures/paywall-plans";
 import type {
   PlaygroundFreeTrialMode,
   PlaygroundPackageScenario,
@@ -55,11 +53,6 @@ const paywallFlowLabels: Record<PlaygroundPaywallFlow, string> = {
   twoStep: "Two-step",
   singleStep: "One-step",
 };
-const paywallFlowDescriptions: Record<PlaygroundPaywallFlow, string> = {
-  twoStep:
-    "Default value-first flow: value screen first, then plans and purchase.",
-  singleStep: "Classic paywall: show plans and purchase UI immediately.",
-};
 const paywallAnimations: PlaygroundPaywallAnimation[] = [
   "default",
   "opacity",
@@ -70,12 +63,6 @@ const paywallAnimationLabels: Record<PlaygroundPaywallAnimation, string> = {
   opacity: "Fade",
   none: "No animation",
 };
-const paywallAnimationDescriptions: Record<PlaygroundPaywallAnimation, string> =
-  {
-    default: "Default bottom-up entrance and vertical step settle.",
-    opacity: "Fade paywall entrance and step changes without movement.",
-    none: "Render paywall and step changes immediately.",
-  };
 const freeTrialModes: PlaygroundFreeTrialMode[] = [
   "sevenDays",
   "twoWeeks",
@@ -86,16 +73,6 @@ const freeTrialModeLabels: Record<PlaygroundFreeTrialMode, string> = {
   twoWeeks: "2 weeks",
   none: "No trial",
 };
-const freeTrialModeDescriptions: Record<PlaygroundFreeTrialMode, string> = {
-  sevenDays: "Default: Start trial CTA, trial notice, and price disclosure.",
-  twoWeeks: "Checks plural week copy and injected trial duration.",
-  none: "Uses Continue CTA and hides trial disclosures.",
-};
-const FIXED_FOOTER_BUTTON_HEIGHT = 54;
-const FIXED_FOOTER_TOP_PADDING = 12;
-const FIXED_FOOTER_MIN_BOTTOM_PADDING = 12;
-const FIXED_FOOTER_SCROLL_GAP = 24;
-
 export const HomeScreen = ({
   scenario,
   isLongPriceEnabled,
@@ -115,20 +92,10 @@ export const HomeScreen = ({
   onOpenProfile,
 }: HomeScreenProps) => {
   const insets = useSafeAreaInsets();
-  const [measuredFooterHeight, setMeasuredFooterHeight] = useState(0);
+  const [isPaywallSettingsVisible, setIsPaywallSettingsVisible] =
+    useState(false);
   const [isReviewRequestVisible, setIsReviewRequestVisible] = useState(false);
-  const footerBottomPadding = Math.max(
-    insets.bottom,
-    FIXED_FOOTER_MIN_BOTTOM_PADDING,
-  );
-  const fallbackFooterHeight =
-    FIXED_FOOTER_TOP_PADDING +
-    FIXED_FOOTER_BUTTON_HEIGHT +
-    footerBottomPadding;
-  const fixedFooterHeight = Math.max(
-    measuredFooterHeight,
-    fallbackFooterHeight,
-  );
+  const closePaywallSettings = () => setIsPaywallSettingsVisible(false);
 
   return (
     <View style={styles.root}>
@@ -136,7 +103,7 @@ export const HomeScreen = ({
         contentContainerStyle={[
           styles.content,
           {
-            paddingBottom: fixedFooterHeight + FIXED_FOOTER_SCROLL_GAP,
+            paddingBottom: Math.max(insets.bottom, 20) + 24,
             paddingTop: Math.max(insets.top, 12) + 16,
           },
         ]}
@@ -144,240 +111,81 @@ export const HomeScreen = ({
         <View style={styles.header}>
           <Text style={styles.eyebrow}>pabal-expo-paywall-ui playground</Text>
           <Text style={styles.title}>Paywall lab</Text>
-          <Text style={styles.subtitle}>
-            Pick packages, locale, flow, then inspect the shared screens.
-          </Text>
         </View>
 
-        <View style={styles.reviewPromptCard}>
-          <View style={styles.reviewPromptCopy}>
-            <Text style={styles.reviewPromptKicker}>Shared modal</Text>
-            <Text style={styles.reviewPromptTitle}>Review request prompt</Text>
-            <Text style={styles.reviewPromptDescription}>
-              Preview the reusable app-rating modal with app-owned callbacks.
-            </Text>
-          </View>
+        <View style={styles.sharedSection}>
+          <SectionTitleRow
+            title="Paywall"
+            onOpenSettings={() => setIsPaywallSettingsVisible(true)}
+          />
+          <Pressable onPress={onOpenPaywall} style={styles.primaryAction}>
+            <Text style={styles.primaryActionText}>Open /paywall</Text>
+          </Pressable>
+        </View>
+
+        <View style={styles.sharedSection}>
+          <Text style={styles.sectionTitle}>Profile</Text>
+          <Pressable onPress={onOpenProfile} style={styles.secondaryAction}>
+            <Text style={styles.secondaryActionText}>Open /profile</Text>
+          </Pressable>
+        </View>
+
+        <View style={styles.sharedSection}>
+          <Text style={styles.sectionTitle}>Review modal</Text>
           <Pressable
             accessibilityRole="button"
             onPress={() => setIsReviewRequestVisible(true)}
-            style={styles.reviewPromptButton}
+            style={styles.secondaryAction}
           >
-            <Text style={styles.reviewPromptButtonText}>Open modal</Text>
+            <Text style={styles.secondaryActionText}>Open modal</Text>
           </Pressable>
         </View>
+
+        <View style={styles.separator} />
 
         <LocaleSelector
           selectedLocale={selectedLocale}
           onChangeLocale={onChangeLocale}
         />
-
-        <View style={styles.section}>
-          <View style={styles.sectionHeaderRow}>
-            <Text style={styles.sectionTitle}>Package scenario</Text>
-            <LongPriceToggle
-              isEnabled={isLongPriceEnabled}
-              onPress={() => onToggleLongPrice(!isLongPriceEnabled)}
-            />
-          </View>
-          <View style={styles.scenarioList}>
-            {scenarios.map((item) => {
-              const isSelected = item === scenario;
-
-              return (
-                <Pressable
-                  key={item}
-                  onPress={() => onChangeScenario(item)}
-                  style={[
-                    styles.scenarioCard,
-                    isSelected && styles.scenarioCardSelected,
-                  ]}
-                >
-                  <View style={styles.scenarioHeader}>
-                    <Text
-                      style={[
-                        styles.scenarioTitle,
-                        isSelected && styles.scenarioTitleSelected,
-                      ]}
-                    >
-                      {packageScenarioLabels[item]}
-                    </Text>
-                    <View
-                      style={[
-                        styles.radio,
-                        isSelected && styles.radioSelected,
-                      ]}
-                    >
-                      {isSelected && <View style={styles.radioDot} />}
-                    </View>
-                  </View>
-                  <Text style={styles.scenarioDescription}>
-                    {packageScenarioDescriptions[item]}
-                  </Text>
-                </Pressable>
-              );
-            })}
-          </View>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Paywall flow</Text>
-          <View style={styles.segmentedList}>
-            {paywallFlows.map((item) => {
-              const isSelected = item === paywallFlow;
-
-              return (
-                <Pressable
-                  key={item}
-                  onPress={() => onChangePaywallFlow(item)}
-                  style={[
-                    styles.flowOption,
-                    isSelected && styles.flowOptionSelected,
-                  ]}
-                >
-                  <Text
-                    style={[
-                      styles.flowTitle,
-                      isSelected && styles.flowTitleSelected,
-                    ]}
-                  >
-                    {paywallFlowLabels[item]}
-                  </Text>
-                  <Text style={styles.flowDescription}>
-                    {paywallFlowDescriptions[item]}
-                  </Text>
-                </Pressable>
-              );
-            })}
-          </View>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Animation</Text>
-          <View style={styles.segmentedList}>
-            {paywallAnimations.map((item) => {
-              const isSelected = item === paywallAnimation;
-
-              return (
-                <Pressable
-                  key={item}
-                  onPress={() => onChangePaywallAnimation(item)}
-                  style={[
-                    styles.flowOption,
-                    isSelected && styles.flowOptionSelected,
-                  ]}
-                >
-                  <Text
-                    style={[
-                      styles.flowTitle,
-                      isSelected && styles.flowTitleSelected,
-                    ]}
-                  >
-                    {paywallAnimationLabels[item]}
-                  </Text>
-                  <Text style={styles.flowDescription}>
-                    {paywallAnimationDescriptions[item]}
-                  </Text>
-                </Pressable>
-              );
-            })}
-          </View>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Free trial</Text>
-          <View style={styles.segmentedList}>
-            {freeTrialModes.map((item) => {
-              const isSelected = item === freeTrialMode;
-
-              return (
-                <Pressable
-                  key={item}
-                  onPress={() => onChangeFreeTrialMode(item)}
-                  style={[
-                    styles.flowOption,
-                    isSelected && styles.flowOptionSelected,
-                  ]}
-                >
-                  <Text
-                    style={[
-                      styles.flowTitle,
-                      isSelected && styles.flowTitleSelected,
-                    ]}
-                  >
-                    {freeTrialModeLabels[item]}
-                  </Text>
-                  <Text style={styles.flowDescription}>
-                    {freeTrialModeDescriptions[item]}
-                  </Text>
-                </Pressable>
-              );
-            })}
-          </View>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Customer state</Text>
-          <Pressable
-            accessibilityRole="switch"
-            accessibilityState={{ checked: isTrialEligible }}
-            onPress={() => onToggleTrialEligibility(!isTrialEligible)}
-            style={[
-              styles.trialEligibilityCard,
-              isTrialEligible && styles.trialEligibilityCardSelected,
-            ]}
-          >
-            <View style={styles.trialEligibilityHeader}>
-              <Text
-                style={[
-                  styles.trialEligibilityTitle,
-                  isTrialEligible && styles.trialEligibilityTitleSelected,
-                ]}
-              >
-                {isTrialEligible ? "Trial eligible" : "Previously subscribed"}
-              </Text>
-              <View
-                style={[
-                  styles.switchTrack,
-                  isTrialEligible && styles.switchTrackOn,
-                ]}
-              >
-                <View
-                  style={[
-                    styles.switchThumb,
-                    isTrialEligible && styles.switchThumbOn,
-                  ]}
-                />
-              </View>
-            </View>
-            <Text style={styles.trialEligibilityDescription}>
-              {isTrialEligible
-                ? "App passes the selected trial duration to the shared paywall."
-                : "App passes freeTrial=false, so the CTA uses selected-plan price."}
-            </Text>
-          </Pressable>
-        </View>
       </ScrollView>
 
-      <View
-        onLayout={(event) => {
-          const nextFooterHeight = Math.ceil(event.nativeEvent.layout.height);
-          setMeasuredFooterHeight((previousFooterHeight) =>
-            previousFooterHeight === nextFooterHeight
-              ? previousFooterHeight
-              : nextFooterHeight,
-          );
-        }}
-        style={[styles.fixedFooter, { paddingBottom: footerBottomPadding }]}
+      <SettingsModal
+        title="Paywall settings"
+        visible={isPaywallSettingsVisible}
+        onClose={closePaywallSettings}
       >
-        <View style={styles.footerActions}>
-          <Pressable onPress={onOpenProfile} style={styles.secondaryCta}>
-            <Text style={styles.secondaryCtaText}>Open /profile</Text>
-          </Pressable>
-          <Pressable onPress={onOpenPaywall} style={styles.cta}>
-            <Text style={styles.ctaText}>Open /paywall</Text>
-          </Pressable>
-        </View>
-      </View>
+        <PackageScenarioSettings
+          scenario={scenario}
+          isLongPriceEnabled={isLongPriceEnabled}
+          onChangeScenario={onChangeScenario}
+          onToggleLongPrice={onToggleLongPrice}
+        />
+        <SegmentedSettings
+          title="Paywall flow"
+          options={paywallFlows}
+          selectedOption={paywallFlow}
+          labels={paywallFlowLabels}
+          onChangeOption={onChangePaywallFlow}
+        />
+        <SegmentedSettings
+          title="Animation"
+          options={paywallAnimations}
+          selectedOption={paywallAnimation}
+          labels={paywallAnimationLabels}
+          onChangeOption={onChangePaywallAnimation}
+        />
+        <SegmentedSettings
+          title="Free trial"
+          options={freeTrialModes}
+          selectedOption={freeTrialMode}
+          labels={freeTrialModeLabels}
+          onChangeOption={onChangeFreeTrialMode}
+        />
+        <CustomerStateSettings
+          isTrialEligible={isTrialEligible}
+          onToggleTrialEligibility={onToggleTrialEligibility}
+        />
+      </SettingsModal>
 
       <ReviewRequestModal
         copy={getDefaultReviewRequestModalCopy(selectedLocale, {
@@ -407,6 +215,241 @@ export const HomeScreen = ({
           Alert.alert("Store review callback");
         }}
       />
+    </View>
+  );
+};
+
+interface SectionTitleRowProps {
+  title: string;
+  onOpenSettings: () => void;
+}
+
+const SectionTitleRow = ({ title, onOpenSettings }: SectionTitleRowProps) => {
+  return (
+    <View style={styles.sectionTitleRow}>
+      <Text style={styles.sectionTitle}>{title}</Text>
+      <SettingsButton onPress={onOpenSettings} />
+    </View>
+  );
+};
+
+interface SettingsButtonProps {
+  onPress: () => void;
+}
+
+const SettingsButton = ({ onPress }: SettingsButtonProps) => {
+  return (
+    <Pressable
+      accessibilityRole="button"
+      onPress={onPress}
+      style={styles.settingsButton}
+    >
+      <Text style={styles.settingsButtonText}>Settings</Text>
+    </Pressable>
+  );
+};
+
+interface SettingsModalProps {
+  children: ReactNode;
+  title: string;
+  visible: boolean;
+  onClose: () => void;
+}
+
+const SettingsModal = ({
+  children,
+  title,
+  visible,
+  onClose,
+}: SettingsModalProps) => {
+  const insets = useSafeAreaInsets();
+
+  return (
+    <Modal
+      animationType="fade"
+      onRequestClose={onClose}
+      transparent
+      visible={visible}
+    >
+      <View
+        style={[
+          styles.settingsModalBackdrop,
+          {
+            paddingBottom: Math.max(insets.bottom, 20),
+            paddingTop: Math.max(insets.top, 20),
+          },
+        ]}
+      >
+        <View style={styles.settingsModalCard}>
+          <View style={styles.settingsModalHeader}>
+            <Text style={styles.settingsModalTitle}>{title}</Text>
+            <Pressable
+              accessibilityRole="button"
+              onPress={onClose}
+              style={styles.settingsModalCloseButton}
+            >
+              <Text style={styles.settingsModalCloseButtonText}>Close</Text>
+            </Pressable>
+          </View>
+          <ScrollView
+            contentContainerStyle={styles.settingsModalContent}
+            showsVerticalScrollIndicator={false}
+          >
+            {children}
+          </ScrollView>
+        </View>
+      </View>
+    </Modal>
+  );
+};
+
+interface PackageScenarioSettingsProps {
+  scenario: PlaygroundPackageScenario;
+  isLongPriceEnabled: boolean;
+  onChangeScenario: (scenario: PlaygroundPackageScenario) => void;
+  onToggleLongPrice: (isEnabled: boolean) => void;
+}
+
+const PackageScenarioSettings = ({
+  scenario,
+  isLongPriceEnabled,
+  onChangeScenario,
+  onToggleLongPrice,
+}: PackageScenarioSettingsProps) => {
+  return (
+    <View style={styles.section}>
+      <View style={styles.sectionHeaderRow}>
+        <Text style={styles.sectionTitle}>Package scenario</Text>
+        <LongPriceToggle
+          isEnabled={isLongPriceEnabled}
+          onPress={() => onToggleLongPrice(!isLongPriceEnabled)}
+        />
+      </View>
+      <View style={styles.scenarioList}>
+        {scenarios.map((item) => {
+          const isSelected = item === scenario;
+
+          return (
+            <Pressable
+              key={item}
+              onPress={() => onChangeScenario(item)}
+              style={[
+                styles.scenarioCard,
+                isSelected && styles.scenarioCardSelected,
+              ]}
+            >
+              <View style={styles.scenarioHeader}>
+                <Text
+                  style={[
+                    styles.scenarioTitle,
+                    isSelected && styles.scenarioTitleSelected,
+                  ]}
+                >
+                  {packageScenarioLabels[item]}
+                </Text>
+                <View
+                  style={[styles.radio, isSelected && styles.radioSelected]}
+                >
+                  {isSelected && <View style={styles.radioDot} />}
+                </View>
+              </View>
+            </Pressable>
+          );
+        })}
+      </View>
+    </View>
+  );
+};
+
+interface SegmentedSettingsProps<TOption extends string> {
+  labels: Record<TOption, string>;
+  options: TOption[];
+  selectedOption: TOption;
+  title: string;
+  onChangeOption: (option: TOption) => void;
+}
+
+const SegmentedSettings = <TOption extends string>({
+  labels,
+  options,
+  selectedOption,
+  title,
+  onChangeOption,
+}: SegmentedSettingsProps<TOption>) => {
+  return (
+    <View style={styles.section}>
+      <Text style={styles.sectionTitle}>{title}</Text>
+      <View style={styles.segmentedList}>
+        {options.map((item) => {
+          const isSelected = item === selectedOption;
+
+          return (
+            <Pressable
+              key={item}
+              onPress={() => onChangeOption(item)}
+              style={[
+                styles.flowOption,
+                isSelected && styles.flowOptionSelected,
+              ]}
+            >
+              <Text
+                style={[
+                  styles.flowTitle,
+                  isSelected && styles.flowTitleSelected,
+                ]}
+              >
+                {labels[item]}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </View>
+    </View>
+  );
+};
+
+interface CustomerStateSettingsProps {
+  isTrialEligible: boolean;
+  onToggleTrialEligibility: (isEligible: boolean) => void;
+}
+
+const CustomerStateSettings = ({
+  isTrialEligible,
+  onToggleTrialEligibility,
+}: CustomerStateSettingsProps) => {
+  return (
+    <View style={styles.section}>
+      <Text style={styles.sectionTitle}>Customer state</Text>
+      <Pressable
+        accessibilityRole="switch"
+        accessibilityState={{ checked: isTrialEligible }}
+        onPress={() => onToggleTrialEligibility(!isTrialEligible)}
+        style={[
+          styles.trialEligibilityCard,
+          isTrialEligible && styles.trialEligibilityCardSelected,
+        ]}
+      >
+        <View style={styles.trialEligibilityHeader}>
+          <Text
+            style={[
+              styles.trialEligibilityTitle,
+              isTrialEligible && styles.trialEligibilityTitleSelected,
+            ]}
+          >
+            {isTrialEligible ? "Trial eligible" : "Previously subscribed"}
+          </Text>
+          <View
+            style={[styles.switchTrack, isTrialEligible && styles.switchTrackOn]}
+          >
+            <View
+              style={[
+                styles.switchThumb,
+                isTrialEligible && styles.switchThumbOn,
+              ]}
+            />
+          </View>
+        </View>
+      </Pressable>
     </View>
   );
 };
@@ -445,22 +488,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    gap: 18,
+    gap: 14,
     paddingHorizontal: 20,
-  },
-  fixedFooter: {
-    backgroundColor: "#05080C",
-    bottom: 0,
-    left: 0,
-    paddingHorizontal: 20,
-    paddingTop: FIXED_FOOTER_TOP_PADDING,
-    position: "absolute",
-    right: 0,
-    zIndex: 5,
-  },
-  footerActions: {
-    flexDirection: "row",
-    gap: 10,
   },
   header: {
     gap: 6,
@@ -479,66 +508,122 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     lineHeight: 34,
   },
-  subtitle: {
-    color: "#B9C4CF",
-    fontSize: 13,
-    lineHeight: 19,
-  },
   section: {
     gap: 10,
   },
-  reviewPromptCard: {
+  sharedSection: {
+    gap: 8,
+  },
+  separator: {
+    backgroundColor: "#2B3845",
+    height: 1,
+    marginVertical: 4,
+  },
+  sectionTitleRow: {
     alignItems: "center",
-    backgroundColor: "#101820",
+    flexDirection: "row",
+    gap: 12,
+    justifyContent: "space-between",
+  },
+  settingsButton: {
+    alignItems: "center",
+    backgroundColor: "#151D25",
     borderColor: "#2B3845",
     borderRadius: 8,
     borderWidth: 1,
-    flexDirection: "row",
-    gap: 14,
-    justifyContent: "space-between",
-    paddingHorizontal: 14,
-    paddingVertical: 14,
+    justifyContent: "center",
+    minHeight: 32,
+    paddingHorizontal: 10,
   },
-  reviewPromptCopy: {
-    flex: 1,
-    gap: 3,
-    minWidth: 0,
-  },
-  reviewPromptKicker: {
-    color: "#5AC8B7",
-    fontSize: 11,
-    fontWeight: "900",
-    letterSpacing: 0,
-    textTransform: "uppercase",
-  },
-  reviewPromptTitle: {
-    color: "#F5F7FA",
-    flexShrink: 1,
-    fontSize: 16,
-    fontWeight: "900",
-    lineHeight: 21,
-  },
-  reviewPromptDescription: {
+  settingsButtonText: {
     color: "#B9C4CF",
-    flexShrink: 1,
     fontSize: 12,
-    fontWeight: "600",
-    lineHeight: 17,
+    fontWeight: "900",
+    lineHeight: 15,
   },
-  reviewPromptButton: {
+  primaryAction: {
     alignItems: "center",
-    backgroundColor: "#F5F7FA",
+    backgroundColor: "#5AC8B7",
     borderRadius: 8,
     justifyContent: "center",
-    minHeight: 40,
-    paddingHorizontal: 13,
-    paddingVertical: 9,
+    minHeight: 54,
+    paddingHorizontal: 16,
   },
-  reviewPromptButtonText: {
-    color: "#05080C",
+  primaryActionText: {
+    color: "#071312",
+    fontSize: 16,
+    fontWeight: "900",
+    lineHeight: 20,
+    textAlign: "center",
+  },
+  secondaryAction: {
+    alignItems: "center",
+    backgroundColor: "#151D25",
+    borderColor: "#2B3845",
+    borderRadius: 8,
+    borderWidth: 1,
+    justifyContent: "center",
+    minHeight: 54,
+    paddingHorizontal: 16,
+  },
+  secondaryActionText: {
+    color: "#F5F7FA",
+    flexShrink: 1,
+    fontSize: 15,
+    fontWeight: "900",
+    lineHeight: 20,
+    textAlign: "center",
+  },
+  settingsModalBackdrop: {
+    backgroundColor: "rgba(5, 8, 12, 0.78)",
+    flex: 1,
+    justifyContent: "flex-end",
+    paddingHorizontal: 14,
+  },
+  settingsModalCard: {
+    backgroundColor: "#05080C",
+    borderColor: "#2B3845",
+    borderRadius: 8,
+    borderWidth: 1,
+    maxHeight: "86%",
+    overflow: "hidden",
+  },
+  settingsModalHeader: {
+    alignItems: "center",
+    borderBottomColor: "#2B3845",
+    borderBottomWidth: 1,
+    flexDirection: "row",
+    gap: 12,
+    justifyContent: "space-between",
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+  },
+  settingsModalTitle: {
+    color: "#F5F7FA",
+    flexShrink: 1,
+    fontSize: 17,
+    fontWeight: "900",
+    lineHeight: 22,
+  },
+  settingsModalCloseButton: {
+    alignItems: "center",
+    backgroundColor: "#151D25",
+    borderColor: "#2B3845",
+    borderRadius: 8,
+    borderWidth: 1,
+    justifyContent: "center",
+    minHeight: 34,
+    paddingHorizontal: 10,
+  },
+  settingsModalCloseButtonText: {
+    color: "#F5F7FA",
     fontSize: 12,
     fontWeight: "900",
-    lineHeight: 16,
+    lineHeight: 15,
+  },
+  settingsModalContent: {
+    gap: 18,
+    padding: 14,
   },
   sectionHeaderRow: {
     alignItems: "center",
@@ -614,8 +699,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     flexBasis: "47%",
     flexGrow: 1,
-    gap: 8,
-    minHeight: 102,
+    minHeight: 54,
     padding: 12,
   },
   scenarioCardSelected: {
@@ -637,11 +721,6 @@ const styles = StyleSheet.create({
   scenarioTitleSelected: {
     color: "#5AC8B7",
   },
-  scenarioDescription: {
-    color: "#B9C4CF",
-    fontSize: 12,
-    lineHeight: 17,
-  },
   radio: {
     alignItems: "center",
     borderColor: "#7F8B96",
@@ -661,13 +740,14 @@ const styles = StyleSheet.create({
     width: 8,
   },
   flowOption: {
+    alignItems: "center",
     backgroundColor: "#151D25",
     borderColor: "#2B3845",
     borderRadius: 8,
     borderWidth: 1,
     flex: 1,
-    gap: 6,
-    minHeight: 86,
+    justifyContent: "center",
+    minHeight: 54,
     padding: 12,
   },
   flowOptionSelected: {
@@ -676,25 +756,21 @@ const styles = StyleSheet.create({
   },
   flowTitle: {
     color: "#F5F7FA",
+    flexShrink: 1,
     fontSize: 14,
     fontWeight: "900",
+    lineHeight: 18,
+    textAlign: "center",
   },
   flowTitleSelected: {
     color: "#5AC8B7",
-  },
-  flowDescription: {
-    color: "#B9C4CF",
-    flexShrink: 1,
-    fontSize: 12,
-    lineHeight: 17,
   },
   trialEligibilityCard: {
     backgroundColor: "#151D25",
     borderColor: "#2B3845",
     borderRadius: 8,
     borderWidth: 1,
-    gap: 8,
-    minHeight: 86,
+    minHeight: 54,
     padding: 12,
   },
   trialEligibilityCardSelected: {
@@ -715,42 +791,5 @@ const styles = StyleSheet.create({
   },
   trialEligibilityTitleSelected: {
     color: "#5AC8B7",
-  },
-  trialEligibilityDescription: {
-    color: "#B9C4CF",
-    fontSize: 12,
-    lineHeight: 17,
-  },
-  cta: {
-    alignItems: "center",
-    backgroundColor: "#5AC8B7",
-    borderRadius: 8,
-    flex: 1,
-    justifyContent: "center",
-    minHeight: 54,
-    paddingHorizontal: 20,
-  },
-  ctaText: {
-    color: "#071312",
-    fontSize: 16,
-    fontWeight: "900",
-  },
-  secondaryCta: {
-    alignItems: "center",
-    backgroundColor: "#151D25",
-    borderColor: "#2B3845",
-    borderRadius: 8,
-    borderWidth: 1,
-    flex: 1,
-    justifyContent: "center",
-    minHeight: 54,
-    paddingHorizontal: 14,
-  },
-  secondaryCtaText: {
-    color: "#F5F7FA",
-    flexShrink: 1,
-    fontSize: 15,
-    fontWeight: "900",
-    textAlign: "center",
   },
 });

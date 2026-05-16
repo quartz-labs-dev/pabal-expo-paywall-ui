@@ -27,6 +27,10 @@
 - App-specific purchase, restore, analytics, navigation, legal link, and widget sync behavior belongs in app adapters.
 - Keep `rawPackage` generic. The shared package must not know the concrete RevenueCat package type.
 - If adding plan periods beyond monthly/annual, update the public types and tests in the same change.
+- Metro reads `packages/paywall-ui/src` directly through the package `react-native`/`source` entry. Internal source imports must resolve in Metro, not only in TypeScript.
+- Avoid directory/file name ambiguity for internal package paths that Metro consumes. Do not keep both `src/shared/icons.tsx` and `src/shared/icons/`; prefer one concrete module path.
+- For static assets loaded with `require(...)`, verify the relative path from the file doing the `require`, not from the package root. Example: from `src/paywall/*`, shared assets live at `../assets/...`.
+- Do not bypass the package `build` script. It cleans stale `dist` output and copies static assets so published/CommonJS consumers do not resolve old files or missing assets.
 
 ## UI Rules
 
@@ -66,6 +70,12 @@ Run these when possible after changes:
 yarn typecheck
 yarn test
 yarn build
+```
+
+- After moving files, changing internal imports, or adding `require(...)` assets in `packages/paywall-ui/src`, also run:
+
+```bash
+yarn workspace playground expo export --platform ios --output-dir /tmp/pabal-playground-ios-export
 ```
 
 If a validation step cannot be run, state exactly why.

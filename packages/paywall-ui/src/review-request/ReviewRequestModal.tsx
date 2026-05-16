@@ -17,7 +17,7 @@ import { mergePaywallTheme } from "../shared/theme";
 import type { PaywallTheme, ReviewRequestModalProps } from "../types";
 
 export const defaultReviewRequestProfileImage =
-  require("./assets/retriever.webp") as ImageSourcePropType;
+  require("../assets/retriever.webp") as ImageSourcePropType;
 
 const DEFAULT_DEVELOPER_NAME = "Quartz";
 const MODAL_HORIZONTAL_MARGIN = 20;

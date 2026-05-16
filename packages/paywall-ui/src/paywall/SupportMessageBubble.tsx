@@ -11,7 +11,7 @@ import {
 import type { PaywallTheme } from "../types";
 
 const defaultSupportMessageIconSource =
-  require("./assets/retriever.webp") as ImageSourcePropType;
+  require("../assets/retriever.webp") as ImageSourcePropType;
 
 interface SupportMessageBubbleProps {
   icon?: ReactNode;
