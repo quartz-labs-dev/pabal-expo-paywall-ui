@@ -18,6 +18,36 @@ export const playgroundBenefits = [
     description: "Tune the interface to match your preferred look.",
     icon: <BenefitIcon label="C" />,
   },
+  {
+    title: "Forecast Alerts",
+    description: "Get notified when the next viewing window improves.",
+    icon: <BenefitIcon label="A" />,
+  },
+  {
+    title: "Saved Observation Notes",
+    description: "Keep notes for each aurora session and location.",
+    icon: <BenefitIcon label="N" />,
+  },
+  {
+    title: "Advanced Map Layers",
+    description: "Compare cloud cover, light pollution, and visibility zones.",
+    icon: <BenefitIcon label="M" />,
+  },
+  {
+    title: "Historical Activity Timeline",
+    description: "Review recent activity trends before planning a trip.",
+    icon: <BenefitIcon label="T" />,
+  },
+  {
+    title: "Multi-Day Trip Planner",
+    description: "Plan several nights around the best forecast windows.",
+    icon: <BenefitIcon label="P" />,
+  },
+  {
+    title: "Priority Data Refresh",
+    description: "Refresh forecast data faster during active sky events.",
+    icon: <BenefitIcon label="R" />,
+  },
 ] satisfies PaywallBenefit[];
 
 interface BenefitIconProps {

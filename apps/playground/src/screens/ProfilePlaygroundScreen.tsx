@@ -54,6 +54,42 @@ const profileSubscriptionBaseConfig = {
         proLimitText: "Unlimited",
         onPress: () => Alert.alert("Color palette details"),
       },
+      {
+        id: "forecast-alerts",
+        title: "Forecast Alerts",
+        usageText: "1 active",
+        proLimitText: "Unlimited",
+      },
+      {
+        id: "saved-observation-notes",
+        title: "Saved Observation Notes",
+        usageText: "5 saved",
+        proLimitText: "Unlimited",
+      },
+      {
+        id: "advanced-maps",
+        title: "Advanced Map Layers",
+        usageText: "0 enabled",
+        proLimitText: "6 layers",
+      },
+      {
+        id: "historical-activity-timeline",
+        title: "Historical Activity Timeline",
+        usageText: "24 hours",
+        proLimitText: "90 days",
+      },
+      {
+        id: "multi-day-trip-planner",
+        title: "Multi-Day Trip Planner",
+        usageText: "Off",
+        proLimitText: "Included",
+      },
+      {
+        id: "priority-data-refresh",
+        title: "Priority Data Refresh",
+        usageText: "15 min",
+        proLimitText: "5 min",
+      },
     ],
   },
 } satisfies Omit<ProfileSubscriptionConfig, "copy" | "headerIcon">;

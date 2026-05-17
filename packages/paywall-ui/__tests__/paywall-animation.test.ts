@@ -120,6 +120,18 @@ test("keeps step transitions as a single vertical settle animation", () => {
   );
 });
 
+test("scrolls paywall content to top when the step changes", () => {
+  const source = readPaywallSource();
+
+  assert.match(source, /const scrollViewRef = useRef<ScrollView>\(null\);/);
+  assert.match(
+    source,
+    /scrollViewRef\.current\?\.scrollTo\(\{ y: 0, animated: false \}\);/,
+  );
+  assert.match(source, /\}, \[currentStep\]\);/);
+  assert.match(source, /ref=\{scrollViewRef\}/);
+});
+
 test("renders feature comparison cells from explicit cell kinds", () => {
   const paywallSource = readPaywallSource();
   const featureComparisonSource = readFeatureComparisonSource();

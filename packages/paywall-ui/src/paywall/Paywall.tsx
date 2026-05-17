@@ -164,6 +164,7 @@ export const Paywall = <TPackage,>({
   ).current;
   const stepTransition = useRef(new Animated.Value(1)).current;
   const isStepTransitioningRef = useRef(false);
+  const scrollViewRef = useRef<ScrollView>(null);
   const [currentStep, setCurrentStep] = useState<PaywallStep>(() =>
     shouldUseValueStep ? "value" : "purchase"
   );
@@ -271,6 +272,10 @@ export const Paywall = <TPackage,>({
     setCurrentStep(shouldUseValueStep ? "value" : "purchase");
   }, [shouldUseValueStep, stepTransition]);
 
+  useEffect(() => {
+    scrollViewRef.current?.scrollTo({ y: 0, animated: false });
+  }, [currentStep]);
+
   const transitionToStep = (nextStep: PaywallStep) => {
     if (isStepTransitioningRef.current || currentStep === nextStep) return;
 
@@ -345,6 +350,7 @@ export const Paywall = <TPackage,>({
       )}
 
       <ScrollView
+        ref={scrollViewRef}
         contentContainerStyle={[
           styles.content,
           {
