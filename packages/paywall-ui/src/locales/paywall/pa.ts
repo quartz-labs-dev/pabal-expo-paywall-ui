@@ -5,6 +5,9 @@ const pa = createPaywallLocaleText({
     nextButton: "ਅੱਗੇ",
     nextButtonAccessibilityLabel: "ਪਲਾਨ ਚੋਣ ਵੱਲ ਜਾਰੀ ਰੱਖੋ",
   },
+  reviewSection: {
+    reviewSectionTitle: "ਵਰਤੋਂਕਾਰ ਸਮੀਖਿਆਵਾਂ",
+  },
   text: {
     annualPlanTitle: "ਸਾਲਾਨਾ",
     benefitsTitle: "ਤੁਹਾਡੇ Pro ਲਾਭ",

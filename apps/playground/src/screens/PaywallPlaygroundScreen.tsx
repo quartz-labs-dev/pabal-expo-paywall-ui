@@ -101,6 +101,20 @@ const playgroundPaywallConfig = {
       },
     ],
   },
+  reviewSection: {
+    reviews: [
+      {
+        rating: 5,
+        quote: "The widget is exactly what I needed for quick aurora checks.",
+        author: "App Store review",
+      },
+      {
+        rating: 5,
+        quote: "Clean, fast, and useful every time the sky starts moving.",
+        author: "App Store review",
+      },
+    ],
+  },
   theme: {
     accentColor: "#5AC8B7",
     backgroundColor: "#05080C",

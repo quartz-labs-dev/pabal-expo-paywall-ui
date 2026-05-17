@@ -5,6 +5,9 @@ const rm = createPaywallLocaleText({
     nextButton: "Enavant",
     nextButtonAccessibilityLabel: "Cuntinuar tar la tscherna dal plan",
   },
+  reviewSection: {
+    reviewSectionTitle: "Recensiuns d'utilisaders",
+  },
   text: {
     annualPlanTitle: "Annual",
     benefitsTitle: "Tes avantatgs Pro",

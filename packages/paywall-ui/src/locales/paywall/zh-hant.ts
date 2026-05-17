@@ -5,6 +5,9 @@ const zhHant = createPaywallLocaleText({
     nextButton: "下一步",
     nextButtonAccessibilityLabel: "繼續選擇方案",
   },
+  reviewSection: {
+    reviewSectionTitle: "使用者評論",
+  },
   text: {
     annualPlanTitle: "年度",
     benefitsTitle: "Pro 權益",

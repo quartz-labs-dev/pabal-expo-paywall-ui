@@ -5,6 +5,9 @@ const kn = createPaywallLocaleText({
     nextButton: "ಮುಂದೆ",
     nextButtonAccessibilityLabel: "ಯೋಜನೆ ಆಯ್ಕೆಗೆ ಮುಂದುವರಿಸಿ",
   },
+  reviewSection: {
+    reviewSectionTitle: "ಬಳಕೆದಾರರ ವಿಮರ್ಶೆಗಳು",
+  },
   text: {
     annualPlanTitle: "ವಾರ್ಷಿಕ",
     benefitsTitle: "ನಿಮ್ಮ Pro ಪ್ರಯೋಜನಗಳು",

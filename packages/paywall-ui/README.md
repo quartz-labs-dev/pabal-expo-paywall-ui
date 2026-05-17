@@ -37,6 +37,7 @@ import {
   getDefaultPaywallPlanOptions,
   type PaywallConfig,
   type PaywallFeatureComparison,
+  type PaywallReviewSection,
 } from "pabal-expo-paywall-ui";
 
 const paywallBenefits = [
@@ -74,6 +75,21 @@ const featureComparison = {
   ],
 } satisfies PaywallFeatureComparison;
 
+const reviewSection = {
+  reviews: [
+    {
+      rating: 5,
+      quote: "The widget is exactly what I needed for quick aurora checks.",
+      author: "App Store review",
+    },
+    {
+      rating: 5,
+      quote: "Clean, fast, and useful every time the sky starts moving.",
+      author: "App Store review",
+    },
+  ],
+} satisfies PaywallReviewSection;
+
 const paywallConfig = {
   hero: <HeroImage />,
   supportMessageIcon: <AppLogoIcon />,
@@ -86,6 +102,7 @@ const paywallConfig = {
   },
   benefits: paywallBenefits,
   featureComparison,
+  reviewSection,
   copy: getDefaultPaywallCopy(undefined, {
     title: "Upgrade to Pro",
     subtitle: "Get the full app experience.",
@@ -120,6 +137,9 @@ subscription sections continue to use `benefits`.
 Use `content` when the app needs a custom React Native body below the built-in
 benefit list or feature comparison; in two-step mode, use `valueStep.content`
 for custom first-step body content.
+Use `reviewSection` when the purchase step should show app-provided social proof.
+The section title is localized by `getDefaultPaywallCopy()`, while the review
+quotes and authors stay app-owned.
 Feature comparison cells are explicit: `{ kind: "included" }` renders a check,
 `{ kind: "excluded" }` renders a dash, and `{ kind: "text", text: "Unlimited" }`
 renders app-provided usage copy as-is.
@@ -258,6 +278,7 @@ rebuilding the whole `copy` object every time the selected plan changes.
 | Top media | `hero`, `heroHeightRatio` |
 | Benefit rows | `benefits` |
 | Free/Pro feature table | `featureComparison` |
+| App review quotes | `reviewSection` |
 | Custom body below benefits | `content` |
 | RevenueCat package mapping | `planOptions.*PackageIds` |
 | Plan card order | `planOptions.displayOrder` |

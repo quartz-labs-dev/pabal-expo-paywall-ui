@@ -5,6 +5,9 @@ const lv = createPaywallLocaleText({
     nextButton: "Tālāk",
     nextButtonAccessibilityLabel: "Turpināt uz plāna izvēli",
   },
+  reviewSection: {
+    reviewSectionTitle: "Lietotāju atsauksmes",
+  },
   text: {
     annualPlanTitle: "Gada",
     benefitsTitle: "Pro priekšrocības",

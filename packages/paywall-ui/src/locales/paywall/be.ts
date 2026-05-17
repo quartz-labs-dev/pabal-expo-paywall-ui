@@ -5,6 +5,9 @@ const be = createPaywallLocaleText({
     nextButton: "Далей",
     nextButtonAccessibilityLabel: "Працягнуць да выбару плана",
   },
+  reviewSection: {
+    reviewSectionTitle: "Водгукі карыстальнікаў",
+  },
   text: {
     annualPlanTitle: "Гадавы",
     benefitsTitle: "Вашы перавагі Pro",

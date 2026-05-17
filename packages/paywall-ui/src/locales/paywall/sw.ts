@@ -5,6 +5,9 @@ const sw = createPaywallLocaleText({
     nextButton: "Inayofuata",
     nextButtonAccessibilityLabel: "Endelea kwenye kuchagua mpango",
   },
+  reviewSection: {
+    reviewSectionTitle: "Maoni ya watumiaji",
+  },
   text: {
     annualPlanTitle: "Kila mwaka",
     benefitsTitle: "Manufaa yako ya Pro",

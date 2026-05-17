@@ -5,6 +5,9 @@ const am = createPaywallLocaleText({
     nextButton: "ቀጣይ",
     nextButtonAccessibilityLabel: "ወደ ዕቅድ ምርጫ ቀጥል",
   },
+  reviewSection: {
+    reviewSectionTitle: "የተጠቃሚ ግምገማዎች",
+  },
   text: {
     annualPlanTitle: "ዓመታዊ",
     benefitsTitle: "የPro ጥቅሞች",

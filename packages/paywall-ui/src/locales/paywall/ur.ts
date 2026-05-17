@@ -5,6 +5,9 @@ const ur = createPaywallLocaleText({
     nextButton: "اگلا",
     nextButtonAccessibilityLabel: "پلان کے انتخاب پر جاری رکھیں",
   },
+  reviewSection: {
+    reviewSectionTitle: "صارفین کے جائزے",
+  },
   text: {
     annualPlanTitle: "سالانہ",
     benefitsTitle: "آپ کے Pro فوائد",

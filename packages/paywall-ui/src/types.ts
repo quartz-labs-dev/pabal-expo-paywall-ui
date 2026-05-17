@@ -110,6 +110,18 @@ export interface PaywallValueStep {
   closeButtonVisibility?: "hidden" | "visible";
 }
 
+export type PaywallReviewRating = 1 | 2 | 3 | 4 | 5;
+
+export interface PaywallReview {
+  quote: string;
+  author?: string;
+  rating?: PaywallReviewRating;
+}
+
+export interface PaywallReviewSection {
+  reviews: PaywallReview[];
+}
+
 export interface PaywallTheme {
   backgroundColor: string;
   surfaceColor: string;
@@ -133,6 +145,7 @@ export interface PaywallProps<TPackage = unknown> {
   benefits?: PaywallBenefit[];
   featureComparison?: PaywallFeatureComparison;
   content?: ReactNode;
+  reviewSection?: PaywallReviewSection;
   purchaseButtonBackground?: ReactNode;
   supportMessageIcon?: ReactNode;
   copy: PaywallCopy;
@@ -158,6 +171,7 @@ export interface PaywallConfig {
   benefits?: PaywallBenefit[];
   featureComparison?: PaywallFeatureComparison;
   content?: ReactNode;
+  reviewSection?: PaywallReviewSection;
   purchaseButtonBackground?: ReactNode;
   supportMessageIcon?: ReactNode;
   copy: PaywallCopy;

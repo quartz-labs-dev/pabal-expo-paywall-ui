@@ -5,6 +5,9 @@ const id = createPaywallLocaleText({
     nextButton: "Berikutnya",
     nextButtonAccessibilityLabel: "Lanjut ke pilihan paket",
   },
+  reviewSection: {
+    reviewSectionTitle: "Ulasan pengguna",
+  },
   text: {
     annualPlanTitle: "Tahunan",
     benefitsTitle: "Manfaat Pro Anda",

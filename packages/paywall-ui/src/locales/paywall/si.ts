@@ -5,6 +5,9 @@ const si = createPaywallLocaleText({
     nextButton: "ඊළඟ",
     nextButtonAccessibilityLabel: "සැලැස්ම තේරීමට ඉදිරියට යන්න",
   },
+  reviewSection: {
+    reviewSectionTitle: "පරිශීලක සමාලෝචන",
+  },
   text: {
     annualPlanTitle: "වාර්ෂික",
     benefitsTitle: "ඔබගේ Pro වාසි",

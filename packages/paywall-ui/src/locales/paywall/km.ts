@@ -5,6 +5,9 @@ const km = createPaywallLocaleText({
     nextButton: "បន្ទាប់",
     nextButtonAccessibilityLabel: "បន្តទៅជ្រើសរើសគម្រោង",
   },
+  reviewSection: {
+    reviewSectionTitle: "ការវាយតម្លៃពីអ្នកប្រើ",
+  },
   text: {
     annualPlanTitle: "ប្រចាំឆ្នាំ",
     benefitsTitle: "អត្ថប្រយោជន៍ Pro របស់អ្នក",

@@ -5,6 +5,9 @@ const eu = createPaywallLocaleText({
     nextButton: "Hurrengoa",
     nextButtonAccessibilityLabel: "Jarraitu planaren hautaketara",
   },
+  reviewSection: {
+    reviewSectionTitle: "Erabiltzaileen iritziak",
+  },
   text: {
     annualPlanTitle: "Urtekoa",
     benefitsTitle: "Zure Pro abantailak",

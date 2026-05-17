@@ -5,6 +5,9 @@ const nb = createPaywallLocaleText({
     nextButton: "Neste",
     nextButtonAccessibilityLabel: "Fortsett til valg av plan",
   },
+  reviewSection: {
+    reviewSectionTitle: "Brukeranmeldelser",
+  },
   text: {
     annualPlanTitle: "Årlig",
     benefitsTitle: "Dine Pro-fordeler",

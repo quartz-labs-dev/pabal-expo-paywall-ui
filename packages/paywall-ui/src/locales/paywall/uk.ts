@@ -5,6 +5,9 @@ const uk = createPaywallLocaleText({
     nextButton: "Далі",
     nextButtonAccessibilityLabel: "Перейти до вибору плану",
   },
+  reviewSection: {
+    reviewSectionTitle: "Відгуки користувачів",
+  },
   text: {
     annualPlanTitle: "Річний",
     benefitsTitle: "Переваги Pro",

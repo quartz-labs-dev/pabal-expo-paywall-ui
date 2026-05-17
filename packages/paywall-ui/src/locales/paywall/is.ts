@@ -5,6 +5,9 @@ const is = createPaywallLocaleText({
     nextButton: "Næst",
     nextButtonAccessibilityLabel: "Halda áfram í val á áskrift",
   },
+  reviewSection: {
+    reviewSectionTitle: "Umsagnir notenda",
+  },
   text: {
     annualPlanTitle: "Árlegt",
     benefitsTitle: "Pro fríðindi",

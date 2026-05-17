@@ -12,7 +12,10 @@ import {
 } from "../src/locales/localized-paywall-copy";
 import { UNIFIED_LOCALES } from "../src/locales/unified-locales";
 import type { PurchasesPackageLike } from "../src/types";
-import type { PaywallValueStepText } from "../src/locales/paywall";
+import type {
+  PaywallReviewSectionText,
+  PaywallValueStepText,
+} from "../src/locales/paywall";
 import assert from "node:assert/strict";
 import test from "node:test";
 
@@ -301,6 +304,16 @@ test("keeps first-step next button copy package-owned", () => {
   );
 });
 
+test("keeps purchase-step review section title package-owned", () => {
+  const copy = getDefaultPaywallCopy("ko-KR", {
+    title: "Pro",
+    reviewSectionTitle: "Custom reviews",
+  } as Parameters<typeof getDefaultPaywallCopy>[1] & PaywallReviewSectionText);
+  const reviewCopy = copy as typeof copy & PaywallReviewSectionText;
+
+  assert.equal(reviewCopy.reviewSectionTitle, "사용자 리뷰");
+});
+
 test("provides localized support messages for paywall and profile", () => {
   const paywallCopy = getDefaultPaywallCopy("ko-KR", { title: "Pro" });
   const customPaywallCopy = getDefaultPaywallCopy("ko-KR", {
@@ -414,6 +427,20 @@ test("localizes continue button copy for every non-English paywall locale", () =
     }
 
     assert.notEqual(copy.continueButton, "Continue", locale);
+  }
+});
+
+test("localizes review section title for every non-English paywall locale", () => {
+  for (const locale of PAYWALL_TEXT_LOCALES) {
+    const copy = getDefaultPaywallCopy(locale, { title: "Pro" });
+    const reviewCopy = copy as typeof copy & PaywallReviewSectionText;
+
+    if (locale === "en") {
+      assert.equal(reviewCopy.reviewSectionTitle, "User reviews");
+      continue;
+    }
+
+    assert.notEqual(reviewCopy.reviewSectionTitle, "User reviews", locale);
   }
 });
 

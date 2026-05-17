@@ -28,6 +28,13 @@ const readFeatureComparisonSource = (): string => {
   );
 };
 
+const readReviewSectionSource = (): string => {
+  return readFileSync(
+    join(process.cwd(), "src", "paywall", "PaywallReviewSection.tsx"),
+    "utf8",
+  );
+};
+
 const readProfileSubscriptionSource = (): string => {
   return readFileSync(
     join(process.cwd(), "src", "profile", "ProfileSubscriptionSection.tsx"),
@@ -134,6 +141,25 @@ test("renders feature comparison cells from explicit cell kinds", () => {
   assert.match(featureComparisonSource, /row\.onPress/);
   assert.match(typesSource, /label: string/);
   assert.match(typesSource, /labelContent\?: ReactNode/);
+});
+
+test("keeps paywall review section wired into purchase step", () => {
+  const paywallSource = readPaywallSource();
+  const reviewSource = readReviewSectionSource();
+  const typesSource = readTypesSource();
+
+  assert.match(paywallSource, /reviewSection,/);
+  assert.match(paywallSource, /!isValueStep && reviewSection/);
+  assert.match(paywallSource, /<PaywallReviewSection/);
+  assert.match(paywallSource, /reviewSectionCopy\.reviewSectionTitle/);
+  assert.match(reviewSource, /reviews\.length === 0/);
+  assert.match(
+    reviewSource,
+    /accessibilityLabel=\{`\$\{review\.rating\}\/\$\{MAX_RATING\}`\}/,
+  );
+  assert.match(typesSource, /interface PaywallReview/);
+  assert.match(typesSource, /interface PaywallReviewSection/);
+  assert.match(typesSource, /reviewSection\?: PaywallReviewSection/);
 });
 
 test("keeps profile benefit list and usage modes explicit", () => {
