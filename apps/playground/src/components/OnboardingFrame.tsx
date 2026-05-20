@@ -26,6 +26,7 @@ interface OnboardingFrameProps {
   continueButtonStyle?: StyleProp<ViewStyle>;
   continueButtonTextStyle?: StyleProp<TextStyle>;
   isContentTransitionEnabled?: boolean;
+  isFooterTransitionEnabled?: boolean;
   isBodyScrollEnabled?: boolean;
   isBackButtonDisabled?: boolean;
   rootStyle?: StyleProp<ViewStyle>;
@@ -75,6 +76,12 @@ const DEFAULT_FRAME_THEME = {
 
 const INITIAL_CONTENT_TRANSITION_DELAY_MS = 90;
 
+const getProgressRatio = (stepIndex: number, stepCount: number) => {
+  const safeStepCount = Math.max(stepCount, 1);
+  const safeStepIndex = Math.min(Math.max(stepIndex, 0), safeStepCount - 1);
+  return (safeStepIndex + 1) / safeStepCount;
+};
+
 export const OnboardingFrame = ({
   background,
   children,
@@ -88,6 +95,7 @@ export const OnboardingFrame = ({
   continueButtonStyle,
   continueButtonTextStyle,
   isContentTransitionEnabled = true,
+  isFooterTransitionEnabled = false,
   isBodyScrollEnabled = true,
   isBackButtonDisabled = false,
   rootStyle,
@@ -114,12 +122,31 @@ export const OnboardingFrame = ({
       themeOverride?.progressInactiveColor ??
       DEFAULT_FRAME_THEME.progressInactiveColor,
   };
-  const steps = Array.from({ length: totalSteps }, (_, index) => index);
   const isBackDisabled = isBackButtonDisabled || !showBackButton || !onBack;
   const previousStepIndexRef = useRef<number | null>(null);
+  const contentDirection =
+    previousStepIndexRef.current !== null &&
+    currentStepIndex < previousStepIndexRef.current
+      ? -1
+      : 1;
   const contentTransition = useRef(
     new Animated.Value(isContentTransitionEnabled ? 0 : 1),
   ).current;
+  const progressTransition = useRef(
+    new Animated.Value(getProgressRatio(currentStepIndex, totalSteps)),
+  ).current;
+
+  useEffect(() => {
+    const animation = Animated.timing(progressTransition, {
+      duration: 420,
+      easing: Easing.out(Easing.cubic),
+      toValue: getProgressRatio(currentStepIndex, totalSteps),
+      useNativeDriver: false,
+    });
+
+    animation.start();
+    return () => animation.stop();
+  }, [currentStepIndex, progressTransition, totalSteps]);
 
   useEffect(() => {
     const previousStepIndex = previousStepIndexRef.current;
@@ -162,7 +189,7 @@ export const OnboardingFrame = ({
           {
             translateX: contentTransition.interpolate({
               inputRange: [0, 1],
-              outputRange: [44, 0],
+              outputRange: [44 * contentDirection, 0],
             }),
           },
         ],
@@ -208,20 +235,24 @@ export const OnboardingFrame = ({
               opacity={isBackDisabled ? 0.46 : 1}
             />
           </Pressable>
-          <View style={styles.progressTrack}>
-            {steps.map((stepIndex) => (
-              <View
-                key={stepIndex}
-                style={[
-                  styles.progressSegment,
-                  { backgroundColor: theme.progressInactiveColor },
-                  stepIndex <= currentStepIndex &&
-                    {
-                      backgroundColor: theme.progressActiveColor,
-                    },
-                ]}
-              />
-            ))}
+          <View
+            style={[
+              styles.progressTrack,
+              { backgroundColor: theme.progressInactiveColor },
+            ]}
+          >
+            <Animated.View
+              style={[
+                styles.progressFill,
+                {
+                  backgroundColor: theme.progressActiveColor,
+                  width: progressTransition.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: ["0%", "100%"],
+                  }),
+                },
+              ]}
+            />
           </View>
         </View>
       )}
@@ -286,7 +317,13 @@ export const OnboardingFrame = ({
           },
         ]}
       >
-        <Animated.View style={[styles.footerContent, footerContentStyle]}>
+        <Animated.View
+          style={[
+            styles.footerContent,
+            isFooterTransitionEnabled && animatedBodyStyle,
+            footerContentStyle,
+          ]}
+        >
           <Pressable
             accessibilityRole="button"
             disabled={!canContinue}
@@ -404,13 +441,13 @@ const styles = StyleSheet.create({
   },
   progressTrack: {
     flex: 1,
-    flexDirection: "row",
-    gap: 6,
-  },
-  progressSegment: {
     borderRadius: 999,
-    flex: 1,
     height: 4,
+    overflow: "hidden",
+  },
+  progressFill: {
+    borderRadius: 999,
+    height: "100%",
   },
   body: {
     flex: 1,

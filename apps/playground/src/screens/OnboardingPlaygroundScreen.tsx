@@ -11,6 +11,7 @@ interface OnboardingPlaygroundScreenProps {
   selectedLocale: PlaygroundLocale;
   theme?: OnboardingPlaygroundTheme;
   onClose: () => void;
+  onNotNowPress?: () => void;
 }
 
 export interface OnboardingPlaygroundTheme {
@@ -54,6 +55,7 @@ export const OnboardingPlaygroundScreen = ({
   selectedLocale,
   theme: themeOverride,
   onClose,
+  onNotNowPress,
 }: OnboardingPlaygroundScreenProps) => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const localizedCopy = getDefaultOnboardingCopy(selectedLocale);
@@ -220,7 +222,7 @@ export const OnboardingPlaygroundScreen = ({
         continueLabel={continueLabel}
         currentStepIndex={currentStepIndex}
         isBackButtonDisabled={currentSlide.isBackButtonDisabled}
-        secondaryActionLabel={localizedCopy.notNowButton}
+        secondaryActionLabel={onNotNowPress ? localizedCopy.notNowButton : undefined}
         showBackButton
         theme={frameTheme}
         title={currentSlide.title}
@@ -228,7 +230,7 @@ export const OnboardingPlaygroundScreen = ({
         description={currentSlide.description}
         onBack={goBack}
         onContinue={goNext}
-        onSecondaryAction={onClose}
+        onSecondaryAction={onNotNowPress}
       >
         {currentSlide.content}
       </OnboardingFrame>

@@ -64,6 +64,11 @@ const DEFAULT_PRE_ONBOARDING_THEME = {
   shadowColor: "#000000",
 } satisfies Required<PreOnboardingTheme>;
 
+const MOCK_PHONE_ASPECT_RATIO = 0.492;
+const MOCK_PHONE_MAX_HEIGHT = 430;
+const MOCK_PHONE_MAX_WIDTH = 224;
+const MOCK_PHONE_HORIZONTAL_MARGIN = 72;
+
 const useEntranceAnimation = (delay: number, resetKey?: unknown) => {
   const progress = useRef(new Animated.Value(0)).current;
 
@@ -100,22 +105,26 @@ const useEntranceAnimation = (delay: number, resetKey?: unknown) => {
   };
 };
 
-const useRightSlideEntranceAnimation = (delay: number, offset: number) => {
+const usePhoneFrameEntranceAnimation = (
+  delay: number,
+  offsetX: number,
+  offsetY: number,
+) => {
   const progress = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     progress.setValue(0);
     const animation = Animated.timing(progress, {
       delay,
-      duration: 780,
-      easing: Easing.out(Easing.exp),
+      duration: 980,
+      easing: Easing.out(Easing.cubic),
       toValue: 1,
       useNativeDriver: true,
     });
 
     animation.start();
     return () => animation.stop();
-  }, [delay, offset, progress]);
+  }, [delay, offsetX, offsetY, progress]);
 
   return {
     opacity: progress,
@@ -123,7 +132,13 @@ const useRightSlideEntranceAnimation = (delay: number, offset: number) => {
       {
         translateX: progress.interpolate({
           inputRange: [0, 1],
-          outputRange: [offset, 0],
+          outputRange: [offsetX, 0],
+        }),
+      },
+      {
+        translateY: progress.interpolate({
+          inputRange: [0, 1],
+          outputRange: [offsetY, 0],
         }),
       },
       {
@@ -158,12 +173,19 @@ export const PreOnboardingPlaygroundScreen = ({
   const isLandingStep = currentStepIndex === 0;
   const isCompactHeight = height < 760;
   const isTinyHeight = height < 690;
-  const mockPhoneHeight = Math.min(
+  const mockPhoneMaxHeight = Math.min(
     height * (isTinyHeight ? 0.38 : isCompactHeight ? 0.43 : 0.5),
-    width * 1.04,
-    430,
+    MOCK_PHONE_MAX_HEIGHT,
   );
-  const mockPhoneWidth = mockPhoneHeight * 0.492;
+  const mockPhoneMaxWidth = Math.min(
+    Math.max(width - MOCK_PHONE_HORIZONTAL_MARGIN, 160),
+    MOCK_PHONE_MAX_WIDTH,
+  );
+  const mockPhoneWidth = Math.min(
+    mockPhoneMaxWidth,
+    mockPhoneMaxHeight * MOCK_PHONE_ASPECT_RATIO,
+  );
+  const mockPhoneHeight = mockPhoneWidth / MOCK_PHONE_ASPECT_RATIO;
   const mockContentGap = isTinyHeight ? 26 : isCompactHeight ? 34 : 44;
   const mockTitleFontSize = isTinyHeight ? 22 : isCompactHeight ? 25 : 29;
   const mockTitleLineHeight = isTinyHeight ? 27 : isCompactHeight ? 31 : 35;
@@ -214,6 +236,8 @@ export const PreOnboardingPlaygroundScreen = ({
         }
         footerStyle={isLandingStep ? styles.landingFooter : styles.mockFooter}
         isBodyScrollEnabled={false}
+        isContentTransitionEnabled={!isLandingStep}
+        isFooterTransitionEnabled={!isLandingStep}
         showHeader={false}
         theme={frameTheme}
         totalSteps={2}
@@ -230,8 +254,9 @@ export const PreOnboardingPlaygroundScreen = ({
           />
         ) : (
           <MockVideoContent
-            mockPhoneWidth={mockPhoneWidth}
             mockContentGap={mockContentGap}
+            mockPhoneHeight={mockPhoneHeight}
+            mockPhoneWidth={mockPhoneWidth}
             mockImageSource={mockImageSource}
             mockTitleFontSize={mockTitleFontSize}
             mockTitleLineHeight={mockTitleLineHeight}
@@ -311,6 +336,7 @@ const LandingContent = ({
 
 interface MockVideoContentProps {
   mockContentGap: number;
+  mockPhoneHeight: number;
   mockPhoneWidth: number;
   mockImageSource?: ImageSourcePropType;
   mockTitleFontSize: number;
@@ -322,6 +348,7 @@ interface MockVideoContentProps {
 
 const MockVideoContent = ({
   mockContentGap,
+  mockPhoneHeight,
   mockImageSource,
   mockPhoneWidth,
   mockTitleFontSize,
@@ -330,71 +357,24 @@ const MockVideoContent = ({
   theme,
   title,
 }: MockVideoContentProps) => {
-  const phoneAnimatedStyle = useRightSlideEntranceAnimation(
-    480,
+  const phoneAnimatedStyle = usePhoneFrameEntranceAnimation(
+    160,
     mockPhoneWidth + 90,
+    42,
   );
 
   return (
     <View style={[styles.mockContent, { gap: mockContentGap }]}>
-      <Animated.View
-        style={[
-          styles.mockPhoneShadow,
-          { shadowColor: theme.frameBorderColor, width: mockPhoneWidth },
-          phoneAnimatedStyle,
-        ]}
-      >
-        <View
-          style={[
-            styles.mockPhoneFrame,
-            {
-              backgroundColor: theme.frameBorderColor,
-              borderColor: theme.frameBorderColor,
-            },
-          ]}
-        >
-          <View
-            style={[
-              styles.mockPhoneScreen,
-              { backgroundColor: theme.frameBackgroundColor },
-            ]}
-          >
-            {mockVideo ??
-              (mockImageSource ? (
-                <Image
-                  resizeMode="cover"
-                  source={mockImageSource}
-                  style={styles.mockImage}
-                />
-              ) : (
-                <View
-                  style={[
-                    styles.mockMediaSlot,
-                    { backgroundColor: theme.frameBackgroundColor },
-                  ]}
-                />
-              ))}
-          </View>
-          <View
-            style={[
-              styles.sideButtonLeftTop,
-              { backgroundColor: theme.frameBorderColor },
-            ]}
-          />
-          <View
-            style={[
-              styles.sideButtonLeftBottom,
-              { backgroundColor: theme.frameBorderColor },
-            ]}
-          />
-          <View
-            style={[
-              styles.sideButtonRight,
-              { backgroundColor: theme.frameBorderColor },
-            ]}
-          />
-        </View>
-      </Animated.View>
+      <View style={styles.mockPhoneStage}>
+        <MockPhoneFrame
+          animatedStyle={phoneAnimatedStyle}
+          height={mockPhoneHeight}
+          imageSource={mockImageSource}
+          theme={theme}
+          video={mockVideo}
+          width={mockPhoneWidth}
+        />
+      </View>
 
       <View style={styles.mockCopy}>
         <Text
@@ -411,6 +391,85 @@ const MockVideoContent = ({
         </Text>
       </View>
     </View>
+  );
+};
+
+interface MockPhoneFrameProps {
+  animatedStyle: StyleProp<ViewStyle>;
+  height: number;
+  imageSource?: ImageSourcePropType;
+  theme: Required<PreOnboardingTheme>;
+  video?: ReactNode;
+  width: number;
+}
+
+const MockPhoneFrame = ({
+  animatedStyle,
+  height,
+  imageSource,
+  theme,
+  video,
+  width,
+}: MockPhoneFrameProps) => {
+  return (
+    <Animated.View
+      style={[
+        styles.mockPhoneShadow,
+        { height, shadowColor: theme.frameBorderColor, width },
+        animatedStyle,
+      ]}
+    >
+      <View
+        style={[
+          styles.mockPhoneFrame,
+          {
+            backgroundColor: theme.frameBorderColor,
+            borderColor: theme.frameBorderColor,
+          },
+        ]}
+      >
+        <View
+          style={[
+            styles.mockPhoneScreen,
+            { backgroundColor: theme.frameBackgroundColor },
+          ]}
+        >
+          {video ??
+            (imageSource ? (
+              <Image
+                resizeMode="cover"
+                source={imageSource}
+                style={styles.mockImage}
+              />
+            ) : (
+              <View
+                style={[
+                  styles.mockMediaSlot,
+                  { backgroundColor: theme.frameBackgroundColor },
+                ]}
+              />
+            ))}
+        </View>
+        <View
+          style={[
+            styles.sideButtonLeftTop,
+            { backgroundColor: theme.frameBorderColor },
+          ]}
+        />
+        <View
+          style={[
+            styles.sideButtonLeftBottom,
+            { backgroundColor: theme.frameBorderColor },
+          ]}
+        />
+        <View
+          style={[
+            styles.sideButtonRight,
+            { backgroundColor: theme.frameBorderColor },
+          ]}
+        />
+      </View>
+    </Animated.View>
   );
 };
 
@@ -566,7 +625,12 @@ const styles = StyleSheet.create({
   mockContent: {
     alignItems: "center",
     flex: 1,
-    justifyContent: "space-between",
+    width: "100%",
+  },
+  mockPhoneStage: {
+    alignItems: "center",
+    flex: 1,
+    justifyContent: "center",
     width: "100%",
   },
   mockPhoneShadow: {
