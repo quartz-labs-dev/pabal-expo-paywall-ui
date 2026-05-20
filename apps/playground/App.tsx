@@ -62,6 +62,8 @@ export default function App() {
   const [freeTrialMode, setFreeTrialMode] =
     useState<PlaygroundFreeTrialMode>("sevenDays");
   const [isTrialEligible, setIsTrialEligible] = useState(true);
+  const [isPreOnboardingLoginPromptVisible, setIsPreOnboardingLoginPromptVisible] =
+    useState(true);
   const [selectedLocale, setSelectedLocale] =
     useState<PlaygroundLocale>("en-US");
 
@@ -112,6 +114,7 @@ export default function App() {
         />
       ) : route === "preOnboarding" ? (
         <PreOnboardingPlaygroundScreen
+          isLoginPromptVisible={isPreOnboardingLoginPromptVisible}
           selectedLocale={selectedLocale}
           onContinue={() => navigate("home")}
         />
@@ -124,9 +127,13 @@ export default function App() {
           paywallAnimation={paywallAnimation}
           freeTrialMode={freeTrialMode}
           isTrialEligible={isTrialEligible}
+          isPreOnboardingLoginPromptVisible={isPreOnboardingLoginPromptVisible}
           onChangeScenario={setScenario}
           onToggleLongPrice={setIsLongPriceEnabled}
           onToggleTrialEligibility={setIsTrialEligible}
+          onTogglePreOnboardingLoginPrompt={
+            setIsPreOnboardingLoginPromptVisible
+          }
           onChangeLocale={setSelectedLocale}
           onChangePaywallFlow={setPaywallFlow}
           onChangePaywallAnimation={setPaywallAnimation}

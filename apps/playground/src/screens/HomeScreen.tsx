@@ -27,10 +27,12 @@ interface HomeScreenProps {
   paywallAnimation: PlaygroundPaywallAnimation;
   freeTrialMode: PlaygroundFreeTrialMode;
   isTrialEligible: boolean;
+  isPreOnboardingLoginPromptVisible: boolean;
   onChangeScenario: (scenario: PlaygroundPackageScenario) => void;
   onChangeLocale: (locale: PlaygroundLocale) => void;
   onToggleLongPrice: (isEnabled: boolean) => void;
   onToggleTrialEligibility: (isEligible: boolean) => void;
+  onTogglePreOnboardingLoginPrompt: (isVisible: boolean) => void;
   onChangePaywallFlow: (paywallFlow: PlaygroundPaywallFlow) => void;
   onChangePaywallAnimation: (
     paywallAnimation: PlaygroundPaywallAnimation,
@@ -78,10 +80,12 @@ export const HomeScreen = ({
   paywallAnimation,
   freeTrialMode,
   isTrialEligible,
+  isPreOnboardingLoginPromptVisible,
   onChangeScenario,
   onChangeLocale,
   onToggleLongPrice,
   onToggleTrialEligibility,
+  onTogglePreOnboardingLoginPrompt,
   onChangePaywallFlow,
   onChangePaywallAnimation,
   onChangeFreeTrialMode,
@@ -93,7 +97,10 @@ export const HomeScreen = ({
   const insets = useSafeAreaInsets();
   const [isPaywallSettingsVisible, setIsPaywallSettingsVisible] =
     useState(false);
+  const [isOnboardingSettingsVisible, setIsOnboardingSettingsVisible] =
+    useState(false);
   const closePaywallSettings = () => setIsPaywallSettingsVisible(false);
+  const closeOnboardingSettings = () => setIsOnboardingSettingsVisible(false);
 
   return (
     <View style={styles.root}>
@@ -122,7 +129,10 @@ export const HomeScreen = ({
         </View>
 
         <View style={styles.sharedSection}>
-          <Text style={styles.sectionTitle}>Onboarding</Text>
+          <SectionTitleRow
+            title="Onboarding"
+            onOpenSettings={() => setIsOnboardingSettingsVisible(true)}
+          />
           <Pressable
             onPress={onOpenPreOnboarding}
             style={styles.secondaryAction}
@@ -184,6 +194,17 @@ export const HomeScreen = ({
         <CustomerStateSettings
           isTrialEligible={isTrialEligible}
           onToggleTrialEligibility={onToggleTrialEligibility}
+        />
+      </SettingsModal>
+
+      <SettingsModal
+        title="Onboarding settings"
+        visible={isOnboardingSettingsVisible}
+        onClose={closeOnboardingSettings}
+      >
+        <PreOnboardingSettings
+          isLoginPromptVisible={isPreOnboardingLoginPromptVisible}
+          onToggleLoginPrompt={onTogglePreOnboardingLoginPrompt}
         />
       </SettingsModal>
     </View>
@@ -416,6 +437,55 @@ const CustomerStateSettings = ({
               style={[
                 styles.switchThumb,
                 isTrialEligible && styles.switchThumbOn,
+              ]}
+            />
+          </View>
+        </View>
+      </Pressable>
+    </View>
+  );
+};
+
+interface PreOnboardingSettingsProps {
+  isLoginPromptVisible: boolean;
+  onToggleLoginPrompt: (isVisible: boolean) => void;
+}
+
+const PreOnboardingSettings = ({
+  isLoginPromptVisible,
+  onToggleLoginPrompt,
+}: PreOnboardingSettingsProps) => {
+  return (
+    <View style={styles.section}>
+      <Text style={styles.sectionTitle}>Pre-onboarding</Text>
+      <Pressable
+        accessibilityRole="switch"
+        accessibilityState={{ checked: isLoginPromptVisible }}
+        onPress={() => onToggleLoginPrompt(!isLoginPromptVisible)}
+        style={[
+          styles.trialEligibilityCard,
+          isLoginPromptVisible && styles.trialEligibilityCardSelected,
+        ]}
+      >
+        <View style={styles.trialEligibilityHeader}>
+          <Text
+            style={[
+              styles.trialEligibilityTitle,
+              isLoginPromptVisible && styles.trialEligibilityTitleSelected,
+            ]}
+          >
+            {isLoginPromptVisible ? "Login available" : "No login"}
+          </Text>
+          <View
+            style={[
+              styles.switchTrack,
+              isLoginPromptVisible && styles.switchTrackOn,
+            ]}
+          >
+            <View
+              style={[
+                styles.switchThumb,
+                isLoginPromptVisible && styles.switchThumbOn,
               ]}
             />
           </View>

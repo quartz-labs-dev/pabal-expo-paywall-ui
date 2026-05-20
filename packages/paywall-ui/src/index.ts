@@ -1,4 +1,5 @@
 export { createPaywallPlans, getDefaultSelectedPlanId } from "./paywall/create-paywall-plans";
+export { getColorWithAlpha } from "./shared/color-utils";
 export {
   getDefaultOnboardingCopy,
   ONBOARDING_TEXT_LOCALES,
