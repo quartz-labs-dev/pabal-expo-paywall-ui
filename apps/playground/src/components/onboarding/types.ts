@@ -31,17 +31,13 @@ export interface SocialProofMetric {
 }
 
 export interface SocialProofReview {
-  author?: string;
   quote: string;
   rating?: SocialProofReviewRating;
   title: string;
 }
 
 export interface SocialProofContentData {
-  eyebrow?: string;
   headline: string;
-  highlightedText?: string;
   metric?: SocialProofMetric;
   reviews: SocialProofReview[];
-  subheadline?: string;
 }

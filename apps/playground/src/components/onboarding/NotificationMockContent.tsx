@@ -1,5 +1,11 @@
 import { type ReactNode } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  type ImageSourcePropType,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
 import { MockPhoneFrame } from "./PreOnboardingContent";
 import type { PlaygroundOnboardingTheme } from "../onboarding-theme";
@@ -7,6 +13,7 @@ import type { PlaygroundOnboardingTheme } from "../onboarding-theme";
 export interface NotificationMockContentProps {
   body: string;
   logo?: ReactNode;
+  logoSource?: ImageSourcePropType;
   nowLabel: string;
   theme: Required<PlaygroundOnboardingTheme>;
   title: string;
@@ -18,6 +25,7 @@ const PHONE_HEIGHT = 455;
 export const NotificationMockContent = ({
   body,
   logo,
+  logoSource,
   nowLabel,
   theme,
   title,
@@ -53,6 +61,7 @@ export const NotificationMockContent = ({
             backgroundColor={notificationBackgroundColor}
             body={body}
             logo={logo}
+            logoSource={logoSource}
             nowLabel={nowLabel}
             textColor={notificationTextColor}
             theme={theme}
@@ -74,7 +83,7 @@ const NotificationFrameContent = ({ theme }: NotificationFrameContentProps) => {
       <View
         style={[
           styles.frameMediaBlock,
-          { backgroundColor: theme.progressInactiveColor },
+          { backgroundColor: "#FFFFFF" },
         ]}
       />
       <View
@@ -91,6 +100,7 @@ interface NotificationCardProps {
   backgroundColor: string;
   body: string;
   logo?: ReactNode;
+  logoSource?: ImageSourcePropType;
   nowLabel: string;
   textColor: string;
   theme: Required<PlaygroundOnboardingTheme>;
@@ -101,6 +111,7 @@ const NotificationCard = ({
   backgroundColor,
   body,
   logo,
+  logoSource,
   nowLabel,
   textColor,
   theme,
@@ -117,7 +128,16 @@ const NotificationCard = ({
       ]}
     >
       <View style={styles.notificationLogoSlot}>
-        {logo ?? <DefaultNotificationLogo theme={theme} />}
+        {logo ??
+          (logoSource ? (
+            <Image
+              resizeMode="cover"
+              source={logoSource}
+              style={styles.notificationLogoImage}
+            />
+          ) : (
+            <DefaultNotificationLogo theme={theme} />
+          ))}
       </View>
       <View style={styles.notificationCopy}>
         <View style={styles.notificationTitleRow}>
@@ -197,7 +217,6 @@ const styles = StyleSheet.create({
   frameMediaBlock: {
     borderRadius: 3,
     height: "70%",
-    opacity: 0.84,
     width: "100%",
   },
   frameBottomFade: {
@@ -209,34 +228,35 @@ const styles = StyleSheet.create({
     right: 0,
   },
   notificationStack: {
-    left: -48,
+    left: -40,
     position: "absolute",
-    right: -48,
+    right: -40,
     top: 138,
   },
   stackedNotification: {
     alignSelf: "center",
-    borderRadius: 8,
+    borderRadius: 12,
     height: 74,
-    opacity: 0.7,
+    opacity: 0.58,
     position: "absolute",
-    width: "83%",
+    width: "98%",
   },
   stackedNotificationBack: {
-    top: 14,
-    transform: [{ scaleX: 0.88 }],
+    top: 21,
+    transform: [{ scaleX: 0.94 }],
   },
   stackedNotificationMiddle: {
-    top: 7,
-    transform: [{ scaleX: 0.94 }],
+    top: 11,
+    transform: [{ scaleX: 0.97 }],
   },
   notificationCard: {
     alignItems: "flex-start",
     alignSelf: "center",
-    borderRadius: 8,
+    borderRadius: 12,
     flexDirection: "row",
     gap: 9,
     minHeight: 74,
+    opacity: 0.94,
     paddingHorizontal: 11,
     paddingVertical: 13,
     shadowOffset: { height: 10, width: 0 },
@@ -256,6 +276,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     height: 25,
     justifyContent: "center",
+    width: 25,
+  },
+  notificationLogoImage: {
+    borderRadius: 7,
+    height: 25,
     width: 25,
   },
   notificationLogoStroke: {

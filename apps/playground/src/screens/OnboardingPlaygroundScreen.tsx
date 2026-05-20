@@ -6,7 +6,7 @@ import {
   type OnboardingAcquisitionSourceId,
   type OnboardingAcquisitionSourceOption,
 } from "pabal-expo-paywall-ui";
-import { StyleSheet } from "react-native";
+import { type ImageSourcePropType, StyleSheet } from "react-native";
 
 import { OnboardingFrame } from "../components/OnboardingFrame";
 import { ChoiceListContent } from "../components/onboarding/ChoiceListContent";
@@ -31,6 +31,7 @@ export type OnboardingPlaygroundTheme = PlaygroundOnboardingTheme;
 export interface OnboardingNotificationContent {
   body: string;
   logo?: ReactNode;
+  logoSource?: ImageSourcePropType;
   title: string;
 }
 
@@ -79,6 +80,7 @@ const createNotificationSlide = ({
     <NotificationMockContent
       body={content.body}
       logo={content.logo}
+      logoSource={content.logoSource}
       nowLabel={nowLabel}
       theme={theme}
       title={content.title}
@@ -282,30 +284,25 @@ const DEFAULT_NOTIFICATION_CONTENT = {
 } satisfies OnboardingNotificationContent;
 
 const ONBOARDING_SOCIAL_PROOF_CONTENT = {
-  eyebrow: "App Store reviews",
-  headline: "Post Black Belt was made for athletes like you.",
-  highlightedText: "athletes like you",
+  headline: "Post Black Belt was made for **athletes like you**.",
   metric: {
     label: "100K+ App Ratings",
     value: "4.8",
   },
   reviews: [
     {
-      author: "App Store review",
       quote:
         "I finally stopped losing track of what to train next. The reminders and plan flow make it easy to stay consistent.",
       rating: 5,
       title: "FINALLY CONSISTENT.",
     },
     {
-      author: "App Store review",
       quote:
         "Simple, clean, and actually useful. It gives me just enough structure without turning training into admin work.",
       rating: 5,
       title: "EXACTLY WHAT I NEEDED.",
     },
   ],
-  subheadline: "Trusted by people building better training habits.",
 } satisfies Omit<ComponentProps<typeof SocialProofContent>, "theme">;
 
 const styles = StyleSheet.create({

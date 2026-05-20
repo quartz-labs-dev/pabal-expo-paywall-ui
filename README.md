@@ -34,3 +34,9 @@ yarn build      # paywall-ui build
 ```
 
 Use `swpm` or `yarn` when adding dependencies. Do not use `npm`.
+
+## Playground Onboarding Copy
+
+Prelude and social-proof headlines use `**highlighted copy**` to apply the
+onboarding primary/accent color. Keep the marker in content strings instead of
+adding a separate highlight prop.

@@ -9,18 +9,16 @@ import type {
   SocialProofReview,
   SocialProofReviewRating,
 } from "./types";
+import { parseIntroEmphasisSegments } from "../../utils/onboarding-intro-text";
 
 export interface SocialProofContentProps extends SocialProofContentData {
   theme: Required<PlaygroundOnboardingTheme>;
 }
 
 export const SocialProofContent = ({
-  eyebrow,
   headline,
-  highlightedText,
   metric,
   reviews,
-  subheadline,
   theme,
 }: SocialProofContentProps) => {
   const mutedTextColor = getMutedPrimaryTextColor(theme);
@@ -28,22 +26,11 @@ export const SocialProofContent = ({
   return (
     <View style={styles.root}>
       <View style={styles.heading}>
-        {eyebrow ? (
-          <Text style={[styles.eyebrow, { color: mutedTextColor }]}>
-            {eyebrow}
-          </Text>
-        ) : null}
         <Headline
           accentColor={theme.accentColor}
-          highlightedText={highlightedText}
           text={headline}
           textColor={theme.primaryTextColor}
         />
-        {subheadline ? (
-          <Text style={[styles.subheadline, { color: mutedTextColor }]}>
-            {subheadline}
-          </Text>
-        ) : null}
       </View>
 
       {metric ? (
@@ -65,7 +52,6 @@ export const SocialProofContent = ({
         {reviews.slice(0, 2).map((review) => (
           <ReviewCard
             key={`${review.title}-${review.quote}`}
-            mutedTextColor={mutedTextColor}
             review={review}
             theme={theme}
           />
@@ -77,28 +63,32 @@ export const SocialProofContent = ({
 
 interface HeadlineProps {
   accentColor: string;
-  highlightedText?: string;
   text: string;
   textColor: string;
 }
 
 const Headline = ({
   accentColor,
-  highlightedText,
   text,
   textColor,
 }: HeadlineProps) => {
-  if (!highlightedText || !text.includes(highlightedText)) {
-    return <Text style={[styles.headline, { color: textColor }]}>{text}</Text>;
-  }
-
-  const [before, after] = text.split(highlightedText);
+  const segments = parseIntroEmphasisSegments(text);
 
   return (
     <Text style={[styles.headline, { color: textColor }]}>
-      {before}
-      <Text style={{ color: accentColor }}>{highlightedText}</Text>
-      {after}
+      {segments.map((segment, index) => (
+        <Text
+          key={`${index}-${segment.text}`}
+          style={[
+            segment.isHighlighted && {
+              color: accentColor,
+              fontWeight: "700",
+            },
+          ]}
+        >
+          {segment.text}
+        </Text>
+      ))}
     </Text>
   );
 };
@@ -140,12 +130,11 @@ const StarRating = ({ color, rating = 5, size = "regular" }: StarRatingProps) =>
 };
 
 interface ReviewCardProps {
-  mutedTextColor: string;
   review: SocialProofReview;
   theme: Required<PlaygroundOnboardingTheme>;
 }
 
-const ReviewCard = ({ mutedTextColor, review, theme }: ReviewCardProps) => {
+const ReviewCard = ({ review, theme }: ReviewCardProps) => {
   return (
     <View
       style={[
@@ -158,14 +147,6 @@ const ReviewCard = ({ mutedTextColor, review, theme }: ReviewCardProps) => {
     >
       <View style={styles.reviewHeader}>
         <StarRating color={theme.accentColor} rating={review.rating ?? 5} />
-        {review.author ? (
-          <Text
-            numberOfLines={1}
-            style={[styles.reviewAuthor, { color: mutedTextColor }]}
-          >
-            {review.author}
-          </Text>
-        ) : null}
       </View>
       <Text style={[styles.reviewTitle, { color: theme.primaryTextColor }]}>
         {review.title}
@@ -190,24 +171,11 @@ const styles = StyleSheet.create({
     maxWidth: 360,
     width: "100%",
   },
-  eyebrow: {
-    fontSize: 15,
-    fontWeight: "600",
-    lineHeight: 20,
-    textAlign: "center",
-  },
   headline: {
     flexShrink: 1,
     fontSize: 31,
     fontWeight: "700",
     lineHeight: 37,
-    textAlign: "center",
-  },
-  subheadline: {
-    flexShrink: 1,
-    fontSize: 16,
-    fontWeight: "500",
-    lineHeight: 22,
     textAlign: "center",
   },
   metricWrap: {
@@ -258,13 +226,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 10,
     justifyContent: "space-between",
-  },
-  reviewAuthor: {
-    flexShrink: 1,
-    fontSize: 13,
-    fontWeight: "600",
-    lineHeight: 18,
-    textAlign: "right",
   },
   reviewTitle: {
     fontSize: 18,
