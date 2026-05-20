@@ -1,5 +1,6 @@
 export interface OnboardingText {
   continueButton: string;
+  doneButton: string;
   landingTitle: string;
   loginLabel: string;
   loginPrompt: string;

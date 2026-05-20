@@ -15,6 +15,7 @@ export {
   createOnboardingAcquisitionSourceOptions,
   ONBOARDING_ACQUISITION_SOURCE_TITLE,
 } from "./onboarding/acquisition-sources";
+export { OnboardingCompletion } from "./onboarding/OnboardingCompletion";
 export { PermissionPromptPreview } from "./onboarding/PermissionPromptPreview";
 export {
   getDefaultPaywallCopy,
@@ -36,6 +37,10 @@ export type {
   OnboardingAcquisitionSourceOption,
   OnboardingAcquisitionStorePlatform,
 } from "./onboarding/acquisition-sources";
+export type {
+  OnboardingCompletionProps,
+  OnboardingCompletionTheme,
+} from "./onboarding/OnboardingCompletion";
 export type { OnboardingAcquisitionSourceText } from "./locales/onboarding/acquisition-source";
 export { Paywall } from "./paywall/Paywall";
 export { ProfileSubscriptionSection } from "./profile/ProfileSubscriptionSection";

@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 export interface PlaygroundSlide {
   canContinue?: boolean;
   content: ReactNode;
+  continueLabel?: string;
   description?: string;
   isBackButtonDisabled?: boolean;
   title?: string;

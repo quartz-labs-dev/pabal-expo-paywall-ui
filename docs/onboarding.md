@@ -61,6 +61,7 @@ Available main content:
 | `social-proof` | Headline, optional metric, and review cards | App |
 | `permission-prompt` | Preview before asking for native permissions | Package primitive |
 | `notification-mock` | Notification stack and phone mock | App |
+| `completion` | Setup-done confirmation with animated success burst and app-provided copy | Package primitive + app state |
 
 Current playground `/onboarding` sequence:
 
@@ -70,6 +71,7 @@ Current playground `/onboarding` sequence:
 4. `social-proof`
 5. `permission-prompt`
 6. `notification-mock`
+7. `completion`
 
 Use `list` when the app owns the option set. Use `acquisition-source` when the
 screen should use the package-owned source labels and bundled icons.
@@ -84,6 +86,7 @@ The package currently exposes two onboarding primitives:
 
 - acquisition source copy/options with bundled source icons
 - `PermissionPromptPreview` for permission education before native prompts
+- `OnboardingCompletion` for the final setup-ready confirmation
 
 Apps still own screen order, selected state, permission APIs, analytics,
 navigation, media, and product-specific copy.
@@ -152,3 +155,32 @@ The package localizes only the button labels from `locale`. `Allow` uses the iOS
 system blue (`#007AFF`) on both platforms, and the pointer is a text glyph rather
 than an SVG asset. The preview uses React Native primitives only. Do not add
 `react-native-svg` or permission SDKs to the shared package for this UI.
+
+## Completion
+
+Use `OnboardingCompletion` when every app needs a polished final "setup is
+ready" moment, but each app has different setup state.
+
+The package owns the layout and a short native `Animated` success burst. The app
+owns the words, next route, analytics event, and what counts as complete. The
+playground keeps this final screen intentionally simple: burst, copy, and the
+localized `doneButton` CTA.
+
+Pass the active onboarding theme from the app/context. `OnboardingCompletion`
+does not define its own default theme.
+
+```tsx
+import { OnboardingCompletion } from "pabal-expo-paywall-ui";
+
+<OnboardingCompletion
+  eyebrow="Setup complete"
+  title="You're all set"
+  description="Your plan is ready. Start with the first workout when you are."
+  theme={{
+    accentColor: "#E22121",
+    accentTextColor: "#FFFFFF",
+    primaryTextColor: "#050505",
+    secondaryTextColor: "#666A70",
+  }}
+/>;
+```

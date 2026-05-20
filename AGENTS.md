@@ -37,6 +37,7 @@
 - Use React Native primitives and `StyleSheet` in the shared package.
 - Do not add app-specific dependencies such as Tamagui, Lottie, Expo Video, or Skia to the shared package.
 - Top media must be passed through the `hero: ReactNode` slot.
+- Onboarding primitives must use the active onboarding theme provided by the app/context. Do not create separate local default themes inside onboarding primitives.
 - Check small-screen text wrapping with `flexShrink`, `flexWrap`, and no unnecessary fixed widths.
 - Keep card radius at 8px unless the design system changes.
 - Use restrained font weights: screen titles and section titles should generally use `600`, primary CTA text can use `700`, body/supporting text should use `400` or `500`, and avoid `800`/`900` unless there is a deliberate brand-mark exception.

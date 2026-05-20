@@ -10,6 +10,7 @@ export type { OnboardingText, PermissionPromptText };
 const ONBOARDING_TEXT_BY_LOCALE = {
   af: {
     continueButton: "Gaan voort",
+    doneButton: "Klaar",
     tapToContinueButton: "Tik om voort te gaan",
     landingTitle: "Welkom by\nPost Black Belt!",
     loginLabel: "Meld aan",
@@ -22,6 +23,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   am: {
     continueButton: "ቀጥል",
+    doneButton: "ተጠናቋል",
     tapToContinueButton: "ለመቀጠል ይንኩ",
     landingTitle: "እንኳን ወደ\nPost Black Belt በደህና መጡ!",
     loginLabel: "ግባ",
@@ -34,6 +36,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   ar: {
     continueButton: "متابعة",
+    doneButton: "تم",
     tapToContinueButton: "اضغط للمتابعة",
     landingTitle: "مرحبًا بك في\nPost Black Belt!",
     loginLabel: "تسجيل الدخول",
@@ -46,6 +49,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   az: {
     continueButton: "Davam et",
+    doneButton: "Tamam",
     tapToContinueButton: "Davam etmək üçün toxunun",
     landingTitle: "Post Black Belt-ə\nxoş gəlmisiniz!",
     loginLabel: "Daxil ol",
@@ -58,6 +62,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   be: {
     continueButton: "Працягнуць",
+    doneButton: "Гатова",
     tapToContinueButton: "Націсніце, каб працягнуць",
     landingTitle: "Вітаем у\nPost Black Belt!",
     loginLabel: "Увайсці",
@@ -70,6 +75,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   bg: {
     continueButton: "Продължи",
+    doneButton: "Готово",
     tapToContinueButton: "Докоснете, за да продължите",
     landingTitle: "Добре дошли в\nPost Black Belt!",
     loginLabel: "Вход",
@@ -82,6 +88,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   bn: {
     continueButton: "চালিয়ে যান",
+    doneButton: "সম্পন্ন",
     tapToContinueButton: "চালিয়ে যেতে ট্যাপ করুন",
     landingTitle: "Post Black Belt-এ\nস্বাগতম!",
     loginLabel: "লগ ইন",
@@ -94,6 +101,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   ca: {
     continueButton: "Continua",
+    doneButton: "Fet",
     tapToContinueButton: "Toca per continuar",
     landingTitle: "Benvingut a\nPost Black Belt!",
     loginLabel: "Inicia sessió",
@@ -106,6 +114,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   cs: {
     continueButton: "Pokračovat",
+    doneButton: "Hotovo",
     tapToContinueButton: "Pokračujte klepnutím",
     landingTitle: "Vítejte v\nPost Black Belt!",
     loginLabel: "Přihlásit se",
@@ -118,6 +127,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   da: {
     continueButton: "Fortsæt",
+    doneButton: "Færdig",
     tapToContinueButton: "Tryk for at fortsætte",
     landingTitle: "Velkommen til\nPost Black Belt!",
     loginLabel: "Log ind",
@@ -130,6 +140,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   de: {
     continueButton: "Weiter",
+    doneButton: "Fertig",
     tapToContinueButton: "Tippen zum Fortfahren",
     landingTitle: "Willkommen bei\nPost Black Belt!",
     loginLabel: "Einloggen",
@@ -142,6 +153,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   el: {
     continueButton: "Συνέχεια",
+    doneButton: "Τέλος",
     tapToContinueButton: "Πατήστε για συνέχεια",
     landingTitle: "Καλώς ήρθες στο\nPost Black Belt!",
     loginLabel: "Σύνδεση",
@@ -154,6 +166,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   en: {
     continueButton: "Continue",
+    doneButton: "Done",
     tapToContinueButton: "Tap to continue",
     landingTitle: "Welcome to\nPost Black Belt!",
     loginLabel: "Log in",
@@ -166,6 +179,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   es: {
     continueButton: "Continuar",
+    doneButton: "Listo",
     tapToContinueButton: "Toca para continuar",
     landingTitle: "¡Te damos la bienvenida a\nPost Black Belt!",
     loginLabel: "Iniciar sesión",
@@ -178,6 +192,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   et: {
     continueButton: "Jätka",
+    doneButton: "Valmis",
     tapToContinueButton: "Jätkamiseks puuduta",
     landingTitle: "Tere tulemast\nPost Black Belti!",
     loginLabel: "Logi sisse",
@@ -190,6 +205,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   eu: {
     continueButton: "Jarraitu",
+    doneButton: "Eginda",
     tapToContinueButton: "Ukitu jarraitzeko",
     landingTitle: "Ongi etorri\nPost Black Belt-era!",
     loginLabel: "Hasi saioa",
@@ -202,6 +218,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   fa: {
     continueButton: "ادامه",
+    doneButton: "انجام شد",
     tapToContinueButton: "برای ادامه ضربه بزنید",
     landingTitle: "به\nPost Black Belt خوش آمدید!",
     loginLabel: "ورود",
@@ -214,6 +231,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   fi: {
     continueButton: "Jatka",
+    doneButton: "Valmis",
     tapToContinueButton: "Jatka napauttamalla",
     landingTitle: "Tervetuloa\nPost Black Beltiin!",
     loginLabel: "Kirjaudu sisään",
@@ -226,6 +244,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   fil: {
     continueButton: "Magpatuloy",
+    doneButton: "Tapos",
     tapToContinueButton: "I-tap para magpatuloy",
     landingTitle: "Maligayang pagdating sa\nPost Black Belt!",
     loginLabel: "Mag-log in",
@@ -238,6 +257,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   fr: {
     continueButton: "Continuer",
+    doneButton: "Terminé",
     tapToContinueButton: "Touchez pour continuer",
     landingTitle: "Bienvenue sur\nPost Black Belt !",
     loginLabel: "Connexion",
@@ -250,6 +270,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   gl: {
     continueButton: "Continuar",
+    doneButton: "Feito",
     tapToContinueButton: "Toca para continuar",
     landingTitle: "Benvido/a a\nPost Black Belt!",
     loginLabel: "Iniciar sesión",
@@ -262,6 +283,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   gu: {
     continueButton: "ચાલુ રાખો",
+    doneButton: "પૂર્ણ",
     tapToContinueButton: "ચાલુ રાખવા માટે ટેપ કરો",
     landingTitle: "Post Black Belt માં\nઆપનું સ્વાગત છે!",
     loginLabel: "લૉગ ઇન",
@@ -274,6 +296,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   he: {
     continueButton: "המשך",
+    doneButton: "סיום",
     tapToContinueButton: "הקש כדי להמשיך",
     landingTitle: "ברוכים הבאים אל\nPost Black Belt!",
     loginLabel: "כניסה",
@@ -286,6 +309,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   hi: {
     continueButton: "जारी रखें",
+    doneButton: "हो गया",
     tapToContinueButton: "जारी रखने के लिए टैप करें",
     landingTitle: "Post Black Belt में\nआपका स्वागत है!",
     loginLabel: "लॉग इन",
@@ -298,6 +322,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   hr: {
     continueButton: "Nastavi",
+    doneButton: "Gotovo",
     tapToContinueButton: "Dodirnite za nastavak",
     landingTitle: "Dobro došli u\nPost Black Belt!",
     loginLabel: "Prijava",
@@ -310,6 +335,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   hu: {
     continueButton: "Folytatás",
+    doneButton: "Kész",
     tapToContinueButton: "Koppints a folytatáshoz",
     landingTitle: "Üdvözlünk a\nPost Black Beltben!",
     loginLabel: "Bejelentkezés",
@@ -322,6 +348,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   hy: {
     continueButton: "Շարունակել",
+    doneButton: "Պատրաստ է",
     tapToContinueButton: "Հպեք՝ շարունակելու համար",
     landingTitle: "Բարի գալուստ\nPost Black Belt!",
     loginLabel: "Մուտք գործել",
@@ -334,6 +361,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   id: {
     continueButton: "Lanjutkan",
+    doneButton: "Selesai",
     tapToContinueButton: "Ketuk untuk melanjutkan",
     landingTitle: "Selamat datang di\nPost Black Belt!",
     loginLabel: "Masuk",
@@ -346,6 +374,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   is: {
     continueButton: "Halda áfram",
+    doneButton: "Lokið",
     tapToContinueButton: "Pikkaðu til að halda áfram",
     landingTitle: "Velkomin(n) í\nPost Black Belt!",
     loginLabel: "Skrá inn",
@@ -358,6 +387,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   it: {
     continueButton: "Continua",
+    doneButton: "Fatto",
     tapToContinueButton: "Tocca per continuare",
     landingTitle: "Benvenuto in\nPost Black Belt!",
     loginLabel: "Accedi",
@@ -370,6 +400,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   ja: {
     continueButton: "続ける",
+    doneButton: "完了",
     tapToContinueButton: "タップして続ける",
     landingTitle: "Post Black Beltへ\nようこそ！",
     loginLabel: "ログイン",
@@ -382,6 +413,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   ka: {
     continueButton: "გაგრძელება",
+    doneButton: "შესრულებულია",
     tapToContinueButton: "გასაგრძელებლად შეეხეთ",
     landingTitle: "კეთილი იყოს თქვენი მობრძანება\nPost Black Belt-ში!",
     loginLabel: "შესვლა",
@@ -394,6 +426,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   kk: {
     continueButton: "Жалғастыру",
+    doneButton: "Дайын",
     tapToContinueButton: "Жалғастыру үшін түртіңіз",
     landingTitle: "Post Black Belt-ке\nқош келдіңіз!",
     loginLabel: "Кіру",
@@ -406,6 +439,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   km: {
     continueButton: "បន្ត",
+    doneButton: "រួចរាល់",
     tapToContinueButton: "ប៉ះដើម្បីបន្ត",
     landingTitle: "សូមស្វាគមន៍មកកាន់\nPost Black Belt!",
     loginLabel: "ចូល",
@@ -418,6 +452,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   kn: {
     continueButton: "ಮುಂದುವರಿಸಿ",
+    doneButton: "ಮುಗಿದಿದೆ",
     tapToContinueButton: "ಮುಂದುವರಿಸಲು ಟ್ಯಾಪ್ ಮಾಡಿ",
     landingTitle: "Post Black Belt ಗೆ\nಸ್ವಾಗತ!",
     loginLabel: "ಲಾಗ್ ಇನ್",
@@ -430,6 +465,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   ko: {
     continueButton: "계속",
+    doneButton: "완료",
     tapToContinueButton: "탭해서 계속",
     landingTitle: "Post Black Belt에\n오신 것을 환영합니다!",
     loginLabel: "로그인",
@@ -442,6 +478,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   ky: {
     continueButton: "Улантуу",
+    doneButton: "Бүттү",
     tapToContinueButton: "Улантуу үчүн таптаңыз",
     landingTitle: "Post Black Beltке\nкош келиңиз!",
     loginLabel: "Кирүү",
@@ -454,6 +491,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   lo: {
     continueButton: "ສືບຕໍ່",
+    doneButton: "ສຳເລັດ",
     tapToContinueButton: "ແຕະເພື່ອສືບຕໍ່",
     landingTitle: "ຍິນດີຕ້ອນຮັບສູ່\nPost Black Belt!",
     loginLabel: "ເຂົ້າລະບົບ",
@@ -466,6 +504,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   lt: {
     continueButton: "Tęsti",
+    doneButton: "Atlikta",
     tapToContinueButton: "Palieskite, kad tęstumėte",
     landingTitle: "Sveiki atvykę į\nPost Black Belt!",
     loginLabel: "Prisijungti",
@@ -478,6 +517,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   lv: {
     continueButton: "Turpināt",
+    doneButton: "Gatavs",
     tapToContinueButton: "Pieskarieties, lai turpinātu",
     landingTitle: "Laipni lūdzam\nPost Black Belt!",
     loginLabel: "Pieteikties",
@@ -490,6 +530,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   mk: {
     continueButton: "Продолжи",
+    doneButton: "Готово",
     tapToContinueButton: "Допрете за да продолжите",
     landingTitle: "Добредојдовте во\nPost Black Belt!",
     loginLabel: "Најава",
@@ -502,6 +543,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   ml: {
     continueButton: "തുടരുക",
+    doneButton: "പൂർത്തിയായി",
     tapToContinueButton: "തുടരാൻ ടാപ്പ് ചെയ്യുക",
     landingTitle: "Post Black Belt-ലേക്ക്\nസ്വാഗതം!",
     loginLabel: "ലോഗിൻ",
@@ -514,6 +556,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   mn: {
     continueButton: "Үргэлжлүүлэх",
+    doneButton: "Дууссан",
     tapToContinueButton: "Үргэлжлүүлэхийн тулд товшино уу",
     landingTitle: "Post Black Belt-д\nтавтай морил!",
     loginLabel: "Нэвтрэх",
@@ -526,6 +569,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   mr: {
     continueButton: "सुरू ठेवा",
+    doneButton: "पूर्ण झाले",
     tapToContinueButton: "सुरू ठेवण्यासाठी टॅप करा",
     landingTitle: "Post Black Belt मध्ये\nस्वागत आहे!",
     loginLabel: "लॉग इन",
@@ -538,6 +582,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   ms: {
     continueButton: "Teruskan",
+    doneButton: "Selesai",
     tapToContinueButton: "Ketik untuk teruskan",
     landingTitle: "Selamat datang ke\nPost Black Belt!",
     loginLabel: "Log masuk",
@@ -550,6 +595,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   my: {
     continueButton: "ဆက်လုပ်ရန်",
+    doneButton: "ပြီးပါပြီ",
     tapToContinueButton: "ဆက်လုပ်ရန် တို့ပါ",
     landingTitle: "Post Black Belt မှ\nကြိုဆိုပါတယ်!",
     loginLabel: "လော့ဂ်အင်",
@@ -562,6 +608,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   nb: {
     continueButton: "Fortsett",
+    doneButton: "Ferdig",
     tapToContinueButton: "Trykk for å fortsette",
     landingTitle: "Velkommen til\nPost Black Belt!",
     loginLabel: "Logg inn",
@@ -574,6 +621,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   ne: {
     continueButton: "जारी राख्नुहोस्",
+    doneButton: "सम्पन्न",
     tapToContinueButton: "जारी राख्न ट्याप गर्नुहोस्",
     landingTitle: "Post Black Belt मा\nस्वागत छ!",
     loginLabel: "लग इन",
@@ -586,6 +634,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   nl: {
     continueButton: "Doorgaan",
+    doneButton: "Gereed",
     tapToContinueButton: "Tik om door te gaan",
     landingTitle: "Welkom bij\nPost Black Belt!",
     loginLabel: "Inloggen",
@@ -598,6 +647,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   pa: {
     continueButton: "ਜਾਰੀ ਰੱਖੋ",
+    doneButton: "ਮੁਕੰਮਲ",
     tapToContinueButton: "ਜਾਰੀ ਰੱਖਣ ਲਈ ਟੈਪ ਕਰੋ",
     landingTitle: "Post Black Belt ਵਿੱਚ\nਸੁਆਗਤ ਹੈ!",
     loginLabel: "ਲੌਗ ਇਨ",
@@ -610,6 +660,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   pl: {
     continueButton: "Kontynuuj",
+    doneButton: "Gotowe",
     tapToContinueButton: "Stuknij, aby kontynuować",
     landingTitle: "Witamy w\nPost Black Belt!",
     loginLabel: "Zaloguj się",
@@ -622,6 +673,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   pt: {
     continueButton: "Continuar",
+    doneButton: "Concluído",
     tapToContinueButton: "Toque para continuar",
     landingTitle: "Bem-vindo ao\nPost Black Belt!",
     loginLabel: "Entrar",
@@ -634,6 +686,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   ptBr: {
     continueButton: "Continuar",
+    doneButton: "Concluído",
     tapToContinueButton: "Toque para continuar",
     landingTitle: "Boas-vindas ao\nPost Black Belt!",
     loginLabel: "Entrar",
@@ -646,6 +699,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   rm: {
     continueButton: "Cuntinuar",
+    doneButton: "Finì",
     tapToContinueButton: "Tutgar per cuntinuar",
     landingTitle: "Bainvegni tar\nPost Black Belt!",
     loginLabel: "S’annunziar",
@@ -658,6 +712,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   ro: {
     continueButton: "Continuă",
+    doneButton: "Gata",
     tapToContinueButton: "Atinge pentru a continua",
     landingTitle: "Bun venit la\nPost Black Belt!",
     loginLabel: "Autentificare",
@@ -670,6 +725,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   ru: {
     continueButton: "Продолжить",
+    doneButton: "Готово",
     tapToContinueButton: "Нажмите, чтобы продолжить",
     landingTitle: "Добро пожаловать в\nPost Black Belt!",
     loginLabel: "Войти",
@@ -682,6 +738,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   si: {
     continueButton: "ඉදිරියට යන්න",
+    doneButton: "නිමයි",
     tapToContinueButton: "ඉදිරියට යාමට තට්ටු කරන්න",
     landingTitle: "Post Black Belt වෙත\nසාදරයෙන් පිළිගනිමු!",
     loginLabel: "පුරනය වන්න",
@@ -694,6 +751,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   sk: {
     continueButton: "Pokračovať",
+    doneButton: "Hotovo",
     tapToContinueButton: "Pokračujte ťuknutím",
     landingTitle: "Vitajte v\nPost Black Belt!",
     loginLabel: "Prihlásiť sa",
@@ -706,6 +764,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   sl: {
     continueButton: "Nadaljuj",
+    doneButton: "Končano",
     tapToContinueButton: "Tapnite za nadaljevanje",
     landingTitle: "Dobrodošli v\nPost Black Belt!",
     loginLabel: "Prijava",
@@ -718,6 +777,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   sq: {
     continueButton: "Vazhdo",
+    doneButton: "U krye",
     tapToContinueButton: "Prek për të vazhduar",
     landingTitle: "Mirë se vini në\nPost Black Belt!",
     loginLabel: "Hyr",
@@ -730,6 +790,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   sr: {
     continueButton: "Настави",
+    doneButton: "Готово",
     tapToContinueButton: "Додирните за наставак",
     landingTitle: "Добродошли у\nPost Black Belt!",
     loginLabel: "Пријави се",
@@ -742,6 +803,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   sv: {
     continueButton: "Fortsätt",
+    doneButton: "Klar",
     tapToContinueButton: "Tryck för att fortsätta",
     landingTitle: "Välkommen till\nPost Black Belt!",
     loginLabel: "Logga in",
@@ -754,6 +816,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   sw: {
     continueButton: "Endelea",
+    doneButton: "Imekamilika",
     tapToContinueButton: "Gusa ili kuendelea",
     landingTitle: "Karibu kwenye\nPost Black Belt!",
     loginLabel: "Ingia",
@@ -766,6 +829,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   ta: {
     continueButton: "தொடரவும்",
+    doneButton: "முடிந்தது",
     tapToContinueButton: "தொடர தட்டவும்",
     landingTitle: "Post Black Belt-க்கு\nவரவேற்கிறோம்!",
     loginLabel: "உள்நுழை",
@@ -778,6 +842,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   te: {
     continueButton: "కొనసాగించు",
+    doneButton: "పూర్తయింది",
     tapToContinueButton: "కొనసాగించడానికి ట్యాప్ చేయండి",
     landingTitle: "Post Black Belt కు\nస్వాగతం!",
     loginLabel: "లాగిన్",
@@ -790,6 +855,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   th: {
     continueButton: "ดำเนินการต่อ",
+    doneButton: "เสร็จสิ้น",
     tapToContinueButton: "แตะเพื่อดำเนินการต่อ",
     landingTitle: "ยินดีต้อนรับสู่\nPost Black Belt!",
     loginLabel: "เข้าสู่ระบบ",
@@ -802,6 +868,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   tr: {
     continueButton: "Devam et",
+    doneButton: "Bitti",
     tapToContinueButton: "Devam etmek için dokun",
     landingTitle: "Post Black Belt’e\nhoş geldiniz!",
     loginLabel: "Giriş yap",
@@ -814,6 +881,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   uk: {
     continueButton: "Продовжити",
+    doneButton: "Готово",
     tapToContinueButton: "Торкніться, щоб продовжити",
     landingTitle: "Ласкаво просимо до\nPost Black Belt!",
     loginLabel: "Увійти",
@@ -826,6 +894,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   ur: {
     continueButton: "جاری رکھیں",
+    doneButton: "مکمل",
     tapToContinueButton: "جاری رکھنے کے لیے ٹیپ کریں",
     landingTitle: "Post Black Belt میں\nخوش آمدید!",
     loginLabel: "لاگ ان",
@@ -838,6 +907,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   vi: {
     continueButton: "Tiếp tục",
+    doneButton: "Xong",
     tapToContinueButton: "Chạm để tiếp tục",
     landingTitle: "Chào mừng đến với\nPost Black Belt!",
     loginLabel: "Đăng nhập",
@@ -850,6 +920,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   zhHans: {
     continueButton: "继续",
+    doneButton: "完成",
     tapToContinueButton: "轻点以继续",
     landingTitle: "欢迎来到\nPost Black Belt！",
     loginLabel: "登录",
@@ -862,6 +933,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   zhHant: {
     continueButton: "繼續",
+    doneButton: "完成",
     tapToContinueButton: "點一下繼續",
     landingTitle: "歡迎來到\nPost Black Belt！",
     loginLabel: "登入",
@@ -874,6 +946,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
   },
   zu: {
     continueButton: "Qhubeka",
+    doneButton: "Qedile",
     tapToContinueButton: "Thepha ukuze uqhubeke",
     landingTitle: "Siyakwamukela ku\nPost Black Belt!",
     loginLabel: "Ngena",

@@ -445,6 +445,7 @@ test("localizes onboarding copy for every non-English onboarding locale", () => 
 
     if (locale === "en") {
       assert.equal(copy.continueButton, "Continue");
+      assert.equal(copy.doneButton, "Done");
       assert.equal(copy.landingTitle, "Welcome to\nPost Black Belt!");
       assert.equal(copy.loginLabel, "Log in");
       assert.equal(copy.loginPrompt, "Already have an account? ");
@@ -457,6 +458,7 @@ test("localizes onboarding copy for every non-English onboarding locale", () => 
     }
 
     assert.notEqual(copy.continueButton, "Continue", locale);
+    assert.notEqual(copy.doneButton, "Done", locale);
     assert.notEqual(copy.landingTitle, "Welcome to\nPost Black Belt!", locale);
     assert.notEqual(copy.loginLabel, "Log in", locale);
     assert.notEqual(copy.loginPrompt, "Already have an account? ", locale);

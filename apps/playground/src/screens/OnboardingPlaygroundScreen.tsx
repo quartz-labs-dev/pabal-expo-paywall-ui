@@ -2,6 +2,7 @@ import { type ComponentProps, type ReactNode, useMemo, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import {
   createOnboardingAcquisitionSourceOptions,
+  OnboardingCompletion,
   PermissionPromptPreview,
   type OnboardingAcquisitionSourceId,
   type OnboardingAcquisitionSourceOption,
@@ -89,6 +90,32 @@ const createNotificationSlide = ({
   title: "Get your plan reminders",
 });
 
+interface CreateCompletionSlideParams {
+  doneLabel: string;
+  theme: Required<PlaygroundOnboardingTheme>;
+}
+
+const createCompletionSlide = ({
+  doneLabel,
+  theme,
+}: CreateCompletionSlideParams): PlaygroundSlide => ({
+  canContinue: true,
+  continueLabel: doneLabel,
+  content: (
+    <OnboardingCompletion
+      description="Your setup is ready. The app can now move into the first real moment instead of ending on a form."
+      eyebrow="Setup complete"
+      theme={{
+        accentColor: theme.accentColor,
+        accentTextColor: theme.buttonTextColor,
+        primaryTextColor: theme.primaryTextColor,
+        secondaryTextColor: theme.secondaryTextColor,
+      }}
+      title="You're all set"
+    />
+  ),
+});
+
 export const OnboardingPlaygroundScreen = ({
   notificationContent = DEFAULT_NOTIFICATION_CONTENT,
   onboardingContext,
@@ -159,12 +186,17 @@ export const OnboardingPlaygroundScreen = ({
         nowLabel: localizedCopy.notificationNowLabel,
         theme,
       }),
+      createCompletionSlide({
+        doneLabel: localizedCopy.doneButton,
+        theme,
+      }),
     ],
     [
       selectedSource,
       acquisitionSourceText.title,
       acquisitionSourceOptions,
       locale,
+      localizedCopy.doneButton,
       localizedCopy.notificationNowLabel,
       notificationContent,
       platform,
@@ -222,7 +254,9 @@ export const OnboardingPlaygroundScreen = ({
             : undefined
         }
         continueLabel={
-          isPreludeStep ? localizedCopy.tapToContinueButton : continueLabel
+          isPreludeStep
+            ? localizedCopy.tapToContinueButton
+            : currentSlide.continueLabel ?? continueLabel
         }
         contentTransitionIndex={currentStepIndex}
         contentContainerStyle={
