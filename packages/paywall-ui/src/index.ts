@@ -1,5 +1,9 @@
 export { createPaywallPlans, getDefaultSelectedPlanId } from "./paywall/create-paywall-plans";
 export {
+  getDefaultOnboardingCopy,
+  ONBOARDING_TEXT_LOCALES,
+} from "./locales/onboarding";
+export {
   getDefaultPaywallCopy,
   getDefaultPaywallPlanOptions,
   getDefaultProfileIdentifiersCopy,
@@ -9,6 +13,7 @@ export {
   PAYWALL_TEXT_LOCALES,
   resolvePaywallTextLocale,
 } from "./locales/localized-paywall-copy";
+export type { OnboardingText, OnboardingTextLocale } from "./locales/onboarding";
 export { Paywall } from "./paywall/Paywall";
 export { ProfileSubscriptionSection } from "./profile/ProfileSubscriptionSection";
 export { isUnifiedLocale, UNIFIED_LOCALES } from "./locales/unified-locales";

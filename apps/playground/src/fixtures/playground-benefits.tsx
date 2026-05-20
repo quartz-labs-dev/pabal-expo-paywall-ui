@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
   benefitIconText: {
     color: "#5AC8B7",
     fontSize: 11,
-    fontWeight: "700",
+    fontWeight: "500",
     lineHeight: 14,
   },
 });

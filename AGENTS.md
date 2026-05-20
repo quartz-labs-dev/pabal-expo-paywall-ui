@@ -39,6 +39,7 @@
 - Top media must be passed through the `hero: ReactNode` slot.
 - Check small-screen text wrapping with `flexShrink`, `flexWrap`, and no unnecessary fixed widths.
 - Keep card radius at 8px unless the design system changes.
+- Use restrained font weights: screen titles and section titles should generally use `600`, primary CTA text can use `700`, body/supporting text should use `400` or `500`, and avoid `800`/`900` unless there is a deliberate brand-mark exception.
 - When applying alpha to theme colors in `packages/paywall-ui`, use `packages/paywall-ui/src/shared/color-utils.ts`. Do not duplicate local hex/HSL/RGB parsing helpers such as `stripExistingAlpha`.
 - Theme color alpha utilities must handle hex, RGB/RGBA, and HSL/HSLA inputs with comma and slash syntax, and must include regression tests for new color syntax.
 

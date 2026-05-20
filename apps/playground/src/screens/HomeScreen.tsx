@@ -36,7 +36,9 @@ interface HomeScreenProps {
     paywallAnimation: PlaygroundPaywallAnimation,
   ) => void;
   onChangeFreeTrialMode: (freeTrialMode: PlaygroundFreeTrialMode) => void;
+  onOpenOnboarding: () => void;
   onOpenPaywall: () => void;
+  onOpenPreOnboarding: () => void;
   onOpenProfile: () => void;
 }
 
@@ -83,7 +85,9 @@ export const HomeScreen = ({
   onChangePaywallFlow,
   onChangePaywallAnimation,
   onChangeFreeTrialMode,
+  onOpenOnboarding,
   onOpenPaywall,
+  onOpenPreOnboarding,
   onOpenProfile,
 }: HomeScreenProps) => {
   const insets = useSafeAreaInsets();
@@ -114,6 +118,19 @@ export const HomeScreen = ({
           />
           <Pressable onPress={onOpenPaywall} style={styles.primaryAction}>
             <Text style={styles.primaryActionText}>Open /paywall</Text>
+          </Pressable>
+        </View>
+
+        <View style={styles.sharedSection}>
+          <Text style={styles.sectionTitle}>Onboarding</Text>
+          <Pressable
+            onPress={onOpenPreOnboarding}
+            style={styles.secondaryAction}
+          >
+            <Text style={styles.secondaryActionText}>Open /pre-onboarding</Text>
+          </Pressable>
+          <Pressable onPress={onOpenOnboarding} style={styles.secondaryAction}>
+            <Text style={styles.secondaryActionText}>Open /onboarding</Text>
           </Pressable>
         </View>
 
@@ -451,14 +468,14 @@ const styles = StyleSheet.create({
   eyebrow: {
     color: "#5AC8B7",
     fontSize: 12,
-    fontWeight: "900",
+    fontWeight: "700",
     letterSpacing: 0,
     textTransform: "uppercase",
   },
   title: {
     color: "#F5F7FA",
     fontSize: 28,
-    fontWeight: "900",
+    fontWeight: "600",
     letterSpacing: 0,
     lineHeight: 34,
   },
@@ -492,7 +509,7 @@ const styles = StyleSheet.create({
   settingsButtonText: {
     color: "#B9C4CF",
     fontSize: 12,
-    fontWeight: "900",
+    fontWeight: "600",
     lineHeight: 15,
   },
   primaryAction: {
@@ -506,7 +523,7 @@ const styles = StyleSheet.create({
   primaryActionText: {
     color: "#071312",
     fontSize: 16,
-    fontWeight: "900",
+    fontWeight: "700",
     lineHeight: 20,
     textAlign: "center",
   },
@@ -524,7 +541,7 @@ const styles = StyleSheet.create({
     color: "#F5F7FA",
     flexShrink: 1,
     fontSize: 15,
-    fontWeight: "900",
+    fontWeight: "600",
     lineHeight: 20,
     textAlign: "center",
   },
@@ -556,7 +573,7 @@ const styles = StyleSheet.create({
     color: "#F5F7FA",
     flexShrink: 1,
     fontSize: 17,
-    fontWeight: "900",
+    fontWeight: "600",
     lineHeight: 22,
   },
   settingsModalCloseButton: {
@@ -572,7 +589,7 @@ const styles = StyleSheet.create({
   settingsModalCloseButtonText: {
     color: "#F5F7FA",
     fontSize: 12,
-    fontWeight: "900",
+    fontWeight: "600",
     lineHeight: 15,
   },
   settingsModalContent: {
@@ -588,7 +605,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     color: "#F5F7FA",
     fontSize: 15,
-    fontWeight: "900",
+    fontWeight: "600",
   },
   longPriceToggle: {
     alignItems: "center",
@@ -609,7 +626,7 @@ const styles = StyleSheet.create({
   longPriceToggleText: {
     color: "#B9C4CF",
     fontSize: 12,
-    fontWeight: "900",
+    fontWeight: "600",
     lineHeight: 15,
   },
   longPriceToggleTextOn: {
@@ -670,7 +687,7 @@ const styles = StyleSheet.create({
     color: "#F5F7FA",
     flexShrink: 1,
     fontSize: 14,
-    fontWeight: "900",
+    fontWeight: "600",
   },
   scenarioTitleSelected: {
     color: "#5AC8B7",
@@ -712,7 +729,7 @@ const styles = StyleSheet.create({
     color: "#F5F7FA",
     flexShrink: 1,
     fontSize: 14,
-    fontWeight: "900",
+    fontWeight: "600",
     lineHeight: 18,
     textAlign: "center",
   },
@@ -741,7 +758,7 @@ const styles = StyleSheet.create({
     color: "#F5F7FA",
     flexShrink: 1,
     fontSize: 14,
-    fontWeight: "900",
+    fontWeight: "600",
   },
   trialEligibilityTitleSelected: {
     color: "#5AC8B7",

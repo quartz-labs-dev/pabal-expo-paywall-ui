@@ -4,7 +4,9 @@ import { Platform } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { HomeScreen } from "./src/screens/HomeScreen";
+import { OnboardingPlaygroundScreen } from "./src/screens/OnboardingPlaygroundScreen";
 import { PaywallPlaygroundScreen } from "./src/screens/PaywallPlaygroundScreen";
+import { PreOnboardingPlaygroundScreen } from "./src/screens/PreOnboardingPlaygroundScreen";
 import { ProfilePlaygroundScreen } from "./src/screens/ProfilePlaygroundScreen";
 import type {
   PlaygroundFreeTrialMode,
@@ -22,6 +24,8 @@ const getInitialRoute = (): PlaygroundRoute => {
   }
 
   if (window.location.pathname === "/profile") return "profile";
+  if (window.location.pathname === "/onboarding") return "onboarding";
+  if (window.location.pathname === "/pre-onboarding") return "preOnboarding";
 
   return window.location.pathname === "/paywall" ? "paywall" : "home";
 };
@@ -32,7 +36,15 @@ const pushWebPath = (route: PlaygroundRoute) => {
   }
 
   const nextPath =
-    route === "paywall" ? "/paywall" : route === "profile" ? "/profile" : "/";
+    route === "paywall"
+      ? "/paywall"
+      : route === "profile"
+        ? "/profile"
+        : route === "onboarding"
+          ? "/onboarding"
+          : route === "preOnboarding"
+            ? "/pre-onboarding"
+            : "/";
   if (window.location.pathname === nextPath) return;
 
   window.history.pushState({ route }, "", nextPath);
@@ -93,6 +105,16 @@ export default function App() {
           selectedLocale={selectedLocale}
           onClose={() => navigate("home")}
         />
+      ) : route === "onboarding" ? (
+        <OnboardingPlaygroundScreen
+          selectedLocale={selectedLocale}
+          onClose={() => navigate("home")}
+        />
+      ) : route === "preOnboarding" ? (
+        <PreOnboardingPlaygroundScreen
+          selectedLocale={selectedLocale}
+          onContinue={() => navigate("home")}
+        />
       ) : (
         <HomeScreen
           scenario={scenario}
@@ -109,7 +131,9 @@ export default function App() {
           onChangePaywallFlow={setPaywallFlow}
           onChangePaywallAnimation={setPaywallAnimation}
           onChangeFreeTrialMode={setFreeTrialMode}
+          onOpenOnboarding={() => navigate("onboarding")}
           onOpenPaywall={() => navigate("paywall")}
+          onOpenPreOnboarding={() => navigate("preOnboarding")}
           onOpenProfile={() => navigate("profile")}
         />
       )}

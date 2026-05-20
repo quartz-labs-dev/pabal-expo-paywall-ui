@@ -12,7 +12,12 @@ export type PlaygroundPackageScenario = Exclude<
   "annualOnly" | "longPrice" | "monthlyOnly"
 >;
 
-export type PlaygroundRoute = "home" | "paywall" | "profile";
+export type PlaygroundRoute =
+  | "home"
+  | "onboarding"
+  | "paywall"
+  | "preOnboarding"
+  | "profile";
 
 export type PlaygroundPaywallFlow = "twoStep" | "singleStep";
 

@@ -346,7 +346,7 @@ const styles = StyleSheet.create({
   title: {
     flexShrink: 1,
     fontSize: 16,
-    fontWeight: "800",
+    fontWeight: "600",
     lineHeight: 21,
   },
   badge: {
@@ -366,7 +366,7 @@ const styles = StyleSheet.create({
   },
   badgeText: {
     fontSize: 11,
-    fontWeight: "800",
+    fontWeight: "600",
     lineHeight: 13,
   },
   priceBlock: {
@@ -381,7 +381,7 @@ const styles = StyleSheet.create({
   },
   price: {
     fontSize: 24,
-    fontWeight: "900",
+    fontWeight: "700",
     lineHeight: 30,
   },
   monthlyPrice: {
@@ -402,7 +402,7 @@ const styles = StyleSheet.create({
   selectedDescription: {
     flexShrink: 1,
     fontSize: 12,
-    fontWeight: "700",
+    fontWeight: "500",
     lineHeight: 16,
   },
 });

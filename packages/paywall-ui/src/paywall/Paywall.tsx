@@ -636,7 +636,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 26,
-    fontWeight: "900",
+    fontWeight: "600",
     letterSpacing: 0,
     lineHeight: 32,
     textAlign: "center",

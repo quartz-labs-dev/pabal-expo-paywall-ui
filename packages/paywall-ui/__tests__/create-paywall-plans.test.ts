@@ -10,6 +10,10 @@ import {
   getDefaultProfileSubscriptionCopy,
   resolvePaywallTextLocale,
 } from "../src/locales/localized-paywall-copy";
+import {
+  ONBOARDING_TEXT_LOCALES,
+  getDefaultOnboardingCopy,
+} from "../src/locales/onboarding";
 import { UNIFIED_LOCALES } from "../src/locales/unified-locales";
 import type { PurchasesPackageLike } from "../src/types";
 import type {
@@ -427,6 +431,35 @@ test("localizes continue button copy for every non-English paywall locale", () =
     }
 
     assert.notEqual(copy.continueButton, "Continue", locale);
+  }
+});
+
+test("localizes onboarding copy for every non-English onboarding locale", () => {
+  for (const locale of ONBOARDING_TEXT_LOCALES) {
+    const copy = getDefaultOnboardingCopy(locale);
+
+    if (locale === "en") {
+      assert.equal(copy.continueButton, "Continue");
+      assert.equal(copy.landingTitle, "Welcome to\nPost Black Belt!");
+      assert.equal(copy.loginLabel, "Log in");
+      assert.equal(copy.loginPrompt, "Already have an account? ");
+      assert.equal(copy.mockTitle, "Do not memorize\nhundreds of techniques.");
+      assert.equal(copy.notNowButton, "Not now");
+      assert.equal(copy.startButton, "Get started");
+      continue;
+    }
+
+    assert.notEqual(copy.continueButton, "Continue", locale);
+    assert.notEqual(copy.landingTitle, "Welcome to\nPost Black Belt!", locale);
+    assert.notEqual(copy.loginLabel, "Log in", locale);
+    assert.notEqual(copy.loginPrompt, "Already have an account? ", locale);
+    assert.notEqual(
+      copy.mockTitle,
+      "Do not memorize\nhundreds of techniques.",
+      locale,
+    );
+    assert.notEqual(copy.notNowButton, "Not now", locale);
+    assert.notEqual(copy.startButton, "Get started", locale);
   }
 });
 

@@ -354,7 +354,7 @@ const styles = StyleSheet.create({
   backButtonText: {
     color: "#F5F7FA",
     fontSize: 13,
-    fontWeight: "700",
+    fontWeight: "600",
   },
   controls: {
     alignSelf: "stretch",
@@ -384,7 +384,7 @@ const styles = StyleSheet.create({
     color: "#B9C4CF",
     flexShrink: 1,
     fontSize: 13,
-    fontWeight: "900",
+    fontWeight: "600",
     lineHeight: 17,
     textAlign: "center",
   },
@@ -438,7 +438,7 @@ const styles = StyleSheet.create({
   appIconProBadgeText: {
     color: "#FFE29A",
     fontSize: 8,
-    fontWeight: "900",
+    fontWeight: "700",
     lineHeight: 10,
   },
   profileUsageTitle: {
@@ -452,7 +452,7 @@ const styles = StyleSheet.create({
     color: "#F5F7FA",
     flexShrink: 1,
     fontSize: 13,
-    fontWeight: "700",
+    fontWeight: "500",
     lineHeight: 18,
     textDecorationLine: "underline",
   },

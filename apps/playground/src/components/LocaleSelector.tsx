@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     color: "#F5F7FA",
     fontSize: 15,
-    fontWeight: "900",
+    fontWeight: "600",
   },
   selectorButton: {
     alignItems: "center",
@@ -327,7 +327,7 @@ const styles = StyleSheet.create({
     color: "#F5F7FA",
     flexShrink: 1,
     fontSize: 14,
-    fontWeight: "900",
+    fontWeight: "600",
     lineHeight: 18,
   },
   selectedMeta: {
@@ -339,7 +339,7 @@ const styles = StyleSheet.create({
   chevron: {
     color: "#5AC8B7",
     fontSize: 11,
-    fontWeight: "900",
+    fontWeight: "700",
     lineHeight: 14,
   },
   menu: {
@@ -383,7 +383,7 @@ const styles = StyleSheet.create({
     color: "#F5F7FA",
     flexShrink: 1,
     fontSize: 13,
-    fontWeight: "900",
+    fontWeight: "600",
     lineHeight: 17,
   },
   optionLabelSelected: {
@@ -393,7 +393,7 @@ const styles = StyleSheet.create({
     color: "#7F8B96",
     flexShrink: 1,
     fontSize: 11,
-    fontWeight: "700",
+    fontWeight: "500",
     lineHeight: 14,
   },
   optionMetaSelected: {
@@ -402,7 +402,7 @@ const styles = StyleSheet.create({
   selectedMark: {
     color: "#5AC8B7",
     fontSize: 11,
-    fontWeight: "900",
+    fontWeight: "600",
     lineHeight: 14,
   },
   supportText: {

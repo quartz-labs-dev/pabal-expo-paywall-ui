@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   label: {
     flexShrink: 1,
     fontSize: 16,
-    fontWeight: "900",
+    fontWeight: "700",
     textAlign: "center",
   },
 });
