@@ -2,24 +2,77 @@
 
 Onboarding in this repo is intentionally split: the shared package owns a few
 primitives that should stay consistent across apps, while each app owns the
-actual flow, media, analytics, permissions, and navigation.
+actual flow, media, analytics, permissions, navigation, and which content blocks
+to render.
 
 That is the point. The package gives teams reusable pieces. The app decides the
 story it tells the customer.
 
-## Supported Content Types
+## Flow Structure
 
-The playground supports these app-composed onboarding content types:
+The playground has two separate flows:
 
-| Type | Use It For | Ownership |
+- `/pre-onboarding`: the marketing-style entry flow before the main onboarding
+- `/onboarding`: the main onboarding flow that collects context and prepares permissions
+
+They share visual language, but they should be documented and configured as
+separate surfaces. Pre-onboarding sells the app experience. Onboarding moves the
+user through setup.
+
+## Content Model
+
+Most onboarding content is composition, not a fixed package-controlled sequence.
+The app or playground screen imports the content component it needs and places it
+in the flow.
+
+`prelude` is the exception in the current playground: `/onboarding` always shows
+two prelude screens before the main stepper. After that, the app can compose the
+main content blocks in the order it needs.
+
+Only the package primitives listed in [Package APIs](#package-apis) are exported
+from `pabal-expo-paywall-ui`. The other content types are playground/app
+composition patterns.
+
+## Pre-Onboarding Content
+
+`/pre-onboarding` currently has two screens:
+
+| Content | Use It For | Ownership |
 | --- | --- | --- |
-| `landing` | Pre-onboarding opening screen with optional background/media slot | App |
+| `landing` | Opening screen with optional background/media slot | App |
 | `mock-video` | Mock phone image/video preview with login or primary action panels | App |
-| `prelude` | Full-screen intro text steps | App |
-| `choice-list` | Selectable options, currently used for acquisition sources | App + package options |
+
+## Onboarding Content
+
+`/onboarding` starts with two `prelude` screens before the main stepper appears.
+
+Intro content:
+
+| Content | Count | Use It For | Ownership |
+| --- | --- | --- | --- |
+| `prelude` | 2 screens | Full-screen intro copy with tap-to-continue | App |
+
+Available main content:
+
+| Content | Use It For | Ownership |
+| --- | --- | --- |
+| `list` | App-owned selectable option list, imported and used by the app/playground where needed | App |
+| `acquisition-source` | "Where did you hear about us?" choice list | App state + package options |
 | `social-proof` | Headline, optional metric, and review cards | App |
 | `permission-prompt` | Preview before asking for native permissions | Package primitive |
 | `notification-mock` | Notification stack and phone mock | App |
+
+Current playground `/onboarding` sequence:
+
+1. `prelude`
+2. `prelude`
+3. `acquisition-source`
+4. `social-proof`
+5. `permission-prompt`
+6. `notification-mock`
+
+Use `list` when the app owns the option set. Use `acquisition-source` when the
+screen should use the package-owned source labels and bundled icons.
 
 Prelude and social-proof headlines use `**highlighted copy**` to apply the
 onboarding primary/accent color. Keep that marker in content strings instead of
@@ -39,6 +92,10 @@ navigation, media, and product-specific copy.
 
 Use this when every app should ask the same "Where did you hear about us?"
 question.
+
+This is rendered as a choice list in the playground, but the content type is
+`acquisition-source`: the package supplies the localized source options and
+icons, while the app owns selected state and analytics.
 
 ```tsx
 import {
