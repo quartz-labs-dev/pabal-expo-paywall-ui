@@ -12,7 +12,7 @@ its mock playground app.
 pabal-expo-paywall-ui/
   apps/
     playground/
-      # Expo app for checking paywall/profile UI states with mock package data.
+      # Expo app for checking paywall/profile/onboarding UI states with mock data.
       # It does not include the RevenueCat SDK.
 
   packages/
@@ -35,7 +35,18 @@ yarn build      # paywall-ui build
 
 Use `swpm` or `yarn` when adding dependencies. Do not use `npm`.
 
-## Playground Onboarding Copy
+## Playground Onboarding
+
+The playground includes `/pre-onboarding` and `/onboarding` flows for checking
+app-owned onboarding composition. Supported content types are:
+
+- `landing`: pre-onboarding landing content with optional background/media slot
+- `mock-video`: mock phone image/video preview with login/primary action panels
+- `prelude`: full-screen intro text steps
+- `choice-list`: selectable options, currently used for acquisition sources
+- `social-proof`: headline, optional metric, and review cards
+- `permission-prompt`: shared native permission prompt preview
+- `notification-mock`: notification stack and phone mock
 
 Prelude and social-proof headlines use `**highlighted copy**` to apply the
 onboarding primary/accent color. Keep the marker in content strings instead of

@@ -118,7 +118,7 @@ const PromptArrow = ({ color, style }: PromptArrowProps) => {
         importantForAccessibility="no-hide-descendants"
         style={[styles.arrowGlyph, { color }]}
       >
-        ↑
+        👆
       </Text>
     </View>
   );
@@ -265,9 +265,8 @@ const styles = StyleSheet.create({
     width: 44,
   },
   arrowGlyph: {
-    fontSize: 58,
-    fontWeight: "700",
-    lineHeight: 58,
+    fontSize: 40,
+    lineHeight: 48,
     textAlign: "center",
   },
   iosArrow: {

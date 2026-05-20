@@ -23,6 +23,17 @@ swpm add pabal-expo-paywall-ui
 Wrap the app with `SafeAreaProvider`. `react-native-safe-area-context` is a peer
 dependency.
 
+## Onboarding APIs
+
+The package exposes shared onboarding primitives only where they should stay
+consistent across apps:
+
+- acquisition source copy/options with bundled source icons
+- `PermissionPromptPreview` for permission education before native prompts
+
+Apps still own the onboarding screen order, selected state, permission requests,
+analytics, navigation, media, and product-specific copy.
+
 ## Onboarding Acquisition Sources
 
 Use the package-owned acquisition source copy and options when every app should
@@ -76,9 +87,8 @@ import { PermissionPromptPreview } from "pabal-expo-paywall-ui";
 photos, microphone, and future permissions can use product-specific reasoning.
 The package localizes only the button labels (`Don't Allow` and `Allow`) from
 `locale`. `Allow` always uses the iOS system blue (`#007AFF`) on both platforms.
-`primaryColor` controls the arrow color only.
-The preview uses React Native primitives only. Do not add an SVG dependency for
-this UI.
+The pointer uses the `👆` text glyph. The preview uses React Native primitives
+only. Do not add `react-native-svg` or any other SVG dependency for this UI.
 
 ## App Config
 
