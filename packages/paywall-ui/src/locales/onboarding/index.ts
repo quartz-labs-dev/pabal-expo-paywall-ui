@@ -16,6 +16,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Het jy reeds ’n rekening? ",
     mockTitle: "Moenie honderde tegnieke\nprobeer memoriseer nie.",
     notNowButton: "Nie nou nie",
+    returnButton: "Nie nou nie",
     startButton: "Begin",
   },
   am: {
@@ -26,6 +27,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "መለያ አለዎት? ",
     mockTitle: "መቶዎች ቴክኒኮችን\nሁሉ አትሸምድዱ።",
     notNowButton: "አሁን አይደለም",
+    returnButton: "አሁን አይደለም",
     startButton: "ጀምር",
   },
   ar: {
@@ -36,6 +38,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "هل لديك حساب بالفعل؟ ",
     mockTitle: "لا تحفظ\nمئات التقنيات.",
     notNowButton: "ليس الآن",
+    returnButton: "ليس الآن",
     startButton: "ابدأ",
   },
   az: {
@@ -46,6 +49,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Artıq hesabınız var? ",
     mockTitle: "Yüzlərlə texnikanı\nyadda saxlamağa çalışmayın.",
     notNowButton: "İndi yox",
+    returnButton: "İndi yox",
     startButton: "Başla",
   },
   be: {
@@ -56,6 +60,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Ужо ёсць уліковы запіс? ",
     mockTitle: "Не завучвайце\nсотні тэхнік.",
     notNowButton: "Не цяпер",
+    returnButton: "Не цяпер",
     startButton: "Пачаць",
   },
   bg: {
@@ -66,6 +71,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Вече имате акаунт? ",
     mockTitle: "Не запаметявайте\nстотици техники.",
     notNowButton: "Не сега",
+    returnButton: "Не сега",
     startButton: "Започни",
   },
   bn: {
@@ -76,6 +82,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "ইতিমধ্যে অ্যাকাউন্ট আছে? ",
     mockTitle: "শত শত কৌশল\nসব মুখস্থ করবেন না।",
     notNowButton: "এখন নয়",
+    returnButton: "এখন নয়",
     startButton: "শুরু করুন",
   },
   ca: {
@@ -86,6 +93,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Ja tens un compte? ",
     mockTitle: "No memoritzis\ncentenars de tècniques.",
     notNowButton: "Ara no",
+    returnButton: "Ara no",
     startButton: "Comença",
   },
   cs: {
@@ -96,6 +104,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Už máte účet? ",
     mockTitle: "Nememorujte si\nstovky technik.",
     notNowButton: "Teď ne",
+    returnButton: "Teď ne",
     startButton: "Začít",
   },
   da: {
@@ -106,6 +115,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Har du allerede en konto? ",
     mockTitle: "Lad være med at huske\nhundredvis af teknikker.",
     notNowButton: "Ikke nu",
+    returnButton: "Ikke nu",
     startButton: "Kom i gang",
   },
   de: {
@@ -116,6 +126,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Hast du schon ein Konto? ",
     mockTitle: "Lerne nicht\nhunderte Techniken auswendig.",
     notNowButton: "Nicht jetzt",
+    returnButton: "Nicht jetzt",
     startButton: "Starten",
   },
   el: {
@@ -126,6 +137,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Έχεις ήδη λογαριασμό; ",
     mockTitle: "Μην απομνημονεύεις\nεκατοντάδες τεχνικές.",
     notNowButton: "Όχι τώρα",
+    returnButton: "Όχι τώρα",
     startButton: "Έναρξη",
   },
   en: {
@@ -136,6 +148,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Already have an account? ",
     mockTitle: "Do not memorize\nhundreds of techniques.",
     notNowButton: "Not now",
+    returnButton: "Return",
     startButton: "Get started",
   },
   es: {
@@ -146,6 +159,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "¿Ya tienes una cuenta? ",
     mockTitle: "No memorices\ncientos de técnicas.",
     notNowButton: "Ahora no",
+    returnButton: "Ahora no",
     startButton: "Empezar",
   },
   et: {
@@ -156,6 +170,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Kas sul on juba konto? ",
     mockTitle: "Ära jäta pähe\nsadu tehnikaid.",
     notNowButton: "Mitte praegu",
+    returnButton: "Mitte praegu",
     startButton: "Alusta",
   },
   eu: {
@@ -166,6 +181,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Baduzu konturik? ",
     mockTitle: "Ez ikasi buruz\nehunka teknika.",
     notNowButton: "Orain ez",
+    returnButton: "Orain ez",
     startButton: "Hasi",
   },
   fa: {
@@ -176,6 +192,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "قبلاً حساب دارید؟ ",
     mockTitle: "صدها تکنیک را\nحفظ نکنید.",
     notNowButton: "الان نه",
+    returnButton: "الان نه",
     startButton: "شروع کنید",
   },
   fi: {
@@ -186,6 +203,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Onko sinulla jo tili? ",
     mockTitle: "Älä opettele ulkoa\nsatoja tekniikoita.",
     notNowButton: "Ei nyt",
+    returnButton: "Ei nyt",
     startButton: "Aloita",
   },
   fil: {
@@ -196,6 +214,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "May account ka na? ",
     mockTitle: "Huwag kabisaduhin\nang daan-daang teknik.",
     notNowButton: "Hindi ngayon",
+    returnButton: "Hindi ngayon",
     startButton: "Magsimula",
   },
   fr: {
@@ -206,6 +225,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Vous avez déjà un compte ? ",
     mockTitle: "Ne mémorisez pas\ndes centaines de techniques.",
     notNowButton: "Pas maintenant",
+    returnButton: "Pas maintenant",
     startButton: "Commencer",
   },
   gl: {
@@ -216,6 +236,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Xa tes unha conta? ",
     mockTitle: "Non memorices\ncentos de técnicas.",
     notNowButton: "Agora non",
+    returnButton: "Agora non",
     startButton: "Comezar",
   },
   gu: {
@@ -226,6 +247,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "પહેલેથી એકાઉન્ટ છે? ",
     mockTitle: "સૈંકડો ટેકનિક\nયાદ ન કરો.",
     notNowButton: "હમણાં નહીં",
+    returnButton: "હમણાં નહીં",
     startButton: "શરૂ કરો",
   },
   he: {
@@ -236,6 +258,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "כבר יש לך חשבון? ",
     mockTitle: "אל תשנן\nמאות טכניקות.",
     notNowButton: "לא עכשיו",
+    returnButton: "לא עכשיו",
     startButton: "התחל",
   },
   hi: {
@@ -246,6 +269,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "क्या आपके पास पहले से खाता है? ",
     mockTitle: "सैकड़ों तकनीकों को\nयाद मत करें।",
     notNowButton: "अभी नहीं",
+    returnButton: "अभी नहीं",
     startButton: "शुरू करें",
   },
   hr: {
@@ -256,6 +280,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Već imate račun? ",
     mockTitle: "Nemojte pamtiti\nstotine tehnika.",
     notNowButton: "Ne sada",
+    returnButton: "Ne sada",
     startButton: "Započni",
   },
   hu: {
@@ -266,6 +291,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Már van fiókod? ",
     mockTitle: "Ne memorizálj\ntöbb száz technikát.",
     notNowButton: "Most nem",
+    returnButton: "Most nem",
     startButton: "Kezdés",
   },
   hy: {
@@ -276,6 +302,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Արդեն ունե՞ք հաշիվ։ ",
     mockTitle: "Մի անգիր արեք\nհարյուրավոր տեխնիկաներ։",
     notNowButton: "Ոչ հիմա",
+    returnButton: "Ոչ հիմա",
     startButton: "Սկսել",
   },
   id: {
@@ -286,6 +313,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Sudah punya akun? ",
     mockTitle: "Jangan menghafal\nratusan teknik.",
     notNowButton: "Tidak sekarang",
+    returnButton: "Tidak sekarang",
     startButton: "Mulai",
   },
   is: {
@@ -296,6 +324,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Ertu þegar með aðgang? ",
     mockTitle: "Ekki leggja á minnið\nhundruð tækniatriða.",
     notNowButton: "Ekki núna",
+    returnButton: "Ekki núna",
     startButton: "Byrja",
   },
   it: {
@@ -306,6 +335,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Hai già un account? ",
     mockTitle: "Non memorizzare\ncentinaia di tecniche.",
     notNowButton: "Non ora",
+    returnButton: "Non ora",
     startButton: "Inizia",
   },
   ja: {
@@ -316,6 +346,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "すでにアカウントをお持ちですか？ ",
     mockTitle: "何百もの技を\nすべて覚えなくて大丈夫。",
     notNowButton: "今はしない",
+    returnButton: "今はしない",
     startButton: "はじめる",
   },
   ka: {
@@ -326,6 +357,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "უკვე გაქვთ ანგარიში? ",
     mockTitle: "ნუ დაიზეპირებთ\nასობით ტექნიკას.",
     notNowButton: "ახლა არა",
+    returnButton: "ახლა არა",
     startButton: "დაწყება",
   },
   kk: {
@@ -336,6 +368,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Есебіңіз бар ма? ",
     mockTitle: "Жүздеген техниканы\nжаттамаңыз.",
     notNowButton: "Қазір емес",
+    returnButton: "Қазір емес",
     startButton: "Бастау",
   },
   km: {
@@ -346,6 +379,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "មានគណនីរួចហើយឬ? ",
     mockTitle: "កុំទន្ទេញ\nបច្ចេកទេសរាប់រយ។",
     notNowButton: "មិនមែនឥឡូវនេះទេ",
+    returnButton: "មិនមែនឥឡូវនេះទេ",
     startButton: "ចាប់ផ្តើម",
   },
   kn: {
@@ -356,6 +390,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "ಈಗಾಗಲೇ ಖಾತೆ ಇದೆಯೇ? ",
     mockTitle: "ನೂರಾರು ತಂತ್ರಗಳನ್ನು\nಕಂಠಪಾಠ ಮಾಡಬೇಡಿ.",
     notNowButton: "ಈಗ ಬೇಡ",
+    returnButton: "ಈಗ ಬೇಡ",
     startButton: "ಪ್ರಾರಂಭಿಸಿ",
   },
   ko: {
@@ -366,6 +401,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "이미 계정이 있나요? ",
     mockTitle: "수백 개의 기술을\n모두 외우지 마세요.",
     notNowButton: "나중에",
+    returnButton: "돌아가기",
     startButton: "시작하기",
   },
   ky: {
@@ -376,6 +412,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Аккаунтуңуз барбы? ",
     mockTitle: "Жүздөгөн ыкмаларды\nжаттабаңыз.",
     notNowButton: "Азыр эмес",
+    returnButton: "Азыр эмес",
     startButton: "Баштоо",
   },
   lo: {
@@ -386,6 +423,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "ມີບັນຊີແລ້ວບໍ? ",
     mockTitle: "ຢ່າຈື່\nເຕັກນິກຫຼາຍຮ້ອຍຢ່າງ.",
     notNowButton: "ບໍ່ແມ່ນຕອນນີ້",
+    returnButton: "ບໍ່ແມ່ນຕອນນີ້",
     startButton: "ເລີ່ມຕົ້ນ",
   },
   lt: {
@@ -396,6 +434,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Jau turite paskyrą? ",
     mockTitle: "Neįsiminkite\nšimtų technikų.",
     notNowButton: "Ne dabar",
+    returnButton: "Ne dabar",
     startButton: "Pradėti",
   },
   lv: {
@@ -406,6 +445,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Jums jau ir konts? ",
     mockTitle: "Nemācieties no galvas\nsimtiem tehniku.",
     notNowButton: "Ne tagad",
+    returnButton: "Ne tagad",
     startButton: "Sākt",
   },
   mk: {
@@ -416,6 +456,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Веќе имате сметка? ",
     mockTitle: "Не меморирајте\nстотици техники.",
     notNowButton: "Не сега",
+    returnButton: "Не сега",
     startButton: "Започни",
   },
   ml: {
@@ -426,6 +467,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "ഇതിനകം അക്കൗണ്ട് ഉണ്ടോ? ",
     mockTitle: "നൂറുകണക്കിന് സാങ്കേതികവിദ്യകൾ\nമനഃപാഠമാക്കേണ്ട.",
     notNowButton: "ഇപ്പോൾ വേണ്ട",
+    returnButton: "ഇപ്പോൾ വേണ്ട",
     startButton: "ആരംഭിക്കുക",
   },
   mn: {
@@ -436,6 +478,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Бүртгэлтэй юу? ",
     mockTitle: "Олон зуун техникийг\nцээжлэх хэрэггүй.",
     notNowButton: "Одоо биш",
+    returnButton: "Одоо биш",
     startButton: "Эхлэх",
   },
   mr: {
@@ -446,6 +489,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "आधीच खाते आहे का? ",
     mockTitle: "शेकडो तंत्रे\nपाठ करू नका.",
     notNowButton: "आत्ता नाही",
+    returnButton: "आत्ता नाही",
     startButton: "सुरू करा",
   },
   ms: {
@@ -456,6 +500,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Sudah ada akaun? ",
     mockTitle: "Jangan hafal\nratusan teknik.",
     notNowButton: "Bukan sekarang",
+    returnButton: "Bukan sekarang",
     startButton: "Mula",
   },
   my: {
@@ -466,6 +511,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "အကောင့်ရှိပြီးသားလား? ",
     mockTitle: "နည်းစနစ်ရာပေါင်းများစွာကို\nအလွတ်မကျက်ပါနဲ့။",
     notNowButton: "ယခုမဟုတ်သေးပါ",
+    returnButton: "ယခုမဟုတ်သေးပါ",
     startButton: "စတင်ပါ",
   },
   nb: {
@@ -476,6 +522,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Har du allerede en konto? ",
     mockTitle: "Ikke memorer\nhundrevis av teknikker.",
     notNowButton: "Ikke nå",
+    returnButton: "Ikke nå",
     startButton: "Kom i gang",
   },
   ne: {
@@ -486,6 +533,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "पहिले नै खाता छ? ",
     mockTitle: "सयौं प्रविधिहरू\nकण्ठ नगर्नुहोस्।",
     notNowButton: "अहिले होइन",
+    returnButton: "अहिले होइन",
     startButton: "सुरु गर्नुहोस्",
   },
   nl: {
@@ -496,6 +544,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Heb je al een account? ",
     mockTitle: "Leer geen\nhonderden technieken uit je hoofd.",
     notNowButton: "Niet nu",
+    returnButton: "Niet nu",
     startButton: "Aan de slag",
   },
   pa: {
@@ -506,6 +555,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "ਪਹਿਲਾਂ ਹੀ ਖਾਤਾ ਹੈ? ",
     mockTitle: "ਸੈਂਕੜੇ ਤਕਨੀਕਾਂ\nਯਾਦ ਨਾ ਕਰੋ।",
     notNowButton: "ਹੁਣ ਨਹੀਂ",
+    returnButton: "ਹੁਣ ਨਹੀਂ",
     startButton: "ਸ਼ੁਰੂ ਕਰੋ",
   },
   pl: {
@@ -516,6 +566,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Masz już konto? ",
     mockTitle: "Nie zapamiętuj\nsetek technik.",
     notNowButton: "Nie teraz",
+    returnButton: "Nie teraz",
     startButton: "Rozpocznij",
   },
   pt: {
@@ -526,6 +577,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Já tem uma conta? ",
     mockTitle: "Não memorize\ncentenas de técnicas.",
     notNowButton: "Agora não",
+    returnButton: "Agora não",
     startButton: "Começar",
   },
   ptBr: {
@@ -536,6 +588,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Já tem uma conta? ",
     mockTitle: "Não memorize\ncentenas de técnicas.",
     notNowButton: "Agora não",
+    returnButton: "Agora não",
     startButton: "Começar",
   },
   rm: {
@@ -546,6 +599,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Has gia in conto? ",
     mockTitle: "Betg emprender ordadora\ntschients tecnicas.",
     notNowButton: "Betg ussa",
+    returnButton: "Betg ussa",
     startButton: "Cumenzar",
   },
   ro: {
@@ -556,6 +610,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Ai deja un cont? ",
     mockTitle: "Nu memora\nsute de tehnici.",
     notNowButton: "Nu acum",
+    returnButton: "Nu acum",
     startButton: "Începe",
   },
   ru: {
@@ -566,6 +621,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Уже есть аккаунт? ",
     mockTitle: "Не заучивайте\nсотни техник.",
     notNowButton: "Не сейчас",
+    returnButton: "Не сейчас",
     startButton: "Начать",
   },
   si: {
@@ -576,6 +632,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "දැනටමත් ගිණුමක් තිබේද? ",
     mockTitle: "තාක්ෂණ සිය ගණනක්\nමතක තබා නොගන්න.",
     notNowButton: "දැන් නොවේ",
+    returnButton: "දැන් නොවේ",
     startButton: "ආරම්භ කරන්න",
   },
   sk: {
@@ -586,6 +643,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Už máte účet? ",
     mockTitle: "Nememorujte si\nstovky techník.",
     notNowButton: "Teraz nie",
+    returnButton: "Teraz nie",
     startButton: "Začať",
   },
   sl: {
@@ -596,6 +654,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Že imate račun? ",
     mockTitle: "Ne učite se na pamet\nstotin tehnik.",
     notNowButton: "Ne zdaj",
+    returnButton: "Ne zdaj",
     startButton: "Začni",
   },
   sq: {
@@ -606,6 +665,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Keni tashmë një llogari? ",
     mockTitle: "Mos mësoni përmendësh\nqindra teknika.",
     notNowButton: "Jo tani",
+    returnButton: "Jo tani",
     startButton: "Fillo",
   },
   sr: {
@@ -616,6 +676,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Већ имате налог? ",
     mockTitle: "Не памтите\nстотине техника.",
     notNowButton: "Не сада",
+    returnButton: "Не сада",
     startButton: "Почни",
   },
   sv: {
@@ -626,6 +687,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Har du redan ett konto? ",
     mockTitle: "Memorera inte\nhundratals tekniker.",
     notNowButton: "Inte nu",
+    returnButton: "Inte nu",
     startButton: "Kom igång",
   },
   sw: {
@@ -636,6 +698,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Tayari una akaunti? ",
     mockTitle: "Usikariri\nmbinu mamia.",
     notNowButton: "Si sasa",
+    returnButton: "Si sasa",
     startButton: "Anza",
   },
   ta: {
@@ -646,6 +709,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "ஏற்கனவே கணக்கு உள்ளதா? ",
     mockTitle: "நூற்றுக்கணக்கான நுட்பங்களை\nமனப்பாடம் செய்ய வேண்டாம்.",
     notNowButton: "இப்போது வேண்டாம்",
+    returnButton: "இப்போது வேண்டாம்",
     startButton: "தொடங்கு",
   },
   te: {
@@ -656,6 +720,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "ఇప్పటికే ఖాతా ఉందా? ",
     mockTitle: "వందలాది టెక్నిక్‌లను\nకంఠస్థం చేయకండి.",
     notNowButton: "ఇప్పుడు కాదు",
+    returnButton: "ఇప్పుడు కాదు",
     startButton: "ప్రారంభించండి",
   },
   th: {
@@ -666,6 +731,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "มีบัญชีอยู่แล้วใช่ไหม? ",
     mockTitle: "อย่าท่องจำ\nเทคนิคหลายร้อยอย่าง",
     notNowButton: "ยังไม่ใช่ตอนนี้",
+    returnButton: "ยังไม่ใช่ตอนนี้",
     startButton: "เริ่มต้น",
   },
   tr: {
@@ -676,6 +742,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Zaten hesabınız var mı? ",
     mockTitle: "Yüzlerce tekniği\nezberlemeyin.",
     notNowButton: "Şimdi değil",
+    returnButton: "Şimdi değil",
     startButton: "Başla",
   },
   uk: {
@@ -686,6 +753,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Уже маєте обліковий запис? ",
     mockTitle: "Не запам’ятовуйте\nсотні технік.",
     notNowButton: "Не зараз",
+    returnButton: "Не зараз",
     startButton: "Почати",
   },
   ur: {
@@ -696,6 +764,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "کیا پہلے سے اکاؤنٹ ہے؟ ",
     mockTitle: "سینکڑوں تکنیکیں\nیاد نہ کریں۔",
     notNowButton: "ابھی نہیں",
+    returnButton: "ابھی نہیں",
     startButton: "شروع کریں",
   },
   vi: {
@@ -706,6 +775,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Bạn đã có tài khoản? ",
     mockTitle: "Đừng ghi nhớ\nhàng trăm kỹ thuật.",
     notNowButton: "Không phải bây giờ",
+    returnButton: "Không phải bây giờ",
     startButton: "Bắt đầu",
   },
   zhHans: {
@@ -716,6 +786,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "已经有账号？",
     mockTitle: "不用记住\n数百个技术。",
     notNowButton: "暂不",
+    returnButton: "暂不",
     startButton: "开始",
   },
   zhHant: {
@@ -726,6 +797,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "已經有帳號？",
     mockTitle: "不用記住\n數百個技術。",
     notNowButton: "暫不",
+    returnButton: "暫不",
     startButton: "開始",
   },
   zu: {
@@ -736,6 +808,7 @@ const ONBOARDING_TEXT_BY_LOCALE = {
     loginPrompt: "Usunayo i-akhawunti? ",
     mockTitle: "Ungazami ukukhumbula\namasu amaningi kakhulu.",
     notNowButton: "Hhayi manje",
+    returnButton: "Hhayi manje",
     startButton: "Qala",
   },
 } satisfies Record<OnboardingTextLocale, OnboardingText>;

@@ -1,6 +1,5 @@
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import {
-  Alert,
   Animated,
   Easing,
   Image,
@@ -17,11 +16,16 @@ import { StatusBar } from "expo-status-bar";
 import { getDefaultOnboardingCopy } from "pabal-expo-paywall-ui";
 
 import { OnboardingFrame } from "../components/OnboardingFrame";
-import type { OnboardingFrameTheme } from "../components/OnboardingFrame";
+import {
+  createOnboardingFrameTheme,
+  resolvePlaygroundOnboardingTheme,
+} from "../components/onboarding-theme";
+import type { PlaygroundOnboardingTheme } from "../components/onboarding-theme";
 import type { PlaygroundLocale } from "../types/playground";
 
 interface PreOnboardingPlaygroundScreenProps {
   isLoginPromptVisible?: boolean;
+  loginActionContent?: ReactNode;
   landingBackground?: ReactNode;
   landingVideo?: ReactNode;
   languageSelector?: ReactNode;
@@ -30,44 +34,25 @@ interface PreOnboardingPlaygroundScreenProps {
   logoSource?: ImageSourcePropType;
   mockImageSource?: ImageSourcePropType;
   mockVideo?: ReactNode;
+  primaryActionContent?: ReactNode;
   selectedLocale: PlaygroundLocale;
   theme?: PreOnboardingTheme;
   onContinue: () => void;
   onLoginPress?: () => void;
 }
 
-export interface PreOnboardingTheme {
-  accentColor?: string;
-  backgroundColor?: string;
-  buttonBackgroundColor?: string;
-  buttonTextColor?: string;
-  cardBackgroundColor?: string;
-  frameBackgroundColor?: string;
-  frameBorderColor?: string;
-  landingOverlayColor?: string;
-  primaryTextColor?: string;
-  secondaryTextColor?: string;
-  shadowColor?: string;
-}
-
-const DEFAULT_PRE_ONBOARDING_THEME = {
-  accentColor: "#E22121",
-  backgroundColor: "#FAFAFA",
-  buttonBackgroundColor: "#E22121",
-  buttonTextColor: "#FFFFFF",
-  cardBackgroundColor: "#FFFFFF",
-  frameBackgroundColor: "#F4F4F4",
-  frameBorderColor: "#151515",
-  landingOverlayColor: "rgba(0, 0, 0, 0.48)",
-  primaryTextColor: "#050505",
-  secondaryTextColor: "#666A70",
-  shadowColor: "#000000",
-} satisfies Required<PreOnboardingTheme>;
+export type PreOnboardingTheme = PlaygroundOnboardingTheme;
 
 const MOCK_PHONE_ASPECT_RATIO = 0.492;
 const MOCK_PHONE_MAX_HEIGHT = 430;
 const MOCK_PHONE_MAX_WIDTH = 224;
 const MOCK_PHONE_HORIZONTAL_MARGIN = 72;
+const ACTION_PANEL_ANIMATION_DURATION_MS = 520;
+const ACTION_PANEL_UNMOUNT_DELAY_MS = ACTION_PANEL_ANIMATION_DURATION_MS + 80;
+const MOCK_FOOTER_RESERVED_HEIGHT = 202;
+const MOCK_FOOTER_RESERVED_COMPACT_HEIGHT = 184;
+
+type PreOnboardingAction = "login" | "primary";
 
 const useEntranceAnimation = (delay: number, resetKey?: unknown) => {
   const progress = useRef(new Animated.Value(0)).current;
@@ -151,8 +136,27 @@ const usePhoneFrameEntranceAnimation = (
   };
 };
 
+const useActionPanelAnimation = (isVisible: boolean) => {
+  const progress = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    const animation = Animated.timing(progress, {
+      duration: ACTION_PANEL_ANIMATION_DURATION_MS,
+      easing: Easing.out(Easing.cubic),
+      toValue: isVisible ? 1 : 0,
+      useNativeDriver: false,
+    });
+
+    animation.start();
+    return () => animation.stop();
+  }, [isVisible, progress]);
+
+  return progress;
+};
+
 export const PreOnboardingPlaygroundScreen = ({
   isLoginPromptVisible = true,
+  loginActionContent,
   landingBackground,
   landingVideo,
   languageSelector,
@@ -161,14 +165,23 @@ export const PreOnboardingPlaygroundScreen = ({
   logoSource,
   mockImageSource,
   mockVideo,
+  primaryActionContent,
   selectedLocale,
   theme: themeOverride,
   onContinue,
   onLoginPress,
 }: PreOnboardingPlaygroundScreenProps) => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  const [activeAction, setActiveAction] = useState<PreOnboardingAction | null>(
+    null,
+  );
+  const [renderedAction, setRenderedAction] =
+    useState<PreOnboardingAction | null>(null);
+  const closeActionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
   const copy = getDefaultOnboardingCopy(selectedLocale);
-  const theme = { ...DEFAULT_PRE_ONBOARDING_THEME, ...themeOverride };
+  const theme = resolvePlaygroundOnboardingTheme(themeOverride);
   const { height, width } = useWindowDimensions();
   const isLandingStep = currentStepIndex === 0;
   const isCompactHeight = height < 760;
@@ -186,14 +199,61 @@ export const PreOnboardingPlaygroundScreen = ({
     mockPhoneMaxHeight * MOCK_PHONE_ASPECT_RATIO,
   );
   const mockPhoneHeight = mockPhoneWidth / MOCK_PHONE_ASPECT_RATIO;
-  const mockContentGap = isTinyHeight ? 26 : isCompactHeight ? 34 : 44;
   const mockTitleFontSize = isTinyHeight ? 22 : isCompactHeight ? 25 : 29;
   const mockTitleLineHeight = isTinyHeight ? 27 : isCompactHeight ? 31 : 35;
-  const frameTheme: OnboardingFrameTheme = {
+  const mockFooterReservedHeight = isTinyHeight
+    ? MOCK_FOOTER_RESERVED_COMPACT_HEIGHT
+    : MOCK_FOOTER_RESERVED_HEIGHT;
+  const isActionPanelVisible = activeAction !== null;
+  const isActionPanelMounted = renderedAction !== null;
+  const actionProgress = useActionPanelAnimation(isActionPanelVisible);
+  const activeActionContent =
+    renderedAction === "primary" ? primaryActionContent : loginActionContent;
+  const loweredFooterContentStyle = isActionPanelMounted
+    ? {
+        opacity: actionProgress.interpolate({
+          inputRange: [0, 0.82, 1],
+          outputRange: [1, 0, 0],
+        }),
+        transform: [
+          {
+            translateY: actionProgress.interpolate({
+              inputRange: [0, 1],
+              outputRange: [0, 64],
+            }),
+          },
+        ],
+      }
+    : undefined;
+  const frameTheme = createOnboardingFrameTheme(theme, {
     backgroundColor: isLandingStep ? theme.primaryTextColor : theme.backgroundColor,
-    continueButtonBackgroundColor: theme.buttonBackgroundColor,
-    continueButtonTextColor: theme.buttonTextColor,
     footerBackgroundColor: isLandingStep ? "transparent" : theme.backgroundColor,
+  });
+
+  useEffect(() => {
+    return () => {
+      if (closeActionTimeoutRef.current) {
+        clearTimeout(closeActionTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const openActionPanel = (action: PreOnboardingAction) => {
+    if (closeActionTimeoutRef.current) {
+      clearTimeout(closeActionTimeoutRef.current);
+      closeActionTimeoutRef.current = null;
+    }
+
+    setRenderedAction(action);
+    setActiveAction(action);
+  };
+
+  const closeActionPanel = () => {
+    setActiveAction(null);
+    closeActionTimeoutRef.current = setTimeout(() => {
+      setRenderedAction(null);
+      closeActionTimeoutRef.current = null;
+    }, ACTION_PANEL_UNMOUNT_DELAY_MS);
   };
 
   const goNext = () => {
@@ -202,7 +262,17 @@ export const PreOnboardingPlaygroundScreen = ({
       return;
     }
 
+    if (isLoginPromptVisible) {
+      openActionPanel("primary");
+      return;
+    }
+
     onContinue();
+  };
+
+  const openLoginAction = () => {
+    openActionPanel("login");
+    onLoginPress?.();
   };
 
   return (
@@ -221,22 +291,46 @@ export const PreOnboardingPlaygroundScreen = ({
         contentContainerStyle={
           isLandingStep
             ? styles.landingContentContainer
-            : styles.mockContentContainer
+            : [
+                styles.mockContentContainer,
+                { paddingBottom: mockFooterReservedHeight },
+              ]
         }
         currentStepIndex={currentStepIndex}
+        footerContentPointerEvents={isActionPanelMounted ? "none" : "auto"}
+        footerContentStyle={loweredFooterContentStyle as StyleProp<ViewStyle>}
         footerAccessory={
           !isLandingStep && isLoginPromptVisible ? (
             <LoginPrompt
               loginLabel={copy.loginLabel}
               prompt={copy.loginPrompt}
               theme={theme}
-              onPress={onLoginPress}
+              onPress={openLoginAction}
             />
           ) : undefined
         }
-        footerStyle={isLandingStep ? styles.landingFooter : styles.mockFooter}
+        footerStyle={[
+          isLandingStep ? styles.landingFooter : styles.mockFooter,
+          !isLandingStep && styles.detachedFrameFooter,
+        ]}
+        footerTopAccessory={
+          !isLandingStep ? (
+            <Text
+              style={[
+                styles.mockTitle,
+                {
+                  color: theme.primaryTextColor,
+                  fontSize: mockTitleFontSize,
+                  lineHeight: mockTitleLineHeight,
+                },
+              ]}
+            >
+              {copy.mockTitle}
+            </Text>
+          ) : undefined
+        }
         isBodyScrollEnabled={false}
-        isContentTransitionEnabled={!isLandingStep}
+        isContentTransitionEnabled={false}
         isFooterTransitionEnabled={!isLandingStep}
         showHeader={false}
         theme={frameTheme}
@@ -254,15 +348,17 @@ export const PreOnboardingPlaygroundScreen = ({
           />
         ) : (
           <MockVideoContent
-            mockContentGap={mockContentGap}
             mockPhoneHeight={mockPhoneHeight}
             mockPhoneWidth={mockPhoneWidth}
             mockImageSource={mockImageSource}
-            mockTitleFontSize={mockTitleFontSize}
-            mockTitleLineHeight={mockTitleLineHeight}
+            actionContent={activeActionContent}
+            actionProgress={actionProgress}
+            isActionPanelMounted={isActionPanelMounted}
+            returnLabel={copy.returnButton}
             theme={theme}
-            title={copy.mockTitle}
             mockVideo={mockVideo}
+            onComplete={onContinue}
+            onReturn={closeActionPanel}
           />
         )}
       </OnboardingFrame>
@@ -335,61 +431,217 @@ const LandingContent = ({
 };
 
 interface MockVideoContentProps {
-  mockContentGap: number;
+  actionContent?: ReactNode;
+  actionProgress: Animated.Value;
+  isActionPanelMounted: boolean;
   mockPhoneHeight: number;
   mockPhoneWidth: number;
   mockImageSource?: ImageSourcePropType;
-  mockTitleFontSize: number;
-  mockTitleLineHeight: number;
   mockVideo?: ReactNode;
+  returnLabel: string;
   theme: Required<PreOnboardingTheme>;
-  title: string;
+  onComplete: () => void;
+  onReturn: () => void;
 }
 
 const MockVideoContent = ({
-  mockContentGap,
+  actionContent,
+  actionProgress,
+  isActionPanelMounted,
   mockPhoneHeight,
   mockImageSource,
   mockPhoneWidth,
-  mockTitleFontSize,
-  mockTitleLineHeight,
   mockVideo,
+  returnLabel,
   theme,
-  title,
+  onComplete,
+  onReturn,
 }: MockVideoContentProps) => {
   const phoneAnimatedStyle = usePhoneFrameEntranceAnimation(
     160,
-    mockPhoneWidth + 90,
+    0,
     42,
   );
+  const phoneExitAnimatedStyle = {
+    opacity: actionProgress.interpolate({
+      inputRange: [0, 0.34, 1],
+      outputRange: [1, 0, 0],
+    }),
+    transform: [
+      {
+        translateY: actionProgress.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, -360],
+        }),
+      },
+      {
+        scale: actionProgress.interpolate({
+          inputRange: [0, 1],
+          outputRange: [1, 0.96],
+        }),
+      },
+    ],
+  };
+  const panelAnimatedStyle = {
+    opacity: actionProgress.interpolate({
+      inputRange: [0, 0.24, 1],
+      outputRange: [0, 1, 1],
+    }),
+    transform: [
+      {
+        translateX: actionProgress.interpolate({
+          inputRange: [0, 1],
+          outputRange: [42, 0],
+        }),
+      },
+    ],
+  };
+  if (!isActionPanelMounted) {
+    return (
+      <View style={styles.mockContent}>
+        <View style={styles.mockPhoneStage}>
+          <MockPhoneFrame
+            animatedStyle={phoneAnimatedStyle}
+            height={mockPhoneHeight}
+            imageSource={mockImageSource}
+            theme={theme}
+            video={mockVideo}
+            width={mockPhoneWidth}
+          />
+        </View>
+      </View>
+    );
+  }
 
   return (
-    <View style={[styles.mockContent, { gap: mockContentGap }]}>
-      <View style={styles.mockPhoneStage}>
+    <View style={styles.mockContent}>
+      <Animated.View
+        pointerEvents="none"
+        style={[styles.mockPhoneStage, phoneExitAnimatedStyle]}
+      >
         <MockPhoneFrame
-          animatedStyle={phoneAnimatedStyle}
+          animatedStyle={isActionPanelMounted ? undefined : phoneAnimatedStyle}
           height={mockPhoneHeight}
           imageSource={mockImageSource}
           theme={theme}
           video={mockVideo}
           width={mockPhoneWidth}
         />
-      </View>
+      </Animated.View>
 
-      <View style={styles.mockCopy}>
-        <Text
-          style={[
-            styles.mockTitle,
-            {
-              color: theme.primaryTextColor,
-              fontSize: mockTitleFontSize,
-              lineHeight: mockTitleLineHeight,
-            },
-          ]}
-        >
-          {title}
-        </Text>
+      <View pointerEvents="box-none" style={styles.actionPanelOverlay}>
+        <Animated.View style={[styles.actionPanel, panelAnimatedStyle]}>
+          <Pressable
+            accessibilityRole="button"
+            onPress={onReturn}
+            style={styles.actionReturnButton}
+          >
+            <ChevronLeftInlineIcon color={theme.secondaryTextColor} />
+            <Text
+              style={[
+                styles.actionReturnButtonText,
+                { color: theme.secondaryTextColor },
+              ]}
+            >
+              {returnLabel}
+            </Text>
+          </Pressable>
+          <View
+            style={[
+              styles.actionContentSlot,
+              { backgroundColor: theme.cardBackgroundColor },
+            ]}
+          >
+            {actionContent ?? (
+              <DefaultLoginActionButtons
+                theme={theme}
+                onComplete={onComplete}
+              />
+            )}
+          </View>
+        </Animated.View>
       </View>
+    </View>
+  );
+};
+
+interface ChevronLeftInlineIconProps {
+  color: string;
+}
+
+const ChevronLeftInlineIcon = ({ color }: ChevronLeftInlineIconProps) => {
+  return (
+    <View style={styles.chevronInlineIcon}>
+      <View
+        style={[
+          styles.chevronInlineLine,
+          styles.chevronInlineLineFirst,
+          { backgroundColor: color },
+        ]}
+      />
+      <View
+        style={[
+          styles.chevronInlineLine,
+          styles.chevronInlineLineSecond,
+          { backgroundColor: color },
+        ]}
+      />
+    </View>
+  );
+};
+
+interface DefaultLoginActionButtonsProps {
+  theme: Required<PreOnboardingTheme>;
+  onComplete: () => void;
+}
+
+const defaultLoginActions = [
+  "Continue with Apple",
+  "Continue with Google",
+  "Continue with Email",
+];
+
+const DefaultLoginActionButtons = ({
+  theme,
+  onComplete,
+}: DefaultLoginActionButtonsProps) => {
+  return (
+    <View style={styles.defaultLoginActions}>
+      {defaultLoginActions.map((label, index) => {
+        const isPrimary = index === 0;
+
+        return (
+          <Pressable
+            key={label}
+            accessibilityRole="button"
+            onPress={onComplete}
+            style={[
+              styles.defaultLoginActionButton,
+              {
+                backgroundColor: isPrimary
+                  ? theme.buttonBackgroundColor
+                  : theme.backgroundColor,
+                borderColor: isPrimary
+                  ? theme.buttonBackgroundColor
+                  : theme.frameBackgroundColor,
+              },
+            ]}
+          >
+            <Text
+              style={[
+                styles.defaultLoginActionButtonText,
+                {
+                  color: isPrimary
+                    ? theme.buttonTextColor
+                    : theme.primaryTextColor,
+                },
+              ]}
+            >
+              {label}
+            </Text>
+          </Pressable>
+        );
+      })}
     </View>
   );
 };
@@ -512,19 +764,10 @@ const LoginPrompt = ({
   theme,
   onPress,
 }: LoginPromptProps) => {
-  const handlePress = () => {
-    if (onPress) {
-      onPress();
-      return;
-    }
-
-    Alert.alert("Login prompt", "Consuming apps can inject login behavior.");
-  };
-
   return (
     <Pressable
       accessibilityRole="button"
-      onPress={handlePress}
+      onPress={onPress}
       style={styles.loginPrompt}
     >
       <Text style={[styles.loginPromptText, { color: theme.primaryTextColor }]}>
@@ -554,6 +797,13 @@ const styles = StyleSheet.create({
   mockFooter: {
     gap: 10,
     paddingHorizontal: 18,
+  },
+  detachedFrameFooter: {
+    backgroundColor: "transparent",
+    bottom: 0,
+    left: 0,
+    position: "absolute",
+    right: 0,
   },
   primaryButton: {
     borderRadius: 999,
@@ -627,6 +877,16 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
   },
+  actionPanelOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: "center",
+    width: "100%",
+  },
+  actionPanel: {
+    gap: 10,
+    paddingTop: 4,
+    width: "100%",
+  },
   mockPhoneStage: {
     alignItems: "center",
     flex: 1,
@@ -634,6 +894,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   mockPhoneShadow: {
+    alignSelf: "center",
     aspectRatio: 0.492,
     maxWidth: 275,
     shadowOffset: { height: 18, width: 0 },
@@ -686,14 +947,71 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
   },
-  mockCopy: {
-    width: "100%",
-  },
   mockTitle: {
     fontSize: 34,
     fontWeight: "600",
     letterSpacing: 0,
     lineHeight: 41,
+    textAlign: "center",
+  },
+  actionReturnButton: {
+    alignItems: "center",
+    alignSelf: "flex-start",
+    flexDirection: "row",
+    gap: 6,
+    justifyContent: "center",
+    minHeight: 34,
+    paddingHorizontal: 4,
+  },
+  actionReturnButtonText: {
+    fontSize: 15,
+    fontWeight: "600",
+    lineHeight: 20,
+  },
+  chevronInlineIcon: {
+    height: 14,
+    justifyContent: "center",
+    width: 9,
+  },
+  chevronInlineLine: {
+    borderRadius: 1,
+    height: 2,
+    position: "absolute",
+    width: 8,
+  },
+  chevronInlineLineFirst: {
+    top: 3.5,
+    transform: [{ rotate: "-45deg" }],
+  },
+  chevronInlineLineSecond: {
+    bottom: 3.5,
+    transform: [{ rotate: "45deg" }],
+  },
+  actionContentSlot: {
+    borderRadius: 8,
+    minHeight: 220,
+    overflow: "hidden",
+    padding: 16,
+    width: "100%",
+  },
+  defaultLoginActions: {
+    gap: 10,
+    justifyContent: "center",
+    width: "100%",
+  },
+  defaultLoginActionButton: {
+    alignItems: "center",
+    borderRadius: 8,
+    borderWidth: 1,
+    justifyContent: "center",
+    minHeight: 52,
+    paddingHorizontal: 16,
+  },
+  defaultLoginActionButtonText: {
+    flexShrink: 1,
+    fontSize: 16,
+    fontWeight: "700",
+    lineHeight: 21,
     textAlign: "center",
   },
   loginPrompt: {

@@ -23,8 +23,10 @@ interface OnboardingFrameProps {
   contentContainerStyle?: StyleProp<ViewStyle>;
   currentStepIndex: number;
   footerAccessory?: ReactNode;
+  footerContentPointerEvents?: "auto" | "none" | "box-none" | "box-only";
   footerContentStyle?: StyleProp<ViewStyle>;
   footerStyle?: StyleProp<ViewStyle>;
+  footerTopAccessory?: ReactNode;
   fullScreenTapAccessibilityLabel?: string;
   continueButtonStyle?: StyleProp<ViewStyle>;
   continueButtonTextStyle?: StyleProp<TextStyle>;
@@ -97,8 +99,10 @@ export const OnboardingFrame = ({
   contentContainerStyle,
   currentStepIndex,
   footerAccessory,
+  footerContentPointerEvents = "auto",
   footerContentStyle,
   footerStyle,
+  footerTopAccessory,
   fullScreenTapAccessibilityLabel,
   continueButtonStyle,
   continueButtonTextStyle,
@@ -282,12 +286,14 @@ export const OnboardingFrame = ({
           ]}
         >
           <Animated.View
+            pointerEvents={footerContentPointerEvents}
             style={[
               styles.footerContent,
               isFooterTransitionEnabled && animatedBodyStyle,
               footerContentStyle,
             ]}
           >
+            {footerTopAccessory}
             {continueActionPresentation === "tapHint" ? (
               <View
                 style={[

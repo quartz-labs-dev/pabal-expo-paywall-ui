@@ -5,6 +5,7 @@ export interface OnboardingText {
   loginPrompt: string;
   mockTitle: string;
   notNowButton: string;
+  returnButton: string;
   startButton: string;
   tapToContinueButton: string;
 }
