@@ -21,6 +21,7 @@ export interface NotificationMockContentProps {
 
 const PHONE_WIDTH = 224;
 const PHONE_HEIGHT = 455;
+const PHONE_VISIBLE_HEIGHT = PHONE_HEIGHT * 0.6;
 
 export const NotificationMockContent = ({
   body,
@@ -36,12 +37,14 @@ export const NotificationMockContent = ({
   return (
     <View style={styles.root}>
       <View style={styles.frameStage}>
-        <MockPhoneFrame
-          height={PHONE_HEIGHT}
-          theme={theme}
-          video={<NotificationFrameContent theme={theme} />}
-          width={PHONE_WIDTH}
-        />
+        <View style={styles.phoneLayer}>
+          <MockPhoneFrame
+            height={PHONE_HEIGHT}
+            theme={theme}
+            video={<NotificationFrameContent theme={theme} />}
+            width={PHONE_WIDTH}
+          />
+        </View>
         <View style={styles.notificationStack}>
           <View
             style={[
@@ -204,8 +207,14 @@ const styles = StyleSheet.create({
   },
   frameStage: {
     alignItems: "center",
-    height: PHONE_HEIGHT,
-    justifyContent: "center",
+    height: PHONE_VISIBLE_HEIGHT,
+    justifyContent: "flex-start",
+    width: PHONE_WIDTH,
+  },
+  phoneLayer: {
+    alignItems: "center",
+    height: PHONE_VISIBLE_HEIGHT,
+    overflow: "hidden",
     width: PHONE_WIDTH,
   },
   frameContent: {
@@ -231,7 +240,8 @@ const styles = StyleSheet.create({
     left: -40,
     position: "absolute",
     right: -40,
-    top: 138,
+    top: 100,
+    zIndex: 2,
   },
   stackedNotification: {
     alignSelf: "center",
