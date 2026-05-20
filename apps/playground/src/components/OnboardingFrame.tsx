@@ -17,6 +17,8 @@ interface OnboardingFrameProps {
   background?: ReactNode;
   children: ReactNode;
   canContinue?: boolean;
+  contentTransitionIndex?: number;
+  continueActionPresentation?: "button" | "tapHint";
   continueLabel: string;
   contentContainerStyle?: StyleProp<ViewStyle>;
   currentStepIndex: number;
@@ -27,6 +29,7 @@ interface OnboardingFrameProps {
   continueButtonTextStyle?: StyleProp<TextStyle>;
   isContentTransitionEnabled?: boolean;
   isFooterTransitionEnabled?: boolean;
+  isFullScreenTapEnabled?: boolean;
   isBodyScrollEnabled?: boolean;
   isBackButtonDisabled?: boolean;
   rootStyle?: StyleProp<ViewStyle>;
@@ -86,6 +89,8 @@ export const OnboardingFrame = ({
   background,
   children,
   canContinue = true,
+  contentTransitionIndex,
+  continueActionPresentation = "button",
   continueLabel,
   contentContainerStyle,
   currentStepIndex,
@@ -96,6 +101,7 @@ export const OnboardingFrame = ({
   continueButtonTextStyle,
   isContentTransitionEnabled = true,
   isFooterTransitionEnabled = false,
+  isFullScreenTapEnabled = false,
   isBodyScrollEnabled = true,
   isBackButtonDisabled = false,
   rootStyle,
@@ -123,36 +129,22 @@ export const OnboardingFrame = ({
       DEFAULT_FRAME_THEME.progressInactiveColor,
   };
   const isBackDisabled = isBackButtonDisabled || !showBackButton || !onBack;
+  const effectiveContentTransitionIndex =
+    contentTransitionIndex ?? currentStepIndex;
   const previousStepIndexRef = useRef<number | null>(null);
   const contentDirection =
     previousStepIndexRef.current !== null &&
-    currentStepIndex < previousStepIndexRef.current
+    effectiveContentTransitionIndex < previousStepIndexRef.current
       ? -1
       : 1;
   const contentTransition = useRef(
     new Animated.Value(isContentTransitionEnabled ? 0 : 1),
   ).current;
-  const progressTransition = useRef(
-    new Animated.Value(getProgressRatio(currentStepIndex, totalSteps)),
-  ).current;
-
-  useEffect(() => {
-    const animation = Animated.timing(progressTransition, {
-      duration: 420,
-      easing: Easing.out(Easing.cubic),
-      toValue: getProgressRatio(currentStepIndex, totalSteps),
-      useNativeDriver: false,
-    });
-
-    animation.start();
-    return () => animation.stop();
-  }, [currentStepIndex, progressTransition, totalSteps]);
-
   useEffect(() => {
     const previousStepIndex = previousStepIndexRef.current;
-    if (previousStepIndex === currentStepIndex) return;
+    if (previousStepIndex === effectiveContentTransitionIndex) return;
 
-    previousStepIndexRef.current = currentStepIndex;
+    previousStepIndexRef.current = effectiveContentTransitionIndex;
 
     if (!isContentTransitionEnabled) {
       contentTransition.setValue(1);
@@ -177,7 +169,11 @@ export const OnboardingFrame = ({
       clearTimeout(timeoutId);
       animation.stop();
     };
-  }, [contentTransition, currentStepIndex, isContentTransitionEnabled]);
+  }, [
+    contentTransition,
+    effectiveContentTransitionIndex,
+    isContentTransitionEnabled,
+  ]);
 
   const animatedBodyStyle = isContentTransitionEnabled
     ? {
@@ -196,65 +192,28 @@ export const OnboardingFrame = ({
       }
     : undefined;
 
-  return (
-    <View
-      style={[
-        styles.root,
-        { backgroundColor: theme.backgroundColor },
-        rootStyle,
-      ]}
-    >
+  const rootStyleValue: StyleProp<ViewStyle> = [
+    styles.root,
+    { backgroundColor: theme.backgroundColor },
+    rootStyle,
+  ];
+
+  const content = (
+    <>
       {background && <View style={styles.background}>{background}</View>}
       {showHeader && (
-        <View
-          style={[
-            styles.header,
-            {
-              paddingTop: Math.max(insets.top, 12) + 12,
-            },
-          ]}
-        >
-          <Pressable
-            accessibilityLabel="Go back"
-            accessibilityRole="button"
-            accessibilityState={{ disabled: isBackDisabled }}
-            disabled={isBackDisabled}
-            onPress={onBack}
-            style={[
-              styles.backButton,
-              { backgroundColor: theme.backButtonBackgroundColor },
-              isBackDisabled && styles.backButtonDisabled,
-            ]}
-          >
-            <ChevronLeftIcon
-              color={
-                isBackDisabled
-                  ? theme.backButtonDisabledIconColor
-                  : theme.backButtonIconColor
-              }
-              opacity={isBackDisabled ? 0.46 : 1}
-            />
-          </Pressable>
-          <View
-            style={[
-              styles.progressTrack,
-              { backgroundColor: theme.progressInactiveColor },
-            ]}
-          >
-            <Animated.View
-              style={[
-                styles.progressFill,
-                {
-                  backgroundColor: theme.progressActiveColor,
-                  width: progressTransition.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: ["0%", "100%"],
-                  }),
-                },
-              ]}
-            />
-          </View>
-        </View>
+        <OnboardingStepHeader
+          backButtonBackgroundColor={theme.backButtonBackgroundColor}
+          backButtonDisabledIconColor={theme.backButtonDisabledIconColor}
+          backButtonIconColor={theme.backButtonIconColor}
+          currentStepIndex={currentStepIndex}
+          isBackDisabled={isBackDisabled}
+          progressActiveColor={theme.progressActiveColor}
+          progressInactiveColor={theme.progressInactiveColor}
+          safeAreaTop={insets.top}
+          totalSteps={totalSteps}
+          onBack={onBack}
+        />
       )}
 
       <Animated.View style={[styles.body, animatedBodyStyle]}>
@@ -324,27 +283,56 @@ export const OnboardingFrame = ({
             footerContentStyle,
           ]}
         >
-          <Pressable
-            accessibilityRole="button"
-            disabled={!canContinue}
-            onPress={onContinue}
-            style={[
-              styles.continueButton,
-              { backgroundColor: theme.continueButtonBackgroundColor },
-              continueButtonStyle,
-              !canContinue && styles.continueButtonDisabled,
-            ]}
-          >
-            <Text
+          {continueActionPresentation === "tapHint" ? (
+            <View
               style={[
-                styles.continueButtonText,
-                { color: theme.continueButtonTextColor },
-                continueButtonTextStyle,
+                styles.tapHint,
+                !canContinue && styles.continueButtonDisabled,
               ]}
             >
-              {continueLabel}
-            </Text>
-          </Pressable>
+              <Text
+                style={[
+                  styles.tapHintText,
+                  { color: theme.continueButtonTextColor },
+                  continueButtonTextStyle,
+                ]}
+              >
+                {continueLabel}
+              </Text>
+              <Text
+                accessibilityElementsHidden
+                importantForAccessibility="no"
+                style={[
+                  styles.tapHintArrow,
+                  { color: theme.continueButtonBackgroundColor },
+                ]}
+              >
+                →
+              </Text>
+            </View>
+          ) : (
+            <Pressable
+              accessibilityRole="button"
+              disabled={!canContinue}
+              onPress={onContinue}
+              style={[
+                styles.continueButton,
+                { backgroundColor: theme.continueButtonBackgroundColor },
+                continueButtonStyle,
+                !canContinue && styles.continueButtonDisabled,
+              ]}
+            >
+              <Text
+                style={[
+                  styles.continueButtonText,
+                  { color: theme.continueButtonTextColor },
+                  continueButtonTextStyle,
+                ]}
+              >
+                {continueLabel}
+              </Text>
+            </Pressable>
+          )}
           {secondaryActionLabel && onSecondaryAction ? (
             <Pressable
               accessibilityRole="button"
@@ -364,6 +352,117 @@ export const OnboardingFrame = ({
           ) : null}
           {footerAccessory}
         </Animated.View>
+      </View>
+    </>
+  );
+
+  if (isFullScreenTapEnabled) {
+    return (
+      <Pressable
+        accessibilityLabel={continueLabel}
+        accessibilityRole="button"
+        accessibilityState={{ disabled: !canContinue }}
+        disabled={!canContinue}
+        onPress={onContinue}
+        style={rootStyleValue}
+      >
+        {content}
+      </Pressable>
+    );
+  }
+
+  return <View style={rootStyleValue}>{content}</View>;
+};
+
+interface OnboardingStepHeaderProps {
+  backButtonBackgroundColor: string;
+  backButtonDisabledIconColor: string;
+  backButtonIconColor: string;
+  currentStepIndex: number;
+  isBackDisabled: boolean;
+  progressActiveColor: string;
+  progressInactiveColor: string;
+  safeAreaTop: number;
+  totalSteps: number;
+  onBack?: () => void;
+}
+
+const OnboardingStepHeader = ({
+  backButtonBackgroundColor,
+  backButtonDisabledIconColor,
+  backButtonIconColor,
+  currentStepIndex,
+  isBackDisabled,
+  progressActiveColor,
+  progressInactiveColor,
+  safeAreaTop,
+  totalSteps,
+  onBack,
+}: OnboardingStepHeaderProps) => {
+  const progressTransition = useRef(
+    new Animated.Value(getProgressRatio(currentStepIndex, totalSteps)),
+  ).current;
+
+  useEffect(() => {
+    const animation = Animated.timing(progressTransition, {
+      duration: 420,
+      easing: Easing.out(Easing.cubic),
+      toValue: getProgressRatio(currentStepIndex, totalSteps),
+      useNativeDriver: false,
+    });
+
+    animation.start();
+    return () => animation.stop();
+  }, [currentStepIndex, progressTransition, totalSteps]);
+
+  return (
+    <View
+      style={[
+        styles.header,
+        {
+          paddingTop: Math.max(safeAreaTop, 12) + 12,
+        },
+      ]}
+    >
+      <Pressable
+        accessibilityLabel="Go back"
+        accessibilityRole="button"
+        accessibilityState={{ disabled: isBackDisabled }}
+        disabled={isBackDisabled}
+        onPress={onBack}
+        style={[
+          styles.backButton,
+          { backgroundColor: backButtonBackgroundColor },
+          isBackDisabled && styles.backButtonDisabled,
+        ]}
+      >
+        <ChevronLeftIcon
+          color={
+            isBackDisabled
+              ? backButtonDisabledIconColor
+              : backButtonIconColor
+          }
+          opacity={isBackDisabled ? 0.46 : 1}
+        />
+      </Pressable>
+      <View
+        style={[
+          styles.progressTrack,
+          { backgroundColor: progressInactiveColor },
+        ]}
+      >
+        <Animated.View
+          style={[
+            styles.progressFill,
+            {
+              backgroundColor: progressActiveColor,
+              width: progressTransition.interpolate({
+                inputRange: [0, 1],
+                outputRange: ["0%", "100%"],
+              }),
+            },
+          ]}
+        />
       </View>
     </View>
   );
@@ -502,6 +601,25 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     lineHeight: 23,
     textAlign: "center",
+  },
+  tapHint: {
+    alignItems: "center",
+    alignSelf: "flex-end",
+    flexDirection: "row",
+    gap: 8,
+    minHeight: 36,
+  },
+  tapHintText: {
+    flexShrink: 1,
+    fontSize: 17,
+    fontWeight: "400",
+    lineHeight: 22,
+    textAlign: "right",
+  },
+  tapHintArrow: {
+    fontSize: 25,
+    fontWeight: "400",
+    lineHeight: 29,
   },
   secondaryActionButton: {
     alignItems: "center",
