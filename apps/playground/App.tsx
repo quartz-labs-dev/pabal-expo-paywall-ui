@@ -1,8 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { Platform } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
+import {
+  DEFAULT_PLAYGROUND_ONBOARDING_PLATFORM,
+  resolvePlaygroundOnboardingContext,
+  type PlaygroundOnboardingPlatform,
+} from "./src/components/onboarding-context";
 import { HomeScreen } from "./src/screens/HomeScreen";
 import { OnboardingPlaygroundScreen } from "./src/screens/OnboardingPlaygroundScreen";
 import { PaywallPlaygroundScreen } from "./src/screens/PaywallPlaygroundScreen";
@@ -64,8 +69,20 @@ export default function App() {
   const [isTrialEligible, setIsTrialEligible] = useState(true);
   const [isPreOnboardingLoginPromptVisible, setIsPreOnboardingLoginPromptVisible] =
     useState(true);
+  const [onboardingPlatform, setOnboardingPlatform] =
+    useState<PlaygroundOnboardingPlatform>(
+      DEFAULT_PLAYGROUND_ONBOARDING_PLATFORM,
+    );
   const [selectedLocale, setSelectedLocale] =
     useState<PlaygroundLocale>("en-US");
+  const onboardingContext = useMemo(
+    () =>
+      resolvePlaygroundOnboardingContext({
+        locale: selectedLocale,
+        platform: onboardingPlatform,
+      }),
+    [onboardingPlatform, selectedLocale],
+  );
 
   useEffect(() => {
     if (Platform.OS !== "web" || typeof window?.addEventListener !== "function") {
@@ -109,13 +126,13 @@ export default function App() {
         />
       ) : route === "onboarding" ? (
         <OnboardingPlaygroundScreen
-          selectedLocale={selectedLocale}
+          onboardingContext={onboardingContext}
           onClose={() => navigate("home")}
         />
       ) : route === "preOnboarding" ? (
         <PreOnboardingPlaygroundScreen
           isLoginPromptVisible={isPreOnboardingLoginPromptVisible}
-          selectedLocale={selectedLocale}
+          onboardingContext={onboardingContext}
           onContinue={() => navigate("home")}
         />
       ) : (
@@ -125,6 +142,7 @@ export default function App() {
           selectedLocale={selectedLocale}
           paywallFlow={paywallFlow}
           paywallAnimation={paywallAnimation}
+          onboardingPlatform={onboardingPlatform}
           freeTrialMode={freeTrialMode}
           isTrialEligible={isTrialEligible}
           isPreOnboardingLoginPromptVisible={isPreOnboardingLoginPromptVisible}
@@ -137,6 +155,7 @@ export default function App() {
           onChangeLocale={setSelectedLocale}
           onChangePaywallFlow={setPaywallFlow}
           onChangePaywallAnimation={setPaywallAnimation}
+          onChangeOnboardingPlatform={setOnboardingPlatform}
           onChangeFreeTrialMode={setFreeTrialMode}
           onOpenOnboarding={() => navigate("onboarding")}
           onOpenPaywall={() => navigate("paywall")}

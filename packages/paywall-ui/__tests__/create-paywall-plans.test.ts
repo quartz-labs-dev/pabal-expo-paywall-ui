@@ -14,6 +14,10 @@ import {
   ONBOARDING_TEXT_LOCALES,
   getDefaultOnboardingCopy,
 } from "../src/locales/onboarding";
+import {
+  getDefaultOnboardingAcquisitionSourceText,
+  ONBOARDING_ACQUISITION_SOURCE_TEXT_LOCALES,
+} from "../src/locales/onboarding/acquisition-source";
 import { UNIFIED_LOCALES } from "../src/locales/unified-locales";
 import type { PurchasesPackageLike } from "../src/types";
 import type {
@@ -445,6 +449,7 @@ test("localizes onboarding copy for every non-English onboarding locale", () => 
       assert.equal(copy.loginPrompt, "Already have an account? ");
       assert.equal(copy.mockTitle, "Do not memorize\nhundreds of techniques.");
       assert.equal(copy.notNowButton, "Not now");
+      assert.equal(copy.returnButton, "Return");
       assert.equal(copy.startButton, "Get started");
       continue;
     }
@@ -459,8 +464,39 @@ test("localizes onboarding copy for every non-English onboarding locale", () => 
       locale,
     );
     assert.notEqual(copy.notNowButton, "Not now", locale);
+    assert.notEqual(copy.returnButton, "Return", locale);
     assert.notEqual(copy.startButton, "Get started", locale);
   }
+});
+
+test("localizes onboarding acquisition source copy for every non-English locale", () => {
+  for (const locale of ONBOARDING_ACQUISITION_SOURCE_TEXT_LOCALES) {
+    const text = getDefaultOnboardingAcquisitionSourceText(locale);
+
+    if (locale === "en") {
+      assert.equal(text.title, "Where did you hear about us?");
+      assert.equal(text.friendOrFamily, "Friend or family");
+      assert.equal(text.other, "Other");
+      assert.equal(text.x, "X (formerly Twitter)");
+      continue;
+    }
+
+    assert.notEqual(text.title, "Where did you hear about us?", locale);
+    assert.notEqual(text.friendOrFamily, "Friend or family", locale);
+    assert.notEqual(text.other, "Other", locale);
+    assert.notEqual(text.x, "X (formerly Twitter)", locale);
+  }
+});
+
+test("provides localized onboarding acquisition source labels", () => {
+  const text = getDefaultOnboardingAcquisitionSourceText("ko-KR");
+
+  assert.equal(text.title, "어디에서 저희를 알게 되셨나요?");
+  assert.equal(text.appStore, "App Store");
+  assert.equal(text.playStore, "Play Store");
+  assert.equal(text.x, "X(구 Twitter)");
+  assert.equal(text.friendOrFamily, "친구 또는 가족");
+  assert.equal(text.other, "기타");
 });
 
 test("localizes review section title for every non-English paywall locale", () => {

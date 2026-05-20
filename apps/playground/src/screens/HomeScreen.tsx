@@ -10,6 +10,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { LocaleSelector } from "../components/LocaleSelector";
+import type { PlaygroundOnboardingPlatform } from "../components/onboarding-context";
 import { packageScenarioLabels } from "../fixtures/paywall-plans";
 import type {
   PlaygroundFreeTrialMode,
@@ -25,6 +26,7 @@ interface HomeScreenProps {
   selectedLocale: PlaygroundLocale;
   paywallFlow: PlaygroundPaywallFlow;
   paywallAnimation: PlaygroundPaywallAnimation;
+  onboardingPlatform: PlaygroundOnboardingPlatform;
   freeTrialMode: PlaygroundFreeTrialMode;
   isTrialEligible: boolean;
   isPreOnboardingLoginPromptVisible: boolean;
@@ -36,6 +38,9 @@ interface HomeScreenProps {
   onChangePaywallFlow: (paywallFlow: PlaygroundPaywallFlow) => void;
   onChangePaywallAnimation: (
     paywallAnimation: PlaygroundPaywallAnimation,
+  ) => void;
+  onChangeOnboardingPlatform: (
+    onboardingPlatform: PlaygroundOnboardingPlatform,
   ) => void;
   onChangeFreeTrialMode: (freeTrialMode: PlaygroundFreeTrialMode) => void;
   onOpenOnboarding: () => void;
@@ -72,12 +77,18 @@ const freeTrialModeLabels: Record<PlaygroundFreeTrialMode, string> = {
   twoWeeks: "2 weeks",
   none: "No trial",
 };
+const onboardingPlatforms: PlaygroundOnboardingPlatform[] = ["ios", "android"];
+const onboardingPlatformLabels: Record<PlaygroundOnboardingPlatform, string> = {
+  ios: "iOS",
+  android: "Android",
+};
 export const HomeScreen = ({
   scenario,
   isLongPriceEnabled,
   selectedLocale,
   paywallFlow,
   paywallAnimation,
+  onboardingPlatform,
   freeTrialMode,
   isTrialEligible,
   isPreOnboardingLoginPromptVisible,
@@ -88,6 +99,7 @@ export const HomeScreen = ({
   onTogglePreOnboardingLoginPrompt,
   onChangePaywallFlow,
   onChangePaywallAnimation,
+  onChangeOnboardingPlatform,
   onChangeFreeTrialMode,
   onOpenOnboarding,
   onOpenPaywall,
@@ -202,6 +214,13 @@ export const HomeScreen = ({
         visible={isOnboardingSettingsVisible}
         onClose={closeOnboardingSettings}
       >
+        <SegmentedSettings
+          title="Platform"
+          options={onboardingPlatforms}
+          selectedOption={onboardingPlatform}
+          labels={onboardingPlatformLabels}
+          onChangeOption={onChangeOnboardingPlatform}
+        />
         <PreOnboardingSettings
           isLoginPromptVisible={isPreOnboardingLoginPromptVisible}
           onToggleLoginPrompt={onTogglePreOnboardingLoginPrompt}

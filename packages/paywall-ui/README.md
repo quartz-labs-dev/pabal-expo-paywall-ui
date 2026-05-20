@@ -23,6 +23,35 @@ swpm add pabal-expo-paywall-ui
 Wrap the app with `SafeAreaProvider`. `react-native-safe-area-context` is a peer
 dependency.
 
+## Onboarding Acquisition Sources
+
+Use the package-owned acquisition source copy and options when every app should
+ask the same "Where did you hear about us?" question. The app still owns selected
+state, analytics, navigation, and the list row styling.
+
+```tsx
+import {
+  createOnboardingAcquisitionSourceOptions,
+  getDefaultOnboardingAcquisitionSourceText,
+  type OnboardingAcquisitionSourceId,
+} from "pabal-expo-paywall-ui";
+
+const storePlatform = Platform.OS === "android" ? "playStore" : "appStore";
+const sourceText = getDefaultOnboardingAcquisitionSourceText(locale);
+const sourceOptions = createOnboardingAcquisitionSourceOptions(
+  storePlatform,
+  locale,
+);
+const [selectedSource, setSelectedSource] =
+  useState<OnboardingAcquisitionSourceId | null>(null);
+```
+
+`createOnboardingAcquisitionSourceOptions()` returns Instagram, YouTube, Google,
+the current store (`App Store` or `Play Store`), X (formerly Twitter), Friend or
+family, and Other. `getDefaultOnboardingAcquisitionSourceText()` returns the
+localized title. Brand icons are bundled PNG assets and render inside a fixed
+white icon badge so they stay visible on light or dark list rows.
+
 ## App Config
 
 Keep app-owned media, benefits, copy, plan mapping, and theme in one typed config.
