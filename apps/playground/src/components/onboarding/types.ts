@@ -22,3 +22,26 @@ export interface OnboardingChoiceOption {
   icon?: ReactNode;
   title: string;
 }
+
+export type SocialProofReviewRating = 1 | 2 | 3 | 4 | 5;
+
+export interface SocialProofMetric {
+  label: string;
+  value: string;
+}
+
+export interface SocialProofReview {
+  author?: string;
+  quote: string;
+  rating?: SocialProofReviewRating;
+  title: string;
+}
+
+export interface SocialProofContentData {
+  eyebrow?: string;
+  headline: string;
+  highlightedText?: string;
+  metric?: SocialProofMetric;
+  reviews: SocialProofReview[];
+  subheadline?: string;
+}

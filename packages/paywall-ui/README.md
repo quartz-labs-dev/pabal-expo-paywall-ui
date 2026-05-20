@@ -52,6 +52,34 @@ family, and Other. `getDefaultOnboardingAcquisitionSourceText()` returns the
 localized title. Brand icons are bundled PNG assets and render inside a fixed
 white icon badge so they stay visible on light or dark list rows.
 
+## Permission Prompt Preview
+
+Use `PermissionPromptPreview` for reusable onboarding permission education
+before the consuming app triggers the native permission request. The package
+only renders the prompt preview. The app still owns permission APIs, analytics,
+navigation, and the localized `title`/`message` copy.
+
+```tsx
+import { PermissionPromptPreview } from "pabal-expo-paywall-ui";
+
+<PermissionPromptPreview
+  locale={locale}
+  message="Notifications may include alerts, sounds, and icon badges."
+  platform={Platform.OS === "android" ? "android" : "ios"}
+  primaryColor="#22C55E"
+  title="“Brilliant” Would Like to Send You Notifications"
+/>;
+```
+
+`platform` switches between iOS-style and Android-style prompt chrome.
+`title` and `message` are app-provided so notifications, location, camera,
+photos, microphone, and future permissions can use product-specific reasoning.
+The package localizes only the button labels (`Don't Allow` and `Allow`) from
+`locale`. `Allow` always uses the iOS system blue (`#007AFF`) on both platforms.
+`primaryColor` controls the arrow color only.
+The preview uses React Native primitives only. Do not add an SVG dependency for
+this UI.
+
 ## App Config
 
 Keep app-owned media, benefits, copy, plan mapping, and theme in one typed config.

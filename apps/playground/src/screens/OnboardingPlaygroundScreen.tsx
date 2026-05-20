@@ -1,7 +1,8 @@
-import { useMemo, useState } from "react";
+import { type ComponentProps, type ReactNode, useMemo, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import {
   createOnboardingAcquisitionSourceOptions,
+  PermissionPromptPreview,
   type OnboardingAcquisitionSourceId,
   type OnboardingAcquisitionSourceOption,
 } from "pabal-expo-paywall-ui";
@@ -9,7 +10,9 @@ import { StyleSheet } from "react-native";
 
 import { OnboardingFrame } from "../components/OnboardingFrame";
 import { ChoiceListContent } from "../components/onboarding/ChoiceListContent";
+import { NotificationMockContent } from "../components/onboarding/NotificationMockContent";
 import { PreludeStepContent } from "../components/onboarding/PreludeStepContent";
+import { SocialProofContent } from "../components/onboarding/SocialProofContent";
 import type { PlaygroundSlide } from "../components/onboarding/types";
 import type { PlaygroundOnboardingContext } from "../components/onboarding-context";
 import type { PlaygroundOnboardingTheme } from "../components/onboarding-theme";
@@ -17,12 +20,19 @@ import { createOnboardingPreludeSteps } from "../fixtures/onboarding-prelude-ste
 import { stripIntroEmphasis } from "../utils/onboarding-intro-text";
 
 interface OnboardingPlaygroundScreenProps {
+  notificationContent?: OnboardingNotificationContent;
   onboardingContext: PlaygroundOnboardingContext;
   onClose: () => void;
   onNotNowPress?: () => void;
 }
 
 export type OnboardingPlaygroundTheme = PlaygroundOnboardingTheme;
+
+export interface OnboardingNotificationContent {
+  body: string;
+  logo?: ReactNode;
+  title: string;
+}
 
 interface CreateAcquisitionSourceSlideParams {
   options: OnboardingAcquisitionSourceOption[];
@@ -53,7 +63,32 @@ const createAcquisitionSourceSlide = ({
   ),
 });
 
+interface CreateNotificationSlideParams {
+  content: OnboardingNotificationContent;
+  nowLabel: string;
+  theme: Required<PlaygroundOnboardingTheme>;
+}
+
+const createNotificationSlide = ({
+  content,
+  nowLabel,
+  theme,
+}: CreateNotificationSlideParams): PlaygroundSlide => ({
+  canContinue: true,
+  content: (
+    <NotificationMockContent
+      body={content.body}
+      logo={content.logo}
+      nowLabel={nowLabel}
+      theme={theme}
+      title={content.title}
+    />
+  ),
+  title: "Get your plan reminders",
+});
+
 export const OnboardingPlaygroundScreen = ({
+  notificationContent = DEFAULT_NOTIFICATION_CONTENT,
   onboardingContext,
   onClose,
   onNotNowPress,
@@ -66,6 +101,7 @@ export const OnboardingPlaygroundScreen = ({
     copy: localizedCopy,
     frameTheme,
     locale,
+    platform,
     storePlatform,
     theme,
   } = onboardingContext;
@@ -93,11 +129,43 @@ export const OnboardingPlaygroundScreen = ({
         title: acquisitionSourceText.title,
         onSelectSource: setSelectedSource,
       }),
+      {
+        canContinue: true,
+        content: (
+          <SocialProofContent
+            {...ONBOARDING_SOCIAL_PROOF_CONTENT}
+            theme={theme}
+          />
+        ),
+      },
+      {
+        title: "Enable smarter reminders",
+        description:
+          "Use the shared permission prompt template before the native permission request.",
+        content: (
+          <PermissionPromptPreview
+            locale={locale}
+            message="Notifications may include alerts, sounds, and icon badges. These can be configured in Settings."
+            platform={platform}
+            primaryColor={theme.accentColor}
+            title="“Post Black Belt” Would Like to Send You Notifications"
+          />
+        ),
+      },
+      createNotificationSlide({
+        content: notificationContent,
+        nowLabel: localizedCopy.notificationNowLabel,
+        theme,
+      }),
     ],
     [
       selectedSource,
       acquisitionSourceText.title,
       acquisitionSourceOptions,
+      locale,
+      localizedCopy.notificationNowLabel,
+      notificationContent,
+      platform,
       theme,
     ],
   );
@@ -207,6 +275,38 @@ export const OnboardingPlaygroundScreen = ({
     </>
   );
 };
+
+const DEFAULT_NOTIFICATION_CONTENT = {
+  body: "Check out your workouts, meal plan and mindset activities for next week!",
+  title: "Your Plan is READY",
+} satisfies OnboardingNotificationContent;
+
+const ONBOARDING_SOCIAL_PROOF_CONTENT = {
+  eyebrow: "App Store reviews",
+  headline: "Post Black Belt was made for athletes like you.",
+  highlightedText: "athletes like you",
+  metric: {
+    label: "100K+ App Ratings",
+    value: "4.8",
+  },
+  reviews: [
+    {
+      author: "App Store review",
+      quote:
+        "I finally stopped losing track of what to train next. The reminders and plan flow make it easy to stay consistent.",
+      rating: 5,
+      title: "FINALLY CONSISTENT.",
+    },
+    {
+      author: "App Store review",
+      quote:
+        "Simple, clean, and actually useful. It gives me just enough structure without turning training into admin work.",
+      rating: 5,
+      title: "EXACTLY WHAT I NEEDED.",
+    },
+  ],
+  subheadline: "Trusted by people building better training habits.",
+} satisfies Omit<ComponentProps<typeof SocialProofContent>, "theme">;
 
 const styles = StyleSheet.create({
   introContentContainer: {

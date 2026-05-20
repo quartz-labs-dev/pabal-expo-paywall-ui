@@ -2,7 +2,9 @@ export { createPaywallPlans, getDefaultSelectedPlanId } from "./paywall/create-p
 export { getColorWithAlpha } from "./shared/color-utils";
 export {
   getDefaultOnboardingCopy,
+  getDefaultPermissionPromptCopy,
   ONBOARDING_TEXT_LOCALES,
+  PERMISSION_PROMPT_TEXT,
 } from "./locales/onboarding";
 export {
   getDefaultOnboardingAcquisitionSourceText,
@@ -13,6 +15,7 @@ export {
   createOnboardingAcquisitionSourceOptions,
   ONBOARDING_ACQUISITION_SOURCE_TITLE,
 } from "./onboarding/acquisition-sources";
+export { PermissionPromptPreview } from "./onboarding/PermissionPromptPreview";
 export {
   getDefaultPaywallCopy,
   getDefaultPaywallPlanOptions,
@@ -23,7 +26,11 @@ export {
   PAYWALL_TEXT_LOCALES,
   resolvePaywallTextLocale,
 } from "./locales/localized-paywall-copy";
-export type { OnboardingText, OnboardingTextLocale } from "./locales/onboarding";
+export type {
+  OnboardingText,
+  OnboardingTextLocale,
+  PermissionPromptText,
+} from "./locales/onboarding";
 export type {
   OnboardingAcquisitionSourceId,
   OnboardingAcquisitionSourceOption,
@@ -68,5 +75,9 @@ export type {
   ProfileSubscriptionSectionProps,
   PurchasesPackageLike,
 } from "./types";
+export type {
+  PermissionPromptPreviewPlatform,
+  PermissionPromptPreviewProps,
+} from "./onboarding/PermissionPromptPreview";
 export type { PaywallTextLocale } from "./locales/localized-paywall-copy";
 export type { UnifiedLocale } from "./locales/unified-locales";

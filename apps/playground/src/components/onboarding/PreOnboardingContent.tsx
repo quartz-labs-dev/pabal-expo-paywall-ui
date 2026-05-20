@@ -287,7 +287,7 @@ interface MockPhoneFrameProps {
   width: number;
 }
 
-const MockPhoneFrame = ({
+export const MockPhoneFrame = ({
   animatedStyle,
   height,
   imageSource,

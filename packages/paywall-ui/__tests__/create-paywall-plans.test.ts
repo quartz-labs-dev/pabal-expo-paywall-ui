@@ -13,6 +13,7 @@ import {
 import {
   ONBOARDING_TEXT_LOCALES,
   getDefaultOnboardingCopy,
+  getDefaultPermissionPromptCopy,
 } from "../src/locales/onboarding";
 import {
   getDefaultOnboardingAcquisitionSourceText,
@@ -448,6 +449,7 @@ test("localizes onboarding copy for every non-English onboarding locale", () => 
       assert.equal(copy.loginLabel, "Log in");
       assert.equal(copy.loginPrompt, "Already have an account? ");
       assert.equal(copy.mockTitle, "Do not memorize\nhundreds of techniques.");
+      assert.equal(copy.notificationNowLabel, "now");
       assert.equal(copy.notNowButton, "Not now");
       assert.equal(copy.returnButton, "Return");
       assert.equal(copy.startButton, "Get started");
@@ -463,10 +465,35 @@ test("localizes onboarding copy for every non-English onboarding locale", () => 
       "Do not memorize\nhundreds of techniques.",
       locale,
     );
+    assert.notEqual(copy.notificationNowLabel, "now", locale);
     assert.notEqual(copy.notNowButton, "Not now", locale);
     assert.notEqual(copy.returnButton, "Return", locale);
     assert.notEqual(copy.startButton, "Get started", locale);
   }
+});
+
+test("localizes permission prompt buttons for every non-English onboarding locale", () => {
+  for (const locale of ONBOARDING_TEXT_LOCALES) {
+    const copy = getDefaultPermissionPromptCopy(locale);
+
+    if (locale === "en") {
+      assert.equal(copy.allowButton, "Allow");
+      assert.equal(copy.denyButton, "Don't Allow");
+      continue;
+    }
+
+    assert.notEqual(copy.allowButton, "Allow", locale);
+    assert.notEqual(copy.denyButton, "Don't Allow", locale);
+  }
+
+  assert.deepEqual(getDefaultPermissionPromptCopy("ko-KR"), {
+    allowButton: "허용",
+    denyButton: "허용 안 함",
+  });
+  assert.deepEqual(getDefaultPermissionPromptCopy("zh-HK"), {
+    allowButton: "允許",
+    denyButton: "不允許",
+  });
 });
 
 test("localizes onboarding acquisition source copy for every non-English locale", () => {
