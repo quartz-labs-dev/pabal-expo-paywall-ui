@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 
-import { OnboardingFrame } from "../components/OnboardingFrame";
+import { PreOnboardingFrame } from "../components/PreOnboardingFrame";
 import {
   LandingBackgroundSlot,
   LandingContent,
@@ -177,7 +177,7 @@ export const PreOnboardingPlaygroundScreen = ({
   return (
     <>
       <StatusBar style={isLandingStep ? "light" : "dark"} />
-      <OnboardingFrame
+      <PreOnboardingFrame
         background={
           isLandingStep ? (
             <LandingBackgroundSlot overlayColor={theme.landingOverlayColor}>
@@ -195,7 +195,6 @@ export const PreOnboardingPlaygroundScreen = ({
                 { paddingBottom: mockFooterReservedHeight },
               ]
         }
-        currentStepIndex={currentStepIndex}
         footerContentPointerEvents={isActionPanelMounted ? "none" : "auto"}
         footerContentStyle={loweredFooterContentStyle as StyleProp<ViewStyle>}
         footerAccessory={
@@ -228,12 +227,7 @@ export const PreOnboardingPlaygroundScreen = ({
             </Text>
           ) : undefined
         }
-        isBodyScrollEnabled={false}
-        isContentTransitionEnabled={false}
-        isFooterTransitionEnabled={!isLandingStep}
-        showHeader={false}
         theme={frameTheme}
-        totalSteps={2}
         onContinue={goNext}
       >
         {isLandingStep ? (
@@ -265,7 +259,7 @@ export const PreOnboardingPlaygroundScreen = ({
             onReturn={closeActionPanel}
           />
         )}
-      </OnboardingFrame>
+      </PreOnboardingFrame>
     </>
   );
 };

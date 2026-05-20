@@ -12,7 +12,7 @@ import {
   type PlaygroundOnboardingPlatform,
   type PlaygroundOnboardingStorePlatform,
 } from "../utils/onboarding-platform";
-import type { OnboardingFrameTheme } from "./OnboardingFrame";
+import type { OnboardingFrameTheme } from "./onboarding-frame-theme";
 import {
   createOnboardingFrameTheme,
   type CreateOnboardingFrameThemeOptions,

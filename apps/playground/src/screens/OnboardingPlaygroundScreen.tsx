@@ -9,7 +9,7 @@ import {
 } from "pabal-expo-paywall-ui";
 import { type ImageSourcePropType, StyleSheet } from "react-native";
 
-import { OnboardingFrame } from "../components/OnboardingFrame";
+import { OnboardingStepFrame } from "../components/OnboardingStepFrame";
 import { ChoiceListContent } from "../components/onboarding/ChoiceListContent";
 import { NotificationMockContent } from "../components/onboarding/NotificationMockContent";
 import { PreludeStepContent } from "../components/onboarding/PreludeStepContent";
@@ -244,7 +244,7 @@ export const OnboardingPlaygroundScreen = ({
   return (
     <>
       <StatusBar style={isInvertedPreludeStep ? "light" : "dark"} />
-      <OnboardingFrame
+      <OnboardingStepFrame
         continueActionPresentation={isPreludeStep ? "tapHint" : "button"}
         continueButtonTextStyle={
           isInvertedPreludeStep
@@ -307,7 +307,7 @@ export const OnboardingPlaygroundScreen = ({
         ) : (
           currentSlide.content
         )}
-      </OnboardingFrame>
+      </OnboardingStepFrame>
     </>
   );
 };

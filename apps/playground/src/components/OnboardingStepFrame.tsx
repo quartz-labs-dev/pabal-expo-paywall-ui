@@ -13,29 +13,27 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-interface OnboardingFrameProps {
-  background?: ReactNode;
+import {
+  resolveOnboardingFrameTheme,
+  type OnboardingFrameTheme,
+} from "./onboarding-frame-theme";
+
+interface OnboardingStepFrameProps {
   children: ReactNode;
   canContinue?: boolean;
+  contentContainerStyle?: StyleProp<ViewStyle>;
   contentTransitionIndex?: number;
   continueActionPresentation?: "button" | "tapHint";
-  continueLabel: string;
-  contentContainerStyle?: StyleProp<ViewStyle>;
-  currentStepIndex: number;
-  footerAccessory?: ReactNode;
-  footerContentPointerEvents?: "auto" | "none" | "box-none" | "box-only";
-  footerContentStyle?: StyleProp<ViewStyle>;
-  footerStyle?: StyleProp<ViewStyle>;
-  footerTopAccessory?: ReactNode;
-  fullScreenTapAccessibilityLabel?: string;
-  continueButtonStyle?: StyleProp<ViewStyle>;
   continueButtonTextStyle?: StyleProp<TextStyle>;
-  isContentTransitionEnabled?: boolean;
-  isFooterTransitionEnabled?: boolean;
-  isFooterVisible?: boolean;
-  isFullScreenTapEnabled?: boolean;
-  isBodyScrollEnabled?: boolean;
+  continueLabel: string;
+  currentStepIndex: number;
+  description?: ReactNode;
+  footerStyle?: StyleProp<ViewStyle>;
+  fullScreenTapAccessibilityLabel?: string;
   isBackButtonDisabled?: boolean;
+  isBodyScrollEnabled?: boolean;
+  isContentTransitionEnabled?: boolean;
+  isFullScreenTapEnabled?: boolean;
   rootStyle?: StyleProp<ViewStyle>;
   secondaryActionLabel?: string;
   secondaryActionTextStyle?: StyleProp<TextStyle>;
@@ -45,41 +43,10 @@ interface OnboardingFrameProps {
   title?: ReactNode;
   titleStyle?: StyleProp<TextStyle>;
   totalSteps: number;
-  description?: ReactNode;
-  descriptionStyle?: StyleProp<TextStyle>;
   onBack?: () => void;
   onContinue: () => void;
   onSecondaryAction?: () => void;
 }
-
-export interface OnboardingFrameTheme {
-  backgroundColor?: string;
-  backButtonBackgroundColor?: string;
-  backButtonDisabledIconColor?: string;
-  backButtonIconColor?: string;
-  continueButtonBackgroundColor?: string;
-  continueButtonTextColor?: string;
-  descriptionTextColor?: string;
-  footerBackgroundColor?: string;
-  progressActiveColor?: string;
-  progressInactiveColor?: string;
-  secondaryActionTextColor?: string;
-  titleTextColor?: string;
-}
-
-const DEFAULT_FRAME_THEME = {
-  backgroundColor: "#F7F7F8",
-  backButtonDisabledIconColor: "#C9C9CA",
-  backButtonIconColor: "#050505",
-  continueButtonBackgroundColor: "#E22121",
-  continueButtonTextColor: "#FFFFFF",
-  descriptionTextColor: "#666A70",
-  footerBackgroundColor: "#F7F7F8",
-  progressActiveColor: "#050505",
-  progressInactiveColor: "#DDDDDE",
-  secondaryActionTextColor: "#050505",
-  titleTextColor: "#050505",
-} satisfies Required<Omit<OnboardingFrameTheme, "backButtonBackgroundColor">>;
 
 const INITIAL_CONTENT_TRANSITION_DELAY_MS = 90;
 
@@ -89,54 +56,39 @@ const getProgressRatio = (stepIndex: number, stepCount: number) => {
   return (safeStepIndex + 1) / safeStepCount;
 };
 
-export const OnboardingFrame = ({
-  background,
+export const OnboardingStepFrame = ({
   children,
   canContinue = true,
+  contentContainerStyle,
   contentTransitionIndex,
   continueActionPresentation = "button",
-  continueLabel,
-  contentContainerStyle,
-  currentStepIndex,
-  footerAccessory,
-  footerContentPointerEvents = "auto",
-  footerContentStyle,
-  footerStyle,
-  footerTopAccessory,
-  fullScreenTapAccessibilityLabel,
-  continueButtonStyle,
   continueButtonTextStyle,
-  isContentTransitionEnabled = true,
-  isFooterTransitionEnabled = false,
-  isFooterVisible = true,
-  isFullScreenTapEnabled = false,
-  isBodyScrollEnabled = true,
+  continueLabel,
+  currentStepIndex,
+  description,
+  footerStyle,
+  fullScreenTapAccessibilityLabel,
   isBackButtonDisabled = false,
+  isBodyScrollEnabled = true,
+  isContentTransitionEnabled = true,
+  isFullScreenTapEnabled = false,
   rootStyle,
   secondaryActionLabel,
   secondaryActionTextStyle,
+  showBackButton,
   showHeader = true,
   theme: themeOverride,
   title,
   titleStyle,
   totalSteps,
-  description,
-  descriptionStyle,
   onBack,
   onContinue,
   onSecondaryAction,
-  showBackButton = Boolean(onBack),
-}: OnboardingFrameProps) => {
+}: OnboardingStepFrameProps) => {
   const insets = useSafeAreaInsets();
-  const theme = {
-    ...DEFAULT_FRAME_THEME,
-    ...themeOverride,
-    backButtonBackgroundColor:
-      themeOverride?.backButtonBackgroundColor ??
-      themeOverride?.progressInactiveColor ??
-      DEFAULT_FRAME_THEME.progressInactiveColor,
-  };
-  const isBackDisabled = isBackButtonDisabled || !showBackButton || !onBack;
+  const theme = resolveOnboardingFrameTheme(themeOverride);
+  const shouldShowBackButton = showBackButton ?? Boolean(onBack);
+  const isBackDisabled = isBackButtonDisabled || !shouldShowBackButton || !onBack;
   const effectiveContentTransitionIndex =
     contentTransitionIndex ?? currentStepIndex;
   const previousStepIndexRef = useRef<number | null>(null);
@@ -148,6 +100,7 @@ export const OnboardingFrame = ({
   const contentTransition = useRef(
     new Animated.Value(isContentTransitionEnabled ? 0 : 1),
   ).current;
+
   useEffect(() => {
     const previousStepIndex = previousStepIndexRef.current;
     if (previousStepIndex === effectiveContentTransitionIndex) return;
@@ -208,7 +161,6 @@ export const OnboardingFrame = ({
 
   const content = (
     <>
-      {background && <View style={styles.background}>{background}</View>}
       {showHeader && (
         <OnboardingStepHeader
           backButtonBackgroundColor={theme.backButtonBackgroundColor}
@@ -246,7 +198,6 @@ export const OnboardingFrame = ({
                 style={[
                   styles.stepDescription,
                   { color: theme.descriptionTextColor },
-                  descriptionStyle,
                 ]}
               >
                 {description}
@@ -274,97 +225,83 @@ export const OnboardingFrame = ({
         </ScrollView>
       </Animated.View>
 
-      {isFooterVisible && (
-        <View
-          style={[
-            styles.footer,
-            { backgroundColor: theme.footerBackgroundColor },
-            footerStyle,
-            {
-              paddingBottom: Math.max(insets.bottom, 12) + 12,
-            },
-          ]}
-        >
-          <Animated.View
-            pointerEvents={footerContentPointerEvents}
+      <View
+        style={[
+          styles.footer,
+          { backgroundColor: theme.footerBackgroundColor },
+          footerStyle,
+          {
+            paddingBottom: Math.max(insets.bottom, 12) + 12,
+          },
+        ]}
+      >
+        {continueActionPresentation === "tapHint" ? (
+          <View
             style={[
-              styles.footerContent,
-              isFooterTransitionEnabled && animatedBodyStyle,
-              footerContentStyle,
+              styles.tapHint,
+              !canContinue && styles.continueButtonDisabled,
             ]}
           >
-            {footerTopAccessory}
-            {continueActionPresentation === "tapHint" ? (
-              <View
-                style={[
-                  styles.tapHint,
-                  !canContinue && styles.continueButtonDisabled,
-                ]}
-              >
-                <Text
-                  style={[
-                    styles.tapHintText,
-                    { color: theme.continueButtonTextColor },
-                    continueButtonTextStyle,
-                  ]}
-                >
-                  {continueLabel}
-                </Text>
-                <Text
-                  accessibilityElementsHidden
-                  importantForAccessibility="no"
-                  style={[
-                    styles.tapHintArrow,
-                    { color: theme.continueButtonBackgroundColor },
-                  ]}
-                >
-                  →
-                </Text>
-              </View>
-            ) : (
-              <Pressable
-                accessibilityRole="button"
-                disabled={!canContinue}
-                onPress={onContinue}
-                style={[
-                  styles.continueButton,
-                  { backgroundColor: theme.continueButtonBackgroundColor },
-                  continueButtonStyle,
-                  !canContinue && styles.continueButtonDisabled,
-                ]}
-              >
-                <Text
-                  style={[
-                    styles.continueButtonText,
-                    { color: theme.continueButtonTextColor },
-                    continueButtonTextStyle,
-                  ]}
-                >
-                  {continueLabel}
-                </Text>
-              </Pressable>
-            )}
-            {secondaryActionLabel && onSecondaryAction ? (
-              <Pressable
-                accessibilityRole="button"
-                onPress={onSecondaryAction}
-                style={styles.secondaryActionButton}
-              >
-                <Text
-                  style={[
-                    styles.secondaryActionText,
-                    { color: theme.secondaryActionTextColor },
-                    secondaryActionTextStyle,
-                  ]}
-                >
-                  {secondaryActionLabel}
-                </Text>
-              </Pressable>
-            ) : null}
-            {footerAccessory}
-          </Animated.View>
-        </View>
-      )}
+            <Text
+              style={[
+                styles.tapHintText,
+                { color: theme.continueButtonTextColor },
+                continueButtonTextStyle,
+              ]}
+            >
+              {continueLabel}
+            </Text>
+            <Text
+              accessibilityElementsHidden
+              importantForAccessibility="no"
+              style={[
+                styles.tapHintArrow,
+                { color: theme.continueButtonBackgroundColor },
+              ]}
+            >
+              →
+            </Text>
+          </View>
+        ) : (
+          <Pressable
+            accessibilityRole="button"
+            disabled={!canContinue}
+            onPress={onContinue}
+            style={[
+              styles.continueButton,
+              { backgroundColor: theme.continueButtonBackgroundColor },
+              !canContinue && styles.continueButtonDisabled,
+            ]}
+          >
+            <Text
+              style={[
+                styles.continueButtonText,
+                { color: theme.continueButtonTextColor },
+                continueButtonTextStyle,
+              ]}
+            >
+              {continueLabel}
+            </Text>
+          </Pressable>
+        )}
+        {secondaryActionLabel && onSecondaryAction ? (
+          <Pressable
+            accessibilityRole="button"
+            onPress={onSecondaryAction}
+            style={styles.secondaryActionButton}
+          >
+            <Text
+              style={[
+                styles.secondaryActionText,
+                { color: theme.secondaryActionTextColor },
+                secondaryActionTextStyle,
+              ]}
+            >
+              {secondaryActionLabel}
+            </Text>
+          </Pressable>
+        ) : null}
+      </View>
     </>
   );
 
@@ -510,9 +447,6 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
   },
-  background: {
-    ...StyleSheet.absoluteFillObject,
-  },
   header: {
     alignItems: "center",
     flexDirection: "row",
@@ -591,11 +525,9 @@ const styles = StyleSheet.create({
     paddingVertical: 22,
   },
   footer: {
+    gap: 12,
     paddingHorizontal: 20,
     paddingTop: 12,
-  },
-  footerContent: {
-    gap: 12,
   },
   continueButton: {
     alignItems: "center",

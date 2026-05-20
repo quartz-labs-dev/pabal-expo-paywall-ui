@@ -1,6 +1,6 @@
 import { getColorWithAlpha } from "pabal-expo-paywall-ui";
 
-import type { OnboardingFrameTheme } from "./OnboardingFrame";
+import type { OnboardingFrameTheme } from "./onboarding-frame-theme";
 
 export interface PlaygroundOnboardingTheme {
   accentColor?: string;
