@@ -46,6 +46,7 @@ export const OnboardingCompletion = ({
   theme,
 }: OnboardingCompletionProps) => {
   const animation = useRef(new Animated.Value(0)).current;
+  const ringAnimation = useRef(new Animated.Value(0)).current;
   const burstParticles = useMemo(
     () => PARTICLE_OFFSETS.slice(0, PARTICLE_COUNT),
     [],
@@ -53,16 +54,29 @@ export const OnboardingCompletion = ({
 
   useEffect(() => {
     animation.setValue(0);
+    ringAnimation.setValue(0);
     const entry = Animated.timing(animation, {
       duration: 780,
       easing: Easing.out(Easing.cubic),
       toValue: 1,
       useNativeDriver: true,
     });
+    const ringPulse = Animated.loop(
+      Animated.timing(ringAnimation, {
+        duration: 1500,
+        easing: Easing.out(Easing.cubic),
+        toValue: 1,
+        useNativeDriver: true,
+      }),
+    );
 
     entry.start();
-    return () => entry.stop();
-  }, [animation]);
+    ringPulse.start();
+    return () => {
+      entry.stop();
+      ringPulse.stop();
+    };
+  }, [animation, ringAnimation]);
 
   const badgeScale = animation.interpolate({
     inputRange: [0, 0.5, 0.72, 1],
@@ -76,15 +90,15 @@ export const OnboardingCompletion = ({
     inputRange: [0, 0.34, 1],
     outputRange: [0.01, 0.01, 1],
   });
-  const firstRingScale = animation.interpolate({
+  const firstRingScale = ringAnimation.interpolate({
     inputRange: [0, 0.62, 1],
     outputRange: [0.72, 1.34, 1.46],
   });
-  const secondRingScale = animation.interpolate({
+  const secondRingScale = ringAnimation.interpolate({
     inputRange: [0, 0.34, 1],
     outputRange: [0.7, 0.7, 1.74],
   });
-  const ringOpacity = animation.interpolate({
+  const ringOpacity = ringAnimation.interpolate({
     inputRange: [0, 0.18, 0.72, 1],
     outputRange: [0, 0.2, 0.12, 0],
   });
