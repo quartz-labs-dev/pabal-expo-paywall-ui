@@ -1,5 +1,7 @@
-import { type ReactNode } from "react";
+import { type ReactNode, useEffect, useRef } from "react";
 import {
+  Animated,
+  Easing,
   Image,
   type ImageSourcePropType,
   StyleSheet,
@@ -22,6 +24,7 @@ export interface NotificationMockContentProps {
 const PHONE_WIDTH = 224;
 const PHONE_HEIGHT = 455;
 const PHONE_VISIBLE_HEIGHT = PHONE_HEIGHT * 0.6;
+const NOTIFICATION_ENTRANCE_DELAY_MS = 260;
 
 export const NotificationMockContent = ({
   body,
@@ -33,6 +36,10 @@ export const NotificationMockContent = ({
 }: NotificationMockContentProps) => {
   const notificationBackgroundColor = theme.primaryTextColor;
   const notificationTextColor = theme.backgroundColor;
+  const notificationEntranceStyle = useNotificationEntrance({
+    initialScaleX: 0.96,
+    settledScaleX: 1,
+  });
 
   return (
     <View style={styles.root}>
@@ -46,34 +53,78 @@ export const NotificationMockContent = ({
           />
         </View>
         <View style={styles.notificationStack}>
-          <View
-            style={[
-              styles.stackedNotification,
-              styles.stackedNotificationBack,
-              { backgroundColor: notificationBackgroundColor },
-            ]}
-          />
-          <View
-            style={[
-              styles.stackedNotification,
-              styles.stackedNotificationMiddle,
-              { backgroundColor: notificationBackgroundColor },
-            ]}
-          />
-          <NotificationCard
-            backgroundColor={notificationBackgroundColor}
-            body={body}
-            logo={logo}
-            logoSource={logoSource}
-            nowLabel={nowLabel}
-            textColor={notificationTextColor}
-            theme={theme}
-            title={title}
-          />
+          <Animated.View
+            style={[styles.notificationCardWrap, notificationEntranceStyle]}
+          >
+            <NotificationCard
+              backgroundColor={notificationBackgroundColor}
+              body={body}
+              logo={logo}
+              logoSource={logoSource}
+              nowLabel={nowLabel}
+              textColor={notificationTextColor}
+              theme={theme}
+              title={title}
+            />
+          </Animated.View>
         </View>
       </View>
     </View>
   );
+};
+
+interface NotificationEntranceOptions {
+  initialScaleX: number;
+  settledScaleX: number;
+}
+
+const useNotificationEntrance = (
+  { initialScaleX, settledScaleX }: NotificationEntranceOptions,
+) => {
+  const progress = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    progress.setValue(0);
+    const animation = Animated.sequence([
+      Animated.delay(NOTIFICATION_ENTRANCE_DELAY_MS),
+      Animated.timing(progress, {
+        duration: 360,
+        easing: Easing.out(Easing.cubic),
+        toValue: 1,
+        useNativeDriver: true,
+      }),
+    ]);
+
+    animation.start();
+    return () => animation.stop();
+  }, [initialScaleX, progress, settledScaleX]);
+
+  return {
+    opacity: progress.interpolate({
+      inputRange: [0, 0.34, 1],
+      outputRange: [0, 0.92, 1],
+    }),
+    transform: [
+      {
+        translateY: progress.interpolate({
+          inputRange: [0, 1],
+          outputRange: [-34, 0],
+        }),
+      },
+      {
+        scaleX: progress.interpolate({
+          inputRange: [0, 1],
+          outputRange: [initialScaleX, settledScaleX],
+        }),
+      },
+      {
+        scaleY: progress.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0.96, 1],
+        }),
+      },
+    ],
+  };
 };
 
 interface NotificationFrameContentProps {
@@ -243,21 +294,9 @@ const styles = StyleSheet.create({
     top: 100,
     zIndex: 2,
   },
-  stackedNotification: {
+  notificationCardWrap: {
     alignSelf: "center",
-    borderRadius: 12,
-    height: 74,
-    opacity: 0.58,
-    position: "absolute",
-    width: "98%",
-  },
-  stackedNotificationBack: {
-    top: 21,
-    transform: [{ scaleX: 0.94 }],
-  },
-  stackedNotificationMiddle: {
-    top: 11,
-    transform: [{ scaleX: 0.97 }],
+    width: "100%",
   },
   notificationCard: {
     alignItems: "flex-start",

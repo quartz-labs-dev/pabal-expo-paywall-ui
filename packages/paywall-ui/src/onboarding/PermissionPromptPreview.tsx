@@ -1,4 +1,7 @@
+import { useEffect, useRef } from "react";
 import {
+  Animated,
+  Easing,
   StyleSheet,
   type StyleProp,
   Text,
@@ -20,6 +23,7 @@ export interface PermissionPromptPreviewProps {
 
 const DEFAULT_PRIMARY_COLOR = "#007AFF";
 const IOS_SYSTEM_BLUE = "#007AFF";
+const PROMPT_ARROW_ENTRANCE_DELAY_MS = 300;
 
 export const PermissionPromptPreview = ({
   platform,
@@ -29,30 +33,88 @@ export const PermissionPromptPreview = ({
   primaryColor = DEFAULT_PRIMARY_COLOR,
 }: PermissionPromptPreviewProps) => {
   const copy = getDefaultPermissionPromptCopy(locale);
+  const promptEntranceStyle = usePromptEntranceAnimation();
+  const arrowEntranceStyle = usePromptEntranceAnimation({
+    delay: PROMPT_ARROW_ENTRANCE_DELAY_MS,
+    initialScale: 1,
+    translateY: 8,
+  });
 
   return (
     <View style={styles.root} pointerEvents="none">
-      {platform === "android" ? (
-        <AndroidPrompt
-          allowLabel={copy.allowButton}
-          denyLabel={copy.denyButton}
-          message={message}
-          title={title}
+      <Animated.View style={promptEntranceStyle}>
+        {platform === "android" ? (
+          <AndroidPrompt
+            allowLabel={copy.allowButton}
+            denyLabel={copy.denyButton}
+            message={message}
+            title={title}
+          />
+        ) : (
+          <IosPrompt
+            allowLabel={copy.allowButton}
+            denyLabel={copy.denyButton}
+            message={message}
+            title={title}
+          />
+        )}
+      </Animated.View>
+      <Animated.View style={arrowEntranceStyle}>
+        <PromptArrow
+          color={primaryColor}
+          style={platform === "android" ? styles.androidArrow : styles.iosArrow}
         />
-      ) : (
-        <IosPrompt
-          allowLabel={copy.allowButton}
-          denyLabel={copy.denyButton}
-          message={message}
-          title={title}
-        />
-      )}
-      <PromptArrow
-        color={primaryColor}
-        style={platform === "android" ? styles.androidArrow : styles.iosArrow}
-      />
+      </Animated.View>
     </View>
   );
+};
+
+interface PromptEntranceAnimationOptions {
+  delay?: number;
+  initialScale?: number;
+  translateY?: number;
+}
+
+const usePromptEntranceAnimation = (
+  {
+    delay = 0,
+    initialScale = 0.92,
+    translateY = 18,
+  }: PromptEntranceAnimationOptions = {},
+) => {
+  const progress = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    progress.setValue(0);
+    const animation = Animated.timing(progress, {
+      delay,
+      duration: 420,
+      easing: Easing.out(Easing.cubic),
+      toValue: 1,
+      useNativeDriver: true,
+    });
+
+    animation.start();
+    return () => animation.stop();
+  }, [delay, initialScale, progress, translateY]);
+
+  return {
+    opacity: progress,
+    transform: [
+      {
+        translateY: progress.interpolate({
+          inputRange: [0, 1],
+          outputRange: [translateY, 0],
+        }),
+      },
+      {
+        scale: progress.interpolate({
+          inputRange: [0, 1],
+          outputRange: [initialScale, 1],
+        }),
+      },
+    ],
+  };
 };
 
 interface PromptViewProps {

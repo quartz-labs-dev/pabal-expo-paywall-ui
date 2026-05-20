@@ -23,11 +23,14 @@ interface ChoiceListContentProps {
 
 interface ChoiceListRowProps {
   descriptionTextColor: string;
+  index: number;
   isSelected: boolean;
   option: OnboardingChoiceOption;
   theme: Required<PlaygroundOnboardingTheme>;
   onSelectOption: (optionId: string) => void;
 }
+
+const CHOICE_ROW_ENTRANCE_STAGGER_MS = 72;
 
 export const ChoiceListContent = ({
   options,
@@ -39,10 +42,11 @@ export const ChoiceListContent = ({
 
   return (
     <View style={styles.choiceList}>
-      {options.map((option) => (
+      {options.map((option, index) => (
         <ChoiceListRow
           key={option.id}
           descriptionTextColor={descriptionTextColor}
+          index={index}
           isSelected={option.id === selectedOptionId}
           option={option}
           theme={theme}
@@ -55,15 +59,33 @@ export const ChoiceListContent = ({
 
 const ChoiceListRow = ({
   descriptionTextColor,
+  index,
   isSelected,
   option,
   theme,
   onSelectOption,
 }: ChoiceListRowProps) => {
+  const entranceProgress = useRef(new Animated.Value(0)).current;
   const selectionProgress = useRef(
     new Animated.Value(isSelected ? 1 : 0),
   ).current;
   const didMountRef = useRef(false);
+
+  useEffect(() => {
+    entranceProgress.setValue(0);
+    const animation = Animated.sequence([
+      Animated.delay(index * CHOICE_ROW_ENTRANCE_STAGGER_MS),
+      Animated.spring(entranceProgress, {
+        friction: 7,
+        tension: 130,
+        toValue: 1,
+        useNativeDriver: true,
+      }),
+    ]);
+
+    animation.start();
+    return () => animation.stop();
+  }, [entranceProgress, index, option.id]);
 
   useEffect(() => {
     if (!didMountRef.current) {
@@ -106,12 +128,19 @@ const ChoiceListRow = ({
   }, [isSelected, selectionProgress]);
 
   const animatedRowStyle = {
+    opacity: entranceProgress,
     transform: [
       {
-        scale: selectionProgress.interpolate({
-          inputRange: [0, 1],
-          outputRange: [1, 1.018],
-        }),
+        scale: Animated.multiply(
+          entranceProgress.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0.92, 1],
+          }),
+          selectionProgress.interpolate({
+            inputRange: [0, 1],
+            outputRange: [1, 1.018],
+          }),
+        ),
       },
     ],
   };
