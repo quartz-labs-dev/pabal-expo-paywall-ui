@@ -5,16 +5,15 @@ import {
   OnboardingChoiceList,
   OnboardingCompletion,
   OnboardingNotificationMock,
-  OnboardingPreludeContent,
+  OnboardingPreludeFrame,
   OnboardingSocialProof,
   OnboardingStepFrame,
   PermissionPromptPreview,
-  stripOnboardingIntroEmphasis,
   type OnboardingAcquisitionSourceId,
   type OnboardingAcquisitionSourceOption,
   type OnboardingSlide,
 } from "pabal-expo-paywall-ui";
-import { type ImageSourcePropType, StyleSheet } from "react-native";
+import type { ImageSourcePropType } from "react-native";
 
 import type { PlaygroundOnboardingContext } from "../components/onboarding-context";
 import type { PlaygroundOnboardingTheme } from "../components/onboarding-theme";
@@ -209,15 +208,6 @@ export const OnboardingPlaygroundScreen = ({
   const mainStepIndex = Math.max(currentStepIndex - preludeSteps.length, 0);
   const currentSlide = slides[mainStepIndex];
   const isInvertedPreludeStep = currentPreludeStep?.tone === "inverted";
-  const preludeAccessibilityLabel = currentPreludeStep
-    ? `${stripOnboardingIntroEmphasis(
-        currentPreludeStep.headline
-      )} ${currentPreludeStep.bodyLines
-        .map(stripOnboardingIntroEmphasis)
-        .join(" ")}. ${
-        localizedCopy.tapToContinueButton
-      }`
-    : undefined;
   const isFirstStep = currentStepIndex === 0;
   const isLastStep =
     currentStepIndex === preludeSteps.length + slides.length - 1;
@@ -244,65 +234,38 @@ export const OnboardingPlaygroundScreen = ({
   return (
     <>
       <StatusBar style={isInvertedPreludeStep ? "light" : "dark"} />
-      <OnboardingStepFrame
-        continueActionPresentation={isPreludeStep ? "tapHint" : "button"}
-        continueButtonTextStyle={
-          currentPreludeStep
-            ? { color: currentPreludeStep.bodyColor }
-            : undefined
-        }
-        continueLabel={
-          isPreludeStep
-            ? localizedCopy.tapToContinueButton
-            : currentSlide.continueLabel ?? continueLabel
-        }
-        contentTransitionIndex={currentStepIndex}
-        contentContainerStyle={
-          isPreludeStep ? styles.introContentContainer : undefined
-        }
-        currentStepIndex={isPreludeStep ? 0 : mainStepIndex}
-        footerStyle={isPreludeStep ? styles.introFooter : undefined}
-        fullScreenTapAccessibilityLabel={preludeAccessibilityLabel}
-        isBodyScrollEnabled={!isPreludeStep}
-        isBackButtonDisabled={
-          isPreludeStep ? true : currentSlide.isBackButtonDisabled
-        }
-        isContentTransitionEnabled
-        isFullScreenTapEnabled={isPreludeStep}
-        locale={locale}
-        canContinue={isPreludeStep ? true : currentSlide.canContinue}
-        showBackButton
-        showHeader={!isPreludeStep}
-        showSecondaryAction={!isPreludeStep && !isLastStep}
-        theme={
-          isInvertedPreludeStep
-            ? {
-                ...frameTheme,
-                backgroundColor: theme.primaryTextColor,
-                continueButtonTextColor: theme.backgroundColor,
-                footerBackgroundColor: theme.primaryTextColor,
-              }
-            : frameTheme
-        }
-        title={isPreludeStep ? undefined : currentSlide.title}
-        totalSteps={isPreludeStep ? 1 : headerStepCount}
-        description={isPreludeStep ? undefined : currentSlide.description}
-        onBack={goBack}
-        onContinue={goNext}
-        onSecondaryAction={goNext}
-      >
-        {currentPreludeStep ? (
-          <OnboardingPreludeContent
-            accentColor={theme.accentColor}
-            bodyColor={currentPreludeStep.bodyColor}
-            bodyLines={currentPreludeStep.bodyLines}
-            headline={currentPreludeStep.headline}
-            headlineColor={currentPreludeStep.headlineColor}
-          />
-        ) : (
-          currentSlide.content
-        )}
-      </OnboardingStepFrame>
+      {currentPreludeStep ? (
+        <OnboardingPreludeFrame
+          continueLabel={localizedCopy.tapToContinueButton}
+          contentTransitionIndex={currentStepIndex}
+          frameTheme={frameTheme}
+          locale={locale}
+          step={currentPreludeStep}
+          theme={theme}
+          onContinue={goNext}
+        />
+      ) : (
+        <OnboardingStepFrame
+          canContinue={currentSlide.canContinue}
+          continueLabel={currentSlide.continueLabel ?? continueLabel}
+          contentTransitionIndex={currentStepIndex}
+          currentStepIndex={mainStepIndex}
+          description={currentSlide.description}
+          isBackButtonDisabled={currentSlide.isBackButtonDisabled}
+          isContentTransitionEnabled
+          locale={locale}
+          showBackButton
+          showSecondaryAction={!isLastStep}
+          theme={frameTheme}
+          title={currentSlide.title}
+          totalSteps={headerStepCount}
+          onBack={goBack}
+          onContinue={goNext}
+          onSecondaryAction={goNext}
+        >
+          {currentSlide.content}
+        </OnboardingStepFrame>
+      )}
     </>
   );
 };
@@ -333,15 +296,3 @@ const ONBOARDING_SOCIAL_PROOF_CONTENT = {
     },
   ],
 } satisfies Omit<ComponentProps<typeof OnboardingSocialProof>, "theme">;
-
-const styles = StyleSheet.create({
-  introContentContainer: {
-    justifyContent: "flex-start",
-    paddingHorizontal: 34,
-    paddingTop: 128,
-  },
-  introFooter: {
-    paddingHorizontal: 28,
-    paddingTop: 8,
-  },
-});

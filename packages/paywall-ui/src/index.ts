@@ -30,6 +30,7 @@ export { OnboardingChoiceList } from "./onboarding/OnboardingChoiceList";
 export { OnboardingCompletion } from "./onboarding/OnboardingCompletion";
 export { OnboardingNotificationMock } from "./onboarding/OnboardingNotificationMock";
 export { OnboardingPreludeContent } from "./onboarding/OnboardingPreludeContent";
+export { OnboardingPreludeFrame } from "./onboarding/OnboardingPreludeFrame";
 export { OnboardingSocialProof } from "./onboarding/OnboardingSocialProof";
 export { OnboardingStepFrame } from "./onboarding/OnboardingStepFrame";
 export { PermissionPromptPreview } from "./onboarding/PermissionPromptPreview";
@@ -77,6 +78,9 @@ export type {
   OnboardingPreludeContentProps,
 } from "./onboarding/OnboardingPreludeContent";
 export type {
+  OnboardingPreludeFrameProps,
+} from "./onboarding/OnboardingPreludeFrame";
+export type {
   OnboardingSocialProofProps,
 } from "./onboarding/OnboardingSocialProof";
 export type {
@@ -98,6 +102,7 @@ export type {
   OnboardingSocialProofMetric,
   OnboardingSocialProofReview,
   OnboardingSocialProofReviewRating,
+  RequiredOnboardingPreludeSteps,
 } from "./onboarding/types";
 export type {
   PreOnboardingBackgroundSlotProps,

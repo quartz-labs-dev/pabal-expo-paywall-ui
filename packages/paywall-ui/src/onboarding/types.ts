@@ -31,6 +31,11 @@ export interface OnboardingPreludeStep {
   tone: "normal" | "inverted";
 }
 
+export type RequiredOnboardingPreludeSteps = readonly [
+  OnboardingPreludeStep,
+  OnboardingPreludeStep,
+];
+
 export interface OnboardingChoiceOption {
   id: string;
   description?: string;

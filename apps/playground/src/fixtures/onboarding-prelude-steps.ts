@@ -1,9 +1,9 @@
-import type { OnboardingPreludeStep } from "pabal-expo-paywall-ui";
+import type { RequiredOnboardingPreludeSteps } from "pabal-expo-paywall-ui";
 import type { PlaygroundOnboardingTheme } from "../components/onboarding-theme";
 
 export const createOnboardingPreludeSteps = (
   theme: Required<PlaygroundOnboardingTheme>,
-): OnboardingPreludeStep[] => [
+): RequiredOnboardingPreludeSteps => [
   {
     bodyColor: theme.backgroundColor,
     bodyLines: [

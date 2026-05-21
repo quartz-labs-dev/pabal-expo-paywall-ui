@@ -25,8 +25,8 @@ Most onboarding content is composition, not a fixed package-controlled sequence.
 The app or playground screen imports the content component it needs and places it
 in the flow.
 
-`prelude` is the exception in the current playground: `/onboarding` always shows
-two prelude screens before the main stepper. After that, the app can compose the
+`prelude` is the exception: every `/onboarding` flow must show exactly two
+prelude screens before the main stepper. After that, the app can compose the
 main content blocks in the order it needs.
 
 Only the package primitives listed in [Package APIs](#package-apis) are exported
@@ -44,13 +44,13 @@ composition patterns.
 
 ## Onboarding Content
 
-`/onboarding` starts with two `prelude` screens before the main stepper appears.
+`/onboarding` must start with two `prelude` screens before the main stepper appears.
 
 Intro content:
 
 | Content | Count | Use It For | Ownership |
 | --- | --- | --- | --- |
-| `prelude` | 2 screens | Full-screen intro copy with tap-to-continue | App |
+| `prelude` | 2 screens | Full-screen intro copy with tap-to-continue | Package frame + app copy/order |
 
 Available main content:
 
@@ -80,6 +80,15 @@ Prelude and social-proof headlines use `**highlighted copy**` to apply the
 onboarding primary/accent color. Keep that marker in content strings instead of
 adding separate highlight props.
 
+The required prelude story is two screens:
+
+1. Problem question, `tone: "inverted"`: use the active theme's primary text
+   color as the background and the normal background color for text.
+2. Solution statement, `tone: "normal"`: use the normal onboarding frame theme.
+
+`tap to continue` uses the same color as the prelude body copy. Do not introduce
+a separate hint, arrow, or button color for prelude tap hints.
+
 ## Package APIs
 
 The package currently exposes these onboarding primitives:
@@ -91,6 +100,8 @@ The package currently exposes these onboarding primitives:
   `PreOnboardingMockContent`, `PreOnboardingMockPhoneFrame`, and
   `PreOnboardingLoginPrompt` for package-owned pre-onboarding composition
 - `OnboardingStepFrame` for app-owned onboarding steps with shared chrome
+- `OnboardingPreludeFrame` for package-owned prelude chrome: full-screen tap,
+  tap hint footer, intro spacing, hidden header, and inverted-tone background
 - `OnboardingPreludeContent`, `OnboardingChoiceList`,
   `OnboardingSocialProof`, and `OnboardingNotificationMock` for the reusable
   animated onboarding content used by the playground
@@ -101,6 +112,63 @@ The package currently exposes these onboarding primitives:
 
 Apps still own screen order, selected state, permission APIs, analytics,
 navigation, media, and product-specific copy.
+
+## Onboarding Prelude
+
+Use `OnboardingPreludeFrame` for the opening full-screen problem/solution beats
+before the main onboarding stepper. This is not optional for `/onboarding`.
+The package owns the frame behavior and spacing. The app owns the required
+two-step story, copy, analytics, and navigation.
+
+```tsx
+import {
+  OnboardingPreludeFrame,
+  type RequiredOnboardingPreludeSteps,
+} from "pabal-expo-paywall-ui";
+
+const preludeSteps: RequiredOnboardingPreludeSteps = [
+  {
+    bodyColor: theme.backgroundColor,
+    bodyLines: [
+      "you are not alone",
+      "jiu-jitsu is too deep to keep in your head,",
+      "especially when every class adds another detail.",
+    ],
+    headline: "ever feel like you **forget** the technique right after class?",
+    headlineColor: theme.backgroundColor,
+    tone: "inverted",
+  },
+  {
+    bodyColor: theme.primaryTextColor,
+    bodyLines: [
+      "save the move, review the key detail,",
+      "and come back before the next roll.",
+    ],
+    headline:
+      "Post Black Belt turns training into a **library** you can actually use.",
+    headlineColor: theme.primaryTextColor,
+    tone: "normal",
+  },
+];
+
+<OnboardingPreludeFrame
+  continueLabel={copy.tapToContinueButton}
+  contentTransitionIndex={currentStepIndex}
+  frameTheme={frameTheme}
+  locale={locale}
+  step={preludeSteps[currentPreludeIndex]}
+  theme={theme}
+  onContinue={goNext}
+/>;
+```
+
+For `tone: "inverted"`, pass copy colors that already match the inverted
+background. `OnboardingPreludeFrame` does not invent a separate tap hint color:
+the label and arrow both follow `step.bodyColor`.
+
+Use `RequiredOnboardingPreludeSteps` for app-owned prelude fixtures so TypeScript
+fails if a consuming app accidentally removes either the required problem screen
+or the required solution screen.
 
 ## Pre-Onboarding Screens
 
@@ -297,8 +365,9 @@ from an app-provided offset.
 
 The intro text helpers parse `**highlighted copy**`, create word tokens, and run
 the sequential word reveal animation used by prelude screens. Apps can use the
-low-level helpers directly, or render the package-owned `OnboardingPreludeContent`
-for the same animated intro copy layout used by the playground.
+low-level helpers directly, render `OnboardingPreludeContent` for only the
+animated copy, or render `OnboardingPreludeFrame` for the full prelude screen
+chrome used by the playground.
 
 ## Acquisition Sources
 
