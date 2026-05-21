@@ -87,7 +87,14 @@ The package currently exposes these onboarding primitives:
 - `PreOnboardingWelcome` for the pre-onboarding welcome screen
 - `PreOnboardingValue` for the pre-onboarding value screen
 - `PreOnboardingFrame` for custom pre-onboarding screens with shared footer chrome
+- `PreOnboardingBackgroundSlot`, `PreOnboardingLandingContent`,
+  `PreOnboardingMockContent`, `PreOnboardingMockPhoneFrame`, and
+  `PreOnboardingLoginPrompt` for package-owned pre-onboarding composition
 - `OnboardingStepFrame` for app-owned onboarding steps with shared chrome
+- `OnboardingPreludeContent`, `OnboardingChoiceList`,
+  `OnboardingSocialProof`, and `OnboardingNotificationMock` for the reusable
+  animated onboarding content used by the playground
+- onboarding animation helpers used by pre-onboarding and intro copy
 - acquisition source copy/options with bundled source icons
 - `PermissionPromptPreview` for permission education before native prompts
 - `OnboardingCompletion` for the final setup-ready confirmation
@@ -142,17 +149,83 @@ can preview localized onboarding copy directly from the first screen.
 Use `PreOnboardingFrame` directly when the app needs a custom pre-onboarding
 screen that does not fit `PreOnboardingWelcome` or `PreOnboardingValue`.
 
+### Pre-Onboarding Language Selector Placement
+
+On the first pre-onboarding landing screen, the language selector belongs inside
+`PreOnboardingFrame` children, directly below the logo/title group. This matches
+the package-owned `PreOnboardingLandingContent` structure:
+
+1. background/media
+2. centered logo
+3. title
+4. language selector card and its animated expanded panel
+5. footer CTA
+
+Do not put the first-screen language selector in `footerTopAccessory`.
+`footerTopAccessory` is reserved for footer-adjacent content such as the
+`mock-video` title above the CTA. Putting the language selector there moves it
+to the bottom of the screen and breaks the intended playground layout.
+
 ```tsx
-import { PreOnboardingFrame } from "pabal-expo-paywall-ui";
+import {
+  PreOnboardingFrame,
+  PreOnboardingLandingContent,
+} from "pabal-expo-paywall-ui";
 
 <PreOnboardingFrame
   background={<LandingVideoBackground />}
   continueLabel={copy.continueButton}
-  footerAccessory={<LoginPrompt />}
   theme={frameTheme}
   onContinue={goNext}
 >
-  <CustomPreOnboardingContent />
+  <PreOnboardingLandingContent
+    languageSelector={<LanguageSelectorCard />}
+    logo={<AppLogo />}
+    logoAnimatedStyle={logoAnimatedStyle}
+    selectorAnimatedStyle={selectorAnimatedStyle}
+    theme={theme}
+    title={copy.landingTitle}
+    titleAnimatedStyle={titleAnimatedStyle}
+  />
+</PreOnboardingFrame>;
+```
+
+For the second `mock-video` pre-onboarding screen, use `footerTopAccessory` for
+the large title above the CTA, and keep login prompt or secondary action copy in
+`footerAccessory`.
+
+```tsx
+import {
+  PreOnboardingFrame,
+  PreOnboardingLoginPrompt,
+  PreOnboardingMockContent,
+} from "pabal-expo-paywall-ui";
+
+<PreOnboardingFrame
+  continueLabel={copy.startButton}
+  footerTopAccessory={<Text style={styles.mockTitle}>{copy.mockTitle}</Text>}
+  footerAccessory={
+    <PreOnboardingLoginPrompt
+      loginLabel={copy.loginLabel}
+      prompt={copy.loginPrompt}
+      theme={theme}
+      onPress={openLogin}
+    />
+  }
+  theme={frameTheme}
+  onContinue={startSignUp}
+>
+  <PreOnboardingMockContent
+    actionContent={<LoginOrSignupActions />}
+    actionProgress={actionProgress}
+    entranceOffsetX={screenWidth}
+    isActionPanelMounted={isActionPanelMounted}
+    mockPhoneHeight={mockPhoneHeight}
+    mockPhoneWidth={mockPhoneWidth}
+    returnLabel={copy.returnButton}
+    theme={theme}
+    onReturn={closeActionPanel}
+  />
 </PreOnboardingFrame>;
 ```
 
@@ -163,7 +236,10 @@ content, but wants the shared header, progress bar, safe-area spacing, animated
 step transition, CTA, and optional secondary action.
 
 ```tsx
-import { OnboardingStepFrame } from "pabal-expo-paywall-ui";
+import {
+  OnboardingChoiceList,
+  OnboardingStepFrame,
+} from "pabal-expo-paywall-ui";
 
 <OnboardingStepFrame
   backButtonAccessibilityLabel="Back"
@@ -179,9 +255,10 @@ import { OnboardingStepFrame } from "pabal-expo-paywall-ui";
   onContinue={goNext}
   onSecondaryAction={skipStep}
 >
-  <ChoiceListContent
+  <OnboardingChoiceList
     options={sourceOptions}
     selectedOptionId={selectedSource}
+    theme={theme}
     onSelectOption={setSelectedSource}
   />
 </OnboardingStepFrame>;
@@ -190,6 +267,37 @@ import { OnboardingStepFrame } from "pabal-expo-paywall-ui";
 The package does not own the full onboarding flow. The app still decides which
 steps exist, selected values, permission request timing, analytics, and final
 navigation.
+
+## Onboarding Animations
+
+The shared package owns the animation helpers used by pre-onboarding and
+intro-style onboarding screens. The playground imports these helpers from
+`pabal-expo-paywall-ui` instead of keeping local copies.
+
+```tsx
+import {
+  createOnboardingIntroTextTokens,
+  createOnboardingSequentialWordAnimation,
+  getOnboardingSequentialWordStyle,
+  parseOnboardingIntroEmphasisSegments,
+  startOnboardingSequentialTextAnimation,
+  stripOnboardingIntroEmphasis,
+  useOnboardingActionPanelAnimation,
+  useOnboardingEntranceAnimation,
+  useOnboardingPhoneFrameEntranceAnimation,
+} from "pabal-expo-paywall-ui";
+```
+
+Use `useOnboardingEntranceAnimation` for staggered landing-screen elements such
+as logo, title, and language selector. Use `useOnboardingActionPanelAnimation`
+for the pre-onboarding login/signup action panel. Use
+`useOnboardingPhoneFrameEntranceAnimation` when a phone preview should slide in
+from an app-provided offset.
+
+The intro text helpers parse `**highlighted copy**`, create word tokens, and run
+the sequential word reveal animation used by prelude screens. Apps can use the
+low-level helpers directly, or render the package-owned `OnboardingPreludeContent`
+for the same animated intro copy layout used by the playground.
 
 ## Acquisition Sources
 

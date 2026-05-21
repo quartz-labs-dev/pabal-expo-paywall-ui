@@ -2,23 +2,23 @@ import { type ComponentProps, type ReactNode, useMemo, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import {
   createOnboardingAcquisitionSourceOptions,
+  OnboardingChoiceList,
   OnboardingCompletion,
+  OnboardingNotificationMock,
+  OnboardingPreludeContent,
+  OnboardingSocialProof,
+  OnboardingStepFrame,
   PermissionPromptPreview,
+  stripOnboardingIntroEmphasis,
   type OnboardingAcquisitionSourceId,
   type OnboardingAcquisitionSourceOption,
+  type OnboardingSlide,
 } from "pabal-expo-paywall-ui";
 import { type ImageSourcePropType, StyleSheet } from "react-native";
 
-import { OnboardingStepFrame } from "../components/OnboardingStepFrame";
-import { ChoiceListContent } from "../components/onboarding/ChoiceListContent";
-import { NotificationMockContent } from "../components/onboarding/NotificationMockContent";
-import { PreludeStepContent } from "../components/onboarding/PreludeStepContent";
-import { SocialProofContent } from "../components/onboarding/SocialProofContent";
-import type { PlaygroundSlide } from "../components/onboarding/types";
 import type { PlaygroundOnboardingContext } from "../components/onboarding-context";
 import type { PlaygroundOnboardingTheme } from "../components/onboarding-theme";
 import { createOnboardingPreludeSteps } from "../fixtures/onboarding-prelude-steps";
-import { stripIntroEmphasis } from "../utils/onboarding-intro-text";
 
 interface OnboardingPlaygroundScreenProps {
   notificationContent?: OnboardingNotificationContent;
@@ -50,11 +50,11 @@ const createAcquisitionSourceSlide = ({
   theme,
   title,
   onSelectSource,
-}: CreateAcquisitionSourceSlideParams): PlaygroundSlide => ({
+}: CreateAcquisitionSourceSlideParams): OnboardingSlide => ({
   title,
   canContinue: Boolean(selectedSource),
   content: (
-    <ChoiceListContent
+    <OnboardingChoiceList
       options={options}
       selectedOptionId={selectedSource}
       theme={theme}
@@ -75,10 +75,10 @@ const createNotificationSlide = ({
   content,
   nowLabel,
   theme,
-}: CreateNotificationSlideParams): PlaygroundSlide => ({
+}: CreateNotificationSlideParams): OnboardingSlide => ({
   canContinue: true,
   content: (
-    <NotificationMockContent
+    <OnboardingNotificationMock
       body={content.body}
       logo={content.logo}
       logoSource={content.logoSource}
@@ -98,7 +98,7 @@ interface CreateCompletionSlideParams {
 const createCompletionSlide = ({
   doneLabel,
   theme,
-}: CreateCompletionSlideParams): PlaygroundSlide => ({
+}: CreateCompletionSlideParams): OnboardingSlide => ({
   canContinue: true,
   continueLabel: doneLabel,
   content: (
@@ -149,7 +149,7 @@ export const OnboardingPlaygroundScreen = ({
     [theme],
   );
 
-  const slides = useMemo<PlaygroundSlide[]>(
+  const slides = useMemo<OnboardingSlide[]>(
     () => [
       createAcquisitionSourceSlide({
         options: acquisitionSourceOptions,
@@ -161,7 +161,7 @@ export const OnboardingPlaygroundScreen = ({
       {
         canContinue: true,
         content: (
-          <SocialProofContent
+          <OnboardingSocialProof
             {...ONBOARDING_SOCIAL_PROOF_CONTENT}
             theme={theme}
           />
@@ -212,9 +212,11 @@ export const OnboardingPlaygroundScreen = ({
   const currentSlide = slides[mainStepIndex];
   const isInvertedPreludeStep = currentPreludeStep?.tone === "inverted";
   const preludeAccessibilityLabel = currentPreludeStep
-    ? `${stripIntroEmphasis(
+    ? `${stripOnboardingIntroEmphasis(
         currentPreludeStep.headline
-      )} ${currentPreludeStep.bodyLines.map(stripIntroEmphasis).join(" ")}. ${
+      )} ${currentPreludeStep.bodyLines
+        .map(stripOnboardingIntroEmphasis)
+        .join(" ")}. ${
         localizedCopy.tapToContinueButton
       }`
     : undefined;
@@ -297,7 +299,7 @@ export const OnboardingPlaygroundScreen = ({
         onSecondaryAction={onNotNowPress}
       >
         {currentPreludeStep ? (
-          <PreludeStepContent
+          <OnboardingPreludeContent
             accentColor={theme.accentColor}
             bodyColor={currentPreludeStep.bodyColor}
             bodyLines={currentPreludeStep.bodyLines}
@@ -337,7 +339,7 @@ const ONBOARDING_SOCIAL_PROOF_CONTENT = {
       title: "EXACTLY WHAT I NEEDED.",
     },
   ],
-} satisfies Omit<ComponentProps<typeof SocialProofContent>, "theme">;
+} satisfies Omit<ComponentProps<typeof OnboardingSocialProof>, "theme">;
 
 const styles = StyleSheet.create({
   introContentContainer: {

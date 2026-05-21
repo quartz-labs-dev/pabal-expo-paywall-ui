@@ -1,30 +1,33 @@
 import { useEffect, useRef } from "react";
 import { Animated, Easing, Image, StyleSheet, Text, View } from "react-native";
 
-import {
-  getMutedPrimaryTextColor,
-  type PlaygroundOnboardingTheme,
-} from "../onboarding-theme";
+import { getColorWithAlpha } from "../shared/color-utils";
+import { parseOnboardingIntroEmphasisSegments } from "./onboarding-animations";
 import type {
-  SocialProofContentData,
-  SocialProofReview,
-  SocialProofReviewRating,
+  OnboardingContentTheme,
+  OnboardingSocialProofContentData,
+  OnboardingSocialProofReview,
+  OnboardingSocialProofReviewRating,
 } from "./types";
-import { parseIntroEmphasisSegments } from "../../utils/onboarding-intro-text";
 
 const STAR_RATING_ENTRANCE_DELAY_MS = 500;
 
-export interface SocialProofContentProps extends SocialProofContentData {
-  theme: Required<PlaygroundOnboardingTheme>;
+export interface OnboardingSocialProofProps
+  extends OnboardingSocialProofContentData {
+  theme: OnboardingContentTheme;
 }
 
-export const SocialProofContent = ({
+export const OnboardingSocialProof = ({
   headline,
   metric,
   reviews,
   theme,
-}: SocialProofContentProps) => {
-  const mutedTextColor = getMutedPrimaryTextColor(theme);
+}: OnboardingSocialProofProps) => {
+  const mutedTextColor = getColorWithAlpha(
+    theme.primaryTextColor,
+    0.62,
+    theme.secondaryTextColor,
+  );
   const headingEntranceStyle = useSocialProofEntrance(0);
   const metricCopyEntranceStyle = useSocialProofEntrance(1);
   const laurelEntranceStyle = useSocialProofEntrance(2, {
@@ -85,12 +88,8 @@ interface HeadlineProps {
   textColor: string;
 }
 
-const Headline = ({
-  accentColor,
-  text,
-  textColor,
-}: HeadlineProps) => {
-  const segments = parseIntroEmphasisSegments(text);
+const Headline = ({ accentColor, text, textColor }: HeadlineProps) => {
+  const segments = parseOnboardingIntroEmphasisSegments(text);
 
   return (
     <Text style={[styles.headline, { color: textColor }]}>
@@ -117,7 +116,7 @@ const LaurelWreath = () => {
       accessibilityElementsHidden
       importantForAccessibility="no-hide-descendants"
       resizeMode="contain"
-      source={require("../../../../../packages/paywall-ui/src/assets/laurel.png")}
+      source={require("../assets/laurel.png")}
       style={styles.laurelWreath}
     />
   );
@@ -170,7 +169,7 @@ const useSocialProofEntrance = (
 interface StarRatingProps {
   color: string;
   isAnimated?: boolean;
-  rating?: SocialProofReviewRating;
+  rating?: OnboardingSocialProofReviewRating;
   size?: "compact" | "regular";
 }
 
@@ -216,10 +215,7 @@ const StarRating = ({
   );
 };
 
-const useStarRatingAnimation = (
-  count: number,
-  isEnabled: boolean,
-) => {
+const useStarRatingAnimation = (count: number, isEnabled: boolean) => {
   const animationsRef = useRef<Animated.Value[]>([]);
 
   if (animationsRef.current.length !== count) {
@@ -262,8 +258,8 @@ const useStarRatingAnimation = (
 
 interface ReviewCardProps {
   entranceIndex: number;
-  review: SocialProofReview;
-  theme: Required<PlaygroundOnboardingTheme>;
+  review: OnboardingSocialProofReview;
+  theme: OnboardingContentTheme;
 }
 
 const ReviewCard = ({ entranceIndex, review, theme }: ReviewCardProps) => {

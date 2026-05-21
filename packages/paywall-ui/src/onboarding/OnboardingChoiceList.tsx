@@ -8,16 +8,13 @@ import {
   View,
 } from "react-native";
 
-import {
-  getMutedPrimaryTextColor,
-  type PlaygroundOnboardingTheme,
-} from "../onboarding-theme";
-import type { OnboardingChoiceOption } from "./types";
+import { getColorWithAlpha } from "../shared/color-utils";
+import type { OnboardingChoiceOption, OnboardingContentTheme } from "./types";
 
-interface ChoiceListContentProps {
+export interface OnboardingChoiceListProps {
   options: OnboardingChoiceOption[];
   selectedOptionId: string | null;
-  theme: Required<PlaygroundOnboardingTheme>;
+  theme: OnboardingContentTheme;
   onSelectOption: (optionId: string) => void;
 }
 
@@ -26,19 +23,23 @@ interface ChoiceListRowProps {
   index: number;
   isSelected: boolean;
   option: OnboardingChoiceOption;
-  theme: Required<PlaygroundOnboardingTheme>;
+  theme: OnboardingContentTheme;
   onSelectOption: (optionId: string) => void;
 }
 
 const CHOICE_ROW_ENTRANCE_STAGGER_MS = 72;
 
-export const ChoiceListContent = ({
+export const OnboardingChoiceList = ({
   options,
   selectedOptionId,
   theme,
   onSelectOption,
-}: ChoiceListContentProps) => {
-  const descriptionTextColor = getMutedPrimaryTextColor(theme);
+}: OnboardingChoiceListProps) => {
+  const descriptionTextColor = getColorWithAlpha(
+    theme.primaryTextColor,
+    0.62,
+    theme.secondaryTextColor,
+  );
 
   return (
     <View style={styles.choiceList}>

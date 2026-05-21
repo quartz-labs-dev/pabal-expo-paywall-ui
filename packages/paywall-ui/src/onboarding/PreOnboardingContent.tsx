@@ -1,7 +1,6 @@
 import { type ReactNode } from "react";
 import {
   Animated,
-  Easing,
   Image,
   type ImageSourcePropType,
   Pressable,
@@ -11,21 +10,19 @@ import {
   View,
   type ViewStyle,
 } from "react-native";
-import { useEffect, useRef } from "react";
 
-import type { PlaygroundOnboardingPlatform } from "../../utils/onboarding-platform";
-import { DefaultLoginActionButtons } from "./DefaultLoginActionButtons";
-import type { PlaygroundOnboardingTheme } from "../onboarding-theme";
+import { useOnboardingPhoneFrameEntranceAnimation } from "./onboarding-animations";
+import type { OnboardingContentTheme } from "./types";
 
-export interface LandingBackgroundSlotProps {
+export interface PreOnboardingBackgroundSlotProps {
   children?: ReactNode;
   overlayColor: string;
 }
 
-export const LandingBackgroundSlot = ({
+export const PreOnboardingBackgroundSlot = ({
   children,
   overlayColor,
-}: LandingBackgroundSlotProps) => {
+}: PreOnboardingBackgroundSlotProps) => {
   return (
     <View style={styles.videoPlaceholder}>
       {children}
@@ -34,19 +31,19 @@ export const LandingBackgroundSlot = ({
   );
 };
 
-export interface LandingContentProps {
+export interface PreOnboardingLandingContentProps {
   languageSelector?: ReactNode;
   logo?: ReactNode;
   logoAnimatedStyle: StyleProp<ViewStyle>;
   logoPositionStyle?: StyleProp<ViewStyle>;
   logoSource?: ImageSourcePropType;
   selectorAnimatedStyle: StyleProp<ViewStyle>;
-  theme: Required<PlaygroundOnboardingTheme>;
+  theme: OnboardingContentTheme;
   title: string;
   titleAnimatedStyle: StyleProp<ViewStyle>;
 }
 
-export const LandingContent = ({
+export const PreOnboardingLandingContent = ({
   languageSelector,
   logo,
   logoAnimatedStyle,
@@ -56,7 +53,7 @@ export const LandingContent = ({
   theme,
   title,
   titleAnimatedStyle,
-}: LandingContentProps) => {
+}: PreOnboardingLandingContentProps) => {
   return (
     <View style={styles.landingContent}>
       <View style={styles.landingHero}>
@@ -83,7 +80,7 @@ export const LandingContent = ({
   );
 };
 
-export interface MockVideoContentProps {
+export interface PreOnboardingMockContentProps {
   actionContent?: ReactNode;
   actionProgress: Animated.Value;
   entranceOffsetX: number;
@@ -92,14 +89,12 @@ export interface MockVideoContentProps {
   mockPhoneWidth: number;
   mockImageSource?: ImageSourcePropType;
   mockVideo?: ReactNode;
-  platform: PlaygroundOnboardingPlatform;
   returnLabel: string;
-  theme: Required<PlaygroundOnboardingTheme>;
-  onComplete: () => void;
+  theme: OnboardingContentTheme;
   onReturn: () => void;
 }
 
-export const MockVideoContent = ({
+export const PreOnboardingMockContent = ({
   actionContent,
   actionProgress,
   entranceOffsetX,
@@ -108,13 +103,11 @@ export const MockVideoContent = ({
   mockImageSource,
   mockPhoneWidth,
   mockVideo,
-  platform,
   returnLabel,
   theme,
-  onComplete,
   onReturn,
-}: MockVideoContentProps) => {
-  const phoneAnimatedStyle = usePhoneFrameEntranceAnimation(
+}: PreOnboardingMockContentProps) => {
+  const phoneAnimatedStyle = useOnboardingPhoneFrameEntranceAnimation(
     300,
     entranceOffsetX,
     42,
@@ -158,7 +151,7 @@ export const MockVideoContent = ({
     return (
       <View style={styles.mockContent}>
         <View style={styles.mockPhoneStage}>
-          <MockPhoneFrame
+          <PreOnboardingMockPhoneFrame
             animatedStyle={phoneAnimatedStyle}
             height={mockPhoneHeight}
             imageSource={mockImageSource}
@@ -177,7 +170,7 @@ export const MockVideoContent = ({
         pointerEvents="none"
         style={[styles.mockPhoneStage, phoneExitAnimatedStyle]}
       >
-        <MockPhoneFrame
+        <PreOnboardingMockPhoneFrame
           animatedStyle={isActionPanelMounted ? undefined : phoneAnimatedStyle}
           height={mockPhoneHeight}
           imageSource={mockImageSource}
@@ -210,13 +203,7 @@ export const MockVideoContent = ({
               { backgroundColor: theme.cardBackgroundColor },
             ]}
           >
-            {actionContent ?? (
-              <DefaultLoginActionButtons
-                platform={platform}
-                theme={theme}
-                onComplete={onComplete}
-              />
-            )}
+            {actionContent}
           </View>
         </Animated.View>
       </View>
@@ -224,19 +211,19 @@ export const MockVideoContent = ({
   );
 };
 
-export interface LoginPromptProps {
+export interface PreOnboardingLoginPromptProps {
   loginLabel: string;
   prompt: string;
-  theme: Required<PlaygroundOnboardingTheme>;
+  theme: OnboardingContentTheme;
   onPress?: () => void;
 }
 
-export const LoginPrompt = ({
+export const PreOnboardingLoginPrompt = ({
   loginLabel,
   prompt,
   theme,
   onPress,
-}: LoginPromptProps) => {
+}: PreOnboardingLoginPromptProps) => {
   return (
     <Pressable
       accessibilityRole="button"
@@ -278,23 +265,23 @@ const ChevronLeftInlineIcon = ({ color }: ChevronLeftInlineIconProps) => {
   );
 };
 
-interface MockPhoneFrameProps {
+export interface PreOnboardingMockPhoneFrameProps {
   animatedStyle?: StyleProp<ViewStyle>;
   height: number;
   imageSource?: ImageSourcePropType;
-  theme: Required<PlaygroundOnboardingTheme>;
+  theme: OnboardingContentTheme;
   video?: ReactNode;
   width: number;
 }
 
-export const MockPhoneFrame = ({
+export const PreOnboardingMockPhoneFrame = ({
   animatedStyle,
   height,
   imageSource,
   theme,
   video,
   width,
-}: MockPhoneFrameProps) => {
+}: PreOnboardingMockPhoneFrameProps) => {
   return (
     <Animated.View
       style={[
@@ -359,7 +346,7 @@ export const MockPhoneFrame = ({
 
 interface DefaultLogoProps {
   source?: ImageSourcePropType;
-  theme: Required<PlaygroundOnboardingTheme>;
+  theme: OnboardingContentTheme;
 }
 
 const DefaultLogo = ({ source, theme }: DefaultLogoProps) => {
@@ -394,51 +381,6 @@ const DefaultLogo = ({ source, theme }: DefaultLogoProps) => {
       />
     </View>
   );
-};
-
-const usePhoneFrameEntranceAnimation = (
-  delay: number,
-  offsetX: number,
-  offsetY: number,
-) => {
-  const progress = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    progress.setValue(0);
-    const animation = Animated.timing(progress, {
-      delay,
-      duration: 980,
-      easing: Easing.out(Easing.cubic),
-      toValue: 1,
-      useNativeDriver: true,
-    });
-
-    animation.start();
-    return () => animation.stop();
-  }, [delay, offsetX, offsetY, progress]);
-
-  return {
-    transform: [
-      {
-        translateX: progress.interpolate({
-          inputRange: [0, 1],
-          outputRange: [offsetX, 0],
-        }),
-      },
-      {
-        translateY: progress.interpolate({
-          inputRange: [0, 1],
-          outputRange: [offsetY, 0],
-        }),
-      },
-      {
-        scale: progress.interpolate({
-          inputRange: [0, 1],
-          outputRange: [0.98, 1],
-        }),
-      },
-    ],
-  };
 };
 
 const styles = StyleSheet.create({

@@ -1,5 +1,14 @@
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import {
+  useOnboardingActionPanelAnimation,
+  useOnboardingEntranceAnimation,
+  PreOnboardingBackgroundSlot,
+  PreOnboardingFrame,
+  PreOnboardingLandingContent,
+  PreOnboardingLoginPrompt,
+  PreOnboardingMockContent,
+} from "pabal-expo-paywall-ui";
+import {
   type ImageSourcePropType,
   StyleSheet,
   type StyleProp,
@@ -9,19 +18,9 @@ import {
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 
-import { PreOnboardingFrame } from "../components/PreOnboardingFrame";
-import {
-  LandingBackgroundSlot,
-  LandingContent,
-  LoginPrompt,
-  MockVideoContent,
-} from "../components/onboarding/PreOnboardingContent";
+import { DefaultLoginActionButtons } from "../components/onboarding/DefaultLoginActionButtons";
 import type { PlaygroundOnboardingContext } from "../components/onboarding-context";
 import type { PlaygroundOnboardingTheme } from "../components/onboarding-theme";
-import {
-  useActionPanelAnimation,
-  useEntranceAnimation,
-} from "../utils/onboarding-animations";
 
 interface PreOnboardingPlaygroundScreenProps {
   isLoginPromptVisible?: boolean;
@@ -102,12 +101,20 @@ export const PreOnboardingPlaygroundScreen = ({
     : MOCK_FOOTER_RESERVED_HEIGHT;
   const isActionPanelVisible = activeAction !== null;
   const isActionPanelMounted = renderedAction !== null;
-  const actionProgress = useActionPanelAnimation(isActionPanelVisible);
-  const logoAnimatedStyle = useEntranceAnimation(120);
-  const titleAnimatedStyle = useEntranceAnimation(300);
-  const selectorAnimatedStyle = useEntranceAnimation(560);
+  const actionProgress = useOnboardingActionPanelAnimation(isActionPanelVisible);
+  const logoAnimatedStyle = useOnboardingEntranceAnimation(120);
+  const titleAnimatedStyle = useOnboardingEntranceAnimation(300);
+  const selectorAnimatedStyle = useOnboardingEntranceAnimation(560);
   const activeActionContent =
     renderedAction === "primary" ? primaryActionContent : loginActionContent;
+  const actionContent =
+    activeActionContent ?? (
+      <DefaultLoginActionButtons
+        platform={platform}
+        theme={theme}
+        onComplete={onContinue}
+      />
+    );
   const loweredFooterContentStyle = isActionPanelMounted
     ? {
         opacity: actionProgress.interpolate({
@@ -180,9 +187,9 @@ export const PreOnboardingPlaygroundScreen = ({
       <PreOnboardingFrame
         background={
           isLandingStep ? (
-            <LandingBackgroundSlot overlayColor={theme.landingOverlayColor}>
+            <PreOnboardingBackgroundSlot overlayColor={theme.landingOverlayColor}>
               {landingVideo ?? landingBackground}
-            </LandingBackgroundSlot>
+            </PreOnboardingBackgroundSlot>
           ) : undefined
         }
         continueButtonStyle={styles.primaryButton}
@@ -199,7 +206,7 @@ export const PreOnboardingPlaygroundScreen = ({
         footerContentStyle={loweredFooterContentStyle as StyleProp<ViewStyle>}
         footerAccessory={
           !isLandingStep && isLoginPromptVisible ? (
-            <LoginPrompt
+            <PreOnboardingLoginPrompt
               loginLabel={copy.loginLabel}
               prompt={copy.loginPrompt}
               theme={theme}
@@ -231,7 +238,7 @@ export const PreOnboardingPlaygroundScreen = ({
         onContinue={goNext}
       >
         {isLandingStep ? (
-          <LandingContent
+          <PreOnboardingLandingContent
             languageSelector={languageSelector}
             logo={logo}
             logoAnimatedStyle={logoAnimatedStyle}
@@ -243,8 +250,8 @@ export const PreOnboardingPlaygroundScreen = ({
             titleAnimatedStyle={titleAnimatedStyle}
           />
         ) : (
-          <MockVideoContent
-            actionContent={activeActionContent}
+          <PreOnboardingMockContent
+            actionContent={actionContent}
             actionProgress={actionProgress}
             entranceOffsetX={width}
             isActionPanelMounted={isActionPanelMounted}
@@ -254,8 +261,6 @@ export const PreOnboardingPlaygroundScreen = ({
             returnLabel={copy.returnButton}
             theme={theme}
             mockVideo={mockVideo}
-            platform={platform}
-            onComplete={onContinue}
             onReturn={closeActionPanel}
           />
         )}

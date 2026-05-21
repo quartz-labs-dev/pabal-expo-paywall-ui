@@ -15,9 +15,31 @@ export {
   createOnboardingAcquisitionSourceOptions,
   ONBOARDING_ACQUISITION_SOURCE_TITLE,
 } from "./onboarding/acquisition-sources";
+export {
+  createOnboardingIntroTextTokens,
+  createOnboardingSequentialWordAnimation,
+  getOnboardingSequentialWordStyle,
+  parseOnboardingIntroEmphasisSegments,
+  startOnboardingSequentialTextAnimation,
+  stripOnboardingIntroEmphasis,
+  useOnboardingActionPanelAnimation,
+  useOnboardingEntranceAnimation,
+  useOnboardingPhoneFrameEntranceAnimation,
+} from "./onboarding/onboarding-animations";
+export { OnboardingChoiceList } from "./onboarding/OnboardingChoiceList";
 export { OnboardingCompletion } from "./onboarding/OnboardingCompletion";
+export { OnboardingNotificationMock } from "./onboarding/OnboardingNotificationMock";
+export { OnboardingPreludeContent } from "./onboarding/OnboardingPreludeContent";
+export { OnboardingSocialProof } from "./onboarding/OnboardingSocialProof";
 export { OnboardingStepFrame } from "./onboarding/OnboardingStepFrame";
 export { PermissionPromptPreview } from "./onboarding/PermissionPromptPreview";
+export {
+  PreOnboardingBackgroundSlot,
+  PreOnboardingLandingContent,
+  PreOnboardingLoginPrompt,
+  PreOnboardingMockContent,
+  PreOnboardingMockPhoneFrame,
+} from "./onboarding/PreOnboardingContent";
 export { PreOnboardingFrame } from "./onboarding/PreOnboardingFrame";
 export { PreOnboardingValue } from "./onboarding/PreOnboardingValue";
 export { PreOnboardingWelcome } from "./onboarding/PreOnboardingWelcome";
@@ -46,11 +68,44 @@ export type {
   OnboardingCompletionTheme,
 } from "./onboarding/OnboardingCompletion";
 export type {
+  OnboardingChoiceListProps,
+} from "./onboarding/OnboardingChoiceList";
+export type {
+  OnboardingNotificationMockProps,
+} from "./onboarding/OnboardingNotificationMock";
+export type {
+  OnboardingPreludeContentProps,
+} from "./onboarding/OnboardingPreludeContent";
+export type {
+  OnboardingSocialProofProps,
+} from "./onboarding/OnboardingSocialProof";
+export type {
+  OnboardingIntroTextSegment,
+  OnboardingIntroTextToken,
+} from "./onboarding/onboarding-animations";
+export type {
   OnboardingFrameTheme,
 } from "./onboarding/onboarding-frame-theme";
 export type {
   OnboardingStepFrameProps,
 } from "./onboarding/OnboardingStepFrame";
+export type {
+  OnboardingChoiceOption,
+  OnboardingContentTheme,
+  OnboardingPreludeStep,
+  OnboardingSlide,
+  OnboardingSocialProofContentData,
+  OnboardingSocialProofMetric,
+  OnboardingSocialProofReview,
+  OnboardingSocialProofReviewRating,
+} from "./onboarding/types";
+export type {
+  PreOnboardingBackgroundSlotProps,
+  PreOnboardingLandingContentProps,
+  PreOnboardingLoginPromptProps,
+  PreOnboardingMockContentProps,
+  PreOnboardingMockPhoneFrameProps,
+} from "./onboarding/PreOnboardingContent";
 export type {
   PreOnboardingFrameProps,
 } from "./onboarding/PreOnboardingFrame";

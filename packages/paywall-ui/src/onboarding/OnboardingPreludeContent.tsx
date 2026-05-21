@@ -2,14 +2,14 @@ import { useEffect, useMemo, useRef } from "react";
 import { Animated, StyleSheet, View } from "react-native";
 
 import {
-  createIntroTextTokens,
-  createSequentialWordAnimation,
-  getSequentialWordStyle,
-  parseIntroEmphasisSegments,
-  startSequentialTextAnimation,
-} from "../../utils/onboarding-intro-text";
+  createOnboardingIntroTextTokens,
+  createOnboardingSequentialWordAnimation,
+  getOnboardingSequentialWordStyle,
+  parseOnboardingIntroEmphasisSegments,
+  startOnboardingSequentialTextAnimation,
+} from "./onboarding-animations";
 
-interface PreludeStepContentProps {
+export interface OnboardingPreludeContentProps {
   accentColor: string;
   bodyColor: string;
   bodyLines: string[];
@@ -17,17 +17,17 @@ interface PreludeStepContentProps {
   headlineColor: string;
 }
 
-export const PreludeStepContent = ({
+export const OnboardingPreludeContent = ({
   accentColor,
   bodyColor,
   bodyLines,
   headline,
   headlineColor,
-}: PreludeStepContentProps) => {
+}: OnboardingPreludeContentProps) => {
   const headlineTokens = useMemo(
     () =>
-      createIntroTextTokens(
-        parseIntroEmphasisSegments(headline),
+      createOnboardingIntroTextTokens(
+        parseOnboardingIntroEmphasisSegments(headline),
         headlineColor,
         accentColor,
       ),
@@ -36,8 +36,8 @@ export const PreludeStepContent = ({
   const bodyLineTokens = useMemo(
     () =>
       bodyLines.map((line) =>
-        createIntroTextTokens(
-          parseIntroEmphasisSegments(line),
+        createOnboardingIntroTextTokens(
+          parseOnboardingIntroEmphasisSegments(line),
           bodyColor,
           accentColor,
         ),
@@ -54,7 +54,7 @@ export const PreludeStepContent = ({
     <View style={styles.introCopy}>
       <View style={styles.introHeadlineLine}>
         {headlineTokens.map((token) => {
-          const animatedStyle = getSequentialWordStyle(
+          const animatedStyle = getOnboardingSequentialWordStyle(
             wordAnimations[wordIndex],
           );
           wordIndex += 1;
@@ -79,7 +79,7 @@ export const PreludeStepContent = ({
         {bodyLineTokens.map((lineTokens, lineIndex) => (
           <View key={`body-line-${lineIndex}`} style={styles.introBodyLine}>
             {lineTokens.map((token) => {
-              const animatedStyle = getSequentialWordStyle(
+              const animatedStyle = getOnboardingSequentialWordStyle(
                 wordAnimations[wordIndex],
               );
               wordIndex += 1;
@@ -112,12 +112,14 @@ const useSequentialTextAnimation = (count: number) => {
   if (animationsRef.current.length !== count) {
     animationsRef.current = Array.from(
       { length: count },
-      createSequentialWordAnimation,
+      createOnboardingSequentialWordAnimation,
     );
   }
 
   useEffect(() => {
-    const sequence = startSequentialTextAnimation(animationsRef.current);
+    const sequence = startOnboardingSequentialTextAnimation(
+      animationsRef.current,
+    );
     return () => sequence.stop();
   }, [count]);
 

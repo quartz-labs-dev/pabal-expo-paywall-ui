@@ -9,15 +9,15 @@ import {
   View,
 } from "react-native";
 
-import { MockPhoneFrame } from "./PreOnboardingContent";
-import type { PlaygroundOnboardingTheme } from "../onboarding-theme";
+import { PreOnboardingMockPhoneFrame } from "./PreOnboardingContent";
+import type { OnboardingContentTheme } from "./types";
 
-export interface NotificationMockContentProps {
+export interface OnboardingNotificationMockProps {
   body: string;
   logo?: ReactNode;
   logoSource?: ImageSourcePropType;
   nowLabel: string;
-  theme: Required<PlaygroundOnboardingTheme>;
+  theme: OnboardingContentTheme;
   title: string;
 }
 
@@ -26,14 +26,14 @@ const PHONE_HEIGHT = 455;
 const PHONE_VISIBLE_HEIGHT = PHONE_HEIGHT * 0.6;
 const NOTIFICATION_ENTRANCE_DELAY_MS = 260;
 
-export const NotificationMockContent = ({
+export const OnboardingNotificationMock = ({
   body,
   logo,
   logoSource,
   nowLabel,
   theme,
   title,
-}: NotificationMockContentProps) => {
+}: OnboardingNotificationMockProps) => {
   const notificationBackgroundColor = theme.primaryTextColor;
   const notificationTextColor = theme.backgroundColor;
   const notificationEntranceStyle = useNotificationEntrance({
@@ -45,10 +45,10 @@ export const NotificationMockContent = ({
     <View style={styles.root}>
       <View style={styles.frameStage}>
         <View style={styles.phoneLayer}>
-          <MockPhoneFrame
+          <PreOnboardingMockPhoneFrame
             height={PHONE_HEIGHT}
             theme={theme}
-            video={<NotificationFrameContent theme={theme} />}
+            video={<NotificationFrameContent />}
             width={PHONE_WIDTH}
           />
         </View>
@@ -78,9 +78,10 @@ interface NotificationEntranceOptions {
   settledScaleX: number;
 }
 
-const useNotificationEntrance = (
-  { initialScaleX, settledScaleX }: NotificationEntranceOptions,
-) => {
+const useNotificationEntrance = ({
+  initialScaleX,
+  settledScaleX,
+}: NotificationEntranceOptions) => {
   const progress = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -127,25 +128,11 @@ const useNotificationEntrance = (
   };
 };
 
-interface NotificationFrameContentProps {
-  theme: Required<PlaygroundOnboardingTheme>;
-}
-
-const NotificationFrameContent = ({ theme }: NotificationFrameContentProps) => {
+const NotificationFrameContent = () => {
   return (
     <View style={styles.frameContent}>
-      <View
-        style={[
-          styles.frameMediaBlock,
-          { backgroundColor: "#FFFFFF" },
-        ]}
-      />
-      <View
-        style={[
-          styles.frameBottomFade,
-          { backgroundColor: "#FFFFFF" },
-        ]}
-      />
+      <View style={[styles.frameMediaBlock, { backgroundColor: "#FFFFFF" }]} />
+      <View style={[styles.frameBottomFade, { backgroundColor: "#FFFFFF" }]} />
     </View>
   );
 };
@@ -157,7 +144,7 @@ interface NotificationCardProps {
   logoSource?: ImageSourcePropType;
   nowLabel: string;
   textColor: string;
-  theme: Required<PlaygroundOnboardingTheme>;
+  theme: OnboardingContentTheme;
   title: string;
 }
 
@@ -220,7 +207,7 @@ const NotificationCard = ({
 };
 
 interface DefaultNotificationLogoProps {
-  theme: Required<PlaygroundOnboardingTheme>;
+  theme: OnboardingContentTheme;
 }
 
 const DefaultNotificationLogo = ({ theme }: DefaultNotificationLogoProps) => {
