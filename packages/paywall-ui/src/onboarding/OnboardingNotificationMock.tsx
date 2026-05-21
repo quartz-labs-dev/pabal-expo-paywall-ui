@@ -13,11 +13,24 @@ import { PreOnboardingMockPhoneFrame } from "./PreOnboardingContent";
 import type { OnboardingContentTheme } from "./types";
 
 export interface OnboardingNotificationMockProps {
-  body: string;
+  body?: string;
+  dateLabel?: string;
+  description?: string;
+  iconBackgroundColor?: string;
   logo?: ReactNode;
   logoSource?: ImageSourcePropType;
   nowLabel: string;
+  notifications?: readonly OnboardingNotificationItem[];
   theme: OnboardingContentTheme;
+  timeLabel?: string;
+  title?: string;
+}
+
+export interface OnboardingNotificationItem {
+  description: string;
+  icon?: ReactNode;
+  iconBackgroundColor?: string;
+  iconSource?: ImageSourcePropType;
   title: string;
 }
 
@@ -28,18 +41,37 @@ const NOTIFICATION_ENTRANCE_DELAY_MS = 260;
 
 export const OnboardingNotificationMock = ({
   body,
+  dateLabel,
+  description,
+  iconBackgroundColor,
   logo,
   logoSource,
   nowLabel,
+  notifications,
   theme,
+  timeLabel,
   title,
 }: OnboardingNotificationMockProps) => {
-  const notificationBackgroundColor = theme.primaryTextColor;
-  const notificationTextColor = theme.backgroundColor;
-  const notificationEntranceStyle = useNotificationEntrance({
-    initialScaleX: 0.96,
-    settledScaleX: 1,
+  const notificationBackgroundColor = theme.backgroundColor;
+  const notificationTextColor = theme.primaryTextColor;
+  const fallbackNotification = resolveFallbackNotification({
+    body,
+    description,
+    iconBackgroundColor,
+    logo,
+    logoSource,
+    theme,
+    title,
   });
+  const visibleNotifications = (
+    notifications && notifications.length > 0
+      ? notifications
+      : fallbackNotification
+        ? [fallbackNotification]
+        : []
+  ).slice(0, 3);
+  const lockScreenDateLabel = dateLabel ?? formatLockScreenDate(new Date());
+  const lockScreenTimeLabel = timeLabel ?? formatLockScreenTime(new Date());
 
   return (
     <View style={styles.root}>
@@ -48,25 +80,28 @@ export const OnboardingNotificationMock = ({
           <PreOnboardingMockPhoneFrame
             height={PHONE_HEIGHT}
             theme={theme}
-            video={<NotificationFrameContent />}
+            video={
+              <NotificationFrameContent
+                dateLabel={lockScreenDateLabel}
+                timeLabel={lockScreenTimeLabel}
+                theme={theme}
+              />
+            }
             width={PHONE_WIDTH}
           />
         </View>
         <View style={styles.notificationStack}>
-          <Animated.View
-            style={[styles.notificationCardWrap, notificationEntranceStyle]}
-          >
-            <NotificationCard
+          {visibleNotifications.map((notification, index) => (
+            <NotificationCardLayer
               backgroundColor={notificationBackgroundColor}
-              body={body}
-              logo={logo}
-              logoSource={logoSource}
+              index={index}
+              key={`${notification.title}-${index}`}
+              notification={notification}
               nowLabel={nowLabel}
               textColor={notificationTextColor}
               theme={theme}
-              title={title}
             />
-          </Animated.View>
+          ))}
         </View>
       </View>
     </View>
@@ -74,20 +109,28 @@ export const OnboardingNotificationMock = ({
 };
 
 interface NotificationEntranceOptions {
+  delayMs: number;
   initialScaleX: number;
+  settledOffsetY: number;
+  settledOpacity: number;
   settledScaleX: number;
+  settledScaleY: number;
 }
 
 const useNotificationEntrance = ({
+  delayMs,
   initialScaleX,
+  settledOffsetY,
+  settledOpacity,
   settledScaleX,
+  settledScaleY,
 }: NotificationEntranceOptions) => {
   const progress = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     progress.setValue(0);
     const animation = Animated.sequence([
-      Animated.delay(NOTIFICATION_ENTRANCE_DELAY_MS),
+      Animated.delay(delayMs),
       Animated.timing(progress, {
         duration: 360,
         easing: Easing.out(Easing.cubic),
@@ -98,18 +141,26 @@ const useNotificationEntrance = ({
 
     animation.start();
     return () => animation.stop();
-  }, [initialScaleX, progress, settledScaleX]);
+  }, [
+    delayMs,
+    initialScaleX,
+    progress,
+    settledOffsetY,
+    settledOpacity,
+    settledScaleX,
+    settledScaleY,
+  ]);
 
   return {
     opacity: progress.interpolate({
       inputRange: [0, 0.34, 1],
-      outputRange: [0, 0.92, 1],
+      outputRange: [0, settledOpacity * 0.92, settledOpacity],
     }),
     transform: [
       {
         translateY: progress.interpolate({
           inputRange: [0, 1],
-          outputRange: [-34, 0],
+          outputRange: [-34, settledOffsetY],
         }),
       },
       {
@@ -121,88 +172,141 @@ const useNotificationEntrance = ({
       {
         scaleY: progress.interpolate({
           inputRange: [0, 1],
-          outputRange: [0.96, 1],
+          outputRange: [0.96, settledScaleY],
         }),
       },
     ],
   };
 };
 
-const NotificationFrameContent = () => {
+interface NotificationFrameContentProps {
+  dateLabel: string;
+  theme: OnboardingContentTheme;
+  timeLabel: string;
+}
+
+const NotificationFrameContent = ({
+  dateLabel,
+  theme,
+  timeLabel,
+}: NotificationFrameContentProps) => {
   return (
     <View style={styles.frameContent}>
-      <View style={[styles.frameMediaBlock, { backgroundColor: "#FFFFFF" }]} />
+      <View style={styles.lockScreenClock}>
+        <Text
+          numberOfLines={1}
+          style={[
+            styles.lockScreenDate,
+            { color: theme.secondaryTextColor },
+          ]}
+        >
+          {dateLabel}
+        </Text>
+        <Text
+          adjustsFontSizeToFit
+          minimumFontScale={0.7}
+          numberOfLines={1}
+          style={[
+            styles.lockScreenTime,
+            { color: theme.primaryTextColor },
+          ]}
+        >
+          {timeLabel}
+        </Text>
+      </View>
       <View style={[styles.frameBottomFade, { backgroundColor: "#FFFFFF" }]} />
     </View>
   );
 };
 
-interface NotificationCardProps {
+interface NotificationCardLayerProps {
   backgroundColor: string;
-  body: string;
-  logo?: ReactNode;
-  logoSource?: ImageSourcePropType;
+  index: number;
+  notification: OnboardingNotificationItem;
   nowLabel: string;
   textColor: string;
   theme: OnboardingContentTheme;
-  title: string;
 }
 
-const NotificationCard = ({
+const NotificationCardLayer = ({
   backgroundColor,
-  body,
-  logo,
-  logoSource,
+  index,
+  notification,
   nowLabel,
   textColor,
   theme,
-  title,
-}: NotificationCardProps) => {
+}: NotificationCardLayerProps) => {
+  const layerOpacity = [0.98, 0.9, 0.76][index] ?? 0.76;
+  const notificationEntranceStyle = useNotificationEntrance({
+    delayMs: NOTIFICATION_ENTRANCE_DELAY_MS + index * 72,
+    initialScaleX: 0.96 - index * 0.02,
+    settledOffsetY: index * 64,
+    settledOpacity: layerOpacity,
+    settledScaleX: 1 - index * 0.045,
+    settledScaleY: 1 - index * 0.035,
+  });
+
   return (
-    <View
+    <Animated.View
       style={[
-        styles.notificationCard,
-        {
-          backgroundColor,
-          shadowColor: theme.shadowColor,
-        },
+        styles.notificationCardWrap,
+        { zIndex: 3 - index },
+        notificationEntranceStyle,
       ]}
     >
-      <View style={styles.notificationLogoSlot}>
-        {logo ??
-          (logoSource ? (
-            <Image
-              resizeMode="cover"
-              source={logoSource}
-              style={styles.notificationLogoImage}
-            />
-          ) : (
-            <DefaultNotificationLogo theme={theme} />
-          ))}
-      </View>
-      <View style={styles.notificationCopy}>
-        <View style={styles.notificationTitleRow}>
+      <View
+        style={[
+          styles.notificationCard,
+          {
+            backgroundColor,
+            shadowColor: theme.shadowColor,
+          },
+        ]}
+      >
+        <View
+          style={[
+            styles.notificationIconSlot,
+            {
+              backgroundColor:
+                notification.iconBackgroundColor ?? theme.cardBackgroundColor,
+            },
+          ]}
+        >
+          {notification.icon ??
+            (notification.iconSource ? (
+              <Image
+                resizeMode="cover"
+                source={notification.iconSource}
+                style={styles.notificationIconImage}
+              />
+            ) : (
+              <DefaultNotificationLogo theme={theme} />
+            ))}
+        </View>
+        <View style={styles.notificationCopy}>
+          <View style={styles.notificationTitleRow}>
+            <Text
+              numberOfLines={1}
+              style={[styles.notificationTitle, { color: textColor }]}
+            >
+              {notification.title}
+            </Text>
+            <Text
+              numberOfLines={1}
+              style={[styles.notificationNowLabel, { color: textColor }]}
+            >
+              {nowLabel}
+            </Text>
+          </View>
           <Text
-            numberOfLines={1}
-            style={[styles.notificationTitle, { color: textColor }]}
+            numberOfLines={2}
+            style={[styles.notificationBody, { color: textColor }]}
           >
-            {title}
-          </Text>
-          <Text
-            numberOfLines={1}
-            style={[styles.notificationNowLabel, { color: textColor }]}
-          >
-            {nowLabel}
+            {notification.description}
           </Text>
         </View>
-        <Text
-          numberOfLines={2}
-          style={[styles.notificationBody, { color: textColor }]}
-        >
-          {body}
-        </Text>
       </View>
-    </View>
+    </Animated.View>
   );
 };
 
@@ -236,6 +340,61 @@ const DefaultNotificationLogo = ({ theme }: DefaultNotificationLogoProps) => {
   );
 };
 
+interface ResolveFallbackNotificationParams {
+  body?: string;
+  description?: string;
+  iconBackgroundColor?: string;
+  logo?: ReactNode;
+  logoSource?: ImageSourcePropType;
+  theme: OnboardingContentTheme;
+  title?: string;
+}
+
+const resolveFallbackNotification = ({
+  body,
+  description,
+  iconBackgroundColor,
+  logo,
+  logoSource,
+  theme,
+  title,
+}: ResolveFallbackNotificationParams): OnboardingNotificationItem | null => {
+  if (!title) return null;
+
+  return {
+    description: description ?? body ?? "",
+    icon: logo,
+    iconBackgroundColor: iconBackgroundColor ?? theme.cardBackgroundColor,
+    iconSource: logoSource,
+    title,
+  };
+};
+
+const formatLockScreenDate = (date: Date): string => {
+  try {
+    return new Intl.DateTimeFormat(undefined, {
+      day: "numeric",
+      month: "long",
+      weekday: "long",
+    }).format(date);
+  } catch {
+    return "";
+  }
+};
+
+const formatLockScreenTime = (date: Date): string => {
+  try {
+    return new Intl.DateTimeFormat(undefined, {
+      hour: "numeric",
+      minute: "2-digit",
+    }).format(date);
+  } catch {
+    const hours = date.getHours();
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    return `${hours}:${minutes}`;
+  }
+};
+
 const styles = StyleSheet.create({
   root: {
     alignItems: "center",
@@ -258,13 +417,30 @@ const styles = StyleSheet.create({
   frameContent: {
     backgroundColor: "#FFFFFF",
     flex: 1,
+    alignItems: "center",
     paddingHorizontal: 14,
-    paddingTop: 44,
+    paddingTop: 50,
   },
-  frameMediaBlock: {
-    borderRadius: 3,
-    height: "70%",
+  lockScreenClock: {
+    alignItems: "center",
+    gap: 2,
     width: "100%",
+  },
+  lockScreenDate: {
+    fontSize: 11,
+    fontWeight: "500",
+    letterSpacing: 0,
+    lineHeight: 15,
+    maxWidth: "90%",
+    textAlign: "center",
+  },
+  lockScreenTime: {
+    fontSize: 46,
+    fontWeight: "600",
+    letterSpacing: 0,
+    lineHeight: 52,
+    maxWidth: "92%",
+    textAlign: "center",
   },
   frameBottomFade: {
     bottom: 0,
@@ -278,11 +454,12 @@ const styles = StyleSheet.create({
     left: -40,
     position: "absolute",
     right: -40,
-    top: 100,
+    top: 105,
     zIndex: 2,
   },
   notificationCardWrap: {
     alignSelf: "center",
+    position: "absolute",
     width: "100%",
   },
   notificationCard: {
@@ -290,34 +467,34 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     borderRadius: 12,
     flexDirection: "row",
-    gap: 9,
-    minHeight: 74,
-    opacity: 0.94,
+    gap: 10,
+    minHeight: 76,
     paddingHorizontal: 11,
-    paddingVertical: 13,
+    paddingVertical: 12,
     shadowOffset: { height: 10, width: 0 },
-    shadowOpacity: 0.24,
+    shadowOpacity: 0.14,
     shadowRadius: 18,
     width: "100%",
   },
-  notificationLogoSlot: {
+  notificationIconSlot: {
     alignItems: "center",
-    height: 30,
+    borderRadius: 20,
+    height: 40,
     justifyContent: "center",
-    width: 30,
+    overflow: "hidden",
+    width: 40,
   },
   notificationDefaultLogo: {
     alignItems: "center",
-    borderRadius: 7,
+    borderRadius: 9,
     borderWidth: 1,
-    height: 25,
+    height: 27,
     justifyContent: "center",
-    width: 25,
+    width: 27,
   },
-  notificationLogoImage: {
-    borderRadius: 7,
-    height: 25,
-    width: 25,
+  notificationIconImage: {
+    height: 40,
+    width: 40,
   },
   notificationLogoStroke: {
     borderRadius: 2,

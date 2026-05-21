@@ -73,6 +73,7 @@ export type {
   OnboardingChoiceListProps,
 } from "./onboarding/OnboardingChoiceList";
 export type {
+  OnboardingNotificationItem,
   OnboardingNotificationMockProps,
 } from "./onboarding/OnboardingNotificationMock";
 export type {

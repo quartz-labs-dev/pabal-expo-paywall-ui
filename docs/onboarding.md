@@ -116,6 +116,40 @@ The package currently exposes these onboarding primitives:
 Apps still own screen order, selected state, permission APIs, analytics,
 navigation, media, and product-specific copy.
 
+## Notification Mock
+
+Use `OnboardingNotificationMock` when the app wants a lock-screen style
+notification preview after the permission education step. Pass `notifications`
+with 1-3 localized items. The component renders only the provided count and caps
+the stack at three cards.
+
+Each notification owns its `title`, `description`, optional `icon`, optional
+`iconSource`, and optional `iconBackgroundColor`. All cards use the provided
+localized `nowLabel`. The phone mock shows the current date/time by default, or
+the app can pass `dateLabel` and `timeLabel` when it needs deterministic copy for
+screenshots.
+
+```tsx
+<OnboardingNotificationMock
+  nowLabel={copy.notificationNowLabel}
+  notifications={[
+    {
+      description: copy.weeklyTipDescription,
+      icon: <TipIcon />,
+      iconBackgroundColor: "#D8B4FE",
+      title: copy.weeklyTipTitle,
+    },
+    {
+      description: copy.reviewReadyDescription,
+      icon: <ReviewIcon />,
+      iconBackgroundColor: "#F4D48A",
+      title: copy.reviewReadyTitle,
+    },
+  ]}
+  theme={theme}
+/>;
+```
+
 ## Onboarding Prelude
 
 Use `OnboardingPreludeFrame` for the opening full-screen problem/solution beats

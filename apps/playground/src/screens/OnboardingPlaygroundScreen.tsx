@@ -1,5 +1,6 @@
 import { type ComponentProps, type ReactNode, useMemo, useState } from "react";
 import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, View } from "react-native";
 import {
   createOnboardingAcquisitionSourceOptions,
   OnboardingChoiceList,
@@ -12,6 +13,7 @@ import {
   type OnboardingAcquisitionSourceId,
   type OnboardingAcquisitionSourceOption,
   type OnboardingChoiceOption,
+  type OnboardingNotificationItem,
   type OnboardingSlide,
 } from "pabal-expo-paywall-ui";
 import type { ImageSourcePropType } from "react-native";
@@ -29,10 +31,13 @@ interface OnboardingPlaygroundScreenProps {
 export type OnboardingPlaygroundTheme = PlaygroundOnboardingTheme;
 
 export interface OnboardingNotificationContent {
-  body: string;
+  body?: string;
+  description?: string;
+  iconBackgroundColor?: string;
   logo?: ReactNode;
   logoSource?: ImageSourcePropType;
-  title: string;
+  notifications?: readonly OnboardingNotificationItem[];
+  title?: string;
 }
 
 interface CreateAcquisitionSourceSlideParams {
@@ -79,9 +84,12 @@ const createNotificationSlide = ({
   content: (
     <OnboardingNotificationMock
       body={content.body}
+      description={content.description}
+      iconBackgroundColor={content.iconBackgroundColor}
       logo={content.logo}
       logoSource={content.logoSource}
       nowLabel={nowLabel}
+      notifications={content.notifications}
       theme={theme}
       title={content.title}
     />
@@ -295,9 +303,40 @@ export const OnboardingPlaygroundScreen = ({
 };
 
 const DEFAULT_NOTIFICATION_CONTENT = {
-  body: "Check out your workouts, meal plan and mindset activities for next week!",
-  title: "Your Plan is READY",
+  notifications: [
+    {
+      description: "New anti-impulse tip available.",
+      icon: <NotificationGlyph color="#5B2E91" label="!" />,
+      iconBackgroundColor: "#D8B4FE",
+      title: "Weekly tip",
+    },
+    {
+      description: "Your 14-day review is open now.",
+      icon: <NotificationGlyph color="#8A6A21" label="*" />,
+      iconBackgroundColor: "#F4D48A",
+      title: "Review ready",
+    },
+    {
+      description: "Your item is ready for check-in.",
+      icon: <NotificationGlyph color="#4A7FA7" label=">" />,
+      iconBackgroundColor: "#CFE8FF",
+      title: "Cooldown complete",
+    },
+  ],
 } satisfies OnboardingNotificationContent;
+
+interface NotificationGlyphProps {
+  color: string;
+  label: string;
+}
+
+function NotificationGlyph({ color, label }: NotificationGlyphProps) {
+  return (
+    <View style={styles.notificationGlyph}>
+      <Text style={[styles.notificationGlyphText, { color }]}>{label}</Text>
+    </View>
+  );
+}
 
 const ONBOARDING_SOCIAL_PROOF_CONTENT = {
   headline: "Post Black Belt was made for **athletes like you**.",
@@ -335,3 +374,18 @@ const INVERTED_FRAME_LIST_OPTIONS = [
     title: "Build a library over time",
   },
 ] satisfies OnboardingChoiceOption[];
+
+const styles = StyleSheet.create({
+  notificationGlyph: {
+    alignItems: "center",
+    height: 24,
+    justifyContent: "center",
+    width: 24,
+  },
+  notificationGlyphText: {
+    fontSize: 15,
+    fontWeight: "700",
+    letterSpacing: 0,
+    lineHeight: 18,
+  },
+});

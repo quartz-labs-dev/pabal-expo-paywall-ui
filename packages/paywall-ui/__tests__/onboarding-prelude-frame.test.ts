@@ -44,6 +44,21 @@ test("exports plain onboarding list as a package primitive", () => {
   );
 });
 
+test("exports notification item contract and caps the mock stack", () => {
+  const indexSource = readSource("src/index.ts");
+  const notificationSource = readSource(
+    "src/onboarding/OnboardingNotificationMock.tsx",
+  );
+
+  assert.match(
+    indexSource,
+    /OnboardingNotificationItem,\n  OnboardingNotificationMockProps,/,
+  );
+  assert.match(notificationSource, /notifications\?: readonly OnboardingNotificationItem\[\];/);
+  assert.match(notificationSource, /\.slice\(0, 3\)/);
+  assert.match(notificationSource, /iconBackgroundColor\?: string;/);
+});
+
 test("keeps prelude tap hint color aligned with prelude copy color", () => {
   const preludeFrameSource = readSource(
     "src/onboarding/OnboardingPreludeFrame.tsx",
