@@ -254,6 +254,7 @@ import {
   totalSteps={slides.length}
   onBack={goBack}
   onContinue={goNext}
+  onSecondaryAction={skipStep}
 >
   <OnboardingChoiceList
     options={sourceOptions}

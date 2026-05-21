@@ -247,10 +247,8 @@ export const OnboardingPlaygroundScreen = ({
       <OnboardingStepFrame
         continueActionPresentation={isPreludeStep ? "tapHint" : "button"}
         continueButtonTextStyle={
-          isInvertedPreludeStep
-            ? { color: theme.backgroundColor }
-            : isPreludeStep
-            ? { color: theme.secondaryTextColor }
+          currentPreludeStep
+            ? { color: currentPreludeStep.bodyColor }
             : undefined
         }
         continueLabel={
@@ -291,6 +289,7 @@ export const OnboardingPlaygroundScreen = ({
         description={isPreludeStep ? undefined : currentSlide.description}
         onBack={goBack}
         onContinue={goNext}
+        onSecondaryAction={goNext}
       >
         {currentPreludeStep ? (
           <OnboardingPreludeContent

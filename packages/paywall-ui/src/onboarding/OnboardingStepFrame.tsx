@@ -47,6 +47,7 @@ export interface OnboardingStepFrameProps {
   totalSteps: number;
   onBack?: () => Promise<void> | void;
   onContinue: () => Promise<void> | void;
+  onSecondaryAction?: () => void;
 }
 
 const INITIAL_CONTENT_TRANSITION_DELAY_MS = 90;
@@ -85,10 +86,13 @@ export const OnboardingStepFrame = ({
   totalSteps,
   onBack,
   onContinue,
+  onSecondaryAction,
 }: OnboardingStepFrameProps) => {
   const insets = useSafeAreaInsets();
   const theme = resolveOnboardingFrameTheme(themeOverride);
   const copy = getDefaultOnboardingCopy(locale);
+  const shouldShowSecondaryAction =
+    showSecondaryAction && Boolean(onSecondaryAction);
   const shouldShowBackButton = showBackButton ?? Boolean(onBack);
   const isBackDisabled = isBackButtonDisabled || !shouldShowBackButton || !onBack;
   const effectiveContentTransitionIndex =
@@ -259,7 +263,8 @@ export const OnboardingStepFrame = ({
               importantForAccessibility="no"
               style={[
                 styles.tapHintArrow,
-                { color: theme.continueButtonBackgroundColor },
+                { color: theme.continueButtonTextColor },
+                continueButtonTextStyle,
               ]}
             >
               →
@@ -287,10 +292,10 @@ export const OnboardingStepFrame = ({
             </Text>
           </Pressable>
         )}
-        {showSecondaryAction ? (
+        {shouldShowSecondaryAction ? (
           <Pressable
             accessibilityRole="button"
-            onPress={onContinue}
+            onPress={onSecondaryAction}
             style={styles.secondaryActionButton}
           >
             <Text
