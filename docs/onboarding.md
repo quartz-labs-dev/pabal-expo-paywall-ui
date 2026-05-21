@@ -39,8 +39,8 @@ composition patterns.
 
 | Content | Use It For | Ownership |
 | --- | --- | --- |
-| `landing` | Opening screen with optional background/media slot | App |
-| `mock-video` | Mock phone image/video preview with login or primary action panels | App |
+| `landing` | Opening screen with optional background/media slot | Package screen + app media/state |
+| `mock-video` | Mock phone image/video preview with login or primary action | Package screen + app preview/action state |
 
 ## Onboarding Content
 
@@ -82,14 +82,55 @@ adding separate highlight props.
 
 ## Package APIs
 
-The package currently exposes two onboarding primitives:
+The package currently exposes these onboarding primitives:
 
+- `PreOnboardingWelcome` for the pre-onboarding welcome screen
+- `PreOnboardingValue` for the pre-onboarding value screen
 - acquisition source copy/options with bundled source icons
 - `PermissionPromptPreview` for permission education before native prompts
 - `OnboardingCompletion` for the final setup-ready confirmation
 
 Apps still own screen order, selected state, permission APIs, analytics,
 navigation, media, and product-specific copy.
+
+## Pre-Onboarding Screens
+
+Use `PreOnboardingWelcome` and `PreOnboardingValue` when the app wants the
+shared pre-onboarding layout, but still owns media, locale state, login flow,
+signup flow, analytics, and navigation.
+
+```tsx
+import {
+  PreOnboardingValue,
+  PreOnboardingWelcome,
+  getDefaultOnboardingCopy,
+} from "pabal-expo-paywall-ui";
+
+const copy = getDefaultOnboardingCopy(locale);
+
+<PreOnboardingWelcome
+  background={<LandingVideoBackground />}
+  copy={copy}
+  isLocaleSelectorVisible={isLocaleSelectorVisible}
+  localeSelector={<LocaleSelector />}
+  logo={<Image source={appIcon} />}
+  selectedLocaleText="🇰🇷 한국어 / Korean"
+  onContinue={goNext}
+  onToggleLocaleSelector={toggleLocaleSelector}
+/>;
+
+<PreOnboardingValue
+  copy={copy}
+  preview={<LoginDemoPhoneFrame width={demoPhoneWidth} />}
+  onLogin={startLogin}
+  onStart={startSignUp}
+/>;
+```
+
+The package renders only the shell: safe-area spacing, localized title/button
+copy, the language card, the primary CTA, and the login prompt. Keep the actual
+background image/video, app logo, locale selector, phone mock, purchase/login
+actions, and routing in the consuming app.
 
 ## Acquisition Sources
 

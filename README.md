@@ -24,7 +24,7 @@ pabal-expo-paywall-ui/
 ## Docs
 
 - [Paywall](./docs/paywall.md)
-- [Onboarding](./docs/onboarding.md)
+- [Onboarding](./docs/onboarding.md): pre-onboarding screens and onboarding primitives
 - [Profile](./docs/profile.md)
 
 ## Workspace Commands

@@ -28,8 +28,9 @@ dependency.
 
 - [Paywall](../../docs/paywall.md): configure plans, benefits, trials, purchase
   callbacks, and RevenueCat-like package conversion.
-- [Onboarding](../../docs/onboarding.md): supported onboarding content types,
-  acquisition source options, and permission prompt previews.
+- [Onboarding](../../docs/onboarding.md): pre-onboarding screen exports,
+  supported onboarding content types, acquisition source options, and permission
+  prompt previews.
 - [Profile](../../docs/profile.md): subscription status, benefit usage, and
   profile identifier UI.
 

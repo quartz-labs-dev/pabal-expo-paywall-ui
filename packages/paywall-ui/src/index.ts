@@ -17,6 +17,8 @@ export {
 } from "./onboarding/acquisition-sources";
 export { OnboardingCompletion } from "./onboarding/OnboardingCompletion";
 export { PermissionPromptPreview } from "./onboarding/PermissionPromptPreview";
+export { PreOnboardingValue } from "./onboarding/PreOnboardingValue";
+export { PreOnboardingWelcome } from "./onboarding/PreOnboardingWelcome";
 export {
   getDefaultPaywallCopy,
   getDefaultPaywallPlanOptions,
@@ -41,6 +43,15 @@ export type {
   OnboardingCompletionProps,
   OnboardingCompletionTheme,
 } from "./onboarding/OnboardingCompletion";
+export type {
+  PreOnboardingTheme,
+} from "./onboarding/pre-onboarding-theme";
+export type {
+  PreOnboardingValueProps,
+} from "./onboarding/PreOnboardingValue";
+export type {
+  PreOnboardingWelcomeProps,
+} from "./onboarding/PreOnboardingWelcome";
 export type { OnboardingAcquisitionSourceText } from "./locales/onboarding/acquisition-source";
 export { Paywall } from "./paywall/Paywall";
 export { ProfileSubscriptionSection } from "./profile/ProfileSubscriptionSection";
