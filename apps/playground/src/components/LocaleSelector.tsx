@@ -12,7 +12,7 @@ interface LocaleSelectorProps {
   onChangeLocale: (locale: UnifiedLocale) => void;
 }
 
-const pinnedLocales: UnifiedLocale[] = [
+export const pinnedLocales: UnifiedLocale[] = [
   "en-US",
   "ko-KR",
   "ja-JP",
@@ -162,12 +162,20 @@ const localeFlags: Partial<Record<UnifiedLocale, string>> = {
   zu: "🇿🇦",
 };
 
-const getLocaleLabel = (locale: UnifiedLocale): string => {
+export const getLocaleLabel = (locale: UnifiedLocale): string => {
   return localeLabels[locale] ?? locale;
 };
 
-const getLocaleFlag = (locale: UnifiedLocale): string => {
+export const getLocaleFlag = (locale: UnifiedLocale): string => {
   return localeFlags[locale] ?? "🌐";
+};
+
+export const getPlaygroundLocaleOptions = (): UnifiedLocale[] => {
+  const remainingLocales = UNIFIED_LOCALES.filter((locale) => {
+    return !pinnedLocales.includes(locale);
+  });
+
+  return [...pinnedLocales, ...remainingLocales];
 };
 
 export const LocaleSelector = ({
@@ -176,13 +184,7 @@ export const LocaleSelector = ({
 }: LocaleSelectorProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const resolvedTextLocale = resolvePaywallTextLocale(selectedLocale);
-  const localeOptions = useMemo(() => {
-    const remainingLocales = UNIFIED_LOCALES.filter((locale) => {
-      return !pinnedLocales.includes(locale);
-    });
-
-    return [...pinnedLocales, ...remainingLocales];
-  }, []);
+  const localeOptions = useMemo(getPlaygroundLocaleOptions, []);
   const selectedLabel = getLocaleLabel(selectedLocale);
   const selectedFlag = getLocaleFlag(selectedLocale);
 

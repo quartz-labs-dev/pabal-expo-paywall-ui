@@ -8,6 +8,7 @@ import {
   resolvePlaygroundOnboardingContext,
   type PlaygroundOnboardingPlatform,
 } from "./src/components/onboarding-context";
+import { PreOnboardingLanguageSelector } from "./src/components/onboarding/PreOnboardingLanguageSelector";
 import { HomeScreen } from "./src/screens/HomeScreen";
 import { OnboardingPlaygroundScreen } from "./src/screens/OnboardingPlaygroundScreen";
 import { PaywallPlaygroundScreen } from "./src/screens/PaywallPlaygroundScreen";
@@ -132,6 +133,13 @@ export default function App() {
       ) : route === "preOnboarding" ? (
         <PreOnboardingPlaygroundScreen
           isLoginPromptVisible={isPreOnboardingLoginPromptVisible}
+          languageSelector={
+            <PreOnboardingLanguageSelector
+              selectedLocale={selectedLocale}
+              theme={onboardingContext.theme}
+              onChangeLocale={setSelectedLocale}
+            />
+          }
           onboardingContext={onboardingContext}
           onContinue={() => navigate("home")}
         />
