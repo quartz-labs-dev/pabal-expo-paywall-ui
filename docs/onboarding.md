@@ -493,7 +493,8 @@ implementation for this UI.
 Use `OnboardingGalleryGrid` when the app wants a dense animated library/content
 preview. The package owns the three-row marquee layout and infinite row
 animation; the app owns the tile titles, image sources, and colors. Rows 1 and
-3 move right, and row 2 moves left.
+3 move right, and row 2 moves left. Set `isBorderVisible={false}` when the
+app wants softer image/color tiles without the black card outline.
 
 ```tsx
 import {
@@ -527,7 +528,11 @@ const galleryItems = [
   onBack={goBack}
   onContinue={goNext}
 >
-  <OnboardingGalleryGrid items={galleryItems} theme={theme} />
+  <OnboardingGalleryGrid
+    isBorderVisible={false}
+    items={galleryItems}
+    theme={theme}
+  />
 </OnboardingStepFrame>;
 ```
 

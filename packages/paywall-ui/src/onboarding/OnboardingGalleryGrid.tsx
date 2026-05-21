@@ -22,6 +22,7 @@ export interface OnboardingGalleryGridItem {
 export interface OnboardingGalleryGridProps {
   accessibilityLabel?: string;
   animationDurationMs?: number;
+  isBorderVisible?: boolean;
   items: readonly OnboardingGalleryGridItem[];
   rowCount?: number;
   theme: OnboardingContentTheme;
@@ -30,6 +31,7 @@ export interface OnboardingGalleryGridProps {
 interface GalleryGridRowProps {
   animationDurationMs: number;
   direction: GalleryGridRowDirection;
+  isBorderVisible: boolean;
   items: readonly OnboardingGalleryGridItem[];
   rowIndex: number;
   textColor: string;
@@ -47,6 +49,7 @@ const ROW_GAP = 10;
 export const OnboardingGalleryGrid = ({
   accessibilityLabel = "Animated content gallery",
   animationDurationMs = DEFAULT_ANIMATION_DURATION_MS,
+  isBorderVisible = true,
   items,
   rowCount = DEFAULT_ROW_COUNT,
   theme,
@@ -77,6 +80,7 @@ export const OnboardingGalleryGrid = ({
         <GalleryGridRow
           animationDurationMs={animationDurationMs}
           direction={rowIndex === 1 ? "left" : "right"}
+          isBorderVisible={isBorderVisible}
           items={rowItems}
           key={rowIndex}
           rowIndex={rowIndex}
@@ -90,6 +94,7 @@ export const OnboardingGalleryGrid = ({
 const GalleryGridRow = ({
   animationDurationMs,
   direction,
+  isBorderVisible,
   items,
   rowIndex,
   textColor,
@@ -131,6 +136,7 @@ const GalleryGridRow = ({
       >
         {repeatedItems.map((item, index) => (
           <GalleryGridTile
+            isBorderVisible={isBorderVisible}
             item={item}
             key={`${rowIndex}-${item.id}-${index}`}
             textColor={textColor}
@@ -142,17 +148,23 @@ const GalleryGridRow = ({
 };
 
 interface GalleryGridTileProps {
+  isBorderVisible: boolean;
   item: OnboardingGalleryGridItem;
   textColor: string;
 }
 
-const GalleryGridTile = ({ item, textColor }: GalleryGridTileProps) => {
+const GalleryGridTile = ({
+  isBorderVisible,
+  item,
+  textColor,
+}: GalleryGridTileProps) => {
   return (
     <View
       style={[
         styles.tile,
         {
           backgroundColor: item.backgroundColor,
+          borderWidth: isBorderVisible ? 2 : 0,
         },
       ]}
     >
