@@ -16,6 +16,7 @@ export {
   ONBOARDING_ACQUISITION_SOURCE_TITLE,
 } from "./onboarding/acquisition-sources";
 export { OnboardingCompletion } from "./onboarding/OnboardingCompletion";
+export { OnboardingStepFrame } from "./onboarding/OnboardingStepFrame";
 export { PermissionPromptPreview } from "./onboarding/PermissionPromptPreview";
 export { PreOnboardingValue } from "./onboarding/PreOnboardingValue";
 export { PreOnboardingWelcome } from "./onboarding/PreOnboardingWelcome";
@@ -43,6 +44,12 @@ export type {
   OnboardingCompletionProps,
   OnboardingCompletionTheme,
 } from "./onboarding/OnboardingCompletion";
+export type {
+  OnboardingFrameTheme,
+} from "./onboarding/onboarding-frame-theme";
+export type {
+  OnboardingStepFrameProps,
+} from "./onboarding/OnboardingStepFrame";
 export type {
   PreOnboardingTheme,
 } from "./onboarding/pre-onboarding-theme";

@@ -86,6 +86,7 @@ The package currently exposes these onboarding primitives:
 
 - `PreOnboardingWelcome` for the pre-onboarding welcome screen
 - `PreOnboardingValue` for the pre-onboarding value screen
+- `OnboardingStepFrame` for app-owned onboarding steps with shared chrome
 - acquisition source copy/options with bundled source icons
 - `PermissionPromptPreview` for permission education before native prompts
 - `OnboardingCompletion` for the final setup-ready confirmation
@@ -131,6 +132,41 @@ The package renders only the shell: safe-area spacing, localized title/button
 copy, the language card, the primary CTA, and the login prompt. Keep the actual
 background image/video, app logo, locale selector, phone mock, purchase/login
 actions, and routing in the consuming app.
+
+## Onboarding Step Frame
+
+Use `OnboardingStepFrame` when the app owns the onboarding step sequence and
+content, but wants the shared header, progress bar, safe-area spacing, animated
+step transition, CTA, and optional secondary action.
+
+```tsx
+import { OnboardingStepFrame } from "pabal-expo-paywall-ui";
+
+<OnboardingStepFrame
+  backButtonAccessibilityLabel="Back"
+  canContinue={Boolean(selectedSource)}
+  continueLabel={copy.continueButton}
+  currentStepIndex={mainStepIndex}
+  description="Tell us where you first found the app."
+  secondaryActionLabel={copy.notNowButton}
+  theme={frameTheme}
+  title={acquisitionSourceText.title}
+  totalSteps={slides.length}
+  onBack={goBack}
+  onContinue={goNext}
+  onSecondaryAction={skipStep}
+>
+  <ChoiceListContent
+    options={sourceOptions}
+    selectedOptionId={selectedSource}
+    onSelectOption={setSelectedSource}
+  />
+</OnboardingStepFrame>;
+```
+
+The package does not own the full onboarding flow. The app still decides which
+steps exist, selected values, permission request timing, analytics, and final
+navigation.
 
 ## Acquisition Sources
 
