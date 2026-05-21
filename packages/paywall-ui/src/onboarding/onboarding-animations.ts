@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { Animated, Easing, type TextStyle } from "react-native";
+import { Animated, Easing, Platform, type TextStyle } from "react-native";
 
 export interface OnboardingIntroTextSegment {
   isHighlighted?: boolean;
@@ -96,14 +96,17 @@ export const getOnboardingSequentialWordStyle = (
   animation: Animated.Value,
 ): Animated.WithAnimatedObject<TextStyle> => ({
   opacity: animation,
-  transform: [
-    {
-      translateY: animation.interpolate({
-        inputRange: [0, 1],
-        outputRange: [14, 0],
-      }),
-    },
-  ],
+  transform:
+    Platform.OS === "android"
+      ? undefined
+      : [
+          {
+            translateY: animation.interpolate({
+              inputRange: [0, 1],
+              outputRange: [14, 0],
+            }),
+          },
+        ],
 });
 
 export const useOnboardingEntranceAnimation = (
