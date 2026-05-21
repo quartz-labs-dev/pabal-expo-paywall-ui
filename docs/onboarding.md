@@ -134,6 +134,11 @@ copy, the language card, the primary CTA, and the login prompt. Keep the actual
 background image/video, app logo, locale selector, phone mock, purchase/login
 actions, and routing in the consuming app.
 
+The playground passes `PreOnboardingLanguageSelector` into the
+`PreOnboardingPlaygroundScreen` `languageSelector` slot. That selector reuses the
+shared playground locale labels, flags, and unified locale list so `/pre-onboarding`
+can preview localized onboarding copy directly from the first screen.
+
 Use `PreOnboardingFrame` directly when the app needs a custom pre-onboarding
 screen that does not fit `PreOnboardingWelcome` or `PreOnboardingValue`.
 
