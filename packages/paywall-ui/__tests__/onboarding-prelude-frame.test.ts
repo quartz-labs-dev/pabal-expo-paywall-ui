@@ -195,8 +195,33 @@ test("keeps keyboard avoiding on the shared onboarding step frame", () => {
 
   assert.match(stepFrameSource, /KeyboardAvoidingView/);
   assert.match(stepFrameSource, /keyboardVerticalOffset\?: number;/);
-  assert.match(stepFrameSource, /Platform\.OS === "ios" \? "padding" : "height"/);
+  assert.match(
+    stepFrameSource,
+    /Platform\.OS === "ios" \? "padding" : undefined/,
+  );
+  assert.match(
+    stepFrameSource,
+    /getOnboardingFooterBottomPadding\(insets\.bottom\)/,
+  );
+  assert.match(stepFrameSource, /styles\.footerContent/);
   assert.doesNotMatch(stepFrameSource, /isKeyboardAvoidingEnabled/);
+});
+
+test("keeps onboarding footer backgrounds and android CTA spacing intentional", () => {
+  const preFrameSource = readSource("src/onboarding/PreOnboardingFrame.tsx");
+  const layoutSource = readSource("src/onboarding/onboarding-layout.ts");
+
+  assert.match(preFrameSource, /background\s*\?\s*"transparent"/);
+  assert.match(
+    preFrameSource,
+    /getOnboardingFooterBottomPadding\(insets\.bottom\)/,
+  );
+  assert.match(layoutSource, /Platform\.OS === "android"/);
+  assert.match(layoutSource, /return bottomPadding;/);
+  assert.match(
+    layoutSource,
+    /bottomPadding \+ IOS_FOOTER_EXTRA_BOTTOM_PADDING/,
+  );
 });
 
 test("keeps prelude screen chrome in the package instead of the playground", () => {

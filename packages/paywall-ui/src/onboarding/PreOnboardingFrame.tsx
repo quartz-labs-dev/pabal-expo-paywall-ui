@@ -15,6 +15,7 @@ import {
   resolveOnboardingFrameTheme,
   type OnboardingFrameTheme,
 } from "./onboarding-frame-theme";
+import { getOnboardingFooterBottomPadding } from "./onboarding-layout";
 
 export interface PreOnboardingFrameProps {
   background?: ReactNode;
@@ -47,6 +48,9 @@ export const PreOnboardingFrame = ({
 }: PreOnboardingFrameProps) => {
   const insets = useSafeAreaInsets();
   const theme = resolveOnboardingFrameTheme(themeOverride);
+  const footerBackgroundColor = background
+    ? "transparent"
+    : theme.footerBackgroundColor;
 
   return (
     <View style={[styles.root, { backgroundColor: theme.backgroundColor }]}>
@@ -70,10 +74,10 @@ export const PreOnboardingFrame = ({
       <View
         style={[
           styles.footer,
-          { backgroundColor: theme.footerBackgroundColor },
+          { backgroundColor: footerBackgroundColor },
           footerStyle,
           {
-            paddingBottom: Math.max(insets.bottom, 12) + 12,
+            paddingBottom: getOnboardingFooterBottomPadding(insets.bottom),
           },
         ]}
       >

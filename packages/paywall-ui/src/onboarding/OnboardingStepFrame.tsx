@@ -21,6 +21,7 @@ import {
   resolveOnboardingFrameTheme,
   type OnboardingFrameTheme,
 } from "./onboarding-frame-theme";
+import { getOnboardingFooterBottomPadding } from "./onboarding-layout";
 import type { OnboardingFrameTone } from "./types";
 
 export interface OnboardingStepFrameProps {
@@ -292,83 +293,85 @@ export const OnboardingStepFrame = ({
           { backgroundColor: footerBackgroundColor },
           footerStyle,
           {
-            paddingBottom: Math.max(insets.bottom, 12) + 12,
+            paddingBottom: getOnboardingFooterBottomPadding(insets.bottom),
           },
         ]}
       >
-        {continueActionPresentation === "tapHint" ? (
-          <View
-            style={[
-              styles.tapHint,
-              !canContinue && styles.continueButtonDisabled,
-            ]}
-          >
-            <Text
+        <View style={styles.footerContent}>
+          {continueActionPresentation === "tapHint" ? (
+            <View
               style={[
-                styles.tapHintText,
-                { color: theme.continueButtonTextColor },
-                continueButtonTextStyle,
+                styles.tapHint,
+                !canContinue && styles.continueButtonDisabled,
               ]}
             >
-              {continueLabel}
-            </Text>
-            <Text
-              accessibilityElementsHidden
-              importantForAccessibility="no"
+              <Text
+                style={[
+                  styles.tapHintText,
+                  { color: theme.continueButtonTextColor },
+                  continueButtonTextStyle,
+                ]}
+              >
+                {continueLabel}
+              </Text>
+              <Text
+                accessibilityElementsHidden
+                importantForAccessibility="no"
+                style={[
+                  styles.tapHintArrow,
+                  { color: theme.continueButtonTextColor },
+                  continueButtonTextStyle,
+                ]}
+              >
+                →
+              </Text>
+            </View>
+          ) : (
+            <Pressable
+              accessibilityRole="button"
+              disabled={!canContinue}
+              onPress={onContinue}
               style={[
-                styles.tapHintArrow,
-                { color: theme.continueButtonTextColor },
-                continueButtonTextStyle,
+                styles.continueButton,
+                { backgroundColor: theme.continueButtonBackgroundColor },
+                !canContinue && styles.continueButtonDisabled,
               ]}
             >
-              →
-            </Text>
-          </View>
-        ) : (
-          <Pressable
-            accessibilityRole="button"
-            disabled={!canContinue}
-            onPress={onContinue}
-            style={[
-              styles.continueButton,
-              { backgroundColor: theme.continueButtonBackgroundColor },
-              !canContinue && styles.continueButtonDisabled,
-            ]}
-          >
-            <Text
-              style={[
-                styles.continueButtonText,
-                { color: theme.continueButtonTextColor },
-                continueButtonTextStyle,
-              ]}
+              <Text
+                style={[
+                  styles.continueButtonText,
+                  { color: theme.continueButtonTextColor },
+                  continueButtonTextStyle,
+                ]}
+              >
+                {continueLabel}
+              </Text>
+            </Pressable>
+          )}
+          {shouldShowSecondaryAction ? (
+            <Pressable
+              accessibilityRole="button"
+              onPress={onSecondaryAction}
+              style={styles.secondaryActionButton}
             >
-              {continueLabel}
-            </Text>
-          </Pressable>
-        )}
-        {shouldShowSecondaryAction ? (
-          <Pressable
-            accessibilityRole="button"
-            onPress={onSecondaryAction}
-            style={styles.secondaryActionButton}
-          >
-            <Text
-              style={[
-                styles.secondaryActionText,
-                { color: secondaryActionTextColor },
-              ]}
-            >
-              {copy.notNowButton}
-            </Text>
-          </Pressable>
-        ) : null}
+              <Text
+                style={[
+                  styles.secondaryActionText,
+                  { color: secondaryActionTextColor },
+                ]}
+              >
+                {copy.notNowButton}
+              </Text>
+            </Pressable>
+          ) : null}
+        </View>
       </View>
     </>
   );
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
       keyboardVerticalOffset={keyboardVerticalOffset}
       style={rootStyleValue}
     >
@@ -594,9 +597,11 @@ const styles = StyleSheet.create({
     paddingVertical: 22,
   },
   footer: {
-    gap: 12,
     paddingHorizontal: 20,
     paddingTop: 12,
+  },
+  footerContent: {
+    gap: 12,
   },
   continueButton: {
     alignItems: "center",
