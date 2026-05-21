@@ -18,6 +18,7 @@ export {
 export { OnboardingCompletion } from "./onboarding/OnboardingCompletion";
 export { OnboardingStepFrame } from "./onboarding/OnboardingStepFrame";
 export { PermissionPromptPreview } from "./onboarding/PermissionPromptPreview";
+export { PreOnboardingFrame } from "./onboarding/PreOnboardingFrame";
 export { PreOnboardingValue } from "./onboarding/PreOnboardingValue";
 export { PreOnboardingWelcome } from "./onboarding/PreOnboardingWelcome";
 export {
@@ -50,6 +51,9 @@ export type {
 export type {
   OnboardingStepFrameProps,
 } from "./onboarding/OnboardingStepFrame";
+export type {
+  PreOnboardingFrameProps,
+} from "./onboarding/PreOnboardingFrame";
 export type {
   PreOnboardingTheme,
 } from "./onboarding/pre-onboarding-theme";

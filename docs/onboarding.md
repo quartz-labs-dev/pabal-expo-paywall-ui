@@ -86,6 +86,7 @@ The package currently exposes these onboarding primitives:
 
 - `PreOnboardingWelcome` for the pre-onboarding welcome screen
 - `PreOnboardingValue` for the pre-onboarding value screen
+- `PreOnboardingFrame` for custom pre-onboarding screens with shared footer chrome
 - `OnboardingStepFrame` for app-owned onboarding steps with shared chrome
 - acquisition source copy/options with bundled source icons
 - `PermissionPromptPreview` for permission education before native prompts
@@ -132,6 +133,23 @@ The package renders only the shell: safe-area spacing, localized title/button
 copy, the language card, the primary CTA, and the login prompt. Keep the actual
 background image/video, app logo, locale selector, phone mock, purchase/login
 actions, and routing in the consuming app.
+
+Use `PreOnboardingFrame` directly when the app needs a custom pre-onboarding
+screen that does not fit `PreOnboardingWelcome` or `PreOnboardingValue`.
+
+```tsx
+import { PreOnboardingFrame } from "pabal-expo-paywall-ui";
+
+<PreOnboardingFrame
+  background={<LandingVideoBackground />}
+  continueLabel={copy.continueButton}
+  footerAccessory={<LoginPrompt />}
+  theme={frameTheme}
+  onContinue={goNext}
+>
+  <CustomPreOnboardingContent />
+</PreOnboardingFrame>;
+```
 
 ## Onboarding Step Frame
 
