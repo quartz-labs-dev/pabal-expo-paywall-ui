@@ -24,7 +24,6 @@ interface OnboardingPlaygroundScreenProps {
   notificationContent?: OnboardingNotificationContent;
   onboardingContext: PlaygroundOnboardingContext;
   onClose: () => void;
-  onNotNowPress?: () => void;
 }
 
 export type OnboardingPlaygroundTheme = PlaygroundOnboardingTheme;
@@ -120,7 +119,6 @@ export const OnboardingPlaygroundScreen = ({
   notificationContent = DEFAULT_NOTIFICATION_CONTENT,
   onboardingContext,
   onClose,
-  onNotNowPress,
 }: OnboardingPlaygroundScreenProps) => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [selectedSource, setSelectedSource] =
@@ -273,14 +271,11 @@ export const OnboardingPlaygroundScreen = ({
         }
         isContentTransitionEnabled
         isFullScreenTapEnabled={isPreludeStep}
+        locale={locale}
         canContinue={isPreludeStep ? true : currentSlide.canContinue}
-        secondaryActionLabel={
-          !isPreludeStep && onNotNowPress
-            ? localizedCopy.notNowButton
-            : undefined
-        }
         showBackButton
         showHeader={!isPreludeStep}
+        showSecondaryAction={!isPreludeStep && !isLastStep}
         theme={
           isInvertedPreludeStep
             ? {
@@ -296,7 +291,6 @@ export const OnboardingPlaygroundScreen = ({
         description={isPreludeStep ? undefined : currentSlide.description}
         onBack={goBack}
         onContinue={goNext}
-        onSecondaryAction={onNotNowPress}
       >
         {currentPreludeStep ? (
           <OnboardingPreludeContent

@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { getDefaultOnboardingCopy } from "../locales/onboarding";
 import {
   resolveOnboardingFrameTheme,
   type OnboardingFrameTheme,
@@ -35,10 +36,10 @@ export interface OnboardingStepFrameProps {
   isBodyScrollEnabled?: boolean;
   isContentTransitionEnabled?: boolean;
   isFullScreenTapEnabled?: boolean;
+  locale?: string;
   rootStyle?: StyleProp<ViewStyle>;
-  secondaryActionLabel?: string;
-  secondaryActionTextStyle?: StyleProp<TextStyle>;
   showBackButton?: boolean;
+  showSecondaryAction?: boolean;
   showHeader?: boolean;
   theme?: OnboardingFrameTheme;
   title?: ReactNode;
@@ -46,7 +47,6 @@ export interface OnboardingStepFrameProps {
   totalSteps: number;
   onBack?: () => Promise<void> | void;
   onContinue: () => Promise<void> | void;
-  onSecondaryAction?: () => Promise<void> | void;
 }
 
 const INITIAL_CONTENT_TRANSITION_DELAY_MS = 90;
@@ -74,10 +74,10 @@ export const OnboardingStepFrame = ({
   isBodyScrollEnabled = true,
   isContentTransitionEnabled = true,
   isFullScreenTapEnabled = false,
+  locale,
   rootStyle,
-  secondaryActionLabel,
-  secondaryActionTextStyle,
   showBackButton,
+  showSecondaryAction = false,
   showHeader = true,
   theme: themeOverride,
   title,
@@ -85,10 +85,10 @@ export const OnboardingStepFrame = ({
   totalSteps,
   onBack,
   onContinue,
-  onSecondaryAction,
 }: OnboardingStepFrameProps) => {
   const insets = useSafeAreaInsets();
   const theme = resolveOnboardingFrameTheme(themeOverride);
+  const copy = getDefaultOnboardingCopy(locale);
   const shouldShowBackButton = showBackButton ?? Boolean(onBack);
   const isBackDisabled = isBackButtonDisabled || !shouldShowBackButton || !onBack;
   const effectiveContentTransitionIndex =
@@ -287,20 +287,19 @@ export const OnboardingStepFrame = ({
             </Text>
           </Pressable>
         )}
-        {secondaryActionLabel && onSecondaryAction ? (
+        {showSecondaryAction ? (
           <Pressable
             accessibilityRole="button"
-            onPress={onSecondaryAction}
+            onPress={onContinue}
             style={styles.secondaryActionButton}
           >
             <Text
               style={[
                 styles.secondaryActionText,
                 { color: theme.secondaryActionTextColor },
-                secondaryActionTextStyle,
               ]}
             >
-              {secondaryActionLabel}
+              {copy.notNowButton}
             </Text>
           </Pressable>
         ) : null}

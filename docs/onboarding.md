@@ -233,7 +233,7 @@ import {
 
 Use `OnboardingStepFrame` when the app owns the onboarding step sequence and
 content, but wants the shared header, progress bar, safe-area spacing, animated
-step transition, CTA, and optional secondary action.
+step transition, CTA, and optional localized secondary continue action.
 
 ```tsx
 import {
@@ -247,13 +247,13 @@ import {
   continueLabel={copy.continueButton}
   currentStepIndex={mainStepIndex}
   description="Tell us where you first found the app."
-  secondaryActionLabel={copy.notNowButton}
+  locale={locale}
+  showSecondaryAction
   theme={frameTheme}
   title={acquisitionSourceText.title}
   totalSteps={slides.length}
   onBack={goBack}
   onContinue={goNext}
-  onSecondaryAction={skipStep}
 >
   <OnboardingChoiceList
     options={sourceOptions}
