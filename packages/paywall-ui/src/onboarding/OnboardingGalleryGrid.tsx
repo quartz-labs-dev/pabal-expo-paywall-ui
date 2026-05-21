@@ -20,6 +20,7 @@ export interface OnboardingGalleryGridItem {
 }
 
 export interface OnboardingGalleryGridProps {
+  accessibilityLabel?: string;
   animationDurationMs?: number;
   items: readonly OnboardingGalleryGridItem[];
   rowCount?: number;
@@ -44,6 +45,7 @@ const TILE_GAP = 10;
 const ROW_GAP = 10;
 
 export const OnboardingGalleryGrid = ({
+  accessibilityLabel = "Animated content gallery",
   animationDurationMs = DEFAULT_ANIMATION_DURATION_MS,
   items,
   rowCount = DEFAULT_ROW_COUNT,
@@ -62,6 +64,7 @@ export const OnboardingGalleryGrid = ({
 
   return (
     <View
+      accessibilityLabel={accessibilityLabel}
       accessibilityRole="image"
       style={[
         styles.root,
@@ -184,7 +187,10 @@ const createGalleryRows = (
   rowCount: number,
 ) => {
   const safeRowCount = Math.max(Math.floor(rowCount), 1);
-  const rows = Array.from({ length: safeRowCount }, () => [] as OnboardingGalleryGridItem[]);
+  const rows = Array.from(
+    { length: safeRowCount },
+    () => [] as OnboardingGalleryGridItem[],
+  );
 
   items.forEach((item, index) => {
     rows[index % safeRowCount].push(item);
