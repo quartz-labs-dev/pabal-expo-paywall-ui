@@ -523,6 +523,7 @@ test("provides localized onboarding acquisition source labels", () => {
   assert.equal(text.title, "어디에서 저희를 알게 되셨나요?");
   assert.equal(text.appStore, "App Store");
   assert.equal(text.playStore, "Play Store");
+  assert.equal(text.tiktok, "TikTok");
   assert.equal(text.x, "X(구 Twitter)");
   assert.equal(text.friendOrFamily, "친구 또는 가족");
   assert.equal(text.other, "기타");

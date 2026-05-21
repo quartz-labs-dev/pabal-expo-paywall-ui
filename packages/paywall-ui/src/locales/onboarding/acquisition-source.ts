@@ -11,6 +11,7 @@ export interface OnboardingAcquisitionSourceText {
   instagram: string;
   other: string;
   playStore: string;
+  tiktok: string;
   title: string;
   x: string;
   youtube: string;
@@ -38,6 +39,7 @@ const createOnboardingAcquisitionSourceText = ({
   instagram: "Instagram",
   other,
   playStore: "Play Store",
+  tiktok: "TikTok",
   title,
   x,
   youtube: "YouTube",

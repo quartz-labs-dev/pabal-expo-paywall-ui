@@ -328,6 +328,7 @@ const [selectedSource, setSelectedSource] =
 `createOnboardingAcquisitionSourceOptions()` returns:
 
 - Instagram
+- TikTok
 - YouTube
 - Google
 - current store, `App Store` or `Play Store`

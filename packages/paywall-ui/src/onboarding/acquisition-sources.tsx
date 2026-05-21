@@ -11,6 +11,7 @@ export type OnboardingAcquisitionStorePlatform = "appStore" | "playStore";
 
 export type OnboardingAcquisitionSourceId =
   | "instagram"
+  | "tiktok"
   | "youtube"
   | "google"
   | "store"
@@ -42,6 +43,15 @@ export const createOnboardingAcquisitionSourceOptions = (
         />
       ),
       title: text.instagram,
+    },
+    {
+      id: "tiktok",
+      icon: (
+        <AcquisitionSourceImageIcon
+          source={acquisitionSourceIconSources.tiktok}
+        />
+      ),
+      title: text.tiktok,
     },
     {
       id: "youtube",
