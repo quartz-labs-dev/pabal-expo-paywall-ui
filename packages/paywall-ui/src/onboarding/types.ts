@@ -20,15 +20,18 @@ export interface OnboardingSlide {
   continueLabel?: string;
   description?: string;
   isBackButtonDisabled?: boolean;
+  tone?: OnboardingFrameTone;
   title?: string;
 }
+
+export type OnboardingFrameTone = "normal" | "inverted";
 
 export interface OnboardingPreludeStep {
   bodyColor: string;
   bodyLines: string[];
   headline: string;
   headlineColor: string;
-  tone: "normal" | "inverted";
+  tone: OnboardingFrameTone;
 }
 
 export type RequiredOnboardingPreludeSteps = readonly [

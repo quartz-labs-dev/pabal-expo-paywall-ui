@@ -11,6 +11,7 @@ import {
   PermissionPromptPreview,
   type OnboardingAcquisitionSourceId,
   type OnboardingAcquisitionSourceOption,
+  type OnboardingChoiceOption,
   type OnboardingSlide,
 } from "pabal-expo-paywall-ui";
 import type { ImageSourcePropType } from "react-native";
@@ -122,6 +123,9 @@ export const OnboardingPlaygroundScreen = ({
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [selectedSource, setSelectedSource] =
     useState<OnboardingAcquisitionSourceId | null>(null);
+  const [selectedProgressStep, setSelectedProgressStep] = useState<
+    string | null
+  >(null);
   const {
     acquisitionSourceText,
     copy: localizedCopy,
@@ -183,6 +187,22 @@ export const OnboardingPlaygroundScreen = ({
         nowLabel: localizedCopy.notificationNowLabel,
         theme,
       }),
+      {
+        canContinue: Boolean(selectedProgressStep),
+        content: (
+          <OnboardingChoiceList
+            options={INVERTED_FRAME_LIST_OPTIONS}
+            selectedOptionId={selectedProgressStep}
+            theme={theme}
+            tone="inverted"
+            onSelectOption={setSelectedProgressStep}
+          />
+        ),
+        description:
+          "The best plan is the one you can return to before the next roll.",
+        title: "Built for repeated progress",
+        tone: "inverted",
+      },
       createCompletionSlide({
         doneLabel: localizedCopy.doneButton,
         theme,
@@ -190,6 +210,7 @@ export const OnboardingPlaygroundScreen = ({
     ],
     [
       selectedSource,
+      selectedProgressStep,
       acquisitionSourceText.title,
       acquisitionSourceOptions,
       locale,
@@ -207,7 +228,9 @@ export const OnboardingPlaygroundScreen = ({
     : undefined;
   const mainStepIndex = Math.max(currentStepIndex - preludeSteps.length, 0);
   const currentSlide = slides[mainStepIndex];
-  const isInvertedPreludeStep = currentPreludeStep?.tone === "inverted";
+  const isInvertedFrameTone =
+    currentPreludeStep?.tone === "inverted" ||
+    (!currentPreludeStep && currentSlide.tone === "inverted");
   const isFirstStep = currentStepIndex === 0;
   const isLastStep =
     currentStepIndex === preludeSteps.length + slides.length - 1;
@@ -233,7 +256,7 @@ export const OnboardingPlaygroundScreen = ({
 
   return (
     <>
-      <StatusBar style={isInvertedPreludeStep ? "light" : "dark"} />
+      <StatusBar style={isInvertedFrameTone ? "light" : "dark"} />
       {currentPreludeStep ? (
         <OnboardingPreludeFrame
           continueLabel={localizedCopy.tapToContinueButton}
@@ -258,6 +281,7 @@ export const OnboardingPlaygroundScreen = ({
           showSecondaryAction={!isLastStep}
           theme={frameTheme}
           title={currentSlide.title}
+          tone={currentSlide.tone}
           totalSteps={headerStepCount}
           onBack={goBack}
           onContinue={goNext}
@@ -296,3 +320,18 @@ const ONBOARDING_SOCIAL_PROOF_CONTENT = {
     },
   ],
 } satisfies Omit<ComponentProps<typeof OnboardingSocialProof>, "theme">;
+
+const INVERTED_FRAME_LIST_OPTIONS = [
+  {
+    id: "save-detail",
+    title: "Save one detail from class",
+  },
+  {
+    id: "review-before-roll",
+    title: "Review it before the next roll",
+  },
+  {
+    id: "build-library",
+    title: "Build a library over time",
+  },
+] satisfies OnboardingChoiceOption[];

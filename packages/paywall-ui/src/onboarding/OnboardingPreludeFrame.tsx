@@ -43,11 +43,6 @@ export const OnboardingPreludeFrame = ({
   theme,
   onContinue,
 }: OnboardingPreludeFrameProps) => {
-  const isInverted = step.tone === "inverted";
-  const backgroundColor = isInverted
-    ? theme.primaryTextColor
-    : (frameTheme?.backgroundColor ?? theme.backgroundColor);
-
   return (
     <OnboardingStepFrame
       canContinue
@@ -72,10 +67,9 @@ export const OnboardingPreludeFrame = ({
       showSecondaryAction={false}
       theme={{
         ...frameTheme,
-        backgroundColor,
         continueButtonTextColor: step.bodyColor,
-        footerBackgroundColor: backgroundColor,
       }}
+      tone={step.tone}
       totalSteps={1}
       onContinue={onContinue}
     >

@@ -19,10 +19,28 @@ test("exports the prelude frame as a public onboarding primitive", () => {
     indexSource,
     /OnboardingPreludeFrameProps,\n\} from "\.\/onboarding\/OnboardingPreludeFrame";/,
   );
+  assert.match(indexSource, /OnboardingFrameTone,/);
   assert.match(indexSource, /RequiredOnboardingPreludeSteps,/);
   assert.match(
     typesSource,
+    /export type OnboardingFrameTone = "normal" \| "inverted";/,
+  );
+  assert.match(
+    typesSource,
     /export type RequiredOnboardingPreludeSteps = readonly \[\n  OnboardingPreludeStep,\n  OnboardingPreludeStep,\n\];/,
+  );
+});
+
+test("exports plain onboarding list as a package primitive", () => {
+  const indexSource = readSource("src/index.ts");
+
+  assert.match(
+    indexSource,
+    /export \{ OnboardingPlainList \} from "\.\/onboarding\/OnboardingPlainList";/,
+  );
+  assert.match(
+    indexSource,
+    /OnboardingPlainListItem,\n  OnboardingPlainListProps,\n\} from "\.\/onboarding\/OnboardingPlainList";/,
   );
 });
 
@@ -46,6 +64,47 @@ test("keeps prelude tap hint color aligned with prelude copy color", () => {
     stepFrameSource,
     /styles\.tapHintArrow,[\s\S]{0,120}continueButtonBackgroundColor/,
   );
+});
+
+test("supports inverted tone on the shared onboarding step frame", () => {
+  const stepFrameSource = readSource("src/onboarding/OnboardingStepFrame.tsx");
+  const preludeFrameSource = readSource(
+    "src/onboarding/OnboardingPreludeFrame.tsx",
+  );
+  const choiceListSource = readSource("src/onboarding/OnboardingChoiceList.tsx");
+  const plainListSource = readSource("src/onboarding/OnboardingPlainList.tsx");
+  const playgroundSource = readFileSync(
+    join(
+      process.cwd(),
+      "..",
+      "..",
+      "apps",
+      "playground",
+      "src",
+      "screens",
+      "OnboardingPlaygroundScreen.tsx",
+    ),
+    "utf8",
+  );
+
+  assert.match(stepFrameSource, /tone\?: OnboardingFrameTone;/);
+  assert.match(stepFrameSource, /tone = "normal"/);
+  assert.match(stepFrameSource, /const isInvertedTone = tone === "inverted";/);
+  assert.match(stepFrameSource, /backgroundColor: frameBackgroundColor/);
+  assert.match(stepFrameSource, /backgroundColor: footerBackgroundColor/);
+  assert.match(stepFrameSource, /progressActiveColor=\{progressActiveColor\}/);
+  assert.match(preludeFrameSource, /tone=\{step\.tone\}/);
+  assert.match(choiceListSource, /tone\?: OnboardingFrameTone;/);
+  assert.match(choiceListSource, /selectedOptionId: string \| null;/);
+  assert.match(choiceListSource, /onSelectOption: \(optionId: string\) => void;/);
+  assert.match(choiceListSource, /const isInvertedTone = tone === "inverted";/);
+  assert.match(plainListSource, /tone\?: OnboardingFrameTone;/);
+  assert.match(plainListSource, /const isInvertedTone = tone === "inverted";/);
+  assert.match(playgroundSource, /<OnboardingChoiceList[\s\S]{0,260}tone="inverted"/);
+  assert.match(playgroundSource, /selectedOptionId=\{selectedProgressStep\}/);
+  assert.match(playgroundSource, /tone: "inverted"/);
+  assert.match(playgroundSource, /tone=\{currentSlide\.tone\}/);
+  assert.doesNotMatch(playgroundSource, /checkedOptionIds/);
 });
 
 test("keeps prelude screen chrome in the package instead of the playground", () => {

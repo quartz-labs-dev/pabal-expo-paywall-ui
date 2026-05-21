@@ -56,11 +56,12 @@ Available main content:
 
 | Content | Use It For | Ownership |
 | --- | --- | --- |
-| `list` | App-owned selectable option list, imported and used by the app/playground where needed | App |
+| `choice-list` | Package-owned one-choice selectable list, with optional inverted tone | Package primitive + app state |
 | `acquisition-source` | "Where did you hear about us?" choice list | App state + package options |
 | `social-proof` | Headline, optional metric, and review cards | App |
 | `permission-prompt` | Preview before asking for native permissions | Package primitive |
 | `notification-mock` | Notification stack and phone mock | App |
+| `plain-list` | Package-owned informational list rows with optional tone | Package primitive + app data |
 | `completion` | Setup-done confirmation with animated success burst and app-provided copy | Package primitive + app state |
 
 Current playground `/onboarding` sequence:
@@ -71,10 +72,12 @@ Current playground `/onboarding` sequence:
 4. `social-proof`
 5. `permission-prompt`
 6. `notification-mock`
-7. `completion`
+7. `choice-list`
+8. `completion`
 
-Use `list` when the app owns the option set. Use `acquisition-source` when the
-screen should use the package-owned source labels and bundled icons.
+Use `choice-list` when the app owns the option set but wants package-owned row
+UI, checked state, and tone handling. Use `acquisition-source` when the screen
+should use the package-owned source labels and bundled icons.
 
 Prelude and social-proof headlines use `**highlighted copy**` to apply the
 onboarding primary/accent color. Keep that marker in content strings instead of
@@ -169,6 +172,10 @@ the label and arrow both follow `step.bodyColor`.
 Use `RequiredOnboardingPreludeSteps` for app-owned prelude fixtures so TypeScript
 fails if a consuming app accidentally removes either the required problem screen
 or the required solution screen.
+
+`tone` is a frame-level concept. `OnboardingPreludeFrame` reads it from the
+prelude step and forwards it to `OnboardingStepFrame`, and regular onboarding
+steps can also set `tone: "inverted"` when the frame chrome should invert.
 
 ## Pre-Onboarding Screens
 
@@ -306,6 +313,7 @@ step transition, CTA, and optional localized secondary continue action.
 ```tsx
 import {
   OnboardingChoiceList,
+  OnboardingPlainList,
   OnboardingStepFrame,
 } from "pabal-expo-paywall-ui";
 
@@ -319,6 +327,7 @@ import {
   showSecondaryAction
   theme={frameTheme}
   title={acquisitionSourceText.title}
+  tone="normal"
   totalSteps={slides.length}
   onBack={goBack}
   onContinue={goNext}
@@ -336,6 +345,41 @@ import {
 The package does not own the full onboarding flow. The app still decides which
 steps exist, selected values, permission request timing, analytics, and final
 navigation.
+
+Set `tone="inverted"` on `OnboardingStepFrame` when the frame background,
+footer, title, description, progress, back icon, and secondary action should use
+the inverted chrome.
+
+`OnboardingChoiceList` is the package-owned one-choice selection list: selecting
+one row shows the checkmark and enables Continue in the app flow. It also
+supports `tone="inverted"` for inverted frames. For non-interactive
+informational list content, use the package-owned `OnboardingPlainList`; it
+supports the same tone prop. The playground should only provide item/option
+data, selected state, and handlers; it should not keep a local custom list
+implementation for this UI.
+
+```tsx
+<OnboardingStepFrame
+  canContinue={Boolean(selectedListOption)}
+  continueLabel={copy.continueButton}
+  currentStepIndex={mainStepIndex}
+  description="The best plan is the one you can return to before the next roll."
+  theme={frameTheme}
+  title="Built for repeated progress"
+  tone="inverted"
+  totalSteps={slides.length}
+  onBack={goBack}
+  onContinue={goNext}
+>
+  <OnboardingChoiceList
+    options={listOptions}
+    selectedOptionId={selectedListOption}
+    theme={theme}
+    tone="inverted"
+    onSelectOption={setSelectedListOption}
+  />
+</OnboardingStepFrame>;
+```
 
 ## Onboarding Animations
 

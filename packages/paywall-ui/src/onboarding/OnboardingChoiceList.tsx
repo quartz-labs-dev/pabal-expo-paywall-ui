@@ -9,21 +9,33 @@ import {
 } from "react-native";
 
 import { getColorWithAlpha } from "../shared/color-utils";
-import type { OnboardingChoiceOption, OnboardingContentTheme } from "./types";
+import type {
+  OnboardingChoiceOption,
+  OnboardingContentTheme,
+  OnboardingFrameTone,
+} from "./types";
 
 export interface OnboardingChoiceListProps {
   options: OnboardingChoiceOption[];
   selectedOptionId: string | null;
   theme: OnboardingContentTheme;
+  tone?: OnboardingFrameTone;
   onSelectOption: (optionId: string) => void;
 }
 
 interface ChoiceListRowProps {
+  checkColor: string;
+  checkedIndicatorBackgroundColor: string;
+  checkedIndicatorBorderColor: string;
   descriptionTextColor: string;
+  indicatorBorderColor: string;
   index: number;
   isSelected: boolean;
   option: OnboardingChoiceOption;
+  rowBackgroundColor: string;
+  rowBorderColor: string;
   theme: OnboardingContentTheme;
+  titleTextColor: string;
   onSelectOption: (optionId: string) => void;
 }
 
@@ -33,24 +45,52 @@ export const OnboardingChoiceList = ({
   options,
   selectedOptionId,
   theme,
+  tone = "normal",
   onSelectOption,
 }: OnboardingChoiceListProps) => {
+  const isInvertedTone = tone === "inverted";
+  const titleTextColor = isInvertedTone
+    ? theme.backgroundColor
+    : theme.primaryTextColor;
   const descriptionTextColor = getColorWithAlpha(
-    theme.primaryTextColor,
+    titleTextColor,
     0.62,
     theme.secondaryTextColor,
   );
+  const rowBackgroundColor = isInvertedTone
+    ? getColorWithAlpha(theme.backgroundColor, 0.12, theme.cardBackgroundColor)
+    : theme.cardBackgroundColor;
+  const rowBorderColor = isInvertedTone
+    ? getColorWithAlpha(theme.backgroundColor, 0.34, "transparent")
+    : "transparent";
+  const checkedIndicatorBackgroundColor = isInvertedTone
+    ? theme.backgroundColor
+    : theme.accentColor;
+  const checkedIndicatorBorderColor = isInvertedTone
+    ? theme.backgroundColor
+    : theme.accentColor;
+  const indicatorBorderColor = isInvertedTone
+    ? getColorWithAlpha(theme.backgroundColor, 0.42, theme.accentColor)
+    : theme.accentColor;
+  const checkColor = isInvertedTone ? theme.primaryTextColor : "#FFFFFF";
 
   return (
     <View style={styles.choiceList}>
       {options.map((option, index) => (
         <ChoiceListRow
           key={option.id}
+          checkColor={checkColor}
+          checkedIndicatorBackgroundColor={checkedIndicatorBackgroundColor}
+          checkedIndicatorBorderColor={checkedIndicatorBorderColor}
           descriptionTextColor={descriptionTextColor}
+          indicatorBorderColor={indicatorBorderColor}
           index={index}
           isSelected={option.id === selectedOptionId}
           option={option}
+          rowBackgroundColor={rowBackgroundColor}
+          rowBorderColor={rowBorderColor}
           theme={theme}
+          titleTextColor={titleTextColor}
           onSelectOption={onSelectOption}
         />
       ))}
@@ -59,11 +99,18 @@ export const OnboardingChoiceList = ({
 };
 
 const ChoiceListRow = ({
+  checkColor,
+  checkedIndicatorBackgroundColor,
+  checkedIndicatorBorderColor,
   descriptionTextColor,
+  indicatorBorderColor,
   index,
   isSelected,
   option,
+  rowBackgroundColor,
+  rowBorderColor,
   theme,
+  titleTextColor,
   onSelectOption,
 }: ChoiceListRowProps) => {
   const entranceProgress = useRef(new Animated.Value(0)).current;
@@ -166,11 +213,12 @@ const ChoiceListRow = ({
         style={[
           styles.choiceRow,
           {
-            backgroundColor: theme.cardBackgroundColor,
+            backgroundColor: rowBackgroundColor,
+            borderColor: rowBorderColor,
             shadowColor: theme.shadowColor,
           },
           isSelected && {
-            borderColor: theme.accentColor,
+            borderColor: checkedIndicatorBorderColor,
           },
         ]}
       >
@@ -178,7 +226,7 @@ const ChoiceListRow = ({
           <View style={styles.choiceLeadingIcon}>{option.icon}</View>
         ) : null}
         <View style={styles.choiceTextWrap}>
-          <Text style={[styles.choiceTitle, { color: theme.primaryTextColor }]}>
+          <Text style={[styles.choiceTitle, { color: titleTextColor }]}>
             {option.title}
           </Text>
           {option.description ? (
@@ -197,13 +245,15 @@ const ChoiceListRow = ({
             styles.choiceIndicator,
             isSelected && animatedCheckStyle,
             {
-              backgroundColor: theme.accentColor,
-              borderColor: theme.accentColor,
+              backgroundColor: checkedIndicatorBackgroundColor,
+              borderColor: isSelected
+                ? checkedIndicatorBorderColor
+                : indicatorBorderColor,
               opacity: isSelected ? undefined : 0,
             },
           ]}
         >
-          <CheckIcon color="#FFFFFF" />
+          <CheckIcon color={checkColor} />
         </Animated.View>
       </Pressable>
     </Animated.View>

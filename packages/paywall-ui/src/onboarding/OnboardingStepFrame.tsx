@@ -14,10 +14,12 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { getDefaultOnboardingCopy } from "../locales/onboarding";
+import { getColorWithAlpha } from "../shared/color-utils";
 import {
   resolveOnboardingFrameTheme,
   type OnboardingFrameTheme,
 } from "./onboarding-frame-theme";
+import type { OnboardingFrameTone } from "./types";
 
 export interface OnboardingStepFrameProps {
   children: ReactNode;
@@ -44,6 +46,7 @@ export interface OnboardingStepFrameProps {
   theme?: OnboardingFrameTheme;
   title?: ReactNode;
   titleStyle?: StyleProp<TextStyle>;
+  tone?: OnboardingFrameTone;
   totalSteps: number;
   onBack?: () => Promise<void> | void;
   onContinue: () => Promise<void> | void;
@@ -83,6 +86,7 @@ export const OnboardingStepFrame = ({
   theme: themeOverride,
   title,
   titleStyle,
+  tone = "normal",
   totalSteps,
   onBack,
   onContinue,
@@ -90,6 +94,52 @@ export const OnboardingStepFrame = ({
 }: OnboardingStepFrameProps) => {
   const insets = useSafeAreaInsets();
   const theme = resolveOnboardingFrameTheme(themeOverride);
+  const isInvertedTone = tone === "inverted";
+  const frameBackgroundColor = isInvertedTone
+    ? theme.titleTextColor
+    : theme.backgroundColor;
+  const frameForegroundColor = isInvertedTone
+    ? theme.backgroundColor
+    : theme.titleTextColor;
+  const frameMutedForegroundColor = getColorWithAlpha(
+    frameForegroundColor,
+    0.68,
+    theme.descriptionTextColor,
+  );
+  const frameSubtleForegroundColor = getColorWithAlpha(
+    frameForegroundColor,
+    0.22,
+    theme.progressInactiveColor,
+  );
+  const frameControlBackgroundColor = getColorWithAlpha(
+    frameForegroundColor,
+    0.14,
+    theme.backButtonBackgroundColor,
+  );
+  const frameDescriptionColor = isInvertedTone
+    ? frameMutedForegroundColor
+    : theme.descriptionTextColor;
+  const footerBackgroundColor = isInvertedTone
+    ? frameBackgroundColor
+    : theme.footerBackgroundColor;
+  const secondaryActionTextColor = isInvertedTone
+    ? frameForegroundColor
+    : theme.secondaryActionTextColor;
+  const progressActiveColor = isInvertedTone
+    ? frameForegroundColor
+    : theme.progressActiveColor;
+  const progressInactiveColor = isInvertedTone
+    ? frameSubtleForegroundColor
+    : theme.progressInactiveColor;
+  const backButtonBackgroundColor = isInvertedTone
+    ? frameControlBackgroundColor
+    : theme.backButtonBackgroundColor;
+  const backButtonIconColor = isInvertedTone
+    ? frameForegroundColor
+    : theme.backButtonIconColor;
+  const backButtonDisabledIconColor = isInvertedTone
+    ? frameForegroundColor
+    : theme.backButtonDisabledIconColor;
   const copy = getDefaultOnboardingCopy(locale);
   const shouldShowSecondaryAction =
     showSecondaryAction && Boolean(onSecondaryAction);
@@ -161,7 +211,7 @@ export const OnboardingStepFrame = ({
 
   const rootStyleValue: StyleProp<ViewStyle> = [
     styles.root,
-    { backgroundColor: theme.backgroundColor },
+    { backgroundColor: frameBackgroundColor },
     rootStyle,
   ];
 
@@ -170,13 +220,13 @@ export const OnboardingStepFrame = ({
       {showHeader && (
         <OnboardingStepHeader
           backButtonAccessibilityLabel={backButtonAccessibilityLabel}
-          backButtonBackgroundColor={theme.backButtonBackgroundColor}
-          backButtonDisabledIconColor={theme.backButtonDisabledIconColor}
-          backButtonIconColor={theme.backButtonIconColor}
+          backButtonBackgroundColor={backButtonBackgroundColor}
+          backButtonDisabledIconColor={backButtonDisabledIconColor}
+          backButtonIconColor={backButtonIconColor}
           currentStepIndex={currentStepIndex}
           isBackDisabled={isBackDisabled}
-          progressActiveColor={theme.progressActiveColor}
-          progressInactiveColor={theme.progressInactiveColor}
+          progressActiveColor={progressActiveColor}
+          progressInactiveColor={progressInactiveColor}
           safeAreaTop={insets.top}
           totalSteps={totalSteps}
           onBack={onBack}
@@ -190,7 +240,7 @@ export const OnboardingStepFrame = ({
               <Text
                 style={[
                   styles.stepTitle,
-                  { color: theme.titleTextColor },
+                  { color: frameForegroundColor },
                   titleStyle,
                 ]}
               >
@@ -204,7 +254,7 @@ export const OnboardingStepFrame = ({
               <Text
                 style={[
                   styles.stepDescription,
-                  { color: theme.descriptionTextColor },
+                  { color: frameDescriptionColor },
                 ]}
               >
                 {description}
@@ -235,7 +285,7 @@ export const OnboardingStepFrame = ({
       <View
         style={[
           styles.footer,
-          { backgroundColor: theme.footerBackgroundColor },
+          { backgroundColor: footerBackgroundColor },
           footerStyle,
           {
             paddingBottom: Math.max(insets.bottom, 12) + 12,
@@ -301,7 +351,7 @@ export const OnboardingStepFrame = ({
             <Text
               style={[
                 styles.secondaryActionText,
-                { color: theme.secondaryActionTextColor },
+                { color: secondaryActionTextColor },
               ]}
             >
               {copy.notNowButton}

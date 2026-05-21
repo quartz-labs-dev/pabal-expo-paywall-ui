@@ -29,6 +29,7 @@ export {
 export { OnboardingChoiceList } from "./onboarding/OnboardingChoiceList";
 export { OnboardingCompletion } from "./onboarding/OnboardingCompletion";
 export { OnboardingNotificationMock } from "./onboarding/OnboardingNotificationMock";
+export { OnboardingPlainList } from "./onboarding/OnboardingPlainList";
 export { OnboardingPreludeContent } from "./onboarding/OnboardingPreludeContent";
 export { OnboardingPreludeFrame } from "./onboarding/OnboardingPreludeFrame";
 export { OnboardingSocialProof } from "./onboarding/OnboardingSocialProof";
@@ -75,6 +76,10 @@ export type {
   OnboardingNotificationMockProps,
 } from "./onboarding/OnboardingNotificationMock";
 export type {
+  OnboardingPlainListItem,
+  OnboardingPlainListProps,
+} from "./onboarding/OnboardingPlainList";
+export type {
   OnboardingPreludeContentProps,
 } from "./onboarding/OnboardingPreludeContent";
 export type {
@@ -96,6 +101,7 @@ export type {
 export type {
   OnboardingChoiceOption,
   OnboardingContentTheme,
+  OnboardingFrameTone,
   OnboardingPreludeStep,
   OnboardingSlide,
   OnboardingSocialProofContentData,
