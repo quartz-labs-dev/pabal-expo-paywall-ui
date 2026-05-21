@@ -242,22 +242,21 @@ const preludeSteps: RequiredOnboardingPreludeSteps = [
   {
     bodyColor: theme.backgroundColor,
     bodyLines: [
-      "you are not alone",
-      "jiu-jitsu is too deep to keep in your head,",
-      "especially when every class adds another detail.",
+      "The technique you learned, the spot where sparring broke down, and your coach's advice fade faster than you think.",
+      "If you do not record it, progress can pile up without ever becoming visible.",
     ],
-    headline: "ever feel like you **forget** the technique right after class?",
+    headline:
+      "You trained hard, but do you remember **what actually stayed with you?**",
     headlineColor: theme.backgroundColor,
     tone: "inverted",
   },
   {
     bodyColor: theme.primaryTextColor,
     bodyLines: [
-      "save the move, review the key detail,",
-      "and come back before the next roll.",
+      "what happened, what you learned,",
+      "and what to work on next.",
     ],
-    headline:
-      "Post Black Belt turns training into a **library** you can actually use.",
+    headline: "Post Black Belt helps you **capture**",
     headlineColor: theme.primaryTextColor,
     tone: "normal",
   },
