@@ -26,6 +26,7 @@ export interface OnboardingNicknameFlowFrameProps {
   frameTheme?: OnboardingFrameTheme;
   initialPhase?: OnboardingNicknameFlowPhase;
   isBackButtonDisabled?: boolean;
+  isContentTransitionEnabled?: boolean;
   locale?: string;
   placeholder?: string;
   onBack?: () => Promise<void> | void;
@@ -44,6 +45,7 @@ export function OnboardingNicknameFlowFrame({
   frameTheme,
   initialPhase = "input",
   isBackButtonDisabled,
+  isContentTransitionEnabled,
   locale,
   nickname,
   placeholder,
@@ -103,7 +105,7 @@ export function OnboardingNicknameFlowFrame({
         }
         currentStepIndex={baseStepIndex + phaseStepOffset}
         isBackButtonDisabled={isBackButtonDisabled}
-        isContentTransitionEnabled
+        isContentTransitionEnabled={isContentTransitionEnabled}
         locale={locale}
         showBackButton
         showSecondaryAction={false}
@@ -131,7 +133,7 @@ export function OnboardingNicknameFlowFrame({
       contentTransitionIndex={contentTransitionIndex ?? baseStepIndex}
       currentStepIndex={baseStepIndex}
       isBackButtonDisabled={isBackButtonDisabled}
-      isContentTransitionEnabled
+      isContentTransitionEnabled={isContentTransitionEnabled}
       locale={locale}
       showBackButton
       showSecondaryAction={false}

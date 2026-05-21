@@ -11,6 +11,7 @@ export interface OnboardingPreludeFrameProps {
   contentTransitionIndex?: number;
   frameTheme?: OnboardingFrameTheme;
   fullScreenTapAccessibilityLabel?: string;
+  isContentTransitionEnabled?: boolean;
   locale?: string;
   step: OnboardingPreludeStep;
   theme: Pick<
@@ -38,6 +39,7 @@ export const OnboardingPreludeFrame = ({
   contentTransitionIndex,
   frameTheme,
   fullScreenTapAccessibilityLabel,
+  isContentTransitionEnabled,
   locale,
   step,
   theme,
@@ -59,7 +61,7 @@ export const OnboardingPreludeFrame = ({
       }
       isBackButtonDisabled
       isBodyScrollEnabled={false}
-      isContentTransitionEnabled
+      isContentTransitionEnabled={isContentTransitionEnabled}
       isFullScreenTapEnabled
       locale={locale}
       showBackButton

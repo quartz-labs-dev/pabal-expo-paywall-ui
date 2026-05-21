@@ -149,6 +149,47 @@ test("keeps prelude tap hint color aligned with prelude copy color", () => {
   );
 });
 
+test("keeps shared onboarding body transition disabled by default", () => {
+  const stepFrameSource = readSource("src/onboarding/OnboardingStepFrame.tsx");
+  const preludeFrameSource = readSource(
+    "src/onboarding/OnboardingPreludeFrame.tsx",
+  );
+  const nicknameFlowFrameSource = readSource(
+    "src/onboarding/OnboardingNicknameFlowFrame.tsx",
+  );
+
+  assert.match(stepFrameSource, /isContentTransitionEnabled = false/);
+  assert.match(
+    preludeFrameSource,
+    /isContentTransitionEnabled=\{isContentTransitionEnabled\}/,
+  );
+  assert.match(
+    nicknameFlowFrameSource,
+    /isContentTransitionEnabled=\{isContentTransitionEnabled\}/,
+  );
+  assert.doesNotMatch(
+    preludeFrameSource,
+    /isContentTransitionEnabled\s*(?:\n\s*)?(?:locale=|isFullScreenTapEnabled)/,
+  );
+  assert.doesNotMatch(
+    nicknameFlowFrameSource,
+    /isContentTransitionEnabled\s*(?:\n\s*)?(?:locale=|showBackButton)/,
+  );
+});
+
+test("keeps opt-in onboarding body transition fade-only", () => {
+  const stepFrameSource = readSource("src/onboarding/OnboardingStepFrame.tsx");
+  const animatedBodyStyleSource =
+    stepFrameSource.match(
+      /const animatedBodyStyle = isContentTransitionEnabled[\s\S]*?: undefined;/,
+    )?.[0] ?? "";
+
+  assert.match(animatedBodyStyleSource, /opacity: contentTransition\.interpolate/);
+  assert.doesNotMatch(animatedBodyStyleSource, /transform:/);
+  assert.doesNotMatch(animatedBodyStyleSource, /translateX/);
+  assert.doesNotMatch(stepFrameSource, /contentDirection/);
+});
+
 test("supports inverted tone on the shared onboarding step frame", () => {
   const stepFrameSource = readSource("src/onboarding/OnboardingStepFrame.tsx");
   const preludeFrameSource = readSource(

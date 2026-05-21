@@ -80,7 +80,7 @@ export const OnboardingStepFrame = ({
   backButtonAccessibilityLabel = "Go back",
   isBackButtonDisabled = false,
   isBodyScrollEnabled = true,
-  isContentTransitionEnabled = true,
+  isContentTransitionEnabled = false,
   isFullScreenTapEnabled = false,
   keyboardVerticalOffset = 0,
   locale,
@@ -153,11 +153,6 @@ export const OnboardingStepFrame = ({
   const effectiveContentTransitionIndex =
     contentTransitionIndex ?? currentStepIndex;
   const previousStepIndexRef = useRef<number | null>(null);
-  const contentDirection =
-    previousStepIndexRef.current !== null &&
-    effectiveContentTransitionIndex < previousStepIndexRef.current
-      ? -1
-      : 1;
   const contentTransition = useRef(
     new Animated.Value(isContentTransitionEnabled ? 0 : 1),
   ).current;
@@ -203,14 +198,6 @@ export const OnboardingStepFrame = ({
           inputRange: [0, 1],
           outputRange: [0.01, 1],
         }),
-        transform: [
-          {
-            translateX: contentTransition.interpolate({
-              inputRange: [0, 1],
-              outputRange: [44 * contentDirection, 0],
-            }),
-          },
-        ],
       }
     : undefined;
 
