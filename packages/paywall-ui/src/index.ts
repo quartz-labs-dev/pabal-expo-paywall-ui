@@ -12,6 +12,12 @@ export {
   ONBOARDING_ACQUISITION_SOURCE_TEXT_LOCALES,
 } from "./locales/onboarding/acquisition-source";
 export {
+  formatOnboardingNicknameWelcomeTitle,
+  getDefaultOnboardingNicknameInputText,
+  ONBOARDING_NICKNAME_INPUT_TEXT,
+  ONBOARDING_NICKNAME_INPUT_TEXT_LOCALES,
+} from "./locales/onboarding/nickname-input";
+export {
   createOnboardingAcquisitionSourceOptions,
   ONBOARDING_ACQUISITION_SOURCE_TITLE,
 } from "./onboarding/acquisition-sources";
@@ -28,12 +34,17 @@ export {
 } from "./onboarding/onboarding-animations";
 export { OnboardingChoiceList } from "./onboarding/OnboardingChoiceList";
 export { OnboardingCompletion } from "./onboarding/OnboardingCompletion";
+export { OnboardingGalleryGrid } from "./onboarding/OnboardingGalleryGrid";
 export { OnboardingNotificationMock } from "./onboarding/OnboardingNotificationMock";
+export { OnboardingNicknameFlowFrame } from "./onboarding/OnboardingNicknameFlowFrame";
+export { OnboardingNicknameInput } from "./onboarding/OnboardingNicknameInput";
 export { OnboardingPlainList } from "./onboarding/OnboardingPlainList";
 export { OnboardingPreludeContent } from "./onboarding/OnboardingPreludeContent";
 export { OnboardingPreludeFrame } from "./onboarding/OnboardingPreludeFrame";
 export { OnboardingSocialProof } from "./onboarding/OnboardingSocialProof";
 export { OnboardingStepFrame } from "./onboarding/OnboardingStepFrame";
+export { OnboardingTextInputContent } from "./onboarding/OnboardingTextInputContent";
+export { OnboardingTypingText } from "./onboarding/OnboardingTypingText";
 export { PermissionPromptPreview } from "./onboarding/PermissionPromptPreview";
 export {
   PreOnboardingBackgroundSlot,
@@ -73,9 +84,26 @@ export type {
   OnboardingChoiceListProps,
 } from "./onboarding/OnboardingChoiceList";
 export type {
+  OnboardingGalleryGridItem,
+  OnboardingGalleryGridProps,
+} from "./onboarding/OnboardingGalleryGrid";
+export type {
   OnboardingNotificationItem,
   OnboardingNotificationMockProps,
 } from "./onboarding/OnboardingNotificationMock";
+export type {
+  OnboardingNicknameFlowFrameProps,
+  OnboardingNicknameFlowPhase,
+} from "./onboarding/OnboardingNicknameFlowFrame";
+export type {
+  OnboardingNicknameInputProps,
+} from "./onboarding/OnboardingNicknameInput";
+export type {
+  OnboardingTextInputContentProps,
+} from "./onboarding/OnboardingTextInputContent";
+export type {
+  OnboardingTypingTextProps,
+} from "./onboarding/OnboardingTypingText";
 export type {
   OnboardingPlainListItem,
   OnboardingPlainListProps,
@@ -131,6 +159,7 @@ export type {
   PreOnboardingWelcomeProps,
 } from "./onboarding/PreOnboardingWelcome";
 export type { OnboardingAcquisitionSourceText } from "./locales/onboarding/acquisition-source";
+export type { OnboardingNicknameInputText } from "./locales/onboarding/nickname-input";
 export { Paywall } from "./paywall/Paywall";
 export { ProfileSubscriptionSection } from "./profile/ProfileSubscriptionSection";
 export { isUnifiedLocale, UNIFIED_LOCALES } from "./locales/unified-locales";

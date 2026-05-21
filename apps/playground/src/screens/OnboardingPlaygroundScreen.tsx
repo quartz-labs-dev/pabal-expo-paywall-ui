@@ -5,6 +5,8 @@ import {
   createOnboardingAcquisitionSourceOptions,
   OnboardingChoiceList,
   OnboardingCompletion,
+  OnboardingGalleryGrid,
+  OnboardingNicknameFlowFrame,
   OnboardingNotificationMock,
   OnboardingPreludeFrame,
   OnboardingSocialProof,
@@ -13,6 +15,8 @@ import {
   type OnboardingAcquisitionSourceId,
   type OnboardingAcquisitionSourceOption,
   type OnboardingChoiceOption,
+  type OnboardingGalleryGridItem,
+  type OnboardingNicknameFlowPhase,
   type OnboardingNotificationItem,
   type OnboardingSlide,
 } from "pabal-expo-paywall-ui";
@@ -38,6 +42,10 @@ export interface OnboardingNotificationContent {
   logoSource?: ImageSourcePropType;
   notifications?: readonly OnboardingNotificationItem[];
   title?: string;
+}
+
+export interface OnboardingSubmittedNicknameProfile {
+  nickname: string;
 }
 
 interface CreateAcquisitionSourceSlideParams {
@@ -134,6 +142,11 @@ export const OnboardingPlaygroundScreen = ({
   const [selectedProgressStep, setSelectedProgressStep] = useState<
     string | null
   >(null);
+  const [profileNickname, setProfileNickname] = useState("");
+  const [nicknameFlowPhase, setNicknameFlowPhase] =
+    useState<OnboardingNicknameFlowPhase>("input");
+  const [, setSubmittedNicknameProfile] =
+    useState<OnboardingSubmittedNicknameProfile | null>(null);
   const {
     acquisitionSourceText,
     copy: localizedCopy,
@@ -167,6 +180,19 @@ export const OnboardingPlaygroundScreen = ({
         title: acquisitionSourceText.title,
         onSelectSource: setSelectedSource,
       }),
+      {
+        canContinue: true,
+        content: (
+          <OnboardingGalleryGrid
+            animationDurationMs={17000}
+            items={ONBOARDING_GALLERY_GRID_ITEMS}
+            theme={theme}
+          />
+        ),
+        description:
+          "Save the small details you want to remember, then come back to them before the next round.",
+        title: "Your training library starts here",
+      },
       {
         canContinue: true,
         content: (
@@ -234,15 +260,22 @@ export const OnboardingPlaygroundScreen = ({
   const currentPreludeStep = isPreludeStep
     ? preludeSteps[currentStepIndex]
     : undefined;
-  const mainStepIndex = Math.max(currentStepIndex - preludeSteps.length, 0);
-  const currentSlide = slides[mainStepIndex];
+  const isNicknameFlowStep = currentStepIndex === preludeSteps.length;
+  const mainSlideStepIndex = Math.max(
+    currentStepIndex - preludeSteps.length - 1,
+    0,
+  );
+  const currentSlide = slides[mainSlideStepIndex];
   const isInvertedFrameTone =
     currentPreludeStep?.tone === "inverted" ||
-    (!currentPreludeStep && currentSlide.tone === "inverted");
+    (isNicknameFlowStep && nicknameFlowPhase === "welcome") ||
+    (!currentPreludeStep &&
+      !isNicknameFlowStep &&
+      currentSlide.tone === "inverted");
   const isFirstStep = currentStepIndex === 0;
   const isLastStep =
-    currentStepIndex === preludeSteps.length + slides.length - 1;
-  const headerStepCount = Math.max(slides.length, 1);
+    currentStepIndex === preludeSteps.length + slides.length;
+  const headerStepCount = Math.max(slides.length + 2, 1);
 
   const goBack = () => {
     if (isFirstStep) {
@@ -253,7 +286,11 @@ export const OnboardingPlaygroundScreen = ({
     setCurrentStepIndex((stepIndex) => stepIndex - 1);
   };
 
-  const goNext = () => {
+  const goNext = async () => {
+    if (!isNicknameFlowStep) {
+      await currentSlide.onContinue?.();
+    }
+
     if (isLastStep) {
       onClose();
       return;
@@ -275,18 +312,40 @@ export const OnboardingPlaygroundScreen = ({
           theme={theme}
           onContinue={goNext}
         />
+      ) : isNicknameFlowStep ? (
+        <OnboardingNicknameFlowFrame
+          autoFocus
+          baseStepIndex={0}
+          continueLabel={continueLabel}
+          contentTransitionIndex={currentStepIndex}
+          frameTheme={frameTheme}
+          initialPhase={nicknameFlowPhase}
+          locale={locale}
+          nickname={profileNickname}
+          theme={theme}
+          totalSteps={headerStepCount}
+          onBack={goBack}
+          onChangeNickname={setProfileNickname}
+          onComplete={goNext}
+          onPhaseChange={setNicknameFlowPhase}
+          onSubmitNickname={(nickname) => {
+            setSubmittedNicknameProfile({ nickname });
+          }}
+        />
       ) : (
         <OnboardingStepFrame
           canContinue={currentSlide.canContinue}
           continueLabel={currentSlide.continueLabel ?? continueLabel}
           contentTransitionIndex={currentStepIndex}
-          currentStepIndex={mainStepIndex}
+          currentStepIndex={mainSlideStepIndex + 2}
           description={currentSlide.description}
           isBackButtonDisabled={currentSlide.isBackButtonDisabled}
           isContentTransitionEnabled
           locale={locale}
           showBackButton
-          showSecondaryAction={!isLastStep}
+          showSecondaryAction={
+            currentSlide.showSecondaryAction ?? !isLastStep
+          }
           theme={frameTheme}
           title={currentSlide.title}
           tone={currentSlide.tone}
@@ -359,6 +418,75 @@ const ONBOARDING_SOCIAL_PROOF_CONTENT = {
     },
   ],
 } satisfies Omit<ComponentProps<typeof OnboardingSocialProof>, "theme">;
+
+const ONBOARDING_GALLERY_GRID_ITEMS = [
+  {
+    backgroundColor: "#F48BB7",
+    id: "captain-hook",
+    title: "Captain Hook",
+  },
+  {
+    backgroundColor: "#79D4DC",
+    id: "james-dean",
+    imageSource: require("../../../../packages/paywall-ui/src/assets/acquisition-icons/instagram.png"),
+    title: "James Dean",
+  },
+  {
+    backgroundColor: "#8BCB67",
+    id: "espresso-machine",
+    imageSource: require("../../../../packages/paywall-ui/src/assets/acquisition-icons/google.png"),
+    title: "Espresso machine",
+  },
+  {
+    backgroundColor: "#F4D35E",
+    id: "saturn-v",
+    imageSource: require("../../../../packages/paywall-ui/src/assets/acquisition-icons/youtube.png"),
+    title: "Saturn V",
+  },
+  {
+    backgroundColor: "#CBA7F2",
+    id: "miss-americana",
+    title: "Miss Americana & the Heartbreak Prince",
+  },
+  {
+    backgroundColor: "#68CBD3",
+    id: "carpenter-ants",
+    title: "Carpenter ants",
+  },
+  {
+    backgroundColor: "#F8E45C",
+    id: "madison-square-garden",
+    title: "Madison Square Garden",
+  },
+  {
+    backgroundColor: "#5AAEEB",
+    id: "josephine-baker",
+    imageSource: require("../../../../packages/paywall-ui/src/assets/acquisition-icons/x.png"),
+    title: "Josephine Baker",
+  },
+  {
+    backgroundColor: "#F6A57F",
+    id: "space-odyssey",
+    title: "2001: A Space Odyssey",
+  },
+  {
+    backgroundColor: "#8DD06A",
+    id: "nitrogen",
+    title: "Nitrogen's atomic number",
+  },
+  {
+    backgroundColor: "#E7EFF7",
+    id: "moonwalk",
+    imageSource: require("../../../../packages/paywall-ui/src/assets/acquisition-icons/app-store.png"),
+    title: "Moonwalk",
+  },
+  {
+    backgroundColor: "#D6C6A7",
+    id: "classical-study",
+    imageSource: require("../../../../packages/paywall-ui/src/assets/acquisition-icons/play-store.png"),
+    title: "Classical study",
+  },
+] satisfies readonly OnboardingGalleryGridItem[];
 
 const INVERTED_FRAME_LIST_OPTIONS = [
   {

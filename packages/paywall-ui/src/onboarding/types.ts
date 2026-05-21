@@ -20,6 +20,8 @@ export interface OnboardingSlide {
   continueLabel?: string;
   description?: string;
   isBackButtonDisabled?: boolean;
+  onContinue?: () => Promise<void> | void;
+  showSecondaryAction?: boolean;
   tone?: OnboardingFrameTone;
   title?: string;
 }

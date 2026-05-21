@@ -59,6 +59,74 @@ test("exports notification item contract and caps the mock stack", () => {
   assert.match(notificationSource, /iconBackgroundColor\?: string;/);
 });
 
+test("exports nickname input as a localized package primitive", () => {
+  const indexSource = readSource("src/index.ts");
+  const nicknameInputSource = readSource(
+    "src/onboarding/OnboardingNicknameInput.tsx",
+  );
+  const textInputSource = readSource(
+    "src/onboarding/OnboardingTextInputContent.tsx",
+  );
+  const typingTextSource = readSource(
+    "src/onboarding/OnboardingTypingText.tsx",
+  );
+  const nicknameFlowFrameSource = readSource(
+    "src/onboarding/OnboardingNicknameFlowFrame.tsx",
+  );
+
+  assert.match(
+    indexSource,
+    /export \{ OnboardingNicknameInput \} from "\.\/onboarding\/OnboardingNicknameInput";/,
+  );
+  assert.match(indexSource, /getDefaultOnboardingNicknameInputText,/);
+  assert.match(indexSource, /formatOnboardingNicknameWelcomeTitle,/);
+  assert.match(
+    indexSource,
+    /OnboardingNicknameInputProps,\n\} from "\.\/onboarding\/OnboardingNicknameInput";/,
+  );
+  assert.match(
+    indexSource,
+    /export \{ OnboardingTextInputContent \} from "\.\/onboarding\/OnboardingTextInputContent";/,
+  );
+  assert.match(
+    indexSource,
+    /OnboardingTextInputContentProps,\n\} from "\.\/onboarding\/OnboardingTextInputContent";/,
+  );
+  assert.match(
+    indexSource,
+    /export \{ OnboardingTypingText \} from "\.\/onboarding\/OnboardingTypingText";/,
+  );
+  assert.match(
+    indexSource,
+    /OnboardingTypingTextProps,\n\} from "\.\/onboarding\/OnboardingTypingText";/,
+  );
+  assert.match(
+    indexSource,
+    /export \{ OnboardingNicknameFlowFrame \} from "\.\/onboarding\/OnboardingNicknameFlowFrame";/,
+  );
+  assert.match(
+    indexSource,
+    /OnboardingNicknameFlowFrameProps,\n  OnboardingNicknameFlowPhase,\n\} from "\.\/onboarding\/OnboardingNicknameFlowFrame";/,
+  );
+  assert.match(nicknameInputSource, /getDefaultOnboardingNicknameInputText/);
+  assert.match(nicknameInputSource, /<OnboardingTextInputContent/);
+  assert.match(nicknameInputSource, /placeholder=\{placeholder \?\? copy\.inputPlaceholder\}/);
+  assert.match(nicknameInputSource, /onChangeText=\{onChangeNickname\}/);
+  assert.match(textInputSource, /placeholder: string;/);
+  assert.match(textInputSource, /placeholder=\{placeholder\}/);
+  assert.match(typingTextSource, /Array\.from\(text\)/);
+  assert.match(typingTextSource, /setVisibleCharacterCount/);
+  assert.match(typingTextSource, /clearInterval/);
+  assert.match(nicknameFlowFrameSource, /phase === "welcome"/);
+  assert.match(nicknameFlowFrameSource, /initialPhase = "input"/);
+  assert.match(nicknameFlowFrameSource, /title=\{copy\.title\}/);
+  assert.match(nicknameFlowFrameSource, /showSecondaryAction=\{false\}/);
+  assert.match(nicknameFlowFrameSource, /<OnboardingNicknameInput/);
+  assert.match(nicknameFlowFrameSource, /tone="inverted"/);
+  assert.match(nicknameFlowFrameSource, /<OnboardingTypingText/);
+  assert.match(nicknameFlowFrameSource, /onSubmitNickname\?\.\(trimmedNickname\)/);
+});
+
 test("keeps prelude tap hint color aligned with prelude copy color", () => {
   const preludeFrameSource = readSource(
     "src/onboarding/OnboardingPreludeFrame.tsx",
@@ -122,6 +190,15 @@ test("supports inverted tone on the shared onboarding step frame", () => {
   assert.doesNotMatch(playgroundSource, /checkedOptionIds/);
 });
 
+test("keeps keyboard avoiding on the shared onboarding step frame", () => {
+  const stepFrameSource = readSource("src/onboarding/OnboardingStepFrame.tsx");
+
+  assert.match(stepFrameSource, /KeyboardAvoidingView/);
+  assert.match(stepFrameSource, /keyboardVerticalOffset\?: number;/);
+  assert.match(stepFrameSource, /Platform\.OS === "ios" \? "padding" : "height"/);
+  assert.doesNotMatch(stepFrameSource, /isKeyboardAvoidingEnabled/);
+});
+
 test("keeps prelude screen chrome in the package instead of the playground", () => {
   const preludeFrameSource = readSource(
     "src/onboarding/OnboardingPreludeFrame.tsx",
@@ -180,8 +257,11 @@ test("keeps playground onboarding prelude mandatory before main steps", () => {
 
   assert.match(fixtureSource, /RequiredOnboardingPreludeSteps/);
   assert.match(playgroundSource, /currentStepIndex < preludeSteps\.length/);
+  assert.match(playgroundSource, /isNicknameFlowStep = currentStepIndex === preludeSteps\.length/);
   assert.match(
     playgroundSource,
-    /Math\.max\(currentStepIndex - preludeSteps\.length, 0\)/,
+    /Math\.max\(\n    currentStepIndex - preludeSteps\.length - 1,\n    0,\n  \)/,
   );
+  assert.match(playgroundSource, /<OnboardingNicknameFlowFrame/);
+  assert.match(playgroundSource, /currentStepIndex=\{mainSlideStepIndex \+ 2\}/);
 });

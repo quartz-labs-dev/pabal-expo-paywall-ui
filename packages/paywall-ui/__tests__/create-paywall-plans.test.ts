@@ -19,6 +19,11 @@ import {
   getDefaultOnboardingAcquisitionSourceText,
   ONBOARDING_ACQUISITION_SOURCE_TEXT_LOCALES,
 } from "../src/locales/onboarding/acquisition-source";
+import {
+  formatOnboardingNicknameWelcomeTitle,
+  getDefaultOnboardingNicknameInputText,
+  ONBOARDING_NICKNAME_INPUT_TEXT_LOCALES,
+} from "../src/locales/onboarding/nickname-input";
 import { UNIFIED_LOCALES } from "../src/locales/unified-locales";
 import type { PurchasesPackageLike } from "../src/types";
 import type {
@@ -26,6 +31,8 @@ import type {
   PaywallValueStepText,
 } from "../src/locales/paywall";
 import assert from "node:assert/strict";
+import { existsSync, readFileSync } from "node:fs";
+import { join } from "node:path";
 import test from "node:test";
 
 const makePackage = (
@@ -514,6 +521,72 @@ test("localizes onboarding acquisition source copy for every non-English locale"
     assert.notEqual(text.friendOrFamily, "Friend or family", locale);
     assert.notEqual(text.other, "Other", locale);
     assert.notEqual(text.x, "X (formerly Twitter)", locale);
+  }
+});
+
+test("localizes onboarding nickname input copy for every non-English locale", () => {
+  for (const locale of ONBOARDING_NICKNAME_INPUT_TEXT_LOCALES) {
+    const text = getDefaultOnboardingNicknameInputText(locale);
+
+    if (locale === "en") {
+      assert.equal(text.title, "What should we call you?");
+      assert.equal(text.inputPlaceholder, "Nickname");
+      assert.equal(text.inputAccessibilityLabel, "Nickname");
+      assert.equal(text.welcomeTitle, "Welcome, {nickname}!");
+      continue;
+    }
+
+    assert.notEqual(text.title, "What should we call you?", locale);
+    assert.notEqual(text.inputPlaceholder, "Nickname", locale);
+    assert.notEqual(text.welcomeTitle, "Welcome, {nickname}!", locale);
+    assert.match(text.welcomeTitle, /!$/u, locale);
+  }
+
+  assert.deepEqual(getDefaultOnboardingNicknameInputText("ko-KR"), {
+    inputAccessibilityLabel: "닉네임",
+    inputPlaceholder: "닉네임",
+    title: "어떻게 불러드릴까요?",
+    welcomeTitle: "환영합니다 {nickname}님!",
+  });
+  assert.equal(
+    formatOnboardingNicknameWelcomeTitle("환영합니다 {nickname}님!", "길동"),
+    "환영합니다 길동님!",
+  );
+});
+
+test("keeps onboarding locale copy split by language file", () => {
+  const localeFileName = (locale: string) => {
+    if (locale === "ptBr") return "pt-br";
+    if (locale === "zhHans") return "zh-hans";
+    if (locale === "zhHant") return "zh-hant";
+
+    return locale;
+  };
+  const onboardingIndexSource = readFileSync(
+    join(process.cwd(), "src", "locales", "onboarding", "index.ts"),
+    "utf8",
+  );
+
+  assert.doesNotMatch(
+    onboardingIndexSource,
+    /const ONBOARDING_TEXT_BY_LOCALE = \{\n\s+af:/,
+  );
+  assert.deepEqual(ONBOARDING_TEXT_LOCALES, PAYWALL_TEXT_LOCALES);
+
+  for (const locale of ONBOARDING_TEXT_LOCALES) {
+    assert.equal(
+      existsSync(
+        join(
+          process.cwd(),
+          "src",
+          "locales",
+          "onboarding",
+          `${localeFileName(locale)}.ts`,
+        ),
+      ),
+      true,
+      locale,
+    );
   }
 });
 

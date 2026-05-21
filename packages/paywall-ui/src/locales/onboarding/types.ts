@@ -16,3 +16,20 @@ export interface PermissionPromptText {
   allowButton: string;
   denyButton: string;
 }
+
+export interface OnboardingNicknameInputText {
+  inputAccessibilityLabel: string;
+  inputPlaceholder: string;
+  title: string;
+  welcomeTitle: string;
+}
+
+export interface OnboardingLocaleText {
+  text: OnboardingText;
+  permissionPrompt: PermissionPromptText;
+  nicknameInput: OnboardingNicknameInputText;
+}
+
+export const createOnboardingLocaleText = (
+  text: OnboardingLocaleText,
+): OnboardingLocaleText => text;

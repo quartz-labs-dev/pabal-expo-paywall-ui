@@ -31,8 +31,9 @@ dependency.
 - [Onboarding](../../docs/onboarding.md): pre-onboarding screen exports,
   pre-onboarding frame/content exports, onboarding frame/content exports,
   required prelude problem/solution frame, supported onboarding content types,
-  animation helpers, acquisition source options, permission prompt previews, and
-  the required first-screen language selector placement under the title.
+  package-owned nickname flow, gallery grid animation, animation helpers,
+  acquisition source options, permission prompt previews, and the required
+  first-screen language selector placement under the title.
 - [Profile](../../docs/profile.md): subscription status, benefit usage, and
   profile identifier UI.
 

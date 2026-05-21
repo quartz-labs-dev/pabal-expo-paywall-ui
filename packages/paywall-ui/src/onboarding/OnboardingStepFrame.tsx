@@ -2,6 +2,8 @@ import { type ReactNode, useEffect, useRef } from "react";
 import {
   Animated,
   Easing,
+  KeyboardAvoidingView,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -38,6 +40,7 @@ export interface OnboardingStepFrameProps {
   isBodyScrollEnabled?: boolean;
   isContentTransitionEnabled?: boolean;
   isFullScreenTapEnabled?: boolean;
+  keyboardVerticalOffset?: number;
   locale?: string;
   rootStyle?: StyleProp<ViewStyle>;
   showBackButton?: boolean;
@@ -78,6 +81,7 @@ export const OnboardingStepFrame = ({
   isBodyScrollEnabled = true,
   isContentTransitionEnabled = true,
   isFullScreenTapEnabled = false,
+  keyboardVerticalOffset = 0,
   locale,
   rootStyle,
   showBackButton,
@@ -362,22 +366,28 @@ export const OnboardingStepFrame = ({
     </>
   );
 
-  if (isFullScreenTapEnabled) {
-    return (
-      <Pressable
-        accessibilityLabel={fullScreenTapAccessibilityLabel ?? continueLabel}
-        accessibilityRole="button"
-        accessibilityState={{ disabled: !canContinue }}
-        disabled={!canContinue}
-        onPress={onContinue}
-        style={rootStyleValue}
-      >
-        {content}
-      </Pressable>
-    );
-  }
-
-  return <View style={rootStyleValue}>{content}</View>;
+  return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={keyboardVerticalOffset}
+      style={rootStyleValue}
+    >
+      {isFullScreenTapEnabled ? (
+        <Pressable
+          accessibilityLabel={fullScreenTapAccessibilityLabel ?? continueLabel}
+          accessibilityRole="button"
+          accessibilityState={{ disabled: !canContinue }}
+          disabled={!canContinue}
+          onPress={onContinue}
+          style={styles.root}
+        >
+          {content}
+        </Pressable>
+      ) : (
+        content
+      )}
+    </KeyboardAvoidingView>
+  );
 };
 
 interface OnboardingStepHeaderProps {

@@ -58,6 +58,8 @@ Available main content:
 | --- | --- | --- |
 | `choice-list` | Package-owned one-choice selectable list, with optional inverted tone | Package primitive + app state |
 | `acquisition-source` | "Where did you hear about us?" choice list | App state + package options |
+| `gallery-grid` | Animated three-row gallery of app-provided title/image/color tiles | Package primitive + app data |
+| `nickname-flow` | Localized nickname input followed by typed welcome | Package frame + app state |
 | `social-proof` | Headline, optional metric, and review cards | App |
 | `permission-prompt` | Preview before asking for native permissions | Package primitive |
 | `notification-mock` | Notification stack and phone mock | App |
@@ -68,12 +70,15 @@ Current playground `/onboarding` sequence:
 
 1. `prelude`
 2. `prelude`
-3. `acquisition-source`
-4. `social-proof`
-5. `permission-prompt`
-6. `notification-mock`
-7. `choice-list`
-8. `completion`
+3. `nickname-flow` input
+4. `nickname-flow` welcome
+5. `acquisition-source`
+6. `gallery-grid`
+7. `social-proof`
+8. `permission-prompt`
+9. `notification-mock`
+10. `choice-list`
+11. `completion`
 
 Use `choice-list` when the app owns the option set but wants package-owned row
 UI, checked state, and tone handling. Use `acquisition-source` when the screen
@@ -105,16 +110,86 @@ The package currently exposes these onboarding primitives:
 - `OnboardingStepFrame` for app-owned onboarding steps with shared chrome
 - `OnboardingPreludeFrame` for package-owned prelude chrome: full-screen tap,
   tap hint footer, intro spacing, hidden header, and inverted-tone background
+- `OnboardingNicknameFlowFrame` for the package-owned nickname capture and
+  personalized welcome flow
 - `OnboardingPreludeContent`, `OnboardingChoiceList`,
+  `OnboardingTextInputContent`, `OnboardingNicknameInput`,
+  `OnboardingTypingText`, `OnboardingGalleryGrid`,
   `OnboardingSocialProof`, and `OnboardingNotificationMock` for the reusable
   animated onboarding content used by the playground
 - onboarding animation helpers used by pre-onboarding and intro copy
 - acquisition source copy/options with bundled source icons
+- localized nickname-input copy and `formatOnboardingNicknameWelcomeTitle` for
+  personalized welcome steps
 - `PermissionPromptPreview` for permission education before native prompts
 - `OnboardingCompletion` for the final setup-ready confirmation
 
 Apps still own screen order, selected state, permission APIs, analytics,
 navigation, media, and product-specific copy.
+
+## Locale Files
+
+Onboarding locale copy follows the same file layout as `src/locales/paywall`.
+Each supported locale has one file under `packages/paywall-ui/src/locales/onboarding`
+such as `en.ts`, `ko.ts`, `pt-br.ts`, `zh-hans.ts`, and `zh-hant.ts`.
+
+Each locale file owns the full onboarding copy bundle for that language:
+
+```txt
+onboarding/{locale}.ts
+  ├─ text              # buttons, landing title, pre-onboarding labels
+  ├─ permissionPrompt  # native permission preview buttons
+  └─ nicknameInput     # nickname title, placeholder, accessibility label, welcome
+```
+
+When adding or changing an onboarding copy key, update every locale file. The
+`OnboardingLocaleText` type makes missing `text`, `permissionPrompt`, or
+`nicknameInput` fields fail typecheck.
+
+## Nickname Input
+
+Use `OnboardingNicknameFlowFrame` when the app wants a personalized greeting
+without collecting a real name. It is a screen-level primitive like
+`OnboardingPreludeFrame`: the package owns the title, input layout, welcome
+layout, CTA secondary-action removal, inverted welcome tone, typing animation,
+and localized default copy. The app owns the value, analytics, persistence, and
+what happens after the welcome screen completes.
+
+`OnboardingTextInputContent` is the lower-level reusable primitive for any
+single-input onboarding content. Use it directly for future steps like goal,
+team, academy, or city input. It requires `placeholder` explicitly so each flow
+chooses the field hint at the call site instead of hiding it inside generic UI.
+
+```tsx
+import {
+  OnboardingNicknameFlowFrame,
+} from "pabal-expo-paywall-ui";
+
+<OnboardingNicknameFlowFrame
+  autoFocus
+  baseStepIndex={mainStepIndex}
+  continueLabel={copy.continueButton}
+  frameTheme={frameTheme}
+  locale={locale}
+  nickname={nickname}
+  theme={theme}
+  totalSteps={totalSteps}
+  onBack={goBack}
+  onChangeNickname={setNickname}
+  onComplete={goNext}
+  onPhaseChange={setNicknameFlowPhase}
+  onSubmitNickname={(submittedNickname) => {
+    analytics.track("onboarding_nickname_submitted", { hasNickname: true });
+    saveProfileNickname(submittedNickname);
+  }}
+/>;
+```
+
+`OnboardingStepFrame` always uses React Native's built-in
+`KeyboardAvoidingView`, so the footer CTA stays reachable when a step contains
+an input. Do not add a keyboard package for a single-name capture step. Reach
+for a dedicated keyboard controller only if an app later needs gesture-synced
+keyboard animation across many dense input screens.
 
 ## Notification Mock
 
@@ -412,6 +487,47 @@ implementation for this UI.
     tone="inverted"
     onSelectOption={setSelectedListOption}
   />
+</OnboardingStepFrame>;
+```
+
+Use `OnboardingGalleryGrid` when the app wants a dense animated library/content
+preview. The package owns the three-row marquee layout and infinite row
+animation; the app owns the tile titles, image sources, and colors. Rows 1 and
+3 move right, and row 2 moves left.
+
+```tsx
+import {
+  OnboardingGalleryGrid,
+  OnboardingStepFrame,
+  type OnboardingGalleryGridItem,
+} from "pabal-expo-paywall-ui";
+
+const galleryItems = [
+  {
+    backgroundColor: "#F48BB7",
+    id: "captain-hook",
+    title: "Captain Hook",
+  },
+  {
+    backgroundColor: "#79D4DC",
+    id: "james-dean",
+    imageSource: require("./assets/james-dean.png"),
+    title: "James Dean",
+  },
+] satisfies readonly OnboardingGalleryGridItem[];
+
+<OnboardingStepFrame
+  canContinue
+  continueLabel={copy.continueButton}
+  currentStepIndex={mainStepIndex}
+  description="Save the small details you want to remember."
+  theme={frameTheme}
+  title="Your training library starts here"
+  totalSteps={slides.length}
+  onBack={goBack}
+  onContinue={goNext}
+>
+  <OnboardingGalleryGrid items={galleryItems} theme={theme} />
 </OnboardingStepFrame>;
 ```
 
