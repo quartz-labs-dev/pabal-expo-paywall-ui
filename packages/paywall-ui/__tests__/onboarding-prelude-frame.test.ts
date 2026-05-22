@@ -413,6 +413,7 @@ test("keeps onboarding frame CTA buttons compact", () => {
 
 test("keeps onboarding footer backgrounds and android CTA spacing intentional", () => {
   const preFrameSource = readSource("src/onboarding/PreOnboardingFrame.tsx");
+  const welcomeSource = readSource("src/onboarding/PreOnboardingWelcome.tsx");
   const layoutSource = readSource("src/onboarding/onboarding-layout.ts");
 
   assert.match(preFrameSource, /background\s*\?\s*"transparent"/);
@@ -420,16 +421,24 @@ test("keeps onboarding footer backgrounds and android CTA spacing intentional", 
     preFrameSource,
     /getOnboardingFooterBottomPadding\(insets\.bottom\)/,
   );
+  assert.match(
+    welcomeSource,
+    /getOnboardingFooterBottomPadding\(insets\.bottom\)/,
+  );
   assert.doesNotMatch(layoutSource, /isCompactSpacingEnabled/);
-  assert.match(layoutSource, /ANDROID_FOOTER_BOTTOM_PADDING_CAP = 24/);
   assert.match(
     layoutSource,
-    /Math\.min\(safeAreaBottom, ANDROID_FOOTER_BOTTOM_PADDING_CAP\)/,
+    /ANDROID_FOOTER_BOTTOM_PADDING_FALLBACK = 52/,
   );
+  assert.doesNotMatch(layoutSource, /Math\.min\(safeAreaBottom/);
   assert.match(layoutSource, /Platform\.OS === "android"/);
   assert.match(
     layoutSource,
-    /Math\.max\(\s*MIN_FOOTER_BOTTOM_PADDING,/,
+    /safeAreaBottom <= 0\) return ANDROID_FOOTER_BOTTOM_PADDING_FALLBACK/,
+  );
+  assert.match(
+    layoutSource,
+    /Math\.max\(MIN_FOOTER_BOTTOM_PADDING, safeAreaBottom\)/,
   );
   assert.doesNotMatch(
     layoutSource,

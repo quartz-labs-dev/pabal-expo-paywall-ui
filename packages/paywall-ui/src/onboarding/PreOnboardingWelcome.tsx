@@ -14,6 +14,7 @@ import {
   resolvePreOnboardingTheme,
   type PreOnboardingTheme,
 } from "./pre-onboarding-theme";
+import { getOnboardingFooterBottomPadding } from "./onboarding-layout";
 
 export interface PreOnboardingWelcomeProps {
   copy: OnboardingText;
@@ -69,7 +70,7 @@ export const PreOnboardingWelcome = ({
         style={[
           styles.content,
           {
-            paddingBottom: Math.max(insets.bottom, 12) + 12,
+            paddingBottom: getOnboardingFooterBottomPadding(insets.bottom),
             paddingTop: Math.max(insets.top, 12) + 22,
           },
         ]}
