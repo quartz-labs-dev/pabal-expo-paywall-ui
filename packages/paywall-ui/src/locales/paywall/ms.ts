@@ -45,6 +45,7 @@ const ms = createPaywallLocaleText({
     trialDaySingular: "hari",
     trialDurationSeparator: " ",
     trialIncludedDescription: "Batalkan bila-bila masa sebelum percubaan tamat.",
+    trialNoPaymentDueNow: "Tiada bayaran perlu dibuat sekarang",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " percubaan percuma disertakan",
     trialPriceDisclosureFreeSuffix: " percuma",

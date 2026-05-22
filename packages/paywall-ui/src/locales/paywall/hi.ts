@@ -45,6 +45,7 @@ const hi = createPaywallLocaleText({
     trialDaySingular: "दिन",
     trialDurationSeparator: " ",
     trialIncludedDescription: "ट्रायल समाप्त होने से पहले कभी भी रद्द करें।",
+    trialNoPaymentDueNow: "अभी कोई भुगतान देय नहीं है",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " मुफ्त ट्रायल शामिल",
     trialPriceDisclosureFreeSuffix: " मुफ्त",

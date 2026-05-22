@@ -45,6 +45,7 @@ const ca = createPaywallLocaleText({
     trialDaySingular: "dia",
     trialDurationSeparator: " ",
     trialIncludedDescription: "Cancel·la en qualsevol moment abans que acabi la prova.",
+    trialNoPaymentDueNow: "No cal pagar res ara",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " prova gratuïta inclosa",
     trialPriceDisclosureFreeSuffix: " gratis",

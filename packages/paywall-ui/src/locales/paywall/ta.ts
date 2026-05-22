@@ -45,6 +45,7 @@ const ta = createPaywallLocaleText({
     trialDaySingular: "நாள்",
     trialDurationSeparator: " ",
     trialIncludedDescription: "சோதனை முடிவதற்கு முன் எப்போது வேண்டுமானாலும் ரத்து செய்யலாம்.",
+    trialNoPaymentDueNow: "இப்போது கட்டணம் எதுவும் செலுத்த வேண்டியதில்லை",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " இலவச சோதனை சேர்க்கப்பட்டுள்ளது",
     trialPriceDisclosureFreeSuffix: " இலவசம்",

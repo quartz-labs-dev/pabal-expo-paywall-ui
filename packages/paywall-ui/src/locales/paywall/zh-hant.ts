@@ -45,6 +45,7 @@ const zhHant = createPaywallLocaleText({
     trialDaySingular: "天",
     trialDurationSeparator: "",
     trialIncludedDescription: "可在試用結束前隨時取消。",
+    trialNoPaymentDueNow: "現在無需付款",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: "免費試用已包含",
     trialPriceDisclosureFreeSuffix: "免費",

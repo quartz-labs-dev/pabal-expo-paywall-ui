@@ -45,6 +45,7 @@ const hu = createPaywallLocaleText({
     trialDaySingular: "nap",
     trialDurationSeparator: " ",
     trialIncludedDescription: "A próbaidőszak vége előtt bármikor lemondhatod.",
+    trialNoPaymentDueNow: "Most nincs fizetendő összeg",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " ingyenes próbaidőszak mellékelve",
     trialPriceDisclosureFreeSuffix: " ingyenes",

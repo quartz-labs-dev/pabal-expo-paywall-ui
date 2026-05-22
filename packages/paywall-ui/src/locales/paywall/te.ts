@@ -45,6 +45,7 @@ const te = createPaywallLocaleText({
     trialDaySingular: "రోజు",
     trialDurationSeparator: " ",
     trialIncludedDescription: "ట్రయల్ ముగిసే ముందు ఎప్పుడైనా రద్దు చేయండి.",
+    trialNoPaymentDueNow: "ఇప్పుడు చెల్లింపు అవసరం లేదు",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " ఉచిత ట్రయల్ చేర్చబడింది",
     trialPriceDisclosureFreeSuffix: " ఉచితం",

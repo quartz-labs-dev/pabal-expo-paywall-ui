@@ -45,6 +45,7 @@ const ne = createPaywallLocaleText({
     trialDaySingular: "दिन",
     trialDurationSeparator: " ",
     trialIncludedDescription: "परीक्षण समाप्त हुनु अघि जुनसुकै बेला रद्द गर्नुहोस्।",
+    trialNoPaymentDueNow: "अहिले कुनै भुक्तानी गर्नुपर्दैन",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " निःशुल्क परीक्षण समावेश",
     trialPriceDisclosureFreeSuffix: " निःशुल्क",

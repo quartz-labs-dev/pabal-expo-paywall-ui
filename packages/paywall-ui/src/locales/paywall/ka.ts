@@ -45,6 +45,7 @@ const ka = createPaywallLocaleText({
     trialDaySingular: "დღე",
     trialDurationSeparator: " ",
     trialIncludedDescription: "გააუქმეთ ნებისმიერ დროს საცდელი პერიოდის დასრულებამდე.",
+    trialNoPaymentDueNow: "ახლა გადასახდელი არ არის",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " უფასო საცდელი პერიოდი შედის",
     trialPriceDisclosureFreeSuffix: " უფასო",

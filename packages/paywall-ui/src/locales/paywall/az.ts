@@ -45,6 +45,7 @@ const az = createPaywallLocaleText({
     trialDaySingular: "gün",
     trialDurationSeparator: " ",
     trialIncludedDescription: "Sınaq bitməzdən əvvəl istənilən vaxt ləğv edə bilərsiniz.",
+    trialNoPaymentDueNow: "Hazırda ödəniş tələb olunmur",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " pulsuz sınaq daxildir",
     trialPriceDisclosureFreeSuffix: " pulsuz",

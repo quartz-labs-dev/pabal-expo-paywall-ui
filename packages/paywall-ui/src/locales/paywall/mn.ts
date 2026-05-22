@@ -45,6 +45,7 @@ const mn = createPaywallLocaleText({
     trialDaySingular: "өдөр",
     trialDurationSeparator: " ",
     trialIncludedDescription: "Туршилт дуусахаас өмнө хэзээ ч цуцалж болно.",
+    trialNoPaymentDueNow: "Одоо төлбөр төлөх шаардлагагүй",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " үнэгүй туршилт багтсан",
     trialPriceDisclosureFreeSuffix: " үнэгүй",

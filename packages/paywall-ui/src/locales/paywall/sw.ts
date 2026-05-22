@@ -45,6 +45,7 @@ const sw = createPaywallLocaleText({
     trialDaySingular: "siku",
     trialDurationSeparator: " ",
     trialIncludedDescription: "Ghairi wakati wowote kabla ya jaribio kuisha.",
+    trialNoPaymentDueNow: "Hakuna malipo yanayohitajika sasa",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " jaribio la bila malipo limejumuishwa",
     trialPriceDisclosureFreeSuffix: " bila malipo",

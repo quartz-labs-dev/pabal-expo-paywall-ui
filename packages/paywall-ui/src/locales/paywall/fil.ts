@@ -45,6 +45,7 @@ const fil = createPaywallLocaleText({
     trialDaySingular: "araw",
     trialDurationSeparator: " ",
     trialIncludedDescription: "Kanselahin anumang oras bago matapos ang trial.",
+    trialNoPaymentDueNow: "Walang bayad na kailangan ngayon",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " kasamang libreng trial",
     trialPriceDisclosureFreeSuffix: " libre",

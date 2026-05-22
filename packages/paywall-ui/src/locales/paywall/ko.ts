@@ -41,6 +41,7 @@ const ko = createPaywallLocaleText({
     renewsOnPrefix: "",
     closeButtonAccessibilityLabel: "페이월 닫기",
     monthlyPriceSuffix: "",
+    trialNoPaymentDueNow: "지금 결제되는 금액은 없습니다",
     trialIncludedTitlePrefix: "",
     monthlyPricePrefix: "월 ",
     pricePerAnnualPeriodSuffix: " / 년",

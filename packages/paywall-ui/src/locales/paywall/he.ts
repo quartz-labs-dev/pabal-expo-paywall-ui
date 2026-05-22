@@ -45,6 +45,7 @@ const he = createPaywallLocaleText({
     trialDaySingular: "יום",
     trialDurationSeparator: " ",
     trialIncludedDescription: "אפשר לבטל בכל עת לפני סיום תקופת הניסיון.",
+    trialNoPaymentDueNow: "אין תשלום לתשלום עכשיו",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " ניסיון חינם כלול",
     trialPriceDisclosureFreeSuffix: " חינם",

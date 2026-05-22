@@ -45,6 +45,7 @@ const af = createPaywallLocaleText({
     trialDaySingular: "dag",
     trialDurationSeparator: " ",
     trialIncludedDescription: "Kanselleer enige tyd voordat die proeflopie eindig.",
+    trialNoPaymentDueNow: "Geen betaling nou verskuldig nie",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " gratis proeflopie ingesluit",
     trialPriceDisclosureFreeSuffix: " gratis",

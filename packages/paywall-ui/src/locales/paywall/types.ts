@@ -33,6 +33,7 @@ export interface PaywallText {
   subscribedSubtitle: string;
   termsText: string;
   trialIncludedDescription: string;
+  trialNoPaymentDueNow: string;
   annualProfilePlan: (productName: string) => string;
   formatPricePerPeriodText: (
     priceText: string,

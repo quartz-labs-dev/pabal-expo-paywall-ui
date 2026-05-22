@@ -45,6 +45,7 @@ const my = createPaywallLocaleText({
     trialDaySingular: "ရက်",
     trialDurationSeparator: "",
     trialIncludedDescription: "စမ်းသပ်ကာလ မပြီးဆုံးမီ မည်သည့်အချိန်မဆို ပယ်ဖျက်နိုင်သည်။",
+    trialNoPaymentDueNow: "ယခု ငွေပေးချေရန် မလိုပါ",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: "အခမဲ့ စမ်းသပ်မှု ပါဝင်သည်",
     trialPriceDisclosureFreeSuffix: "အခမဲ့",

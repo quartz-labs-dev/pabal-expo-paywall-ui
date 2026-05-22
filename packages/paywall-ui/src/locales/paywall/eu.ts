@@ -45,6 +45,7 @@ const eu = createPaywallLocaleText({
     trialDaySingular: "egun",
     trialDurationSeparator: " ",
     trialIncludedDescription: "Proba amaitu aurretik edozein unetan bertan behera utz dezakezu.",
+    trialNoPaymentDueNow: "Ez da ordainketarik egin behar orain",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " doako proba barne",
     trialPriceDisclosureFreeSuffix: " doan",

@@ -45,6 +45,7 @@ const et = createPaywallLocaleText({
     trialDaySingular: "päev",
     trialDurationSeparator: " ",
     trialIncludedDescription: "Tühista igal ajal enne prooviperioodi lõppu.",
+    trialNoPaymentDueNow: "Praegu ei ole makset vaja",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " tasuta prooviperiood sisaldub",
     trialPriceDisclosureFreeSuffix: " tasuta",

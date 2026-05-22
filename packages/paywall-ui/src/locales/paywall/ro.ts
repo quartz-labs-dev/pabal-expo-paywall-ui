@@ -45,6 +45,7 @@ const ro = createPaywallLocaleText({
     trialDaySingular: "zi",
     trialDurationSeparator: " ",
     trialIncludedDescription: "Anulați oricând înainte ca perioada de probă să se încheie.",
+    trialNoPaymentDueNow: "Nu se datorează nicio plată acum",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " probă gratuită inclusă",
     trialPriceDisclosureFreeSuffix: " gratuit",

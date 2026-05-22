@@ -45,6 +45,7 @@ const hy = createPaywallLocaleText({
     trialDaySingular: "օր",
     trialDurationSeparator: " ",
     trialIncludedDescription: "Կարող եք չեղարկել ցանկացած պահի մինչև փորձաշրջանի ավարտը։",
+    trialNoPaymentDueNow: "Այժմ վճարում չի պահանջվում",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " անվճար փորձաշրջան ներառված է",
     trialPriceDisclosureFreeSuffix: " անվճար",

@@ -45,6 +45,7 @@ const lo = createPaywallLocaleText({
     trialDaySingular: "ມື້",
     trialDurationSeparator: "",
     trialIncludedDescription: "ຍົກເລີກໄດ້ທຸກເວລາກ່ອນການທົດລອງສິ້ນສຸດ.",
+    trialNoPaymentDueNow: "ຕອນນີ້ບໍ່ມີການຊຳລະເງິນ",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: "ລວມການທົດລອງຟຣີ",
     trialPriceDisclosureFreeSuffix: "ຟຣີ",

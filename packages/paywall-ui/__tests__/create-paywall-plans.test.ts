@@ -674,6 +674,7 @@ test("localizes generated paywall copy for every non-English paywall locale", ()
 
     assert.ok(copy.closeButtonAccessibilityLabel, locale);
     assert.ok(copy.trialIncludedDescription, locale);
+    assert.ok(copy.trialNoPaymentDueNow, locale);
     assert.ok(trialTitle, locale);
     assert.ok(trialDisclosure, locale);
     assert.ok(annualPlan?.monthlyPriceText, locale);
@@ -688,6 +689,7 @@ test("localizes generated paywall copy for every non-English paywall locale", ()
       /Cancel anytime/,
       locale,
     );
+    assert.notEqual(copy.trialNoPaymentDueNow, "No payment due now", locale);
     assert.doesNotMatch(trialTitle ?? "", /Free Trial Included/, locale);
     assert.doesNotMatch(trialDisclosure ?? "", / free, then /, locale);
     assert.doesNotMatch(annualPlan?.monthlyPriceText ?? "", / \/ mo$/, locale);

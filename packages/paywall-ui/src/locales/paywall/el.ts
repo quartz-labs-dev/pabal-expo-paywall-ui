@@ -45,6 +45,7 @@ const el = createPaywallLocaleText({
     trialDaySingular: "ημέρα",
     trialDurationSeparator: " ",
     trialIncludedDescription: "Ακύρωση οποιαδήποτε στιγμή πριν λήξει η δοκιμή.",
+    trialNoPaymentDueNow: "Δεν απαιτείται πληρωμή τώρα",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " περιλαμβάνεται δωρεάν δοκιμή",
     trialPriceDisclosureFreeSuffix: " δωρεάν",

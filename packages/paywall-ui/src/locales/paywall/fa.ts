@@ -45,6 +45,7 @@ const fa = createPaywallLocaleText({
     trialDaySingular: "روز",
     trialDurationSeparator: " ",
     trialIncludedDescription: "هر زمان پیش از پایان دوره آزمایشی می‌توانید لغو کنید.",
+    trialNoPaymentDueNow: "اکنون پرداختی لازم نیست",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " دوره آزمایشی رایگان شامل است",
     trialPriceDisclosureFreeSuffix: " رایگان",

@@ -45,6 +45,7 @@ const vi = createPaywallLocaleText({
     trialDaySingular: "ngày",
     trialDurationSeparator: " ",
     trialIncludedDescription: "Hủy bất cứ lúc nào trước khi thời gian dùng thử kết thúc.",
+    trialNoPaymentDueNow: "Chưa cần thanh toán ngay",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " đã bao gồm dùng thử miễn phí",
     trialPriceDisclosureFreeSuffix: " miễn phí",

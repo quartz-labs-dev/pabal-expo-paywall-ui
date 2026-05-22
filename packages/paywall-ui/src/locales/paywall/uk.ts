@@ -45,6 +45,7 @@ const uk = createPaywallLocaleText({
     trialDaySingular: "день",
     trialDurationSeparator: " ",
     trialIncludedDescription: "Скасуйте будь-коли до завершення пробного періоду.",
+    trialNoPaymentDueNow: "Зараз оплата не потрібна",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " безкоштовний пробний період включено",
     trialPriceDisclosureFreeSuffix: " безкоштовно",

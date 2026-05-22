@@ -45,6 +45,7 @@ const nb = createPaywallLocaleText({
     trialDaySingular: "dag",
     trialDurationSeparator: " ",
     trialIncludedDescription: "Avbryt når som helst før prøveperioden avsluttes.",
+    trialNoPaymentDueNow: "Ingen betaling forfaller nå",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " gratis prøveperiode inkludert",
     trialPriceDisclosureFreeSuffix: " gratis",

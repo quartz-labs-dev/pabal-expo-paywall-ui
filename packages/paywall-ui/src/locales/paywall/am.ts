@@ -45,6 +45,7 @@ const am = createPaywallLocaleText({
     trialDaySingular: "ቀን",
     trialDurationSeparator: " ",
     trialIncludedDescription: "ሙከራው ከመጠናቀቁ በፊት በማንኛውም ጊዜ መሰረዝ ይችላሉ።",
+    trialNoPaymentDueNow: "አሁን ክፍያ አያስፈልግም",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " ነፃ ሙከራ ተካቷል",
     trialPriceDisclosureFreeSuffix: " ነፃ",

@@ -45,6 +45,7 @@ const hr = createPaywallLocaleText({
     trialDaySingular: "dan",
     trialDurationSeparator: " ",
     trialIncludedDescription: "Otkažite bilo kada prije završetka probnog razdoblja.",
+    trialNoPaymentDueNow: "Sada nema dospjelog plaćanja",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " uključeno besplatno probno razdoblje",
     trialPriceDisclosureFreeSuffix: " besplatno",

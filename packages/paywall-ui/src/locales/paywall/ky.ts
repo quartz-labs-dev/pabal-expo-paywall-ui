@@ -45,6 +45,7 @@ const ky = createPaywallLocaleText({
     trialDaySingular: "күн",
     trialDurationSeparator: " ",
     trialIncludedDescription: "Сыноо бүтө электе каалаган убакта жокко чыгара аласыз.",
+    trialNoPaymentDueNow: "Азыр төлөм талап кылынбайт",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " акысыз сыноо камтылган",
     trialPriceDisclosureFreeSuffix: " акысыз",

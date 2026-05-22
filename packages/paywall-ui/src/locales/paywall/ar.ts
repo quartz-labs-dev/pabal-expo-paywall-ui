@@ -45,6 +45,7 @@ const ar = createPaywallLocaleText({
     trialDaySingular: "يوم",
     trialDurationSeparator: " ",
     trialIncludedDescription: "يمكنك الإلغاء في أي وقت قبل انتهاء التجربة.",
+    trialNoPaymentDueNow: "لا توجد دفعة مستحقة الآن",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " تجربة مجانية مضمنة",
     trialPriceDisclosureFreeSuffix: " مجانًا",

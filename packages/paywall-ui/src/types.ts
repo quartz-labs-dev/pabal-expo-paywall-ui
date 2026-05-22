@@ -57,6 +57,7 @@ export interface PaywallCopy {
   ) => string;
   formatTrialIncludedTitle?: (duration: PaywallTrialDuration) => string;
   trialIncludedDescription?: string;
+  trialNoPaymentDueNow?: string;
 }
 
 export interface PaywallBenefitDetail {

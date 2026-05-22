@@ -45,6 +45,7 @@ const sk = createPaywallLocaleText({
     trialDaySingular: "deň",
     trialDurationSeparator: " ",
     trialIncludedDescription: "Zrušiť môžete kedykoľvek pred koncom skúšobnej verzie.",
+    trialNoPaymentDueNow: "Teraz nie je potrebná žiadna platba",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " zahrnutá bezplatná skúšobná verzia",
     trialPriceDisclosureFreeSuffix: " zadarmo",

@@ -45,6 +45,7 @@ const ru = createPaywallLocaleText({
     trialDaySingular: "день",
     trialDurationSeparator: " ",
     trialIncludedDescription: "Отменить можно в любое время до окончания пробного периода.",
+    trialNoPaymentDueNow: "Сейчас оплата не требуется",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " бесплатный пробный период включен",
     trialPriceDisclosureFreeSuffix: " бесплатно",

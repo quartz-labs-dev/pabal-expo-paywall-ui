@@ -132,6 +132,15 @@ test("scrolls paywall content to top when the step changes", () => {
   assert.match(source, /ref=\{scrollViewRef\}/);
 });
 
+test("uses localized no-payment copy for trial footer disclosure", () => {
+  const paywallSource = readPaywallSource();
+  const typesSource = readTypesSource();
+
+  assert.match(typesSource, /trialNoPaymentDueNow\?: string/);
+  assert.match(paywallSource, /copy\.trialNoPaymentDueNow \?\?/);
+  assert.match(paywallSource, /getTrialPriceDisclosure/);
+});
+
 test("renders feature comparison cells from explicit cell kinds", () => {
   const paywallSource = readPaywallSource();
   const featureComparisonSource = readFeatureComparisonSource();

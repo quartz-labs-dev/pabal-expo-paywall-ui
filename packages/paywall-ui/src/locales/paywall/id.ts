@@ -45,6 +45,7 @@ const id = createPaywallLocaleText({
     trialDaySingular: "hari",
     trialDurationSeparator: " ",
     trialIncludedDescription: "Batalkan kapan saja sebelum uji coba berakhir.",
+    trialNoPaymentDueNow: "Tidak ada pembayaran jatuh tempo sekarang",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " uji coba gratis termasuk",
     trialPriceDisclosureFreeSuffix: " gratis",

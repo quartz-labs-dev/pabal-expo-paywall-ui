@@ -45,6 +45,7 @@ const bn = createPaywallLocaleText({
     trialDaySingular: "দিন",
     trialDurationSeparator: " ",
     trialIncludedDescription: "ট্রায়াল শেষ হওয়ার আগে যেকোনো সময় বাতিল করতে পারেন।",
+    trialNoPaymentDueNow: "এখন কোনো পেমেন্ট দিতে হবে না",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " ফ্রি ট্রায়াল অন্তর্ভুক্ত",
     trialPriceDisclosureFreeSuffix: " ফ্রি",

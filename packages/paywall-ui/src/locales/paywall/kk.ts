@@ -45,6 +45,7 @@ const kk = createPaywallLocaleText({
     trialDaySingular: "күн",
     trialDurationSeparator: " ",
     trialIncludedDescription: "Сынақ мерзімі аяқталғанға дейін кез келген уақытта бас тарта аласыз.",
+    trialNoPaymentDueNow: "Қазір төлем қажет емес",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " тегін сынақ қосылған",
     trialPriceDisclosureFreeSuffix: " тегін",

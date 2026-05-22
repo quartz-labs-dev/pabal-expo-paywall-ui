@@ -45,6 +45,7 @@ const cs = createPaywallLocaleText({
     trialDaySingular: "den",
     trialDurationSeparator: " ",
     trialIncludedDescription: "Zrušit můžete kdykoli před koncem zkušebního období.",
+    trialNoPaymentDueNow: "Nyní není třeba platit",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " zkušební období zdarma zahrnuto",
     trialPriceDisclosureFreeSuffix: " zdarma",

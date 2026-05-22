@@ -45,6 +45,7 @@ const rm = createPaywallLocaleText({
     trialDaySingular: "di",
     trialDurationSeparator: " ",
     trialIncludedDescription: "Annullescha da tut temp avant che l'emprova finescha.",
+    trialNoPaymentDueNow: "Nagins pajament è ussa debit",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " emprova gratuita inclusa",
     trialPriceDisclosureFreeSuffix: " gratuit",

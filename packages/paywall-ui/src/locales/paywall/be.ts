@@ -45,6 +45,7 @@ const be = createPaywallLocaleText({
     trialDaySingular: "дзень",
     trialDurationSeparator: " ",
     trialIncludedDescription: "Можна скасаваць у любы час да заканчэння пробнага перыяду.",
+    trialNoPaymentDueNow: "Зараз аплата не патрабуецца",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " бясплатны пробны перыяд уключаны",
     trialPriceDisclosureFreeSuffix: " бясплатна",

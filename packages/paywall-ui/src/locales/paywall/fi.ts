@@ -45,6 +45,7 @@ const fi = createPaywallLocaleText({
     trialDaySingular: "päivä",
     trialDurationSeparator: " ",
     trialIncludedDescription: "Voit perua milloin tahansa ennen kokeilun päättymistä.",
+    trialNoPaymentDueNow: "Maksua ei eräänny nyt",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " ilmainen kokeilu sisältyy",
     trialPriceDisclosureFreeSuffix: " ilmaiseksi",

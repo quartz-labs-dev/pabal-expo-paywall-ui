@@ -174,7 +174,8 @@ export const Paywall = <TPackage,>({
   const trialDuration = freeTrialConfig?.duration;
   const trialPriceDisclosure =
     trialDuration && selectedPlan
-      ? getTrialPriceDisclosure(
+      ? copy.trialNoPaymentDueNow ??
+        getTrialPriceDisclosure(
           copy,
           trialDuration,
           selectedPlan.pricePerPeriodText ?? selectedPlan.priceText
@@ -590,9 +591,9 @@ const styles = StyleSheet.create({
   },
   trialPriceDisclosure: {
     flexShrink: 1,
-    fontSize: 11,
+    fontSize: 13,
     fontWeight: "600",
-    lineHeight: 15,
+    lineHeight: 18,
     textAlign: "center",
   },
   nextButton: {

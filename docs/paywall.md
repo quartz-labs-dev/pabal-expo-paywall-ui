@@ -105,6 +105,7 @@ toast, widget sync, and navigation belong inside the app's callbacks.
 | Plan card order and package mapping | `planOptions` |
 | Selected-plan comparison copy | `planOptions.*SelectedDescription` |
 | Selected-plan CTA text | `copy.formatPurchaseButtonLabel` |
+| Trial footer reassurance copy | `copy.trialNoPaymentDueNow` |
 | Legal links and developer site | callback props |
 
 ## Dynamic CTA Labels
@@ -127,3 +128,8 @@ const copy = getDefaultPaywallCopy(locale, {
 
 This lets a first-time user see `Start 7-day free trial` while a returning user
 sees `Start for $9.99`, without rebuilding the whole paywall.
+
+When `freeTrial` is enabled, the fixed footer shows localized reassurance copy
+below the purchase button. `getDefaultPaywallCopy()` provides `No payment due now`
+and its localized equivalents by default. Override `copy.trialNoPaymentDueNow`
+only when the app needs different wording.

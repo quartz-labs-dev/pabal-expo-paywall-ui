@@ -45,6 +45,7 @@ const km = createPaywallLocaleText({
     trialDaySingular: "ថ្ងៃ",
     trialDurationSeparator: "",
     trialIncludedDescription: "អាចបោះបង់បានគ្រប់ពេលមុនពេលការសាកល្បងបញ្ចប់។",
+    trialNoPaymentDueNow: "មិនទាន់ត្រូវបង់ប្រាក់ឥឡូវនេះទេ",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: "ការសាកល្បងឥតគិតថ្លៃត្រូវបានរួមបញ្ចូល",
     trialPriceDisclosureFreeSuffix: "ឥតគិតថ្លៃ",

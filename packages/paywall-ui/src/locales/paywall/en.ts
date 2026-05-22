@@ -48,6 +48,7 @@ const en = createPaywallLocaleText({
     trialDayPlural: "days",
     trialDaySingular: "day",
     trialDurationSeparator: " ",
+    trialNoPaymentDueNow: "No payment due now",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " free trial included",
     trialPriceDisclosureFreeSuffix: " free",

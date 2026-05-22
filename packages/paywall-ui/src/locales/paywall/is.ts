@@ -45,6 +45,7 @@ const is = createPaywallLocaleText({
     trialDaySingular: "dagur",
     trialDurationSeparator: " ",
     trialIncludedDescription: "Hættu við hvenær sem er áður en prufunni lýkur.",
+    trialNoPaymentDueNow: "Engin greiðsla gjaldfellur núna",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " ókeypis prufa innifalin",
     trialPriceDisclosureFreeSuffix: " ókeypis",

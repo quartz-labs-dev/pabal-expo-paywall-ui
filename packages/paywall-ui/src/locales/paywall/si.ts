@@ -45,6 +45,7 @@ const si = createPaywallLocaleText({
     trialDaySingular: "දින",
     trialDurationSeparator: " ",
     trialIncludedDescription: "අත්හදා බැලීම අවසන් වීමට පෙර ඕනෑම වේලාවක අවලංගු කරන්න.",
+    trialNoPaymentDueNow: "දැන් ගෙවීමක් අවශ්‍ය නැත",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " නොමිලේ අත්හදා බැලීම ඇතුළත්",
     trialPriceDisclosureFreeSuffix: " නොමිලේ",

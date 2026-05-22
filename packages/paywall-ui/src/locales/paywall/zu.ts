@@ -45,6 +45,7 @@ const zu = createPaywallLocaleText({
     trialDaySingular: "usuku",
     trialDurationSeparator: " ",
     trialIncludedDescription: "Khansela noma nini ngaphambi kokuphela kwesivivinyo.",
+    trialNoPaymentDueNow: "Akukho nkokhelo edingekayo manje",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " isivivinyo samahhala sifakiwe",
     trialPriceDisclosureFreeSuffix: " mahhala",

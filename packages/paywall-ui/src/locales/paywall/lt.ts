@@ -45,6 +45,7 @@ const lt = createPaywallLocaleText({
     trialDaySingular: "diena",
     trialDurationSeparator: " ",
     trialIncludedDescription: "Atšaukti galite bet kada iki bandomojo laikotarpio pabaigos.",
+    trialNoPaymentDueNow: "Dabar mokėti nereikia",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " nemokama bandomoji versija įtraukta",
     trialPriceDisclosureFreeSuffix: " nemokamai",

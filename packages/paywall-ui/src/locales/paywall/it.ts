@@ -45,6 +45,7 @@ const it = createPaywallLocaleText({
     trialDaySingular: "giorno",
     trialDurationSeparator: " ",
     trialIncludedDescription: "Annulla in qualsiasi momento prima della fine della prova.",
+    trialNoPaymentDueNow: "Nessun pagamento dovuto ora",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " prova gratuita inclusa",
     trialPriceDisclosureFreeSuffix: " gratis",

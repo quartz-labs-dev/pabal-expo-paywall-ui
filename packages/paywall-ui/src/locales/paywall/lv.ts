@@ -45,6 +45,7 @@ const lv = createPaywallLocaleText({
     trialDaySingular: "diena",
     trialDurationSeparator: " ",
     trialIncludedDescription: "Atceliet jebkurā laikā pirms izmēģinājuma beigām.",
+    trialNoPaymentDueNow: "Tagad maksājums nav jāveic",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " bezmaksas izmēģinājums iekļauts",
     trialPriceDisclosureFreeSuffix: " bez maksas",

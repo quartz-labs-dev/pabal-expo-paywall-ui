@@ -45,6 +45,7 @@ const sq = createPaywallLocaleText({
     trialDaySingular: "ditë",
     trialDurationSeparator: " ",
     trialIncludedDescription: "Anulo në çdo kohë para se të përfundojë prova.",
+    trialNoPaymentDueNow: "Nuk ka pagesë për t’u bërë tani",
     trialIncludedTitlePrefix: "",
     trialIncludedTitleSuffix: " provë falas e përfshirë",
     trialPriceDisclosureFreeSuffix: " falas",

@@ -119,6 +119,7 @@ export const getDefaultPaywallCopy = (
     formatTrialIncludedTitle: text.formatTrialIncludedTitle,
     formatTrialPriceDisclosure: text.formatTrialPriceDisclosure,
     trialIncludedDescription: text.trialIncludedDescription,
+    trialNoPaymentDueNow: text.trialNoPaymentDueNow,
     ...PAYWALL_VALUE_STEP_TEXT[resolvePaywallTextLocale(locale)],
     ...PAYWALL_REVIEW_SECTION_TEXT[resolvePaywallTextLocale(locale)],
     ...safeCopy,
