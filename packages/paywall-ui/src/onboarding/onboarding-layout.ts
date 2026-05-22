@@ -4,13 +4,8 @@ const ANDROID_FOOTER_BOTTOM_PADDING_CAP = 24;
 const IOS_FOOTER_EXTRA_BOTTOM_PADDING = 12;
 const MIN_FOOTER_BOTTOM_PADDING = 12;
 
-interface OnboardingFooterPaddingOptions {
-  isCompactSpacingEnabled?: boolean;
-}
-
 export const getOnboardingFooterBottomPadding = (
   safeAreaBottom: number,
-  options: OnboardingFooterPaddingOptions = {},
 ) => {
   if (Platform.OS === "android") {
     return Math.max(
@@ -18,8 +13,6 @@ export const getOnboardingFooterBottomPadding = (
       Math.min(safeAreaBottom, ANDROID_FOOTER_BOTTOM_PADDING_CAP),
     );
   }
-
-  if (options.isCompactSpacingEnabled) return MIN_FOOTER_BOTTOM_PADDING;
 
   const bottomPadding = Math.max(safeAreaBottom, MIN_FOOTER_BOTTOM_PADDING);
 

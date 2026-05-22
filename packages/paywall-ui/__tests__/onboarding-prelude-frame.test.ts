@@ -312,10 +312,7 @@ test("keeps keyboard avoiding on the shared onboarding step frame", () => {
     stepFrameSource,
     /const isInputContentLayout = contentVerticalAlignment === "input";/,
   );
-  assert.match(
-    stepFrameSource,
-    /const shouldAvoidAndroidFooterKeyboard = isInputContentLayout;/,
-  );
+  assert.doesNotMatch(stepFrameSource, /shouldAvoidAndroidFooterKeyboard/);
   assert.match(
     stepFrameSource,
     /const \[androidFrameHeight, setAndroidFrameHeight\] = useState\(0\);/,
@@ -328,6 +325,10 @@ test("keeps keyboard avoiding on the shared onboarding step frame", () => {
   assert.match(stepFrameSource, /Keyboard\.addListener\(\s*"keyboardDidHide"/);
   assert.match(stepFrameSource, /androidFrameHeight - keyboardTop/);
   assert.match(stepFrameSource, /translateY: -androidFooterKeyboardOffset/);
+  assert.doesNotMatch(
+    stepFrameSource,
+    /shouldAvoidAndroidFooterKeyboard && androidFooterKeyboardOffset/,
+  );
   assert.match(stepFrameSource, /onLayout=\{handleAndroidRootLayout\}/);
   assert.doesNotMatch(stepFrameSource, /ANDROID_FOOTER_KEYBOARD_BEHAVIOR/);
   assert.match(
@@ -348,15 +349,16 @@ test("keeps keyboard avoiding on the shared onboarding step frame", () => {
   );
   assert.match(
     stepFrameSource,
-    /getOnboardingFooterBottomPadding\(insets\.bottom, \{\s*isCompactSpacingEnabled: isInputContentLayout,\s*\}\)/,
+    /getOnboardingFooterBottomPadding\(insets\.bottom\)/,
   );
+  assert.doesNotMatch(stepFrameSource, /isCompactSpacingEnabled/);
   assert.match(stepFrameSource, /styles\.footerContent/);
   assert.doesNotMatch(stepFrameSource, /isKeyboardAvoidingEnabled/);
   assert.doesNotMatch(stepFrameSource, /footerBottomPadding\?: number;/);
   assert.doesNotMatch(stepFrameSource, /isSecondaryActionVisible/);
 });
 
-test("documents compact secondary action footer input examples in the playground", () => {
+test("documents matching secondary action footer input examples in the playground", () => {
   const playgroundSource = readFileSync(
     join(
       process.cwd(),
@@ -373,6 +375,7 @@ test("documents compact secondary action footer input examples in the playground
 
   assert.match(playgroundSource, /<OnboardingWeightInputExample/);
   assert.match(playgroundSource, /contentVerticalAlignment: "input"/);
+  assert.match(playgroundSource, /matching safe-area footer/);
   assert.match(playgroundSource, /showSecondaryAction: true/);
   assert.match(playgroundSource, /currentUnit === "kg" \? "lb" : "kg"/);
   assert.ok(
@@ -417,7 +420,7 @@ test("keeps onboarding footer backgrounds and android CTA spacing intentional", 
     preFrameSource,
     /getOnboardingFooterBottomPadding\(insets\.bottom\)/,
   );
-  assert.match(layoutSource, /isCompactSpacingEnabled\?: boolean;/);
+  assert.doesNotMatch(layoutSource, /isCompactSpacingEnabled/);
   assert.match(layoutSource, /ANDROID_FOOTER_BOTTOM_PADDING_CAP = 24/);
   assert.match(
     layoutSource,
@@ -432,10 +435,7 @@ test("keeps onboarding footer backgrounds and android CTA spacing intentional", 
     layoutSource,
     /if \(Platform\.OS === "android"\) return bottomPadding;/,
   );
-  assert.match(
-    layoutSource,
-    /if \(options\.isCompactSpacingEnabled\) return MIN_FOOTER_BOTTOM_PADDING;/,
-  );
+  assert.doesNotMatch(layoutSource, /MIN_FOOTER_BOTTOM_PADDING;/);
   assert.match(
     layoutSource,
     /bottomPadding \+ IOS_FOOTER_EXTRA_BOTTOM_PADDING/,

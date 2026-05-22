@@ -202,7 +202,7 @@ export const OnboardingPlaygroundScreen = ({
         ),
         contentVerticalAlignment: "input",
         description:
-          "This mirrors an input step with a secondary action and a compact safe-area footer.",
+          "This mirrors an input step with a secondary action and matching safe-area footer.",
         showSecondaryAction: true,
         title: "Pick a weight unit",
       },

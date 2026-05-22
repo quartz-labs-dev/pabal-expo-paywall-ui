@@ -217,14 +217,13 @@ export const OnboardingStepFrame = ({
     rootStyle,
   ];
   const isInputContentLayout = contentVerticalAlignment === "input";
-  const shouldAvoidAndroidFooterKeyboard = isInputContentLayout;
   const androidFooterKeyboardStyle: StyleProp<ViewStyle> =
-    shouldAvoidAndroidFooterKeyboard && androidFooterKeyboardOffset > 0
+    androidFooterKeyboardOffset > 0
       ? { transform: [{ translateY: -androidFooterKeyboardOffset }] }
       : undefined;
 
   useEffect(() => {
-    if (Platform.OS !== "android" || !shouldAvoidAndroidFooterKeyboard) {
+    if (Platform.OS !== "android") {
       setAndroidFooterKeyboardOffset(0);
       return;
     }
@@ -260,7 +259,6 @@ export const OnboardingStepFrame = ({
   }, [
     androidFrameHeight,
     keyboardVerticalOffset,
-    shouldAvoidAndroidFooterKeyboard,
   ]);
 
   const handleAndroidRootLayout = (event: LayoutChangeEvent) => {
@@ -345,9 +343,7 @@ export const OnboardingStepFrame = ({
         { backgroundColor: footerBackgroundColor },
         footerStyle,
         {
-          paddingBottom: getOnboardingFooterBottomPadding(insets.bottom, {
-            isCompactSpacingEnabled: isInputContentLayout,
-          }),
+          paddingBottom: getOnboardingFooterBottomPadding(insets.bottom),
         },
       ]}
     >
@@ -432,13 +428,9 @@ export const OnboardingStepFrame = ({
   const androidContent = (
     <>
       {mainContent}
-      {shouldAvoidAndroidFooterKeyboard ? (
-        <View style={androidFooterKeyboardStyle}>
-          {footer}
-        </View>
-      ) : (
-        footer
-      )}
+      <View style={androidFooterKeyboardStyle}>
+        {footer}
+      </View>
     </>
   );
 
