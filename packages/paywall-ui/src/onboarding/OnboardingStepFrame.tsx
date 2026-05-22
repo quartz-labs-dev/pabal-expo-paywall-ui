@@ -29,6 +29,7 @@ export interface OnboardingStepFrameProps {
   canContinue?: boolean;
   contentContainerStyle?: StyleProp<ViewStyle>;
   contentTransitionIndex?: number;
+  contentVerticalAlignment?: "center" | "input";
   continueActionPresentation?: "button" | "tapHint";
   continueButtonTextStyle?: StyleProp<TextStyle>;
   continueLabel: string;
@@ -59,6 +60,9 @@ export interface OnboardingStepFrameProps {
 
 const INITIAL_CONTENT_TRANSITION_DELAY_MS = 90;
 
+const ANDROID_FOOTER_KEYBOARD_BEHAVIOR = "position";
+const IOS_KEYBOARD_AVOIDING_BEHAVIOR = "padding";
+
 const getProgressRatio = (stepIndex: number, stepCount: number) => {
   const safeStepCount = Math.max(stepCount, 1);
   const safeStepIndex = Math.min(Math.max(stepIndex, 0), safeStepCount - 1);
@@ -70,6 +74,7 @@ export const OnboardingStepFrame = ({
   canContinue = true,
   contentContainerStyle,
   contentTransitionIndex,
+  contentVerticalAlignment = "center",
   continueActionPresentation = "button",
   continueButtonTextStyle,
   continueLabel,
@@ -206,8 +211,10 @@ export const OnboardingStepFrame = ({
     { backgroundColor: frameBackgroundColor },
     rootStyle,
   ];
+  const shouldAvoidAndroidFooterKeyboard =
+    contentVerticalAlignment === "input";
 
-  const content = (
+  const mainContent = (
     <>
       {showHeader && (
         <OnboardingStepHeader
@@ -260,6 +267,7 @@ export const OnboardingStepFrame = ({
           bounces={isBodyScrollEnabled}
           contentContainerStyle={[
             styles.bodyContent,
+            contentVerticalAlignment === "input" && styles.bodyContentInput,
             contentContainerStyle,
             !showHeader && {
               paddingTop: Math.max(insets.top, 12) + 22,
@@ -273,92 +281,139 @@ export const OnboardingStepFrame = ({
           {children}
         </ScrollView>
       </Animated.View>
-
-      <View
-        style={[
-          styles.footer,
-          { backgroundColor: footerBackgroundColor },
-          footerStyle,
-          {
-            paddingBottom: getOnboardingFooterBottomPadding(insets.bottom),
-          },
-        ]}
-      >
-        <View style={styles.footerContent}>
-          {continueActionPresentation === "tapHint" ? (
-            <View
-              style={[
-                styles.tapHint,
-                !canContinue && styles.continueButtonDisabled,
-              ]}
-            >
-              <Text
-                style={[
-                  styles.tapHintText,
-                  { color: theme.continueButtonTextColor },
-                  continueButtonTextStyle,
-                ]}
-              >
-                {continueLabel}
-              </Text>
-              <Text
-                accessibilityElementsHidden
-                importantForAccessibility="no"
-                style={[
-                  styles.tapHintArrow,
-                  { color: theme.continueButtonTextColor },
-                  continueButtonTextStyle,
-                ]}
-              >
-                →
-              </Text>
-            </View>
-          ) : (
-            <Pressable
-              accessibilityRole="button"
-              disabled={!canContinue}
-              onPress={onContinue}
-              style={[
-                styles.continueButton,
-                { backgroundColor: theme.continueButtonBackgroundColor },
-                !canContinue && styles.continueButtonDisabled,
-              ]}
-            >
-              <Text
-                style={[
-                  styles.continueButtonText,
-                  { color: theme.continueButtonTextColor },
-                  continueButtonTextStyle,
-                ]}
-              >
-                {continueLabel}
-              </Text>
-            </Pressable>
-          )}
-          {shouldShowSecondaryAction ? (
-            <Pressable
-              accessibilityRole="button"
-              onPress={onSecondaryAction}
-              style={styles.secondaryActionButton}
-            >
-              <Text
-                style={[
-                  styles.secondaryActionText,
-                  { color: secondaryActionTextColor },
-                ]}
-              >
-                {copy.notNowButton}
-              </Text>
-            </Pressable>
-          ) : null}
-        </View>
-      </View>
     </>
   );
 
+  const footer = (
+    <View
+      style={[
+        styles.footer,
+        { backgroundColor: footerBackgroundColor },
+        footerStyle,
+        {
+          paddingBottom: getOnboardingFooterBottomPadding(insets.bottom),
+        },
+      ]}
+    >
+      <View style={styles.footerContent}>
+        {continueActionPresentation === "tapHint" ? (
+          <View
+            style={[
+              styles.tapHint,
+              !canContinue && styles.continueButtonDisabled,
+            ]}
+          >
+            <Text
+              style={[
+                styles.tapHintText,
+                { color: theme.continueButtonTextColor },
+                continueButtonTextStyle,
+              ]}
+            >
+              {continueLabel}
+            </Text>
+            <Text
+              accessibilityElementsHidden
+              importantForAccessibility="no"
+              style={[
+                styles.tapHintArrow,
+                { color: theme.continueButtonTextColor },
+                continueButtonTextStyle,
+              ]}
+            >
+              →
+            </Text>
+          </View>
+        ) : (
+          <Pressable
+            accessibilityRole="button"
+            disabled={!canContinue}
+            onPress={onContinue}
+            style={[
+              styles.continueButton,
+              { backgroundColor: theme.continueButtonBackgroundColor },
+              !canContinue && styles.continueButtonDisabled,
+            ]}
+          >
+            <Text
+              style={[
+                styles.continueButtonText,
+                { color: theme.continueButtonTextColor },
+                continueButtonTextStyle,
+              ]}
+            >
+              {continueLabel}
+            </Text>
+          </Pressable>
+        )}
+        {shouldShowSecondaryAction ? (
+          <Pressable
+            accessibilityRole="button"
+            onPress={onSecondaryAction}
+            style={styles.secondaryActionButton}
+          >
+            <Text
+              style={[
+                styles.secondaryActionText,
+                { color: secondaryActionTextColor },
+              ]}
+            >
+              {copy.notNowButton}
+            </Text>
+          </Pressable>
+        ) : null}
+      </View>
+    </View>
+  );
+
+  const content = (
+    <>
+      {mainContent}
+      {footer}
+    </>
+  );
+
+  const androidContent = (
+    <>
+      {mainContent}
+      {shouldAvoidAndroidFooterKeyboard ? (
+        <KeyboardAvoidingView
+          behavior={ANDROID_FOOTER_KEYBOARD_BEHAVIOR}
+          keyboardVerticalOffset={keyboardVerticalOffset}
+        >
+          {footer}
+        </KeyboardAvoidingView>
+      ) : (
+        footer
+      )}
+    </>
+  );
+
+  if (Platform.OS === "android") {
+    return (
+      <View style={rootStyleValue}>
+        {isFullScreenTapEnabled ? (
+          <Pressable
+            accessibilityLabel={fullScreenTapAccessibilityLabel ?? continueLabel}
+            accessibilityRole="button"
+            accessibilityState={{ disabled: !canContinue }}
+            disabled={!canContinue}
+            onPress={onContinue}
+            style={styles.root}
+          >
+            {androidContent}
+          </Pressable>
+        ) : (
+          androidContent
+        )}
+      </View>
+    );
+  }
+
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      behavior={IOS_KEYBOARD_AVOIDING_BEHAVIOR}
+      contentContainerStyle={styles.keyboardAvoidingContent}
       keyboardVerticalOffset={keyboardVerticalOffset}
       style={rootStyleValue}
     >
@@ -506,6 +561,9 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
   },
+  keyboardAvoidingContent: {
+    flex: 1,
+  },
   header: {
     alignItems: "center",
     flexDirection: "row",
@@ -583,6 +641,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingVertical: 22,
   },
+  bodyContentInput: {
+    justifyContent: "flex-start",
+    paddingTop: 72,
+  },
   footer: {
     paddingHorizontal: 20,
     paddingTop: 12,
@@ -594,7 +656,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 999,
     justifyContent: "center",
-    minHeight: 58,
+    minHeight: 52,
     paddingHorizontal: 18,
   },
   continueButtonDisabled: {

@@ -177,6 +177,20 @@ test("keeps shared onboarding body transition disabled by default", () => {
   );
 });
 
+test("keeps nickname input content input aligned in the shared frame", () => {
+  const stepFrameSource = readSource("src/onboarding/OnboardingStepFrame.tsx");
+  const nicknameFlowFrameSource = readSource(
+    "src/onboarding/OnboardingNicknameFlowFrame.tsx",
+  );
+
+  assert.match(stepFrameSource, /contentVerticalAlignment = "center"/);
+  assert.match(
+    stepFrameSource,
+    /contentVerticalAlignment === "input" && styles\.bodyContentInput/,
+  );
+  assert.match(nicknameFlowFrameSource, /contentVerticalAlignment="input"/);
+});
+
 test("keeps opt-in onboarding body transition fade-only", () => {
   const stepFrameSource = readSource("src/onboarding/OnboardingStepFrame.tsx");
   const animatedBodyStyleSource =
@@ -238,7 +252,30 @@ test("keeps keyboard avoiding on the shared onboarding step frame", () => {
   assert.match(stepFrameSource, /keyboardVerticalOffset\?: number;/);
   assert.match(
     stepFrameSource,
-    /Platform\.OS === "ios" \? "padding" : undefined/,
+    /const shouldAvoidAndroidFooterKeyboard =\s*\n\s*contentVerticalAlignment === "input";/,
+  );
+  assert.match(
+    stepFrameSource,
+    /const ANDROID_FOOTER_KEYBOARD_BEHAVIOR = "position"/,
+  );
+  assert.match(
+    stepFrameSource,
+    /const IOS_KEYBOARD_AVOIDING_BEHAVIOR = "padding"/,
+  );
+  assert.match(stepFrameSource, /Platform\.OS === "android"/);
+  assert.match(
+    stepFrameSource,
+    /behavior=\{ANDROID_FOOTER_KEYBOARD_BEHAVIOR\}/,
+  );
+  assert.doesNotMatch(stepFrameSource, /enabled=\{isKeyboardVisible\}/);
+  assert.doesNotMatch(stepFrameSource, /android: "height" as const/);
+  assert.match(
+    stepFrameSource,
+    /behavior=\{IOS_KEYBOARD_AVOIDING_BEHAVIOR\}/,
+  );
+  assert.match(
+    stepFrameSource,
+    /contentContainerStyle=\{styles\.keyboardAvoidingContent\}/,
   );
   assert.match(
     stepFrameSource,
@@ -246,6 +283,31 @@ test("keeps keyboard avoiding on the shared onboarding step frame", () => {
   );
   assert.match(stepFrameSource, /styles\.footerContent/);
   assert.doesNotMatch(stepFrameSource, /isKeyboardAvoidingEnabled/);
+});
+
+test("keeps onboarding frame CTA buttons compact", () => {
+  const stepFrameSource = readSource("src/onboarding/OnboardingStepFrame.tsx");
+  const preFrameSource = readSource("src/onboarding/PreOnboardingFrame.tsx");
+  const playgroundPreOnboardingSource = readFileSync(
+    join(
+      process.cwd(),
+      "..",
+      "..",
+      "apps",
+      "playground",
+      "src",
+      "screens",
+      "PreOnboardingPlaygroundScreen.tsx",
+    ),
+    "utf8",
+  );
+
+  assert.match(stepFrameSource, /continueButton:[\s\S]{0,160}minHeight: 52/);
+  assert.match(preFrameSource, /continueButton:[\s\S]{0,160}minHeight: 52/);
+  assert.match(
+    playgroundPreOnboardingSource,
+    /primaryButton:[\s\S]{0,80}minHeight: 52/,
+  );
 });
 
 test("keeps onboarding footer backgrounds and android CTA spacing intentional", () => {

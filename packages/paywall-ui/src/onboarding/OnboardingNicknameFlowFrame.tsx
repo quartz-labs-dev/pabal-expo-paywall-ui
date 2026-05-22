@@ -131,6 +131,7 @@ export function OnboardingNicknameFlowFrame({
       canContinue={Boolean(trimmedNickname)}
       continueLabel={continueLabel}
       contentTransitionIndex={contentTransitionIndex ?? baseStepIndex}
+      contentVerticalAlignment="input"
       currentStepIndex={baseStepIndex}
       isBackButtonDisabled={isBackButtonDisabled}
       isContentTransitionEnabled={isContentTransitionEnabled}

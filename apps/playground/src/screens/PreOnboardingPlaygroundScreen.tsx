@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
   },
   primaryButton: {
     borderRadius: 999,
-    minHeight: 58,
+    minHeight: 52,
   },
   mockTitle: {
     fontSize: 34,

@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 999,
     justifyContent: "center",
-    minHeight: 58,
+    minHeight: 52,
     paddingHorizontal: 18,
   },
   continueButtonText: {
