@@ -38,6 +38,8 @@ const PHONE_WIDTH = 224;
 const PHONE_HEIGHT = 455;
 const PHONE_VISIBLE_HEIGHT = PHONE_HEIGHT * 0.6;
 const NOTIFICATION_ENTRANCE_DELAY_MS = 260;
+const DEFAULT_LOCK_SCREEN_HOUR = 18;
+const DEFAULT_LOCK_SCREEN_MINUTE = 30;
 
 export const OnboardingNotificationMock = ({
   body,
@@ -70,8 +72,12 @@ export const OnboardingNotificationMock = ({
         ? [fallbackNotification]
         : []
   ).slice(0, 3);
-  const lockScreenDateLabel = dateLabel ?? formatLockScreenDate(new Date());
-  const lockScreenTimeLabel = timeLabel ?? formatLockScreenTime(new Date());
+  const defaultLockScreenDate = new Date();
+  const lockScreenDateLabel =
+    dateLabel ?? formatLockScreenDate(defaultLockScreenDate);
+  const lockScreenTimeLabel =
+    timeLabel ??
+    formatLockScreenTime(createDefaultLockScreenTime(defaultLockScreenDate));
 
   return (
     <View style={styles.root}>
@@ -380,6 +386,17 @@ const formatLockScreenDate = (date: Date): string => {
   } catch {
     return "";
   }
+};
+
+const createDefaultLockScreenTime = (date: Date): Date => {
+  const lockScreenTime = new Date(date);
+  lockScreenTime.setHours(
+    DEFAULT_LOCK_SCREEN_HOUR,
+    DEFAULT_LOCK_SCREEN_MINUTE,
+    0,
+    0,
+  );
+  return lockScreenTime;
 };
 
 const formatLockScreenTime = (date: Date): string => {

@@ -208,9 +208,9 @@ the stack at three cards.
 
 Each notification owns its `title`, `description`, optional `icon`, optional
 `iconSource`, and optional `iconBackgroundColor`. All cards use the provided
-localized `nowLabel`. The phone mock shows the current date/time by default, or
-the app can pass `dateLabel` and `timeLabel` when it needs deterministic copy for
-screenshots.
+localized `nowLabel`. The phone mock shows today's date and defaults the time to
+6:30 PM. The app can pass `dateLabel` and `timeLabel` when it needs deterministic
+copy for screenshots.
 
 ```tsx
 <OnboardingNotificationMock

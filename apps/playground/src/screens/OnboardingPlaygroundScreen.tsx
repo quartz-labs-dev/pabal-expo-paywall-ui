@@ -36,11 +36,13 @@ export type OnboardingPlaygroundTheme = PlaygroundOnboardingTheme;
 
 export interface OnboardingNotificationContent {
   body?: string;
+  dateLabel?: string;
   description?: string;
   iconBackgroundColor?: string;
   logo?: ReactNode;
   logoSource?: ImageSourcePropType;
   notifications?: readonly OnboardingNotificationItem[];
+  timeLabel?: string;
   title?: string;
 }
 
@@ -98,6 +100,7 @@ const createNotificationSlide = ({
   content: (
     <OnboardingNotificationMock
       body={content.body}
+      dateLabel={content.dateLabel}
       description={content.description}
       iconBackgroundColor={content.iconBackgroundColor}
       logo={content.logo}
@@ -105,6 +108,7 @@ const createNotificationSlide = ({
       nowLabel={nowLabel}
       notifications={content.notifications}
       theme={theme}
+      timeLabel={content.timeLabel}
       title={content.title}
     />
   ),

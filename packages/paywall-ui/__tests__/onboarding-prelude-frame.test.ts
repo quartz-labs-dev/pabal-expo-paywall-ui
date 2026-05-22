@@ -59,6 +59,46 @@ test("exports notification item contract and caps the mock stack", () => {
   assert.match(notificationSource, /iconBackgroundColor\?: string;/);
 });
 
+test("defaults notification mock clock to today at 6:30 PM", () => {
+  const notificationSource = readSource(
+    "src/onboarding/OnboardingNotificationMock.tsx",
+  );
+
+  assert.match(notificationSource, /dateLabel \?\? formatLockScreenDate\(defaultLockScreenDate\)/);
+  assert.match(notificationSource, /DEFAULT_LOCK_SCREEN_HOUR = 18/);
+  assert.match(notificationSource, /DEFAULT_LOCK_SCREEN_MINUTE = 30/);
+  assert.match(
+    notificationSource,
+    /formatLockScreenTime\(createDefaultLockScreenTime\(defaultLockScreenDate\)\)/,
+  );
+  assert.match(notificationSource, /lockScreenTime\.setHours\(/);
+  assert.doesNotMatch(
+    notificationSource,
+    /timeLabel \?\? formatLockScreenTime\(new Date\(\)\)/,
+  );
+});
+
+test("lets playground callers inject notification mock date and time labels", () => {
+  const playgroundSource = readFileSync(
+    join(
+      process.cwd(),
+      "..",
+      "..",
+      "apps",
+      "playground",
+      "src",
+      "screens",
+      "OnboardingPlaygroundScreen.tsx",
+    ),
+    "utf8",
+  );
+
+  assert.match(playgroundSource, /dateLabel\?: string;/);
+  assert.match(playgroundSource, /timeLabel\?: string;/);
+  assert.match(playgroundSource, /dateLabel=\{content\.dateLabel\}/);
+  assert.match(playgroundSource, /timeLabel=\{content\.timeLabel\}/);
+});
+
 test("exports nickname input as a localized package primitive", () => {
   const indexSource = readSource("src/index.ts");
   const nicknameInputSource = readSource(
