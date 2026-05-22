@@ -12,6 +12,7 @@ import {
 } from "react-native";
 
 import { useOnboardingPhoneFrameEntranceAnimation } from "./onboarding-animations";
+import { getPreOnboardingPhoneFrameMetrics } from "./pre-onboarding-phone-frame-metrics";
 import type { OnboardingContentTheme } from "./types";
 
 export interface PreOnboardingBackgroundSlotProps {
@@ -282,11 +283,19 @@ export const PreOnboardingMockPhoneFrame = ({
   video,
   width,
 }: PreOnboardingMockPhoneFrameProps) => {
+  const frameMetrics = getPreOnboardingPhoneFrameMetrics(width);
+
   return (
     <Animated.View
       style={[
         styles.mockPhoneShadow,
-        { height, shadowColor: theme.frameBorderColor, width },
+        {
+          height,
+          shadowColor: theme.frameBorderColor,
+          shadowOffset: { height: frameMetrics.shadowOffsetY, width: 0 },
+          shadowRadius: frameMetrics.shadowRadius,
+          width,
+        },
         animatedStyle,
       ]}
     >
@@ -295,14 +304,19 @@ export const PreOnboardingMockPhoneFrame = ({
           styles.mockPhoneFrame,
           {
             backgroundColor: theme.frameBorderColor,
+            borderRadius: frameMetrics.borderRadius,
             borderColor: theme.frameBorderColor,
+            borderWidth: frameMetrics.borderWidth,
           },
         ]}
       >
         <View
           style={[
             styles.mockPhoneScreen,
-            { backgroundColor: theme.frameBackgroundColor },
+            {
+              backgroundColor: theme.frameBackgroundColor,
+              borderRadius: frameMetrics.screenBorderRadius,
+            },
           ]}
         >
           {video ??
@@ -324,19 +338,43 @@ export const PreOnboardingMockPhoneFrame = ({
         <View
           style={[
             styles.sideButtonLeftTop,
-            { backgroundColor: theme.frameBorderColor },
+            {
+              backgroundColor: theme.frameBorderColor,
+              borderBottomLeftRadius: frameMetrics.sideButtonRadius,
+              borderTopLeftRadius: frameMetrics.sideButtonRadius,
+              height: frameMetrics.leftTopButtonHeight,
+              left: frameMetrics.sideButtonOffset,
+              top: frameMetrics.leftTopButtonTop,
+              width: frameMetrics.sideButtonWidth,
+            },
           ]}
         />
         <View
           style={[
             styles.sideButtonLeftBottom,
-            { backgroundColor: theme.frameBorderColor },
+            {
+              backgroundColor: theme.frameBorderColor,
+              borderBottomLeftRadius: frameMetrics.sideButtonRadius,
+              borderTopLeftRadius: frameMetrics.sideButtonRadius,
+              height: frameMetrics.leftBottomButtonHeight,
+              left: frameMetrics.sideButtonOffset,
+              top: frameMetrics.leftBottomButtonTop,
+              width: frameMetrics.sideButtonWidth,
+            },
           ]}
         />
         <View
           style={[
             styles.sideButtonRight,
-            { backgroundColor: theme.frameBorderColor },
+            {
+              backgroundColor: theme.frameBorderColor,
+              borderBottomRightRadius: frameMetrics.sideButtonRadius,
+              borderTopRightRadius: frameMetrics.sideButtonRadius,
+              height: frameMetrics.rightButtonHeight,
+              right: frameMetrics.sideButtonOffset,
+              top: frameMetrics.rightButtonTop,
+              width: frameMetrics.sideButtonWidth,
+            },
           ]}
         />
       </View>
@@ -472,46 +510,23 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     aspectRatio: 0.492,
     maxWidth: 275,
-    shadowOffset: { height: 18, width: 0 },
     shadowOpacity: 0.16,
-    shadowRadius: 26,
   },
   mockPhoneFrame: {
-    borderRadius: 38,
-    borderWidth: 5,
     flex: 1,
   },
   mockPhoneScreen: {
-    borderRadius: 32,
     flex: 1,
     overflow: "hidden",
   },
   sideButtonLeftTop: {
-    borderBottomLeftRadius: 5,
-    borderTopLeftRadius: 5,
-    height: 46,
-    left: -9,
     position: "absolute",
-    top: 95,
-    width: 5,
   },
   sideButtonLeftBottom: {
-    borderBottomLeftRadius: 5,
-    borderTopLeftRadius: 5,
-    height: 46,
-    left: -9,
     position: "absolute",
-    top: 150,
-    width: 5,
   },
   sideButtonRight: {
-    borderBottomRightRadius: 5,
-    borderTopRightRadius: 5,
-    height: 68,
     position: "absolute",
-    right: -9,
-    top: 124,
-    width: 5,
   },
   mockImage: {
     height: "100%",

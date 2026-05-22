@@ -204,6 +204,24 @@ test("keeps opt-in onboarding body transition fade-only", () => {
   assert.doesNotMatch(stepFrameSource, /contentDirection/);
 });
 
+test("scales pre-onboarding mock phone frame chrome with frame width", async () => {
+  const { getPreOnboardingPhoneFrameMetrics } = await import(
+    "../src/onboarding/pre-onboarding-phone-frame-metrics"
+  );
+
+  const compactMetrics = getPreOnboardingPhoneFrameMetrics(160);
+  const regularMetrics = getPreOnboardingPhoneFrameMetrics(224);
+  const tabletMetrics = getPreOnboardingPhoneFrameMetrics(320);
+
+  assert.ok(compactMetrics.borderRadius < regularMetrics.borderRadius);
+  assert.ok(compactMetrics.leftTopButtonTop < regularMetrics.leftTopButtonTop);
+  assert.ok(compactMetrics.rightButtonHeight < regularMetrics.rightButtonHeight);
+  assert.equal(regularMetrics.borderRadius, 38);
+  assert.equal(regularMetrics.borderWidth, 5);
+  assert.equal(tabletMetrics.borderRadius, 43);
+  assert.equal(tabletMetrics.borderWidth, 6);
+});
+
 test("supports inverted tone on the shared onboarding step frame", () => {
   const stepFrameSource = readSource("src/onboarding/OnboardingStepFrame.tsx");
   const preludeFrameSource = readSource(
