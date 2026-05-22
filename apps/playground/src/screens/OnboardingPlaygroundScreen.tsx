@@ -1,6 +1,6 @@
 import { type ComponentProps, type ReactNode, useMemo, useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import {
   createOnboardingAcquisitionSourceOptions,
   OnboardingChoiceList,
@@ -83,6 +83,12 @@ interface CreateNotificationSlideParams {
   theme: Required<PlaygroundOnboardingTheme>;
 }
 
+interface PlaygroundOnboardingSlide extends OnboardingSlide {
+  contentVerticalAlignment?: ComponentProps<
+    typeof OnboardingStepFrame
+  >["contentVerticalAlignment"];
+}
+
 const createNotificationSlide = ({
   content,
   nowLabel,
@@ -142,6 +148,8 @@ export const OnboardingPlaygroundScreen = ({
   const [selectedProgressStep, setSelectedProgressStep] = useState<
     string | null
   >(null);
+  const [weight, setWeight] = useState("");
+  const [weightUnit, setWeightUnit] = useState<WeightUnit>("kg");
   const [profileNickname, setProfileNickname] = useState("");
   const [nicknameFlowPhase, setNicknameFlowPhase] =
     useState<OnboardingNicknameFlowPhase>("input");
@@ -171,8 +179,29 @@ export const OnboardingPlaygroundScreen = ({
     [theme],
   );
 
-  const slides = useMemo<OnboardingSlide[]>(
+  const slides = useMemo<PlaygroundOnboardingSlide[]>(
     () => [
+      {
+        canContinue: Boolean(weight.trim()),
+        content: (
+          <OnboardingWeightInputExample
+            theme={theme}
+            unit={weightUnit}
+            value={weight}
+            onChangeValue={setWeight}
+            onToggleUnit={() => {
+              setWeightUnit((currentUnit) =>
+                currentUnit === "kg" ? "lb" : "kg",
+              );
+            }}
+          />
+        ),
+        contentVerticalAlignment: "input",
+        description:
+          "This mirrors an input step with a secondary action and a compact safe-area footer.",
+        showSecondaryAction: true,
+        title: "Pick a weight unit",
+      },
       createAcquisitionSourceSlide({
         options: acquisitionSourceOptions,
         selectedSource,
@@ -253,6 +282,8 @@ export const OnboardingPlaygroundScreen = ({
       notificationContent,
       platform,
       theme,
+      weight,
+      weightUnit,
     ],
   );
 
@@ -337,6 +368,7 @@ export const OnboardingPlaygroundScreen = ({
           canContinue={currentSlide.canContinue}
           continueLabel={currentSlide.continueLabel ?? continueLabel}
           contentTransitionIndex={currentStepIndex}
+          contentVerticalAlignment={currentSlide.contentVerticalAlignment}
           currentStepIndex={mainSlideStepIndex + 2}
           description={currentSlide.description}
           isBackButtonDisabled={currentSlide.isBackButtonDisabled}
@@ -393,6 +425,72 @@ function NotificationGlyph({ color, label }: NotificationGlyphProps) {
   return (
     <View style={styles.notificationGlyph}>
       <Text style={[styles.notificationGlyphText, { color }]}>{label}</Text>
+    </View>
+  );
+}
+
+type WeightUnit = "kg" | "lb";
+
+interface OnboardingWeightInputExampleProps {
+  theme: Required<PlaygroundOnboardingTheme>;
+  unit: WeightUnit;
+  value: string;
+  onChangeValue: (value: string) => void;
+  onToggleUnit: () => void;
+}
+
+function OnboardingWeightInputExample({
+  theme,
+  unit,
+  value,
+  onChangeValue,
+  onToggleUnit,
+}: OnboardingWeightInputExampleProps) {
+  return (
+    <View
+      style={[
+        styles.weightInputCard,
+        { backgroundColor: theme.cardBackgroundColor },
+      ]}
+    >
+      <Text style={[styles.weightInputTitle, { color: theme.primaryTextColor }]}>
+        Weight
+      </Text>
+      <View
+        style={[
+          styles.weightInputRow,
+          { backgroundColor: theme.frameBackgroundColor },
+        ]}
+      >
+        <TextInput
+          autoFocus
+          keyboardType="decimal-pad"
+          placeholder="Enter weight"
+          placeholderTextColor={theme.secondaryTextColor}
+          style={[styles.weightInput, { color: theme.primaryTextColor }]}
+          value={value}
+          onChangeText={onChangeValue}
+        />
+        <Pressable
+          accessibilityLabel={`Switch weight unit from ${unit}`}
+          accessibilityRole="button"
+          hitSlop={8}
+          onPress={onToggleUnit}
+          style={[
+            styles.weightUnitToggle,
+            { backgroundColor: theme.cardBackgroundColor },
+          ]}
+        >
+          <Text
+            style={[
+              styles.weightUnitToggleText,
+              { color: theme.primaryTextColor },
+            ]}
+          >
+            {unit}
+          </Text>
+        </Pressable>
+      </View>
     </View>
   );
 }
@@ -504,6 +602,52 @@ const INVERTED_FRAME_LIST_OPTIONS = [
 ] satisfies OnboardingChoiceOption[];
 
 const styles = StyleSheet.create({
+  weightInputCard: {
+    alignSelf: "center",
+    borderRadius: 8,
+    gap: 14,
+    maxWidth: 420,
+    padding: 16,
+    width: "100%",
+  },
+  weightInputTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+    letterSpacing: 0,
+    lineHeight: 22,
+  },
+  weightInputRow: {
+    alignItems: "center",
+    borderRadius: 14,
+    flexDirection: "row",
+    gap: 10,
+    minHeight: 56,
+    paddingLeft: 16,
+    paddingRight: 8,
+  },
+  weightInput: {
+    flex: 1,
+    fontSize: 22,
+    fontWeight: "600",
+    letterSpacing: 0,
+    lineHeight: 27,
+    minHeight: 56,
+    paddingVertical: 0,
+  },
+  weightUnitToggle: {
+    alignItems: "center",
+    borderRadius: 999,
+    justifyContent: "center",
+    minHeight: 40,
+    minWidth: 58,
+    paddingHorizontal: 14,
+  },
+  weightUnitToggleText: {
+    fontSize: 16,
+    fontWeight: "700",
+    letterSpacing: 0,
+    lineHeight: 20,
+  },
   notificationGlyph: {
     alignItems: "center",
     height: 24,

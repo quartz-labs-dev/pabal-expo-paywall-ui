@@ -191,6 +191,14 @@ an input. Do not add a keyboard package for a single-name capture step. Reach
 for a dedicated keyboard controller only if an app later needs gesture-synced
 keyboard animation across many dense input screens.
 
+For input steps, the shared frame automatically uses compact footer spacing.
+This applies whether the footer has only the CTA or the localized secondary
+action as well. The package owns the keyboard avoidance and footer chrome
+without making every app tune safe-area padding by hand.
+On Android, onboarding footers cap bottom safe-area spacing in their resting
+state. This keeps gesture/navigation bar protection without letting large
+system insets create an empty area below the CTA.
+
 ## Notification Mock
 
 Use `OnboardingNotificationMock` when the app wants a lock-screen style
@@ -443,6 +451,30 @@ import {
     theme={theme}
     onSelectOption={setSelectedSource}
   />
+</OnboardingStepFrame>;
+```
+
+Input steps can use `contentVerticalAlignment="input"` when the CTA should stay
+above the keyboard. The footer uses compact bottom spacing automatically for
+both CTA-only and CTA + secondary action variants.
+
+```tsx
+<OnboardingStepFrame
+  canContinue={Boolean(weight)}
+  contentVerticalAlignment="input"
+  continueLabel={copy.continueButton}
+  currentStepIndex={mainStepIndex}
+  description="Choose the unit you use most often."
+  locale={locale}
+  showSecondaryAction
+  theme={frameTheme}
+  title="Pick a weight unit"
+  totalSteps={slides.length}
+  onBack={goBack}
+  onContinue={goNext}
+  onSecondaryAction={skipStep}
+>
+  <WeightInput value={weight} unit={unit} onChangeValue={setWeight} />
 </OnboardingStepFrame>;
 ```
 

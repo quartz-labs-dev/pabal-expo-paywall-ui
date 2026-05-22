@@ -1,8 +1,11 @@
-import { type ReactNode, useEffect, useRef } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 import {
   Animated,
   Easing,
+  Keyboard,
   KeyboardAvoidingView,
+  type KeyboardEvent,
+  type LayoutChangeEvent,
   Platform,
   Pressable,
   ScrollView,
@@ -60,7 +63,6 @@ export interface OnboardingStepFrameProps {
 
 const INITIAL_CONTENT_TRANSITION_DELAY_MS = 90;
 
-const ANDROID_FOOTER_KEYBOARD_BEHAVIOR = "position";
 const IOS_KEYBOARD_AVOIDING_BEHAVIOR = "padding";
 
 const getProgressRatio = (stepIndex: number, stepCount: number) => {
@@ -158,6 +160,9 @@ export const OnboardingStepFrame = ({
   const effectiveContentTransitionIndex =
     contentTransitionIndex ?? currentStepIndex;
   const previousStepIndexRef = useRef<number | null>(null);
+  const [androidFrameHeight, setAndroidFrameHeight] = useState(0);
+  const [androidFooterKeyboardOffset, setAndroidFooterKeyboardOffset] =
+    useState(0);
   const contentTransition = useRef(
     new Animated.Value(isContentTransitionEnabled ? 0 : 1),
   ).current;
@@ -211,8 +216,57 @@ export const OnboardingStepFrame = ({
     { backgroundColor: frameBackgroundColor },
     rootStyle,
   ];
-  const shouldAvoidAndroidFooterKeyboard =
-    contentVerticalAlignment === "input";
+  const isInputContentLayout = contentVerticalAlignment === "input";
+  const shouldAvoidAndroidFooterKeyboard = isInputContentLayout;
+  const androidFooterKeyboardStyle: StyleProp<ViewStyle> =
+    shouldAvoidAndroidFooterKeyboard && androidFooterKeyboardOffset > 0
+      ? { transform: [{ translateY: -androidFooterKeyboardOffset }] }
+      : undefined;
+
+  useEffect(() => {
+    if (Platform.OS !== "android" || !shouldAvoidAndroidFooterKeyboard) {
+      setAndroidFooterKeyboardOffset(0);
+      return;
+    }
+
+    const handleKeyboardShow = (event: KeyboardEvent) => {
+      const keyboardTop = event.endCoordinates.screenY;
+      const overlapFromFrame =
+        androidFrameHeight > 0 ? androidFrameHeight - keyboardTop : 0;
+      const overlap =
+        overlapFromFrame > 0 ? overlapFromFrame : event.endCoordinates.height;
+
+      setAndroidFooterKeyboardOffset(
+        Math.max(overlap - keyboardVerticalOffset, 0),
+      );
+    };
+
+    const keyboardShowSubscription = Keyboard.addListener(
+      "keyboardDidShow",
+      handleKeyboardShow,
+    );
+    const keyboardHideSubscription = Keyboard.addListener(
+      "keyboardDidHide",
+      () => {
+        setAndroidFooterKeyboardOffset(0);
+      },
+    );
+
+    return () => {
+      keyboardShowSubscription.remove();
+      keyboardHideSubscription.remove();
+      setAndroidFooterKeyboardOffset(0);
+    };
+  }, [
+    androidFrameHeight,
+    keyboardVerticalOffset,
+    shouldAvoidAndroidFooterKeyboard,
+  ]);
+
+  const handleAndroidRootLayout = (event: LayoutChangeEvent) => {
+    if (Platform.OS !== "android") return;
+    setAndroidFrameHeight(event.nativeEvent.layout.height);
+  };
 
   const mainContent = (
     <>
@@ -267,7 +321,7 @@ export const OnboardingStepFrame = ({
           bounces={isBodyScrollEnabled}
           contentContainerStyle={[
             styles.bodyContent,
-            contentVerticalAlignment === "input" && styles.bodyContentInput,
+            isInputContentLayout && styles.bodyContentInput,
             contentContainerStyle,
             !showHeader && {
               paddingTop: Math.max(insets.top, 12) + 22,
@@ -291,7 +345,9 @@ export const OnboardingStepFrame = ({
         { backgroundColor: footerBackgroundColor },
         footerStyle,
         {
-          paddingBottom: getOnboardingFooterBottomPadding(insets.bottom),
+          paddingBottom: getOnboardingFooterBottomPadding(insets.bottom, {
+            isCompactSpacingEnabled: isInputContentLayout,
+          }),
         },
       ]}
     >
@@ -377,12 +433,9 @@ export const OnboardingStepFrame = ({
     <>
       {mainContent}
       {shouldAvoidAndroidFooterKeyboard ? (
-        <KeyboardAvoidingView
-          behavior={ANDROID_FOOTER_KEYBOARD_BEHAVIOR}
-          keyboardVerticalOffset={keyboardVerticalOffset}
-        >
+        <View style={androidFooterKeyboardStyle}>
           {footer}
-        </KeyboardAvoidingView>
+        </View>
       ) : (
         footer
       )}
@@ -391,7 +444,7 @@ export const OnboardingStepFrame = ({
 
   if (Platform.OS === "android") {
     return (
-      <View style={rootStyleValue}>
+      <View onLayout={handleAndroidRootLayout} style={rootStyleValue}>
         {isFullScreenTapEnabled ? (
           <Pressable
             accessibilityLabel={fullScreenTapAccessibilityLabel ?? continueLabel}
