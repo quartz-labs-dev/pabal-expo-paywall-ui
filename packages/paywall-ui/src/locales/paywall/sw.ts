@@ -26,6 +26,8 @@ const sw = createPaywallLocaleText({
     openingPaywall: "Ukurasa wa malipo unafunguliwa...",
     privacyText: "Faragha",
     purchaseButton: "Anza jaribio",
+    startForPriceButtonPrefix: "Anza kwa ",
+    startForPriceButtonSuffix: "",
     purchasingButton: "Inachakata",
     restoreButton: "Rejesha manunuzi",
     restoring: "Inarejesha...",

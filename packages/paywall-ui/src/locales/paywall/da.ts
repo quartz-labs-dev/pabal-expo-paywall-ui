@@ -26,6 +26,8 @@ const da = createPaywallLocaleText({
     openingPaywall: "Åbner betalingsskærm...",
     privacyText: "Privatliv",
     purchaseButton: "Start prøveperiode",
+    startForPriceButtonPrefix: "Begynd for ",
+    startForPriceButtonSuffix: "",
     purchasingButton: "Behandler",
     restoreButton: "Gendan køb",
     restoring: "Gendanner...",

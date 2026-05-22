@@ -26,6 +26,8 @@ const ar = createPaywallLocaleText({
     openingPaywall: "جار فتح صفحة الدفع...",
     privacyText: "الخصوصية",
     purchaseButton: "ابدأ التجربة",
+    startForPriceButtonPrefix: "ابدأ مقابل ",
+    startForPriceButtonSuffix: "",
     purchasingButton: "جار المعالجة",
     restoreButton: "استعادة المشتريات",
     restoring: "جار الاستعادة...",

@@ -26,6 +26,8 @@ const af = createPaywallLocaleText({
     openingPaywall: "Betaalskerm word oopgemaak...",
     privacyText: "Privaatheid",
     purchaseButton: "Begin proeflopie",
+    startForPriceButtonPrefix: "Begin vir ",
+    startForPriceButtonSuffix: "",
     purchasingButton: "Verwerk",
     restoreButton: "Herstel aankope",
     restoring: "Herstel...",

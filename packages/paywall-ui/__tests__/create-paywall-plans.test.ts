@@ -280,6 +280,46 @@ test("formats free-trial durations with singular and plural copy", () => {
   );
 });
 
+test("formats default purchase CTA from trial eligibility and selected price", () => {
+  const enCopy = getDefaultPaywallCopy("en-US", { title: "Pro" });
+  const koCopy = getDefaultPaywallCopy("ko-KR", { title: "Pro" });
+  const annualPlan = createPaywallPlans([
+    makePackage("$rc_annual", 29.99, "$29.99"),
+  ])[0];
+
+  assert.ok(annualPlan);
+  assert.equal(
+    enCopy.formatPurchaseButtonLabel?.({
+      hasFreeTrial: true,
+      plan: annualPlan,
+      trialDuration: { value: 7, unit: "day" },
+    }),
+    "7 days free, then $29.99",
+  );
+  assert.equal(
+    enCopy.formatPurchaseButtonLabel?.({
+      hasFreeTrial: false,
+      plan: annualPlan,
+    }),
+    "Start for $29.99",
+  );
+  assert.equal(
+    koCopy.formatPurchaseButtonLabel?.({
+      hasFreeTrial: true,
+      plan: annualPlan,
+      trialDuration: { value: 7, unit: "day" },
+    }),
+    "7일 무료, 이후 $29.99",
+  );
+  assert.equal(
+    koCopy.formatPurchaseButtonLabel?.({
+      hasFreeTrial: false,
+      plan: annualPlan,
+    }),
+    "$29.99으로 시작해보세요",
+  );
+});
+
 test("provides localized default plan copy from locale strings", () => {
   const plans = createPaywallPlans(
     [
@@ -669,6 +709,15 @@ test("localizes generated paywall copy for every non-English paywall locale", ()
       { value: 2, unit: "week" },
       "$80.00",
     );
+    const trialCta = copy.formatPurchaseButtonLabel?.({
+      hasFreeTrial: true,
+      plan: plans[0]!,
+      trialDuration: { value: 2, unit: "week" },
+    });
+    const paidCta = copy.formatPurchaseButtonLabel?.({
+      hasFreeTrial: false,
+      plan: plans[0]!,
+    });
     const annualPlan = plans.find((plan) => plan.period === "annual");
     const monthlyPlan = plans.find((plan) => plan.period === "monthly");
 
@@ -677,6 +726,8 @@ test("localizes generated paywall copy for every non-English paywall locale", ()
     assert.ok(copy.trialNoPaymentDueNow, locale);
     assert.ok(trialTitle, locale);
     assert.ok(trialDisclosure, locale);
+    assert.ok(trialCta, locale);
+    assert.ok(paidCta, locale);
     assert.ok(annualPlan?.monthlyPriceText, locale);
     assert.ok(annualPlan?.pricePerPeriodText, locale);
     assert.ok(monthlyPlan?.pricePerPeriodText, locale);
@@ -692,6 +743,8 @@ test("localizes generated paywall copy for every non-English paywall locale", ()
     assert.notEqual(copy.trialNoPaymentDueNow, "No payment due now", locale);
     assert.doesNotMatch(trialTitle ?? "", /Free Trial Included/, locale);
     assert.doesNotMatch(trialDisclosure ?? "", / free, then /, locale);
+    assert.doesNotMatch(trialCta ?? "", / free, then /, locale);
+    assert.doesNotMatch(paidCta ?? "", /^Start for /, locale);
     assert.doesNotMatch(annualPlan?.monthlyPriceText ?? "", / \/ mo$/, locale);
     assert.doesNotMatch(annualPlan?.pricePerPeriodText ?? "", / \/ year$/, locale);
     assert.doesNotMatch(monthlyPlan?.pricePerPeriodText ?? "", / \/ month$/, locale);

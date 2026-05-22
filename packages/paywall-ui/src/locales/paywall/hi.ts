@@ -26,6 +26,8 @@ const hi = createPaywallLocaleText({
     openingPaywall: "भुगतान पेज खोला जा रहा है...",
     privacyText: "गोपनीयता",
     purchaseButton: "ट्रायल शुरू करें",
+    startForPriceButtonPrefix: "",
+    startForPriceButtonSuffix: " से शुरू करें",
     purchasingButton: "प्रोसेस हो रहा है",
     restoreButton: "खरीदारियां पुनर्स्थापित करें",
     restoring: "पुनर्स्थापित हो रहा है...",

@@ -26,6 +26,8 @@ const ru = createPaywallLocaleText({
     openingPaywall: "Открытие paywall...",
     privacyText: "Конфиденциальность",
     purchaseButton: "Начать пробный период",
+    startForPriceButtonPrefix: "Начните за ",
+    startForPriceButtonSuffix: "",
     purchasingButton: "Обработка",
     restoreButton: "Восстановить покупки",
     restoring: "Восстановление...",

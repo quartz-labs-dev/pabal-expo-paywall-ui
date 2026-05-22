@@ -26,6 +26,8 @@ const uk = createPaywallLocaleText({
     openingPaywall: "Відкриття paywall...",
     privacyText: "Конфіденційність",
     purchaseButton: "Почати пробний період",
+    startForPriceButtonPrefix: "Почніть за ",
+    startForPriceButtonSuffix: "",
     purchasingButton: "Обробка",
     restoreButton: "Відновити покупки",
     restoring: "Відновлення...",

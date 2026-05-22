@@ -26,6 +26,8 @@ const bg = createPaywallLocaleText({
     openingPaywall: "Отваряне на paywall...",
     privacyText: "Поверителност",
     purchaseButton: "Започнете пробен период",
+    startForPriceButtonPrefix: "Започнете за ",
+    startForPriceButtonSuffix: "",
     purchasingButton: "Обработка",
     restoreButton: "Възстановяване на покупки",
     restoring: "Възстановяване...",

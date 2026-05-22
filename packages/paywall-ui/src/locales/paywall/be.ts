@@ -26,6 +26,8 @@ const be = createPaywallLocaleText({
     openingPaywall: "Адкрываецца старонка аплаты...",
     privacyText: "Прыватнасць",
     purchaseButton: "Пачаць пробны перыяд",
+    startForPriceButtonPrefix: "Пачніце за ",
+    startForPriceButtonSuffix: "",
     purchasingButton: "Апрацоўка",
     restoreButton: "Аднавіць пакупкі",
     restoring: "Аднаўленне...",

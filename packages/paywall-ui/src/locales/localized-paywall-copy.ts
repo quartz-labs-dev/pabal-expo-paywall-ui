@@ -115,6 +115,7 @@ export const getDefaultPaywallCopy = (
     legalPrefix: text.subscriptionRenewsAutomatically,
     supportMessageLabel: text.supportMessageLabel,
     supportMessage: text.paywallSupportMessage,
+    formatPurchaseButtonLabel: text.formatPurchaseButtonLabel,
     formatTrialDuration: text.formatTrialDuration,
     formatTrialIncludedTitle: text.formatTrialIncludedTitle,
     formatTrialPriceDisclosure: text.formatTrialPriceDisclosure,

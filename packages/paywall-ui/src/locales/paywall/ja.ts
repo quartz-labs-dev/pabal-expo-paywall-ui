@@ -26,6 +26,8 @@ const ja = createPaywallLocaleText({
     openingPaywall: "ペイウォールを開いています...",
     privacyText: "プライバシー",
     purchaseButton: "トライアルを開始",
+    startForPriceButtonPrefix: "",
+    startForPriceButtonSuffix: "で始める",
     purchasingButton: "処理中",
     restoreButton: "購入を復元",
     restoring: "復元中...",

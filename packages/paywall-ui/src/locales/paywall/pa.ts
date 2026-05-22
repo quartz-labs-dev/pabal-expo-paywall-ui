@@ -26,6 +26,8 @@ const pa = createPaywallLocaleText({
     openingPaywall: "ਭੁਗਤਾਨ ਪੰਨਾ ਖੁੱਲ ਰਿਹਾ ਹੈ...",
     privacyText: "ਗੋਪਨੀਯਤਾ",
     purchaseButton: "ਟ੍ਰਾਇਲ ਸ਼ੁਰੂ ਕਰੋ",
+    startForPriceButtonPrefix: "",
+    startForPriceButtonSuffix: " ਨਾਲ ਸ਼ੁਰੂ ਕਰੋ",
     purchasingButton: "ਪ੍ਰਕਿਰਿਆ ਜਾਰੀ ਹੈ",
     restoreButton: "ਖਰੀਦਾਂ ਮੁੜ ਪ੍ਰਾਪਤ ਕਰੋ",
     restoring: "ਮੁੜ ਪ੍ਰਾਪਤ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ...",

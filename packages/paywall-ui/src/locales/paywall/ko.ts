@@ -26,6 +26,8 @@ const ko = createPaywallLocaleText({
     openingPaywall: "페이월 여는 중...",
     privacyText: "개인정보 처리방침",
     purchaseButton: "무료 체험 시작",
+    startForPriceButtonPrefix: "",
+    startForPriceButtonSuffix: "으로 시작해보세요",
     purchasingButton: "처리 중",
     restoreButton: "구매 복원",
     restoring: "복원 중...",

@@ -154,6 +154,7 @@ export interface PaywallProps<TPackage = unknown> {
   selectedPlanId?: string;
   theme?: Partial<PaywallTheme>;
   isPurchasing?: boolean;
+  isRestoring?: boolean;
   onSelectPlan: (planId: string) => void;
   onPurchase: (plan: PaywallPlan<TPackage>) => Promise<void> | void;
   onRestore: () => Promise<void> | void;

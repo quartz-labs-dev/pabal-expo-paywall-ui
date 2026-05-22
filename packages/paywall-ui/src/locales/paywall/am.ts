@@ -26,6 +26,8 @@ const am = createPaywallLocaleText({
     openingPaywall: "የክፍያ ገጽ በመክፈት ላይ...",
     privacyText: "ግላዊነት",
     purchaseButton: "ሙከራ ጀምር",
+    startForPriceButtonPrefix: "በ ",
+    startForPriceButtonSuffix: " ይጀምሩ",
     purchasingButton: "በሂደት ላይ",
     restoreButton: "ግዢዎችን መልስ",
     restoring: "በመመለስ ላይ...",

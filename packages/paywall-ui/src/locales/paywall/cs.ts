@@ -26,6 +26,8 @@ const cs = createPaywallLocaleText({
     openingPaywall: "Otevírání paywallu...",
     privacyText: "Soukromí",
     purchaseButton: "Spustit zkušební období",
+    startForPriceButtonPrefix: "Začněte za ",
+    startForPriceButtonSuffix: "",
     purchasingButton: "Zpracování",
     restoreButton: "Obnovit nákupy",
     restoring: "Obnovování...",

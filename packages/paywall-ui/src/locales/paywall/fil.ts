@@ -26,6 +26,8 @@ const fil = createPaywallLocaleText({
     openingPaywall: "Binubuksan ang pahina ng bayad...",
     privacyText: "Privacy",
     purchaseButton: "Simulan ang trial",
+    startForPriceButtonPrefix: "Magsimula sa ",
+    startForPriceButtonSuffix: "",
     purchasingButton: "Pinoproseso",
     restoreButton: "I-restore ang mga pagbili",
     restoring: "Nire-restore...",

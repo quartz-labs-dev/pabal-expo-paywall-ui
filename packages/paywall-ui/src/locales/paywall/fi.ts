@@ -26,6 +26,8 @@ const fi = createPaywallLocaleText({
     openingPaywall: "Avataan maksumuuria...",
     privacyText: "Tietosuoja",
     purchaseButton: "Aloita kokeilu",
+    startForPriceButtonPrefix: "Aloita hintaan ",
+    startForPriceButtonSuffix: "",
     purchasingButton: "Käsitellään",
     restoreButton: "Palauta ostot",
     restoring: "Palautetaan...",

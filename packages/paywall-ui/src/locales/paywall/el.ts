@@ -26,6 +26,8 @@ const el = createPaywallLocaleText({
     openingPaywall: "Άνοιγμα paywall...",
     privacyText: "Απόρρητο",
     purchaseButton: "Έναρξη δοκιμής",
+    startForPriceButtonPrefix: "Ξεκινήστε με ",
+    startForPriceButtonSuffix: "",
     purchasingButton: "Επεξεργασία",
     restoreButton: "Επαναφορά αγορών",
     restoring: "Επαναφορά...",

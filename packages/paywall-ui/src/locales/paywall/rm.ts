@@ -26,6 +26,8 @@ const rm = createPaywallLocaleText({
     openingPaywall: "Avra la pagina da pajament...",
     privacyText: "Privacitad",
     purchaseButton: "Cumenzar la prova",
+    startForPriceButtonPrefix: "Cumenzar per ",
+    startForPriceButtonSuffix: "",
     purchasingButton: "Elavuraziun",
     restoreButton: "Restaurar cumpras",
     restoring: "Restaurescha...",

@@ -26,6 +26,8 @@ const ka = createPaywallLocaleText({
     openingPaywall: "გადახდის გვერდი იხსნება...",
     privacyText: "კონფიდენციალურობა",
     purchaseButton: "საცდელის დაწყება",
+    startForPriceButtonPrefix: "დაიწყეთ ",
+    startForPriceButtonSuffix: "-ად",
     purchasingButton: "მუშავდება",
     restoreButton: "შენაძენების აღდგენა",
     restoring: "აღდგენა...",

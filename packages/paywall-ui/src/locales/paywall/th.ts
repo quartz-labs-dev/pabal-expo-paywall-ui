@@ -26,6 +26,8 @@ const th = createPaywallLocaleText({
     openingPaywall: "กำลังเปิดหน้าชำระเงิน...",
     privacyText: "ความเป็นส่วนตัว",
     purchaseButton: "เริ่มทดลองใช้ฟรี",
+    startForPriceButtonPrefix: "เริ่มต้นด้วย ",
+    startForPriceButtonSuffix: "",
     purchasingButton: "กำลังประมวลผล",
     restoreButton: "กู้คืนการซื้อ",
     restoring: "กำลังกู้คืน...",

@@ -9,7 +9,6 @@ import {
   type PaywallConfig,
   type PaywallFreeTrialConfig,
   type PaywallPlan,
-  type PaywallTrialDuration,
   type PurchasesPackageLike,
 } from "pabal-expo-paywall-ui";
 
@@ -160,16 +159,6 @@ const getFreeTrialConfig = (
   return true;
 };
 
-const formatTrialDurationLabel = (
-  trialDuration: PaywallTrialDuration | undefined,
-): string => {
-  const duration = trialDuration ?? { value: 7, unit: "day" };
-  const unit = duration.unit === "week" ? "week" : "day";
-  const unitLabel = duration.value === 1 ? unit : `${unit}s`;
-
-  return `${duration.value} ${unitLabel}`;
-};
-
 export const PaywallPlaygroundScreen = ({
   scenario,
   selectedLocale,
@@ -200,15 +189,6 @@ export const PaywallPlaygroundScreen = ({
     return getDefaultPaywallCopy(selectedLocale, {
       title: "Upgrade to Pro",
       subtitle: "Unlock every feature.",
-      formatPurchaseButtonLabel: ({ plan, hasFreeTrial, trialDuration }) => {
-        if (hasFreeTrial) {
-          return `${formatTrialDurationLabel(trialDuration)} free, then ${
-            plan.priceText
-          }`;
-        }
-
-        return `Start ${plan.title} for ${plan.priceText}`;
-      },
     });
   }, [selectedLocale]);
 

@@ -26,6 +26,8 @@ const lt = createPaywallLocaleText({
     openingPaywall: "Atidaromas paywall...",
     privacyText: "Privatumas",
     purchaseButton: "Pradėti bandomąjį laikotarpį",
+    startForPriceButtonPrefix: "Pradėkite už ",
+    startForPriceButtonSuffix: "",
     purchasingButton: "Apdorojama",
     restoreButton: "Atkurti pirkinius",
     restoring: "Atkuriama...",

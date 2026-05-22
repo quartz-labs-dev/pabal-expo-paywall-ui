@@ -144,6 +144,7 @@ export const Paywall = <TPackage,>({
   selectedPlanId,
   theme: themeOverride,
   isPurchasing = false,
+  isRestoring = false,
   onSelectPlan,
   onPurchase,
   onRestore,
@@ -199,6 +200,7 @@ export const Paywall = <TPackage,>({
           trialDuration,
         })
       : defaultPurchaseButtonLabel;
+  const isProcessing = isPurchasing || isRestoring;
   const heroHeight = Math.round(windowHeight * heroHeightRatio);
   const [measuredFooterHeight, setMeasuredFooterHeight] = useState(0);
   const footerBottomPadding =
@@ -446,6 +448,7 @@ export const Paywall = <TPackage,>({
           {!isValueStep && (
             <LegalLinks
               copy={copy}
+              isRestoreDisabled={isProcessing}
               shouldShowLegalPrefix={shouldShowLegalPrefix}
               theme={theme}
               onRestore={onRestore}
@@ -488,7 +491,7 @@ export const Paywall = <TPackage,>({
               label={purchaseButtonLabel}
               loadingLabel={copy.purchasingButton}
               background={purchaseButtonBackground}
-              isLoading={isPurchasing}
+              isLoading={isProcessing}
               isDisabled={!selectedPlan}
               theme={theme}
               onPress={() => {

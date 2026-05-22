@@ -26,6 +26,8 @@ const lv = createPaywallLocaleText({
     openingPaywall: "Atver paywall...",
     privacyText: "Privātums",
     purchaseButton: "Sākt izmēģinājumu",
+    startForPriceButtonPrefix: "Sāciet par ",
+    startForPriceButtonSuffix: "",
     purchasingButton: "Apstrāde",
     restoreButton: "Atjaunot pirkumus",
     restoring: "Atjauno...",

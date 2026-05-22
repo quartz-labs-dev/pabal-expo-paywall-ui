@@ -26,6 +26,8 @@ const ml = createPaywallLocaleText({
     openingPaywall: "പേയ്മെന്റ് പേജ് തുറക്കുന്നു...",
     privacyText: "സ്വകാര്യത",
     purchaseButton: "ട്രയൽ ആരംഭിക്കുക",
+    startForPriceButtonPrefix: "",
+    startForPriceButtonSuffix: " മുതൽ തുടങ്ങൂ",
     purchasingButton: "പ്രോസസ് ചെയ്യുന്നു",
     restoreButton: "വാങ്ങലുകൾ പുനഃസ്ഥാപിക്കുക",
     restoring: "പുനഃസ്ഥാപിക്കുന്നു...",

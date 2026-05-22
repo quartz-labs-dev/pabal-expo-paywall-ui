@@ -1,5 +1,6 @@
 import type {
   PaywallPlanPeriod,
+  PaywallPurchaseButtonLabelContext,
   PaywallTrialDuration,
   PaywallTrialUnit,
 } from "../../types";
@@ -39,6 +40,9 @@ export interface PaywallText {
     priceText: string,
     period: Exclude<PaywallPlanPeriod, "lifetime">
   ) => string;
+  formatPurchaseButtonLabel: (
+    context: PaywallPurchaseButtonLabelContext
+  ) => string;
   formatTrialDuration: (duration: PaywallTrialDuration) => string;
   formatTrialIncludedTitle: (duration: PaywallTrialDuration) => string;
   formatTrialPriceDisclosure: (
@@ -67,6 +71,7 @@ interface PaywallTextInput
     PaywallText,
     | "annualProfilePlan"
     | "formatPricePerPeriodText"
+    | "formatPurchaseButtonLabel"
     | "formatTrialDuration"
     | "formatTrialIncludedTitle"
     | "formatTrialPriceDisclosure"
@@ -81,6 +86,9 @@ interface PaywallTextInput
   formatPricePerPeriodText?: (
     priceText: string,
     period: Exclude<PaywallPlanPeriod, "lifetime">
+  ) => string;
+  formatPurchaseButtonLabel?: (
+    context: PaywallPurchaseButtonLabelContext
   ) => string;
   formatTrialDuration?: (duration: PaywallTrialDuration) => string;
   formatTrialIncludedTitle?: (duration: PaywallTrialDuration) => string;
@@ -98,6 +106,8 @@ interface PaywallTextInput
   renewsOnSuffix: string;
   savePrefix: string;
   saveSuffix: string;
+  startForPriceButtonPrefix: string;
+  startForPriceButtonSuffix: string;
   trialDaySingular: string;
   trialDayPlural: string;
   trialDurationSeparator: string;
@@ -152,6 +162,20 @@ const createPaywallText = (text: PaywallTextInput): PaywallText => {
         period === "annual"
           ? `${priceText}${text.pricePerAnnualPeriodSuffix}`
           : `${priceText}${text.pricePerMonthlyPeriodSuffix}`),
+    formatPurchaseButtonLabel:
+      text.formatPurchaseButtonLabel ??
+      (({ hasFreeTrial, plan, trialDuration }) => {
+        if (hasFreeTrial && trialDuration) {
+          return (
+            text.formatTrialPriceDisclosure?.(trialDuration, plan.priceText) ??
+            `${formatTrialDuration(trialDuration)}${
+              text.trialPriceDisclosureFreeSuffix
+            }, ${text.trialPriceDisclosureThenPrefix}${plan.priceText}`
+          );
+        }
+
+        return `${text.startForPriceButtonPrefix}${plan.priceText}${text.startForPriceButtonSuffix}`;
+      }),
     formatTrialDuration,
     formatTrialIncludedTitle:
       text.formatTrialIncludedTitle ??

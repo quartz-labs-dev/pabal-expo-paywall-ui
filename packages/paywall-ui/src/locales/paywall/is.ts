@@ -26,6 +26,8 @@ const is = createPaywallLocaleText({
     openingPaywall: "Opnar greiðslusíðu...",
     privacyText: "Persónuvernd",
     purchaseButton: "Hefja prufu",
+    startForPriceButtonPrefix: "Byrjaðu fyrir ",
+    startForPriceButtonSuffix: "",
     purchasingButton: "Vinnsla",
     restoreButton: "Endurheimta kaup",
     restoring: "Endurheimtir...",

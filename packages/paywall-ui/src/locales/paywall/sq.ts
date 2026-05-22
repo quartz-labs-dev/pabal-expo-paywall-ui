@@ -26,6 +26,8 @@ const sq = createPaywallLocaleText({
     openingPaywall: "Po hapet faqja e pagesës...",
     privacyText: "Privatësia",
     purchaseButton: "Fillo provën",
+    startForPriceButtonPrefix: "Filloni me ",
+    startForPriceButtonSuffix: "",
     purchasingButton: "Po përpunohet",
     restoreButton: "Rikthe blerjet",
     restoring: "Po rikthehet...",

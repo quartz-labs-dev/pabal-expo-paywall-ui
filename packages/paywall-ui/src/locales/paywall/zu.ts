@@ -26,6 +26,8 @@ const zu = createPaywallLocaleText({
     openingPaywall: "Ikhasi lokukhokha liyavulwa...",
     privacyText: "Ubumfihlo",
     purchaseButton: "Qala isivivinyo",
+    startForPriceButtonPrefix: "Qala ngo-",
+    startForPriceButtonSuffix: "",
     purchasingButton: "Iyacubungula",
     restoreButton: "Buyisela okuthengiwe",
     restoring: "Iyabuyisela...",

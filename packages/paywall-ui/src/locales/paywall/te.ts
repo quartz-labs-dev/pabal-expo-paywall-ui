@@ -26,6 +26,8 @@ const te = createPaywallLocaleText({
     openingPaywall: "చెల్లింపు పేజీ తెరుస్తోంది...",
     privacyText: "గోప్యత",
     purchaseButton: "ట్రయల్ ప్రారంభించండి",
+    startForPriceButtonPrefix: "",
+    startForPriceButtonSuffix: " తో ప్రారంభించండి",
     purchasingButton: "ప్రాసెస్ అవుతోంది",
     restoreButton: "కొనుగోళ్లను పునరుద్ధరించండి",
     restoring: "పునరుద్ధరిస్తోంది...",

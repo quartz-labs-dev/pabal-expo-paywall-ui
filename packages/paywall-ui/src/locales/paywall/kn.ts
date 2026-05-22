@@ -26,6 +26,8 @@ const kn = createPaywallLocaleText({
     openingPaywall: "ಪಾವತಿ ಪುಟ ತೆರೆಯುತ್ತಿದೆ...",
     privacyText: "ಗೌಪ್ಯತೆ",
     purchaseButton: "ಟ್ರಯಲ್ ಆರಂಭಿಸಿ",
+    startForPriceButtonPrefix: "",
+    startForPriceButtonSuffix: " ನಲ್ಲಿ ಪ್ರಾರಂಭಿಸಿ",
     purchasingButton: "ಪ್ರಕ್ರಿಯೆಗೊಳಿಸಲಾಗುತ್ತಿದೆ",
     restoreButton: "ಖರೀದಿಗಳನ್ನು ಮರುಸ್ಥಾಪಿಸಿ",
     restoring: "ಮರುಸ್ಥಾಪಿಸಲಾಗುತ್ತಿದೆ...",

@@ -26,6 +26,8 @@ const he = createPaywallLocaleText({
     openingPaywall: "עמוד התשלום נפתח...",
     privacyText: "פרטיות",
     purchaseButton: "התחל ניסיון",
+    startForPriceButtonPrefix: "התחל ב-",
+    startForPriceButtonSuffix: "",
     purchasingButton: "מעבד",
     restoreButton: "שחזר רכישות",
     restoring: "משחזר...",

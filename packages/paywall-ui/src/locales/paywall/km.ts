@@ -26,6 +26,8 @@ const km = createPaywallLocaleText({
     openingPaywall: "កំពុងបើកទំព័របង់ប្រាក់...",
     privacyText: "ភាពឯកជន",
     purchaseButton: "ចាប់ផ្តើមសាកល្បង",
+    startForPriceButtonPrefix: "ចាប់ផ្តើមក្នុងតម្លៃ ",
+    startForPriceButtonSuffix: "",
     purchasingButton: "កំពុងដំណើរការ",
     restoreButton: "ស្ដារការទិញ",
     restoring: "កំពុងស្ដារ...",

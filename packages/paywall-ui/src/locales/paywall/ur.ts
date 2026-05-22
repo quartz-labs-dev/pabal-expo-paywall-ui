@@ -26,6 +26,8 @@ const ur = createPaywallLocaleText({
     openingPaywall: "ادائیگی کا صفحہ کھل رہا ہے...",
     privacyText: "رازداری",
     purchaseButton: "ٹرائل شروع کریں",
+    startForPriceButtonPrefix: "",
+    startForPriceButtonSuffix: " سے شروع کریں",
     purchasingButton: "پروسیسنگ",
     restoreButton: "خریداریاں بحال کریں",
     restoring: "بحال ہو رہا ہے...",

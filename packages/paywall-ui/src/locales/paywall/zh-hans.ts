@@ -26,6 +26,8 @@ const zhHans = createPaywallLocaleText({
     openingPaywall: "正在打开付费页...",
     privacyText: "隐私",
     purchaseButton: "开始试用",
+    startForPriceButtonPrefix: "以",
+    startForPriceButtonSuffix: "开始",
     purchasingButton: "处理中",
     restoreButton: "恢复购买",
     restoring: "正在恢复...",

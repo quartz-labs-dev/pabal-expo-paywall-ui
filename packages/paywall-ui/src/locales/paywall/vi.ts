@@ -26,6 +26,8 @@ const vi = createPaywallLocaleText({
     openingPaywall: "Đang mở trang thanh toán...",
     privacyText: "Quyền riêng tư",
     purchaseButton: "Bắt đầu dùng thử",
+    startForPriceButtonPrefix: "Bắt đầu với ",
+    startForPriceButtonSuffix: "",
     purchasingButton: "Đang xử lý",
     restoreButton: "Khôi phục giao dịch mua",
     restoring: "Đang khôi phục...",

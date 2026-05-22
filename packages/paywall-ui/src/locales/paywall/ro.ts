@@ -26,6 +26,8 @@ const ro = createPaywallLocaleText({
     openingPaywall: "Se deschide paywall...",
     privacyText: "Confidențialitate",
     purchaseButton: "Începe perioada de probă",
+    startForPriceButtonPrefix: "Începe cu ",
+    startForPriceButtonSuffix: "",
     purchasingButton: "Se procesează",
     restoreButton: "Restaurează achizițiile",
     restoring: "Se restaurează...",

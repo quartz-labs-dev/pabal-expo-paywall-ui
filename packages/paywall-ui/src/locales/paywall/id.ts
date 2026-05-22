@@ -26,6 +26,8 @@ const id = createPaywallLocaleText({
     openingPaywall: "Membuka paywall...",
     privacyText: "Privasi",
     purchaseButton: "Mulai uji coba",
+    startForPriceButtonPrefix: "Mulai dengan ",
+    startForPriceButtonSuffix: "",
     purchasingButton: "Memproses",
     restoreButton: "Pulihkan pembelian",
     restoring: "Memulihkan...",

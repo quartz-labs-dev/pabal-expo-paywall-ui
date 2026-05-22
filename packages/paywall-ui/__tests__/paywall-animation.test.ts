@@ -56,6 +56,13 @@ const readSupportMessageBubbleSource = (): string => {
   );
 };
 
+const readLegalLinksSource = (): string => {
+  return readFileSync(
+    join(process.cwd(), "src", "paywall", "LegalLinks.tsx"),
+    "utf8",
+  );
+};
+
 test("keeps default paywall body animation as movement without opacity", () => {
   const source = readPaywallSource();
   const animatedMovementStyle =
@@ -139,6 +146,17 @@ test("uses localized no-payment copy for trial footer disclosure", () => {
   assert.match(typesSource, /trialNoPaymentDueNow\?: string/);
   assert.match(paywallSource, /copy\.trialNoPaymentDueNow \?\?/);
   assert.match(paywallSource, /getTrialPriceDisclosure/);
+});
+
+test("disables restore while purchase or restore is processing", () => {
+  const paywallSource = readPaywallSource();
+  const legalLinksSource = readLegalLinksSource();
+  const typesSource = readTypesSource();
+
+  assert.match(typesSource, /isRestoring\?: boolean/);
+  assert.match(paywallSource, /const isProcessing = isPurchasing \|\| isRestoring;/);
+  assert.match(paywallSource, /isRestoreDisabled=\{isProcessing\}/);
+  assert.match(legalLinksSource, /disabled=\{isRestoreDisabled\}/);
 });
 
 test("renders feature comparison cells from explicit cell kinds", () => {

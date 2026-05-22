@@ -26,6 +26,8 @@ const mn = createPaywallLocaleText({
     openingPaywall: "Төлбөрийн хуудас нээгдэж байна...",
     privacyText: "Нууцлал",
     purchaseButton: "Туршилт эхлүүлэх",
+    startForPriceButtonPrefix: "",
+    startForPriceButtonSuffix: "-оор эхлээрэй",
     purchasingButton: "Боловсруулж байна",
     restoreButton: "Худалдан авалтыг сэргээх",
     restoring: "Сэргээж байна...",

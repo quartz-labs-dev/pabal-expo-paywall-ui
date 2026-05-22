@@ -26,6 +26,8 @@ const hy = createPaywallLocaleText({
     openingPaywall: "Վճարման էջը բացվում է...",
     privacyText: "Գաղտնիություն",
     purchaseButton: "Սկսել փորձաշրջանը",
+    startForPriceButtonPrefix: "Սկսեք ",
+    startForPriceButtonSuffix: " գնով",
     purchasingButton: "Մշակվում է",
     restoreButton: "Վերականգնել գնումները",
     restoring: "Վերականգնվում է...",

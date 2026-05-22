@@ -26,6 +26,8 @@ const kk = createPaywallLocaleText({
     openingPaywall: "Төлем беті ашылуда...",
     privacyText: "Құпиялылық",
     purchaseButton: "Сынақты бастау",
+    startForPriceButtonPrefix: "",
+    startForPriceButtonSuffix: " бағасымен бастаңыз",
     purchasingButton: "Өңделуде",
     restoreButton: "Сатып алуларды қалпына келтіру",
     restoring: "Қалпына келтірілуде...",

@@ -26,6 +26,8 @@ const az = createPaywallLocaleText({
     openingPaywall: "Ödəniş səhifəsi açılır...",
     privacyText: "Məxfilik",
     purchaseButton: "Sınağa başla",
+    startForPriceButtonPrefix: "",
+    startForPriceButtonSuffix: " ilə başlayın",
     purchasingButton: "İşlənir",
     restoreButton: "Satınalmaları bərpa et",
     restoring: "Bərpa olunur...",

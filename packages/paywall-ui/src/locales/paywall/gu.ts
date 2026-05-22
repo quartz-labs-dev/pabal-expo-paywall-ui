@@ -26,6 +26,8 @@ const gu = createPaywallLocaleText({
     openingPaywall: "ચુકવણી પેજ ખુલી રહ્યું છે...",
     privacyText: "ગોપનીયતા",
     purchaseButton: "ટ્રાયલ શરૂ કરો",
+    startForPriceButtonPrefix: "",
+    startForPriceButtonSuffix: "થી શરૂ કરો",
     purchasingButton: "પ્રક્રિયા ચાલુ છે",
     restoreButton: "ખરીદીઓ પુનઃસ્થાપિત કરો",
     restoring: "પુનઃસ્થાપિત થઈ રહ્યું છે...",

@@ -26,6 +26,8 @@ const sv = createPaywallLocaleText({
     openingPaywall: "Öppnar betalvägg...",
     privacyText: "Integritet",
     purchaseButton: "Starta provperiod",
+    startForPriceButtonPrefix: "Starta för ",
+    startForPriceButtonSuffix: "",
     purchasingButton: "Bearbetar",
     restoreButton: "Återställ köp",
     restoring: "Återställer...",

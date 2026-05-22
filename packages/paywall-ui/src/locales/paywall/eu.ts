@@ -26,6 +26,8 @@ const eu = createPaywallLocaleText({
     openingPaywall: "Ordainketa-pantaila irekitzen...",
     privacyText: "Pribatutasuna",
     purchaseButton: "Hasi proba",
+    startForPriceButtonPrefix: "Hasi ",
+    startForPriceButtonSuffix: "(r)ekin",
     purchasingButton: "Prozesatzen",
     restoreButton: "Berrezarri erosketak",
     restoring: "Berrezartzen...",

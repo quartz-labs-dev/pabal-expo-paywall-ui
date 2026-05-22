@@ -26,6 +26,8 @@ const hu = createPaywallLocaleText({
     openingPaywall: "Paywall megnyitása...",
     privacyText: "Adatvédelem",
     purchaseButton: "Próba indítása",
+    startForPriceButtonPrefix: "Kezdés ennyiért: ",
+    startForPriceButtonSuffix: "",
     purchasingButton: "Feldolgozás",
     restoreButton: "Vásárlások visszaállítása",
     restoring: "Visszaállítás...",

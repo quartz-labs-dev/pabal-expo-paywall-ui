@@ -4,6 +4,7 @@ import type { PaywallCopy, PaywallTheme } from "../types";
 
 interface LegalLinksProps {
   copy: PaywallCopy;
+  isRestoreDisabled?: boolean;
   shouldShowLegalPrefix?: boolean;
   theme: PaywallTheme;
   onRestore: () => Promise<void> | void;
@@ -13,6 +14,7 @@ interface LegalLinksProps {
 
 export const LegalLinks = ({
   copy,
+  isRestoreDisabled = false,
   shouldShowLegalPrefix = true,
   theme,
   onRestore,
@@ -38,9 +40,13 @@ export const LegalLinks = ({
         <View style={styles.actionCell}>
           <Pressable
             accessibilityRole="button"
+            disabled={isRestoreDisabled}
             hitSlop={8}
             onPress={onRestore}
-            style={styles.actionItem}
+            style={[
+              styles.actionItem,
+              isRestoreDisabled && styles.disabledAction,
+            ]}
           >
             <Text style={[styles.actionLabel, { color: theme.secondaryTextColor }]}>
               {copy.restoreButton}
@@ -112,6 +118,9 @@ const styles = StyleSheet.create({
     minHeight: 36,
     paddingHorizontal: 4,
     width: "100%",
+  },
+  disabledAction: {
+    opacity: 0.45,
   },
   actionLabel: {
     flexShrink: 1,

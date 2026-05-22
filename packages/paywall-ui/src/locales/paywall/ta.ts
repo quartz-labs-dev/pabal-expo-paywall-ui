@@ -26,6 +26,8 @@ const ta = createPaywallLocaleText({
     openingPaywall: "கட்டணப் பக்கம் திறக்கிறது...",
     privacyText: "தனியுரிமை",
     purchaseButton: "சோதனையைத் தொடங்கு",
+    startForPriceButtonPrefix: "",
+    startForPriceButtonSuffix: " மூலம் தொடங்குங்கள்",
     purchasingButton: "செயலாக்கப்படுகிறது",
     restoreButton: "வாங்குதல்களை மீட்டெடு",
     restoring: "மீட்டெடுக்கிறது...",

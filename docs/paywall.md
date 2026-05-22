@@ -76,6 +76,8 @@ import { Paywall, type PaywallPlan } from "pabal-expo-paywall-ui";
   {...paywallPresentation}
   plans={plans}
   selectedPlanId={selectedPlanId ?? defaultSelectedPlanId}
+  isPurchasing={isPurchasing}
+  isRestoring={isRestoring}
   onSelectPlan={setSelectedPlanId}
   onPurchase={async (plan: PaywallPlan) => {
     await Purchases.purchasePackage(plan.rawPackage);
@@ -87,8 +89,10 @@ import { Paywall, type PaywallPlan } from "pabal-expo-paywall-ui";
 />;
 ```
 
-Purchase success, cancellation, failure handling, analytics, entitlement refresh,
-toast, widget sync, and navigation belong inside the app's callbacks.
+Purchase success, cancellation, failure handling, restore loading state,
+analytics, entitlement refresh, toast, widget sync, and navigation belong inside
+the app's callbacks. Set `isPurchasing` or `isRestoring` while those callbacks
+are running so the CTA shows the localized processing label and spinner.
 
 ## Supported Content
 
@@ -104,15 +108,22 @@ toast, widget sync, and navigation belong inside the app's callbacks.
 | Custom body below benefits/comparison | `content`, `valueStep.content` |
 | Plan card order and package mapping | `planOptions` |
 | Selected-plan comparison copy | `planOptions.*SelectedDescription` |
-| Selected-plan CTA text | `copy.formatPurchaseButtonLabel` |
+| Selected-plan CTA text | localized by default, override with `copy.formatPurchaseButtonLabel` |
 | Trial footer reassurance copy | `copy.trialNoPaymentDueNow` |
 | Legal links and developer site | callback props |
 
 ## Dynamic CTA Labels
 
-Use `copy.formatPurchaseButtonLabel` when the button text depends on selected
-plan or trial eligibility. The app still owns the RevenueCat/customer logic that
-decides whether `freeTrial` should be enabled.
+`getDefaultPaywallCopy()` provides localized purchase CTA labels based on the
+selected plan and `freeTrial` prop:
+
+- free trial: `7 days free, then $29.99`
+- no free trial: `Start for $29.99`
+- loading: `Processing` with the button spinner
+
+Use `copy.formatPurchaseButtonLabel` only when the app needs product-specific
+CTA text. The app still owns the RevenueCat/customer logic that decides whether
+`freeTrial` should be enabled.
 
 ```tsx
 const copy = getDefaultPaywallCopy(locale, {
@@ -126,8 +137,8 @@ const copy = getDefaultPaywallCopy(locale, {
 });
 ```
 
-This lets a first-time user see `Start 7-day free trial` while a returning user
-sees `Start for $9.99`, without rebuilding the whole paywall.
+This lets an app replace the default `7 days free, then $29.99` or
+`Start for $9.99` labels without rebuilding the whole paywall.
 
 When `freeTrial` is enabled, the fixed footer shows localized reassurance copy
 below the purchase button. `getDefaultPaywallCopy()` provides `No payment due now`

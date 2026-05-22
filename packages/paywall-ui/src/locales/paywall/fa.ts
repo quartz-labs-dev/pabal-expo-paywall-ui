@@ -26,6 +26,8 @@ const fa = createPaywallLocaleText({
     openingPaywall: "در حال باز کردن صفحه پرداخت...",
     privacyText: "حریم خصوصی",
     purchaseButton: "شروع دوره آزمایشی",
+    startForPriceButtonPrefix: "با ",
+    startForPriceButtonSuffix: " شروع کنید",
     purchasingButton: "در حال پردازش",
     restoreButton: "بازیابی خریدها",
     restoring: "در حال بازیابی...",

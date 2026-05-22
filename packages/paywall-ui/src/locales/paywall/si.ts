@@ -26,6 +26,8 @@ const si = createPaywallLocaleText({
     openingPaywall: "ගෙවීම් පිටුව විවෘත වෙමින්...",
     privacyText: "පෞද්ගලිකත්වය",
     purchaseButton: "අත්හදා බැලීම ආරම්භ කරන්න",
+    startForPriceButtonPrefix: "",
+    startForPriceButtonSuffix: " සිට ආරම්භ කරන්න",
     purchasingButton: "සකසමින්",
     restoreButton: "මිලදී ගැනීම් ප්‍රතිසාධනය කරන්න",
     restoring: "ප්‍රතිසාධනය වෙමින්...",

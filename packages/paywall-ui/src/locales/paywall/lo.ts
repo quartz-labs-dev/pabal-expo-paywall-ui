@@ -26,6 +26,8 @@ const lo = createPaywallLocaleText({
     openingPaywall: "ກໍາລັງເປີດໜ້າຊໍາລະເງິນ...",
     privacyText: "ຄວາມເປັນສ່ວນຕົວ",
     purchaseButton: "ເລີ່ມທົດລອງ",
+    startForPriceButtonPrefix: "ເລີ່ມດ້ວຍ ",
+    startForPriceButtonSuffix: "",
     purchasingButton: "ກໍາລັງປະມວນຜົນ",
     restoreButton: "ກູ້ຄືນການຊື້",
     restoring: "ກໍາລັງກູ້ຄືນ...",

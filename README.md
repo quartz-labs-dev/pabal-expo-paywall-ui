@@ -17,7 +17,8 @@ pabal-expo-paywall-ui/
 
   packages/
     paywall-ui/
-      # Published package source, including paywall/onboarding/profile UI contracts.
+      # Published package source, including paywall/onboarding/profile UI contracts
+      # and localized default CTA behavior.
       # See packages/paywall-ui/README.md for the UI prop contract and usage.
 ```
 

@@ -26,6 +26,8 @@ const my = createPaywallLocaleText({
     openingPaywall: "ငွေပေးချေမှု စာမျက်နှာ ဖွင့်နေသည်...",
     privacyText: "ကိုယ်ရေးလုံခြုံမှု",
     purchaseButton: "စမ်းသပ်မှု စတင်ပါ",
+    startForPriceButtonPrefix: "",
+    startForPriceButtonSuffix: " ဖြင့် စတင်ပါ",
     purchasingButton: "လုပ်ဆောင်နေသည်",
     restoreButton: "ဝယ်ယူမှုများ ပြန်လည်ရယူပါ",
     restoring: "ပြန်လည်ရယူနေသည်...",

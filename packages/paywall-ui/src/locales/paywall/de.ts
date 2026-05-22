@@ -26,6 +26,8 @@ const de = createPaywallLocaleText({
     openingPaywall: "Paywall wird geöffnet...",
     privacyText: "Datenschutz",
     purchaseButton: "Testversion starten",
+    startForPriceButtonPrefix: "Für ",
+    startForPriceButtonSuffix: " starten",
     purchasingButton: "Verarbeitung",
     restoreButton: "Käufe wiederherstellen",
     restoring: "Wiederherstellung...",

@@ -26,6 +26,8 @@ const ms = createPaywallLocaleText({
     openingPaywall: "Membuka halaman bayaran...",
     privacyText: "Privasi",
     purchaseButton: "Mulakan percubaan",
+    startForPriceButtonPrefix: "Mulakan dengan ",
+    startForPriceButtonSuffix: "",
     purchasingButton: "Memproses",
     restoreButton: "Pulihkan pembelian",
     restoring: "Memulihkan...",

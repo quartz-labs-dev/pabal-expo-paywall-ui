@@ -26,6 +26,8 @@ const sl = createPaywallLocaleText({
     openingPaywall: "Odpiranje paywalla...",
     privacyText: "Zasebnost",
     purchaseButton: "Začni preizkus",
+    startForPriceButtonPrefix: "Začnite za ",
+    startForPriceButtonSuffix: "",
     purchasingButton: "Obdelava",
     restoreButton: "Obnovi nakupe",
     restoring: "Obnavljanje...",
