@@ -23,6 +23,9 @@ export interface OnboardingGalleryGridProps {
   accessibilityLabel?: string;
   animationDurationMs?: number;
   isBorderVisible?: boolean;
+  isEdgeToEdge?: boolean;
+  isStageBackgroundVisible?: boolean;
+  isTitleVisible?: boolean;
   items: readonly OnboardingGalleryGridItem[];
   rowCount?: number;
   theme: OnboardingContentTheme;
@@ -32,6 +35,8 @@ interface GalleryGridRowProps {
   animationDurationMs: number;
   direction: GalleryGridRowDirection;
   isBorderVisible: boolean;
+  isEdgeToEdge: boolean;
+  isTitleVisible: boolean;
   items: readonly OnboardingGalleryGridItem[];
   rowIndex: number;
   textColor: string;
@@ -50,6 +55,9 @@ export const OnboardingGalleryGrid = ({
   accessibilityLabel = "Animated content gallery",
   animationDurationMs = DEFAULT_ANIMATION_DURATION_MS,
   isBorderVisible = true,
+  isEdgeToEdge = false,
+  isStageBackgroundVisible = true,
+  isTitleVisible = true,
   items,
   rowCount = DEFAULT_ROW_COUNT,
   theme,
@@ -71,8 +79,11 @@ export const OnboardingGalleryGrid = ({
       accessibilityRole="image"
       style={[
         styles.root,
+        !isEdgeToEdge && styles.constrainedRoot,
         {
-          backgroundColor: stageBackgroundColor,
+          backgroundColor: isStageBackgroundVisible
+            ? stageBackgroundColor
+            : "transparent",
         },
       ]}
     >
@@ -81,6 +92,8 @@ export const OnboardingGalleryGrid = ({
           animationDurationMs={animationDurationMs}
           direction={rowIndex === 1 ? "left" : "right"}
           isBorderVisible={isBorderVisible}
+          isEdgeToEdge={isEdgeToEdge}
+          isTitleVisible={isTitleVisible}
           items={rowItems}
           key={rowIndex}
           rowIndex={rowIndex}
@@ -95,6 +108,8 @@ const GalleryGridRow = ({
   animationDurationMs,
   direction,
   isBorderVisible,
+  isEdgeToEdge,
+  isTitleVisible,
   items,
   rowIndex,
   textColor,
@@ -129,6 +144,7 @@ const GalleryGridRow = ({
       <Animated.View
         style={[
           styles.rowTrack,
+          !isEdgeToEdge && styles.paddedRowTrack,
           {
             transform: [{ translateX }],
           },
@@ -137,6 +153,7 @@ const GalleryGridRow = ({
         {repeatedItems.map((item, index) => (
           <GalleryGridTile
             isBorderVisible={isBorderVisible}
+            isTitleVisible={isTitleVisible}
             item={item}
             key={`${rowIndex}-${item.id}-${index}`}
             textColor={textColor}
@@ -149,12 +166,14 @@ const GalleryGridRow = ({
 
 interface GalleryGridTileProps {
   isBorderVisible: boolean;
+  isTitleVisible: boolean;
   item: OnboardingGalleryGridItem;
   textColor: string;
 }
 
 const GalleryGridTile = ({
   isBorderVisible,
+  isTitleVisible,
   item,
   textColor,
 }: GalleryGridTileProps) => {
@@ -175,21 +194,23 @@ const GalleryGridTile = ({
           style={styles.tileImage}
         />
       ) : null}
-      <View
-        style={[
-          styles.tileTitleLayer,
-          Boolean(item.imageSource) && styles.tileTitleLayerOverImage,
-        ]}
-      >
-        <Text
-          adjustsFontSizeToFit
-          minimumFontScale={0.72}
-          numberOfLines={4}
-          style={[styles.tileTitle, { color: textColor }]}
+      {isTitleVisible ? (
+        <View
+          style={[
+            styles.tileTitleLayer,
+            Boolean(item.imageSource) && styles.tileTitleLayerOverImage,
+          ]}
         >
-          {item.title}
-        </Text>
-      </View>
+          <Text
+            adjustsFontSizeToFit
+            minimumFontScale={0.72}
+            numberOfLines={4}
+            style={[styles.tileTitle, { color: textColor }]}
+          >
+            {item.title}
+          </Text>
+        </View>
+      ) : null}
     </View>
   );
 };
@@ -228,10 +249,12 @@ const styles = StyleSheet.create({
   root: {
     borderRadius: 8,
     gap: ROW_GAP,
-    maxWidth: 380,
     overflow: "hidden",
     paddingVertical: 16,
     width: "100%",
+  },
+  constrainedRoot: {
+    maxWidth: 380,
   },
   rowClip: {
     height: TILE_HEIGHT,
@@ -241,6 +264,8 @@ const styles = StyleSheet.create({
   rowTrack: {
     flexDirection: "row",
     gap: TILE_GAP,
+  },
+  paddedRowTrack: {
     paddingHorizontal: TILE_GAP,
   },
   tile: {

@@ -25,7 +25,7 @@ pabal-expo-paywall-ui/
 ## Docs
 
 - [Paywall](./docs/paywall.md)
-- [Onboarding](./docs/onboarding.md): pre-onboarding screens, required onboarding prelude frame, package-owned nickname flow, and primitives
+- [Onboarding](./docs/onboarding.md): pre-onboarding screens, required onboarding prelude frame, package-owned nickname flow, gallery grid display controls, and primitives
 - [Profile](./docs/profile.md)
 
 ## Workspace Commands

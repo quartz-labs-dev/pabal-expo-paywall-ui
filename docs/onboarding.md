@@ -531,7 +531,11 @@ Use `OnboardingGalleryGrid` when the app wants a dense animated library/content
 preview. The package owns the three-row marquee layout and infinite row
 animation; the app owns the tile titles, image sources, and colors. Rows 1 and
 3 move right, and row 2 moves left. Set `isBorderVisible={false}` when the
-app wants softer image/color tiles without the black card outline.
+app wants softer image/color tiles without the black card outline. For full-bleed
+image-only grids, set `isTitleVisible={false}`,
+`isStageBackgroundVisible={false}`, and `isEdgeToEdge={true}` so image tiles do
+not render title overlays, the stage stays transparent, and the row track can
+reach the horizontal edges.
 
 ```tsx
 import {
@@ -566,7 +570,10 @@ const galleryItems = [
   onContinue={goNext}
 >
   <OnboardingGalleryGrid
+    isEdgeToEdge
     isBorderVisible={false}
+    isStageBackgroundVisible={false}
+    isTitleVisible={false}
     items={galleryItems}
     theme={theme}
   />

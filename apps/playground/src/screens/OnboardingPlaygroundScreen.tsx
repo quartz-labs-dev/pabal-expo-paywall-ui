@@ -86,6 +86,9 @@ interface CreateNotificationSlideParams {
 }
 
 interface PlaygroundOnboardingSlide extends OnboardingSlide {
+  contentContainerStyle?: ComponentProps<
+    typeof OnboardingStepFrame
+  >["contentContainerStyle"];
   contentVerticalAlignment?: ComponentProps<
     typeof OnboardingStepFrame
   >["contentVerticalAlignment"];
@@ -218,10 +221,14 @@ export const OnboardingPlaygroundScreen = ({
         content: (
           <OnboardingGalleryGrid
             animationDurationMs={17000}
+            isEdgeToEdge
+            isStageBackgroundVisible={false}
+            isTitleVisible={false}
             items={ONBOARDING_GALLERY_GRID_ITEMS}
             theme={theme}
           />
         ),
+        contentContainerStyle: styles.edgeToEdgeContent,
         description:
           "Save the small details you want to remember, then come back to them before the next round.",
         title: "Your training library starts here",
@@ -372,6 +379,7 @@ export const OnboardingPlaygroundScreen = ({
           canContinue={currentSlide.canContinue}
           continueLabel={currentSlide.continueLabel ?? continueLabel}
           contentTransitionIndex={currentStepIndex}
+          contentContainerStyle={currentSlide.contentContainerStyle}
           contentVerticalAlignment={currentSlide.contentVerticalAlignment}
           currentStepIndex={mainSlideStepIndex + 2}
           description={currentSlide.description}
@@ -606,6 +614,9 @@ const INVERTED_FRAME_LIST_OPTIONS = [
 ] satisfies OnboardingChoiceOption[];
 
 const styles = StyleSheet.create({
+  edgeToEdgeContent: {
+    paddingHorizontal: 0,
+  },
   weightInputCard: {
     alignSelf: "center",
     borderRadius: 8,
