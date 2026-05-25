@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef } from "react";
-import { Animated, StyleSheet, Text, View } from "react-native";
+import { Animated, StyleSheet, View } from "react-native";
 
 import {
   createOnboardingIntroTextTokens,
@@ -52,8 +52,8 @@ export const OnboardingPreludeContent = ({
 
   return (
     <View style={styles.introCopy}>
-      <Text style={[styles.introHeadline, { color: headlineColor }]}>
-        {headlineTokens.map((token, tokenIndex) => {
+      <View style={styles.introHeadlineLine}>
+        {headlineTokens.map((token) => {
           const animatedStyle = getOnboardingSequentialWordStyle(
             wordAnimations[wordIndex],
           );
@@ -63,24 +63,22 @@ export const OnboardingPreludeContent = ({
             <Animated.Text
               key={token.key}
               style={[
+                styles.introHeadline,
+                styles.introWord,
                 { color: token.color },
                 token.isHighlighted && styles.introHighlightedWord,
                 animatedStyle,
               ]}
             >
               {token.text}
-              {tokenIndex < headlineTokens.length - 1 ? " " : ""}
             </Animated.Text>
           );
         })}
-      </Text>
+      </View>
       <View style={styles.introBodyStack}>
         {bodyLineTokens.map((lineTokens, lineIndex) => (
-          <Text
-            key={`body-line-${lineIndex}`}
-            style={[styles.introBody, { color: bodyColor }]}
-          >
-            {lineTokens.map((token, tokenIndex) => {
+          <View key={`body-line-${lineIndex}`} style={styles.introBodyLine}>
+            {lineTokens.map((token) => {
               const animatedStyle = getOnboardingSequentialWordStyle(
                 wordAnimations[wordIndex],
               );
@@ -90,17 +88,18 @@ export const OnboardingPreludeContent = ({
                 <Animated.Text
                   key={token.key}
                   style={[
+                    styles.introBody,
+                    styles.introWord,
                     { color: token.color },
                     token.isHighlighted && styles.introHighlightedWord,
                     animatedStyle,
                   ]}
                 >
                   {token.text}
-                  {tokenIndex < lineTokens.length - 1 ? " " : ""}
                 </Animated.Text>
               );
             })}
-          </Text>
+          </View>
         ))}
       </View>
     </View>
@@ -132,6 +131,10 @@ const styles = StyleSheet.create({
     gap: 72,
     width: "100%",
   },
+  introHeadlineLine: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+  },
   introHeadline: {
     fontSize: 31,
     fontWeight: "600",
@@ -141,8 +144,15 @@ const styles = StyleSheet.create({
   introHighlightedWord: {
     fontWeight: "700",
   },
+  introWord: {
+    marginRight: 7,
+  },
   introBodyStack: {
     gap: 0,
+  },
+  introBodyLine: {
+    flexDirection: "row",
+    flexWrap: "wrap",
   },
   introBody: {
     fontSize: 23,

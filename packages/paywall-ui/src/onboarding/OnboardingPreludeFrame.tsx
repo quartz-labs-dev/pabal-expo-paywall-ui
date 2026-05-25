@@ -25,20 +25,13 @@ const createPreludeAccessibilityLabel = (
   step: OnboardingPreludeStep,
   continueLabel: string,
 ) => {
-  const bodyLines = normalizePreludeBodyLines(step.bodyLines);
   const copy = [
     stripOnboardingIntroEmphasis(step.headline),
-    ...bodyLines.map(stripOnboardingIntroEmphasis),
+    ...step.bodyLines.map(stripOnboardingIntroEmphasis),
     continueLabel,
   ];
 
   return copy.join(" ");
-};
-
-const normalizePreludeBodyLines = (bodyLines: string[]) => {
-  if (bodyLines.length <= 1) return bodyLines;
-
-  return [bodyLines.join(" ")];
 };
 
 export const OnboardingPreludeFrame = ({
@@ -52,8 +45,6 @@ export const OnboardingPreludeFrame = ({
   theme,
   onContinue,
 }: OnboardingPreludeFrameProps) => {
-  const bodyLines = normalizePreludeBodyLines(step.bodyLines);
-
   return (
     <OnboardingStepFrame
       canContinue
@@ -87,7 +78,7 @@ export const OnboardingPreludeFrame = ({
       <OnboardingPreludeContent
         accentColor={theme.accentColor}
         bodyColor={step.bodyColor}
-        bodyLines={bodyLines}
+        bodyLines={step.bodyLines}
         headline={step.headline}
         headlineColor={step.headlineColor}
       />
@@ -98,8 +89,8 @@ export const OnboardingPreludeFrame = ({
 const styles = StyleSheet.create({
   contentContainer: {
     justifyContent: "flex-start",
-    paddingHorizontal: 24,
-    paddingTop: 112,
+    paddingHorizontal: 34,
+    paddingTop: 128,
   },
   footer: {
     paddingHorizontal: 28,

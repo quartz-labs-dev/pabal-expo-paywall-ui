@@ -509,7 +509,7 @@ test("keeps prelude screen chrome in the package instead of the playground", () 
   assert.doesNotMatch(playgroundSource, /introContentContainer/);
 });
 
-test("renders prelude copy as sentence-level text on Android", () => {
+test("keeps prelude copy on the 1.6.3 word animation structure", () => {
   const preludeContentSource = readSource(
     "src/onboarding/OnboardingPreludeContent.tsx",
   );
@@ -518,18 +518,16 @@ test("renders prelude copy as sentence-level text on Android", () => {
   );
 
   assert.match(preludeContentSource, /import \{ useEffect, useMemo, useRef \} from "react";/);
-  assert.match(preludeContentSource, /import \{ Animated, StyleSheet, Text, View \} from "react-native";/);
-  assert.match(preludeContentSource, /<Text style=\{\[styles\.introHeadline, \{ color: headlineColor \}\]\}>/);
-  assert.match(preludeContentSource, /<Text\n\s+key=\{`body-line-\$\{lineIndex\}`\}/);
+  assert.match(preludeContentSource, /import \{ Animated, StyleSheet, View \} from "react-native";/);
+  assert.match(preludeContentSource, /<View style=\{styles\.introHeadlineLine\}>/);
+  assert.match(preludeContentSource, /<View key=\{`body-line-\$\{lineIndex\}`\} style=\{styles\.introBodyLine\}>/);
   assert.match(preludeContentSource, /<Animated\.Text/);
-  assert.doesNotMatch(preludeContentSource, /introHeadlineLine/);
-  assert.doesNotMatch(preludeContentSource, /introBodyLine/);
-  assert.doesNotMatch(preludeContentSource, /introWord/);
-  assert.match(preludeFrameSource, /const normalizePreludeBodyLines = /);
-  assert.match(preludeFrameSource, /bodyLines\.length <= 1/);
-  assert.match(preludeFrameSource, /bodyLines\.join\(" "\)/);
-  assert.match(preludeFrameSource, /paddingHorizontal: 24/);
-  assert.match(preludeFrameSource, /paddingTop: 112/);
+  assert.match(preludeContentSource, /introWord/);
+  assert.doesNotMatch(preludeFrameSource, /normalizePreludeBodyLines/);
+  assert.doesNotMatch(preludeFrameSource, /bodyLines\.join\(" "\)/);
+  assert.match(preludeFrameSource, /bodyLines=\{step\.bodyLines\}/);
+  assert.match(preludeFrameSource, /paddingHorizontal: 34/);
+  assert.match(preludeFrameSource, /paddingTop: 128/);
 });
 
 test("keeps playground onboarding prelude mandatory before main steps", () => {

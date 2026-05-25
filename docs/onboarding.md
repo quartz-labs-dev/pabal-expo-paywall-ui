@@ -96,10 +96,15 @@ The required prelude story is two screens:
 
 Keep each prelude body as one complete paragraph in a single `bodyLines` item,
 with highlighted spans wrapped in `**double asterisks**`. Do not split
-continuous copy across multiple items for manual line breaks. The package
-renders the headline and each body paragraph as a React Native `Text` paragraph,
-with animated highlighted/normal word spans inside it, so Android can measure
-the paragraph as text instead of as wrapped word boxes.
+continuous copy across multiple items for manual line breaks. The package keeps
+the 1.6.3 word-level `Animated.Text` reveal, so apps should pass a single
+paragraph when they want one continuous body block.
+
+Prelude copy is animated as individual word boxes. This means a long highlighted
+phrase can leave an orphan word on the next line, such as `you?` after
+`stayed with`. Avoid long highlighted clauses in headlines. Prefer short
+headlines, short highlighted spans, and complete phrases that can wrap cleanly
+on narrow Android screens.
 
 `tap to continue` uses the same color as the prelude body copy. Do not introduce
 a separate hint, arrow, or button color for prelude tap hints.
@@ -262,8 +267,7 @@ const preludeSteps: RequiredOnboardingPreludeSteps = [
         "If you do not record it, progress can pile up without ever becoming **visible**.",
       ].join(" "),
     ],
-    headline:
-      "You trained hard, but do you remember **what actually stayed with you?**",
+    headline: "You trained hard. Do you remember **what stayed?**",
     headlineColor: theme.backgroundColor,
     tone: "inverted",
   },
@@ -287,11 +291,32 @@ const preludeSteps: RequiredOnboardingPreludeSteps = [
 />;
 ```
 
-Each `bodyLines` item is rendered as one animated `Text` paragraph. Put the full
-body copy for that beat into one item, and let React Native wrap the text
-naturally. For example, write
+Each `bodyLines` item is rendered as its own animated word row. Put the full
+body copy for that beat into one item, and let the row wrap naturally. For
+example, write
 `["The best light does not wait. A few minutes later, and the moment is already gone."]`
 instead of splitting those clauses into separate array items.
+
+For headlines, keep the highlighted span short. Avoid:
+
+```tsx
+headline: "You trained hard, but do you remember **what actually stayed with you?**"
+```
+
+Prefer:
+
+```tsx
+headline: "You trained hard. Do you remember **what stayed?**"
+```
+
+or:
+
+```tsx
+headline: "What **stayed** after training?"
+```
+
+The goal is to avoid highlighted tails like `with you?`, `for today`, or
+`in your game` wrapping with the final word alone on a new line.
 
 If an app already stores localized copy as `bodyLine1` and `bodyLine2`, keep that
 locale structure and join at the adapter boundary:
@@ -312,8 +337,9 @@ const preludeStep = {
 ```
 
 Do not migrate by adding `\n`, separate `bodyLines` entries, or manually placed
-spaces to force a visual line break. The package animates words inside a
-paragraph-level `Text`, and React Native should own wrapping on each device.
+spaces to force a visual line break. Keep visual wrapping device-owned; use
+`bodyLines` entries only when you intentionally want separate animated body
+rows.
 
 For `tone: "inverted"`, pass copy colors that already match the inverted
 background. `OnboardingPreludeFrame` does not invent a separate tap hint color:
@@ -327,6 +353,8 @@ For apps upgrading from older prelude copy, migrate in three steps:
 2. Combine continuous body copy into one paragraph before passing it to the
    package.
 3. Pass that paragraph as the only item in `bodyLines`.
+4. Shorten long headline highlights so the final word of a phrase does not wrap
+   alone on narrow Android screens.
 
 Before:
 
@@ -347,9 +375,22 @@ bodyLines: [[
 ```
 
 This keeps the existing localized keys intact while giving the package a single
-paragraph to measure and animate. `OnboardingPreludeFrame` also defensively joins
-multiple `bodyLines` entries, but apps should still pass one paragraph so
-accessibility labels, screenshots, and visual QA match the intended copy.
+body row to animate. `OnboardingPreludeFrame` does not join entries for you, so
+apps should pass one paragraph when the intended copy is one paragraph.
+
+Headline migration example:
+
+```tsx
+// Before: the highlighted phrase can wrap as "with" / "you?"
+headline: t("preludeProblemHeadline")
+
+// After: keep the same meaning, but shorten the highlighted span per locale.
+headline: t("preludeProblemHeadlineShort")
+```
+
+For each locale, review the actual translated headline on a narrow Android
+screen. Do not translate the English short headline mechanically if the target
+language needs a different word order to avoid orphan words.
 
 Use `RequiredOnboardingPreludeSteps` for app-owned prelude fixtures so TypeScript
 fails if a consuming app accidentally removes either the required problem screen

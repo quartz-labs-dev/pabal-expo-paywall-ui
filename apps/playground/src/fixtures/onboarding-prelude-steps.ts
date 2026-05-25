@@ -9,15 +9,14 @@ export const createOnboardingPreludeSteps = (
     "If you do not record it, progress can pile up without ever becoming **visible**.",
   ].join(" ");
   const solutionBody = [
-    "what happened, what you learned, and what to work on next.",
+    "what happened, what you learned, and your next focus.",
   ].join(" ");
 
   return [
     {
       bodyColor: theme.backgroundColor,
       bodyLines: [problemBody],
-      headline:
-        "You trained hard, but do you remember **what actually stayed with you?**",
+      headline: "You trained hard. Do you remember **what stayed?**",
       headlineColor: theme.backgroundColor,
       tone: "inverted",
     },
