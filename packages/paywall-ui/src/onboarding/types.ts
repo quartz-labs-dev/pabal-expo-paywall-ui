@@ -31,8 +31,8 @@ export type OnboardingFrameTone = "normal" | "inverted";
 export interface OnboardingPreludeStep {
   bodyColor: string;
   /**
-   * Keep each prelude body as one complete text string per array item.
-   * Splitting continuous copy across multiple items can overlap on Android.
+   * Keep each prelude body as one complete paragraph per array item.
+   * Use **double asterisks** inside the string for highlighted spans.
    */
   bodyLines: string[];
   headline: string;

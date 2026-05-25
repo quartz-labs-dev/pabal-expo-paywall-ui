@@ -94,9 +94,12 @@ The required prelude story is two screens:
    color as the background and the normal background color for text.
 2. Solution statement, `tone: "normal"`: use the normal onboarding frame theme.
 
-Keep each prelude body as one complete text string in a single `bodyLines`
-item. Do not split continuous copy across multiple items for manual line breaks;
-Android can lay those animated text rows on top of each other.
+Keep each prelude body as one complete paragraph in a single `bodyLines` item,
+with highlighted spans wrapped in `**double asterisks**`. Do not split
+continuous copy across multiple items for manual line breaks. The package
+renders the headline and each body paragraph as a React Native `Text` paragraph,
+with animated highlighted/normal word spans inside it, so Android can measure
+the paragraph as text instead of as wrapped word boxes.
 
 `tap to continue` uses the same color as the prelude body copy. Do not introduce
 a separate hint, arrow, or button color for prelude tap hints.
@@ -254,7 +257,10 @@ const preludeSteps: RequiredOnboardingPreludeSteps = [
   {
     bodyColor: theme.backgroundColor,
     bodyLines: [
-      "The technique you learned, the spot where sparring broke down, and your coach's advice fade faster than you think. If you do not record it, progress can pile up without ever becoming visible.",
+      [
+        "The technique you learned, the spot where sparring broke down, and your coach's advice fade faster than you think.",
+        "If you do not record it, progress can pile up without ever becoming **visible**.",
+      ].join(" "),
     ],
     headline:
       "You trained hard, but do you remember **what actually stayed with you?**",
@@ -281,15 +287,69 @@ const preludeSteps: RequiredOnboardingPreludeSteps = [
 />;
 ```
 
-Each `bodyLines` item is rendered as its own animated row. Put the full body
-copy for that beat into one item, and let React Native wrap the text naturally.
-For example, write
+Each `bodyLines` item is rendered as one animated `Text` paragraph. Put the full
+body copy for that beat into one item, and let React Native wrap the text
+naturally. For example, write
 `["The best light does not wait. A few minutes later, and the moment is already gone."]`
 instead of splitting those clauses into separate array items.
+
+If an app already stores localized copy as `bodyLine1` and `bodyLine2`, keep that
+locale structure and join at the adapter boundary:
+
+```tsx
+const preludeProblemBody = [
+  t("preludeProblemBodyLine1"),
+  t("preludeProblemBodyLine2"),
+].join(" ");
+
+const preludeStep = {
+  bodyColor: theme.backgroundColor,
+  bodyLines: [preludeProblemBody],
+  headline: t("preludeProblemHeadline"),
+  headlineColor: theme.backgroundColor,
+  tone: "inverted",
+} satisfies OnboardingPreludeStep;
+```
+
+Do not migrate by adding `\n`, separate `bodyLines` entries, or manually placed
+spaces to force a visual line break. The package animates words inside a
+paragraph-level `Text`, and React Native should own wrapping on each device.
 
 For `tone: "inverted"`, pass copy colors that already match the inverted
 background. `OnboardingPreludeFrame` does not invent a separate tap hint color:
 the label and arrow both follow `step.bodyColor`.
+
+### Prelude Migration
+
+For apps upgrading from older prelude copy, migrate in three steps:
+
+1. Keep headline highlights as `**highlighted copy**`.
+2. Combine continuous body copy into one paragraph before passing it to the
+   package.
+3. Pass that paragraph as the only item in `bodyLines`.
+
+Before:
+
+```tsx
+bodyLines: [
+  t("preludeProblemBodyLine1"),
+  t("preludeProblemBodyLine2"),
+]
+```
+
+After:
+
+```tsx
+bodyLines: [[
+  t("preludeProblemBodyLine1"),
+  t("preludeProblemBodyLine2"),
+].join(" ")]
+```
+
+This keeps the existing localized keys intact while giving the package a single
+paragraph to measure and animate. `OnboardingPreludeFrame` also defensively joins
+multiple `bodyLines` entries, but apps should still pass one paragraph so
+accessibility labels, screenshots, and visual QA match the intended copy.
 
 Use `RequiredOnboardingPreludeSteps` for app-owned prelude fixtures so TypeScript
 fails if a consuming app accidentally removes either the required problem screen

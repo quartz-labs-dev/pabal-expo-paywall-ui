@@ -509,6 +509,29 @@ test("keeps prelude screen chrome in the package instead of the playground", () 
   assert.doesNotMatch(playgroundSource, /introContentContainer/);
 });
 
+test("renders prelude copy as sentence-level text on Android", () => {
+  const preludeContentSource = readSource(
+    "src/onboarding/OnboardingPreludeContent.tsx",
+  );
+  const preludeFrameSource = readSource(
+    "src/onboarding/OnboardingPreludeFrame.tsx",
+  );
+
+  assert.match(preludeContentSource, /import \{ useEffect, useMemo, useRef \} from "react";/);
+  assert.match(preludeContentSource, /import \{ Animated, StyleSheet, Text, View \} from "react-native";/);
+  assert.match(preludeContentSource, /<Text style=\{\[styles\.introHeadline, \{ color: headlineColor \}\]\}>/);
+  assert.match(preludeContentSource, /<Text\n\s+key=\{`body-line-\$\{lineIndex\}`\}/);
+  assert.match(preludeContentSource, /<Animated\.Text/);
+  assert.doesNotMatch(preludeContentSource, /introHeadlineLine/);
+  assert.doesNotMatch(preludeContentSource, /introBodyLine/);
+  assert.doesNotMatch(preludeContentSource, /introWord/);
+  assert.match(preludeFrameSource, /const normalizePreludeBodyLines = /);
+  assert.match(preludeFrameSource, /bodyLines\.length <= 1/);
+  assert.match(preludeFrameSource, /bodyLines\.join\(" "\)/);
+  assert.match(preludeFrameSource, /paddingHorizontal: 24/);
+  assert.match(preludeFrameSource, /paddingTop: 112/);
+});
+
 test("keeps playground onboarding prelude mandatory before main steps", () => {
   const fixtureSource = readFileSync(
     join(

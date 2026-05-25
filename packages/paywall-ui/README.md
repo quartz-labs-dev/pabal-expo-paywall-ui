@@ -35,8 +35,8 @@ dependency.
   required prelude problem/solution frame, supported onboarding content types,
   package-owned nickname flow, gallery grid animation and image-only display
   controls, animation helpers, acquisition source options, permission prompt
-  previews, and the required first-screen language selector placement under the
-  title.
+  previews, prelude body paragraph migration guidance, and the required
+  first-screen language selector placement under the title.
 - [Profile](../../docs/profile.md): subscription status, benefit usage, and
   profile identifier UI.
 
