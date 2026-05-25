@@ -94,6 +94,10 @@ The required prelude story is two screens:
    color as the background and the normal background color for text.
 2. Solution statement, `tone: "normal"`: use the normal onboarding frame theme.
 
+Keep each prelude body as one complete text string in a single `bodyLines`
+item. Do not split continuous copy across multiple items for manual line breaks;
+Android can lay those animated text rows on top of each other.
+
 `tap to continue` uses the same color as the prelude body copy. Do not introduce
 a separate hint, arrow, or button color for prelude tap hints.
 
@@ -276,6 +280,12 @@ const preludeSteps: RequiredOnboardingPreludeSteps = [
   onContinue={goNext}
 />;
 ```
+
+Each `bodyLines` item is rendered as its own animated row. Put the full body
+copy for that beat into one item, and let React Native wrap the text naturally.
+For example, write
+`["The best light does not wait. A few minutes later, and the moment is already gone."]`
+instead of splitting those clauses into separate array items.
 
 For `tone: "inverted"`, pass copy colors that already match the inverted
 background. `OnboardingPreludeFrame` does not invent a separate tap hint color:
