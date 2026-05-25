@@ -253,7 +253,6 @@ export const PreOnboardingPlaygroundScreen = ({
           <PreOnboardingMockContent
             actionContent={actionContent}
             actionProgress={actionProgress}
-            entranceOffsetX={width}
             isActionPanelMounted={isActionPanelMounted}
             mockPhoneHeight={mockPhoneHeight}
             mockPhoneWidth={mockPhoneWidth}

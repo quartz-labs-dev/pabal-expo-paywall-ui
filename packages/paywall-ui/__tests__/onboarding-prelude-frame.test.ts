@@ -451,6 +451,36 @@ test("keeps onboarding footer backgrounds and android CTA spacing intentional", 
   );
 });
 
+test("keeps pre-onboarding mock phone entrance coming from the right by default", () => {
+  const preFrameSource = readSource("src/onboarding/PreOnboardingFrame.tsx");
+  const preContentSource = readSource("src/onboarding/PreOnboardingContent.tsx");
+  const playgroundSource = readFileSync(
+    join(
+      process.cwd(),
+      "..",
+      "..",
+      "apps",
+      "playground",
+      "src",
+      "screens",
+      "PreOnboardingPlaygroundScreen.tsx",
+    ),
+    "utf8",
+  );
+
+  assert.doesNotMatch(
+    preFrameSource,
+    /useOnboardingPhoneFrameEntranceAnimation\(300, 0, 42\)/,
+  );
+  assert.doesNotMatch(preContentSource, /entranceOffsetX/);
+  assert.match(preContentSource, /const \{ width \} = useWindowDimensions\(\);/);
+  assert.match(
+    preContentSource,
+    /useOnboardingPhoneFrameEntranceAnimation\(\s*300,\s*width,\s*0,\s*\)/,
+  );
+  assert.doesNotMatch(playgroundSource, /entranceOffsetX=\{width\}/);
+});
+
 test("keeps prelude screen chrome in the package instead of the playground", () => {
   const preludeFrameSource = readSource(
     "src/onboarding/OnboardingPreludeFrame.tsx",

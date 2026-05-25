@@ -7,6 +7,7 @@ import {
   StyleSheet,
   type StyleProp,
   Text,
+  useWindowDimensions,
   View,
   type ViewStyle,
 } from "react-native";
@@ -84,7 +85,6 @@ export const PreOnboardingLandingContent = ({
 export interface PreOnboardingMockContentProps {
   actionContent?: ReactNode;
   actionProgress: Animated.Value;
-  entranceOffsetX: number;
   isActionPanelMounted: boolean;
   mockPhoneHeight: number;
   mockPhoneWidth: number;
@@ -98,7 +98,6 @@ export interface PreOnboardingMockContentProps {
 export const PreOnboardingMockContent = ({
   actionContent,
   actionProgress,
-  entranceOffsetX,
   isActionPanelMounted,
   mockPhoneHeight,
   mockImageSource,
@@ -108,10 +107,11 @@ export const PreOnboardingMockContent = ({
   theme,
   onReturn,
 }: PreOnboardingMockContentProps) => {
+  const { width } = useWindowDimensions();
   const phoneAnimatedStyle = useOnboardingPhoneFrameEntranceAnimation(
     300,
-    entranceOffsetX,
-    42,
+    width,
+    0,
   );
   const phoneExitAnimatedStyle = {
     opacity: actionProgress.interpolate({

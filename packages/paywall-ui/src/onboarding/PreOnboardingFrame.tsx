@@ -15,7 +15,6 @@ import {
   resolveOnboardingFrameTheme,
   type OnboardingFrameTheme,
 } from "./onboarding-frame-theme";
-import { useOnboardingPhoneFrameEntranceAnimation } from "./onboarding-animations";
 import { getOnboardingFooterBottomPadding } from "./onboarding-layout";
 
 export interface PreOnboardingFrameProps {
@@ -49,7 +48,6 @@ export const PreOnboardingFrame = ({
 }: PreOnboardingFrameProps) => {
   const insets = useSafeAreaInsets();
   const theme = resolveOnboardingFrameTheme(themeOverride);
-  const contentAnimatedStyle = useOnboardingPhoneFrameEntranceAnimation(300, 0, 42);
   const footerBackgroundColor = background
     ? "transparent"
     : theme.footerBackgroundColor;
@@ -71,9 +69,7 @@ export const PreOnboardingFrame = ({
         showsVerticalScrollIndicator={false}
         style={styles.bodyScroll}
       >
-        <Animated.View style={[styles.bodyAnimatedContent, contentAnimatedStyle]}>
-          {children}
-        </Animated.View>
+        {children}
       </ScrollView>
       <View
         style={[
@@ -130,10 +126,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingHorizontal: 24,
     paddingVertical: 22,
-  },
-  bodyAnimatedContent: {
-    alignItems: "center",
-    width: "100%",
   },
   footer: {
     paddingHorizontal: 20,
