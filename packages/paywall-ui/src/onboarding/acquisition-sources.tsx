@@ -12,6 +12,7 @@ export type OnboardingAcquisitionStorePlatform = "appStore" | "playStore";
 export type OnboardingAcquisitionSourceId =
   | "instagram"
   | "tiktok"
+  | "threads"
   | "youtube"
   | "google"
   | "store"
@@ -45,13 +46,13 @@ export const createOnboardingAcquisitionSourceOptions = (
       title: text.instagram,
     },
     {
-      id: "tiktok",
+      id: "threads",
       icon: (
         <AcquisitionSourceImageIcon
-          source={acquisitionSourceIconSources.tiktok}
+          source={acquisitionSourceIconSources.threads}
         />
       ),
-      title: text.tiktok,
+      title: text.threads,
     },
     {
       id: "youtube",
@@ -90,6 +91,15 @@ export const createOnboardingAcquisitionSourceOptions = (
         <AcquisitionSourceImageIcon source={acquisitionSourceIconSources.x} />
       ),
       title: text.x,
+    },
+    {
+      id: "tiktok",
+      icon: (
+        <AcquisitionSourceImageIcon
+          source={acquisitionSourceIconSources.tiktok}
+        />
+      ),
+      title: text.tiktok,
     },
     {
       id: "friend-or-family",

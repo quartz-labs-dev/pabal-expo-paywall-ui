@@ -742,11 +742,12 @@ const [selectedSource, setSelectedSource] =
 `createOnboardingAcquisitionSourceOptions()` returns:
 
 - Instagram
-- TikTok
+- Threads
 - YouTube
 - Google
 - current store, `App Store` or `Play Store`
 - X, formerly Twitter
+- TikTok
 - Friend or family
 - Other
 

@@ -10,6 +10,7 @@ export type AcquisitionSourceBrandIconId =
   | "google"
   | "instagram"
   | "playStore"
+  | "threads"
   | "tiktok"
   | "x"
   | "youtube";
@@ -19,6 +20,7 @@ export const acquisitionSourceIconSources = {
   google: require("../../assets/acquisition-icons/google.png"),
   instagram: require("../../assets/acquisition-icons/instagram.png"),
   playStore: require("../../assets/acquisition-icons/play-store.png"),
+  threads: require("../../assets/acquisition-icons/threads.png"),
   tiktok: require("../../assets/acquisition-icons/tiktok.png"),
   x: require("../../assets/acquisition-icons/x.png"),
   youtube: require("../../assets/acquisition-icons/youtube.png"),

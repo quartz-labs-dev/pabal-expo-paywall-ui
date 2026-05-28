@@ -553,6 +553,7 @@ test("localizes onboarding acquisition source copy for every non-English locale"
       assert.equal(text.title, "Where did you hear about us?");
       assert.equal(text.friendOrFamily, "Friend or family");
       assert.equal(text.other, "Other");
+      assert.equal(text.threads, "Threads");
       assert.equal(text.x, "X (formerly Twitter)");
       continue;
     }
@@ -560,8 +561,32 @@ test("localizes onboarding acquisition source copy for every non-English locale"
     assert.notEqual(text.title, "Where did you hear about us?", locale);
     assert.notEqual(text.friendOrFamily, "Friend or family", locale);
     assert.notEqual(text.other, "Other", locale);
+    assert.equal(text.threads, "Threads", locale);
     assert.notEqual(text.x, "X (formerly Twitter)", locale);
   }
+});
+
+test("orders onboarding acquisition source options with Threads second and TikTok after X", () => {
+  const acquisitionSourceModule = readFileSync(
+    join(process.cwd(), "src", "onboarding", "acquisition-sources.tsx"),
+    "utf8",
+  );
+  const optionIdMatches = acquisitionSourceModule.matchAll(/id: "([^"]+)"/gu);
+
+  assert.deepEqual(
+    Array.from(optionIdMatches, (match) => match[1]),
+    [
+      "instagram",
+      "threads",
+      "youtube",
+      "google",
+      "store",
+      "x",
+      "tiktok",
+      "friend-or-family",
+      "other",
+    ],
+  );
 });
 
 test("localizes onboarding nickname input copy for every non-English locale", () => {
@@ -636,6 +661,7 @@ test("provides localized onboarding acquisition source labels", () => {
   assert.equal(text.title, "어디에서 저희를 알게 되셨나요?");
   assert.equal(text.appStore, "App Store");
   assert.equal(text.playStore, "Play Store");
+  assert.equal(text.threads, "Threads");
   assert.equal(text.tiktok, "TikTok");
   assert.equal(text.x, "X(구 Twitter)");
   assert.equal(text.friendOrFamily, "친구 또는 가족");
