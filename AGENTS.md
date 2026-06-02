@@ -18,6 +18,12 @@
 - When installing or wiring `pabal-expo-paywall-ui` into a consuming app for the first time, read `packages/paywall-ui/README.md` and follow its installation guide.
 - Keep the root `README.md` focused on repository structure and workspace commands.
 
+## Execution Plans
+
+- Before changing public props, exported types, exported components, helper APIs, package entrypoints, or documented consumer behavior, read `docs/exec-plans/public-api-change.md`.
+- Before adding or changing user-visible localized paywall, onboarding, or profile copy, read `docs/exec-plans/localization-change.md`.
+- Before moving internal package files, changing Metro-consumed imports, or adding `require(...)` static assets, read `docs/exec-plans/asset-or-import-change.md`.
+
 ## Architecture Rules
 
 - `packages/paywall-ui` must stay RevenueCat-agnostic.

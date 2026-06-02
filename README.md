@@ -27,6 +27,7 @@ pabal-expo-paywall-ui/
 - [Paywall](./docs/paywall.md)
 - [Onboarding](./docs/onboarding.md): pre-onboarding screens, required onboarding prelude frame, package-owned nickname flow, gallery grid display controls, and primitives
 - [Profile](./docs/profile.md)
+- [Execution Plans](./docs/exec-plans/README.md): change-type checklists for public API, localization, and Metro/import/asset changes
 
 ## Workspace Commands
 
