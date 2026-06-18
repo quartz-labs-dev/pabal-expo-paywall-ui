@@ -407,6 +407,26 @@ const weeklyOnlyOffering = createOffering({
   ],
 });
 
+const weeklyAnnualOffering = createOffering({
+  identifier: "weekly_annual",
+  serverDescription: "Offering with weekly and annual packages.",
+  metadata: {
+    paywallVariant: "weekly_annual",
+  },
+  availablePackages: [
+    {
+      ...usdWeeklyPackage,
+      offeringIdentifier: "weekly_annual",
+      presentedOfferingContext: createPresentedOfferingContext("weekly_annual"),
+    },
+    {
+      ...usdAnnualPackage,
+      offeringIdentifier: "weekly_annual",
+      presentedOfferingContext: createPresentedOfferingContext("weekly_annual"),
+    },
+  ],
+});
+
 const longPriceOffering = createOffering({
   identifier: krwOfferingIdentifier,
   serverDescription: "Offering with long localized KRW price strings.",
@@ -424,6 +444,7 @@ export const mockRevenueCatOfferingsByScenario: Record<
   annualOnly: createOfferings(annualOnlyOffering),
   monthlyOnly: createOfferings(monthlyOnlyOffering),
   weeklyOnly: createOfferings(weeklyOnlyOffering),
+  weeklyAnnual: createOfferings(weeklyAnnualOffering),
   lifetimeOnly: createOfferings(lifetimeOnlyOffering),
   longPrice: createOfferings(longPriceOffering),
 };

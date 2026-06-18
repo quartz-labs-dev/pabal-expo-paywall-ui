@@ -175,6 +175,7 @@ export type {
   PaywallFeatureComparisonRow,
   PaywallFreeTrialConfig,
   PaywallPlan,
+  PaywallPlanFreeTrialConfig,
   PaywallPlanPeriod,
   PaywallProps,
   PaywallPurchaseButtonLabelContext,

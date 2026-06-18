@@ -144,6 +144,12 @@ test("uses localized no-payment copy for trial footer disclosure", () => {
   const typesSource = readTypesSource();
 
   assert.match(typesSource, /trialNoPaymentDueNow\?: string/);
+  assert.match(typesSource, /type PaywallPlanFreeTrialConfig/);
+  assert.match(typesSource, /byPeriod\?: Partial</);
+  assert.match(
+    typesSource,
+    /byPlanId\?: Record<string, PaywallPlanFreeTrialConfig>/,
+  );
   assert.match(paywallSource, /copy\.trialNoPaymentDueNow \?\?/);
   assert.match(paywallSource, /getTrialPriceDisclosure/);
 });

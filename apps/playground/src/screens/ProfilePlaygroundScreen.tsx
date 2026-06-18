@@ -100,6 +100,7 @@ const profilePeriods: Record<PlaygroundScenario, PaywallPlanPeriod> = {
   longPrice: "annual",
   monthlyOnly: "monthly",
   standard: "annual",
+  weeklyAnnual: "annual",
   weeklyOnly: "weekly",
 };
 

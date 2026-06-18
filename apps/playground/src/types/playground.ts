@@ -5,6 +5,7 @@ export type PlaygroundScenario =
   | "annualOnly"
   | "monthlyOnly"
   | "weeklyOnly"
+  | "weeklyAnnual"
   | "lifetimeOnly"
   | "longPrice";
 
@@ -24,6 +25,10 @@ export type PlaygroundPaywallFlow = "twoStep" | "singleStep";
 
 export type PlaygroundPaywallAnimation = "default" | "opacity" | "none";
 
-export type PlaygroundFreeTrialMode = "sevenDays" | "twoWeeks" | "none";
+export type PlaygroundFreeTrialMode =
+  | "sevenDays"
+  | "twoWeeks"
+  | "perPlan"
+  | "none";
 
 export type PlaygroundLocale = UnifiedLocale;

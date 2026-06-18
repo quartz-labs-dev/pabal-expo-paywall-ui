@@ -30,8 +30,8 @@ import { PurchaseButton } from "./PurchaseButton";
 import { SupportMessageBubble } from "./SupportMessageBubble";
 import { mergePaywallTheme } from "../shared/theme";
 import { TrialNotice } from "./TrialNotice";
+import { resolveFreeTrialConfig } from "./free-trial-config";
 import type {
-  PaywallFreeTrialConfig,
   PaywallPlan,
   PaywallProps,
   PaywallTheme,
@@ -52,29 +52,6 @@ const hasRenewingSubscriptionPlan = <TPackage,>(
   plans: PaywallPlan<TPackage>[]
 ): boolean => {
   return plans.some((plan) => plan.period !== "lifetime");
-};
-
-const DEFAULT_TRIAL_DURATION: PaywallTrialDuration = {
-  value: 7,
-  unit: "day",
-};
-
-const resolveFreeTrialConfig = (
-  freeTrial: boolean | PaywallFreeTrialConfig | undefined,
-  selectedPlan?: PaywallPlan
-): PaywallFreeTrialConfig | undefined => {
-  if (freeTrial === false || selectedPlan?.period === "lifetime") {
-    return undefined;
-  }
-
-  if (freeTrial === true || freeTrial === undefined) {
-    return { duration: DEFAULT_TRIAL_DURATION };
-  }
-
-  return {
-    ...freeTrial,
-    duration: freeTrial.duration ?? DEFAULT_TRIAL_DURATION,
-  };
 };
 
 const formatFallbackTrialDuration = (

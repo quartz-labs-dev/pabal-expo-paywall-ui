@@ -8,7 +8,8 @@ restore, analytics, navigation, legal links, permissions, and clipboard behavior
 This package receives normalized data and app-owned callbacks only.
 Pass `freeTrial`, selected weekly/monthly/annual/lifetime plans, and
 purchase/restore loading flags into `Paywall`; the package localizes the
-default CTA text from those props.
+default CTA text from those props. `freeTrial` can be global or overridden per
+plan period or plan id.
 
 It does not import `react-native-purchases` or `react-native-purchases-ui`.
 

@@ -11,7 +11,11 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { LocaleSelector } from "../components/LocaleSelector";
 import type { PlaygroundOnboardingPlatform } from "../components/onboarding-context";
-import { packageScenarioLabels } from "../fixtures/paywall-plans";
+import {
+  packageScenarioDescriptions,
+  packageScenarioLabels,
+} from "../fixtures/paywall-plans";
+import { getPlaygroundTrialPreviewRows } from "../fixtures/paywall-trial-policy";
 import type {
   PlaygroundFreeTrialMode,
   PlaygroundPackageScenario,
@@ -70,11 +74,13 @@ const paywallAnimationLabels: Record<PlaygroundPaywallAnimation, string> = {
 const freeTrialModes: PlaygroundFreeTrialMode[] = [
   "sevenDays",
   "twoWeeks",
+  "perPlan",
   "none",
 ];
 const freeTrialModeLabels: Record<PlaygroundFreeTrialMode, string> = {
   sevenDays: "7 days",
   twoWeeks: "2 weeks",
+  perPlan: "Per plan",
   none: "No trial",
 };
 const onboardingPlatforms: PlaygroundOnboardingPlatform[] = ["ios", "android"];
@@ -196,15 +202,12 @@ export const HomeScreen = ({
           labels={paywallAnimationLabels}
           onChangeOption={onChangePaywallAnimation}
         />
-        <SegmentedSettings
-          title="Free trial"
-          options={freeTrialModes}
-          selectedOption={freeTrialMode}
-          labels={freeTrialModeLabels}
-          onChangeOption={onChangeFreeTrialMode}
-        />
-        <CustomerStateSettings
+        <TrialPolicySettings
+          scenario={scenario}
+          isLongPriceEnabled={isLongPriceEnabled}
+          freeTrialMode={freeTrialMode}
           isTrialEligible={isTrialEligible}
+          onChangeFreeTrialMode={onChangeFreeTrialMode}
           onToggleTrialEligibility={onToggleTrialEligibility}
         />
       </SettingsModal>
@@ -364,6 +367,14 @@ const PackageScenarioSettings = ({
                   {isSelected && <View style={styles.radioDot} />}
                 </View>
               </View>
+              <Text
+                style={[
+                  styles.scenarioDescription,
+                  isSelected && styles.scenarioDescriptionSelected,
+                ]}
+              >
+                {packageScenarioDescriptions[item]}
+              </Text>
             </Pressable>
           );
         })}
@@ -419,35 +430,50 @@ const SegmentedSettings = <TOption extends string>({
   );
 };
 
-interface CustomerStateSettingsProps {
+interface TrialPolicySettingsProps {
+  scenario: PlaygroundPackageScenario;
+  isLongPriceEnabled: boolean;
+  freeTrialMode: PlaygroundFreeTrialMode;
   isTrialEligible: boolean;
+  onChangeFreeTrialMode: (freeTrialMode: PlaygroundFreeTrialMode) => void;
   onToggleTrialEligibility: (isEligible: boolean) => void;
 }
 
-const CustomerStateSettings = ({
+const TrialPolicySettings = ({
+  scenario,
+  isLongPriceEnabled,
+  freeTrialMode,
   isTrialEligible,
+  onChangeFreeTrialMode,
   onToggleTrialEligibility,
-}: CustomerStateSettingsProps) => {
+}: TrialPolicySettingsProps) => {
+  const trialPreviewRows = getPlaygroundTrialPreviewRows({
+    freeTrialMode,
+    isLongPriceEnabled,
+    isTrialEligible,
+    scenario,
+  });
+
   return (
     <View style={styles.section}>
-      <Text style={styles.sectionTitle}>Customer state</Text>
-      <Pressable
-        accessibilityRole="switch"
-        accessibilityState={{ checked: isTrialEligible }}
-        onPress={() => onToggleTrialEligibility(!isTrialEligible)}
-        style={[
-          styles.trialEligibilityCard,
-          isTrialEligible && styles.trialEligibilityCardSelected,
-        ]}
-      >
-        <View style={styles.trialEligibilityHeader}>
+      <View style={styles.sectionHeaderRow}>
+        <Text style={styles.sectionTitle}>Trial policy</Text>
+        <Pressable
+          accessibilityRole="switch"
+          accessibilityState={{ checked: isTrialEligible }}
+          onPress={() => onToggleTrialEligibility(!isTrialEligible)}
+          style={[
+            styles.eligibilityToggle,
+            isTrialEligible && styles.eligibilityToggleOn,
+          ]}
+        >
           <Text
             style={[
-              styles.trialEligibilityTitle,
-              isTrialEligible && styles.trialEligibilityTitleSelected,
+              styles.eligibilityToggleText,
+              isTrialEligible && styles.eligibilityToggleTextOn,
             ]}
           >
-            {isTrialEligible ? "Trial eligible" : "Previously subscribed"}
+            {isTrialEligible ? "Eligible" : "Subscribed"}
           </Text>
           <View
             style={[styles.switchTrack, isTrialEligible && styles.switchTrackOn]}
@@ -459,8 +485,67 @@ const CustomerStateSettings = ({
               ]}
             />
           </View>
+        </Pressable>
+      </View>
+      <View style={styles.segmentedList}>
+        {freeTrialModes.map((item) => {
+          const isSelected = item === freeTrialMode;
+
+          return (
+            <Pressable
+              key={item}
+              onPress={() => onChangeFreeTrialMode(item)}
+              style={[
+                styles.trialModeOption,
+                isSelected && styles.trialModeOptionSelected,
+              ]}
+            >
+              <Text
+                style={[
+                  styles.trialModeTitle,
+                  isSelected && styles.trialModeTitleSelected,
+                ]}
+              >
+                {freeTrialModeLabels[item]}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </View>
+      <View style={styles.trialPreviewCard}>
+        <View style={styles.trialPreviewHeader}>
+          <Text style={styles.trialPreviewTitle}>Package preview</Text>
+          <Text style={styles.trialPreviewMeta}>
+            {trialPreviewRows.length} package
+            {trialPreviewRows.length === 1 ? "" : "s"}
+          </Text>
         </View>
-      </Pressable>
+        <View style={styles.trialPreviewRows}>
+          {trialPreviewRows.map((row) => (
+            <View key={row.period} style={styles.trialPreviewRow}>
+              <View style={styles.trialPreviewPlan}>
+                <Text style={styles.trialPreviewPlanLabel}>{row.label}</Text>
+                <Text style={styles.trialPreviewPlanDetail}>{row.detail}</Text>
+              </View>
+              <View
+                style={[
+                  styles.trialPreviewBadge,
+                  row.isActive && styles.trialPreviewBadgeActive,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.trialPreviewBadgeText,
+                    row.isActive && styles.trialPreviewBadgeTextActive,
+                  ]}
+                >
+                  {row.value}
+                </Text>
+              </View>
+            </View>
+          ))}
+        </View>
+      </View>
     </View>
   );
 };
@@ -750,6 +835,7 @@ const styles = StyleSheet.create({
   },
   segmentedList: {
     flexDirection: "row",
+    flexWrap: "wrap",
     gap: 10,
   },
   scenarioCard: {
@@ -759,8 +845,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     flexBasis: "47%",
     flexGrow: 1,
-    minHeight: 54,
+    minHeight: 86,
     padding: 12,
+    gap: 8,
   },
   scenarioCardSelected: {
     backgroundColor: "#102A2A",
@@ -780,6 +867,16 @@ const styles = StyleSheet.create({
   },
   scenarioTitleSelected: {
     color: "#5AC8B7",
+  },
+  scenarioDescription: {
+    color: "#7F8B96",
+    flexShrink: 1,
+    fontSize: 12,
+    fontWeight: "400",
+    lineHeight: 16,
+  },
+  scenarioDescriptionSelected: {
+    color: "#B7E8DF",
   },
   radio: {
     alignItems: "center",
@@ -823,6 +920,143 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   flowTitleSelected: {
+    color: "#5AC8B7",
+  },
+  eligibilityToggle: {
+    alignItems: "center",
+    backgroundColor: "#151D25",
+    borderColor: "#2B3845",
+    borderRadius: 8,
+    borderWidth: 1,
+    flexDirection: "row",
+    gap: 8,
+    minHeight: 32,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+  },
+  eligibilityToggleOn: {
+    backgroundColor: "#102A2A",
+    borderColor: "#5AC8B7",
+  },
+  eligibilityToggleText: {
+    color: "#B9C4CF",
+    fontSize: 12,
+    fontWeight: "600",
+    lineHeight: 15,
+  },
+  eligibilityToggleTextOn: {
+    color: "#5AC8B7",
+  },
+  trialModeOption: {
+    alignItems: "center",
+    backgroundColor: "#151D25",
+    borderColor: "#2B3845",
+    borderRadius: 8,
+    borderWidth: 1,
+    flexBasis: "22%",
+    flexGrow: 1,
+    justifyContent: "center",
+    minHeight: 44,
+    paddingHorizontal: 8,
+    paddingVertical: 10,
+  },
+  trialModeOptionSelected: {
+    backgroundColor: "#102A2A",
+    borderColor: "#5AC8B7",
+  },
+  trialModeTitle: {
+    color: "#F5F7FA",
+    flexShrink: 1,
+    fontSize: 12,
+    fontWeight: "600",
+    lineHeight: 16,
+    textAlign: "center",
+  },
+  trialModeTitleSelected: {
+    color: "#5AC8B7",
+  },
+  trialPreviewCard: {
+    backgroundColor: "#0B1117",
+    borderColor: "#2B3845",
+    borderRadius: 8,
+    borderWidth: 1,
+    gap: 12,
+    padding: 12,
+  },
+  trialPreviewHeader: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 12,
+    justifyContent: "space-between",
+  },
+  trialPreviewTitle: {
+    color: "#F5F7FA",
+    flexShrink: 1,
+    fontSize: 13,
+    fontWeight: "600",
+    lineHeight: 17,
+  },
+  trialPreviewMeta: {
+    color: "#7F8B96",
+    fontSize: 12,
+    fontWeight: "600",
+    lineHeight: 15,
+  },
+  trialPreviewRows: {
+    gap: 8,
+  },
+  trialPreviewRow: {
+    alignItems: "center",
+    backgroundColor: "#151D25",
+    borderColor: "#22303D",
+    borderRadius: 8,
+    borderWidth: 1,
+    flexDirection: "row",
+    gap: 10,
+    justifyContent: "space-between",
+    minHeight: 58,
+    padding: 10,
+  },
+  trialPreviewPlan: {
+    flex: 1,
+    gap: 3,
+  },
+  trialPreviewPlanLabel: {
+    color: "#F5F7FA",
+    fontSize: 13,
+    fontWeight: "600",
+    lineHeight: 17,
+  },
+  trialPreviewPlanDetail: {
+    color: "#7F8B96",
+    flexShrink: 1,
+    fontSize: 11,
+    fontWeight: "400",
+    lineHeight: 15,
+  },
+  trialPreviewBadge: {
+    alignItems: "center",
+    backgroundColor: "#202A34",
+    borderColor: "#344351",
+    borderRadius: 8,
+    borderWidth: 1,
+    justifyContent: "center",
+    minHeight: 32,
+    minWidth: 78,
+    paddingHorizontal: 9,
+  },
+  trialPreviewBadgeActive: {
+    backgroundColor: "#102A2A",
+    borderColor: "#5AC8B7",
+  },
+  trialPreviewBadgeText: {
+    color: "#B9C4CF",
+    fontSize: 12,
+    fontWeight: "700",
+    lineHeight: 15,
+    textAlign: "center",
+  },
+  trialPreviewBadgeTextActive: {
     color: "#5AC8B7",
   },
   trialEligibilityCard: {

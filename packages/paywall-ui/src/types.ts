@@ -9,8 +9,21 @@ export interface PaywallTrialDuration {
   unit: PaywallTrialUnit;
 }
 
+export type PaywallPlanFreeTrialConfig =
+  | boolean
+  | {
+      duration?: PaywallTrialDuration;
+    };
+
 export interface PaywallFreeTrialConfig {
   duration?: PaywallTrialDuration;
+  byPeriod?: Partial<
+    Record<
+      Exclude<PaywallPlanPeriod, "lifetime">,
+      PaywallPlanFreeTrialConfig
+    >
+  >;
+  byPlanId?: Record<string, PaywallPlanFreeTrialConfig>;
 }
 
 export interface PaywallPlan<TPackage = unknown> {

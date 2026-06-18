@@ -29,7 +29,13 @@ const paywallConfig = {
   hero: <HeroImage />,
   stepMode: "twoStep",
   animationMode: "default",
-  freeTrial: { duration: { value: 7, unit: "day" } },
+  freeTrial: {
+    duration: { value: 7, unit: "day" },
+    byPeriod: {
+      weekly: { duration: { value: 3, unit: "day" } },
+      annual: { duration: { value: 2, unit: "week" } },
+    },
+  },
   valueStep: {
     title: "Unlock the full app",
     subtitle: "See what Pro adds before choosing a plan.",
@@ -105,7 +111,7 @@ are running so the CTA shows the localized processing label and spinner.
 | --- | --- |
 | One-step or two-step paywall | `stepMode` |
 | Moving, fade-only, or no transition | `animationMode` |
-| Trial duration or no trial | `freeTrial` |
+| Trial duration, no trial, or plan-specific trials | `freeTrial` |
 | Top media | `hero`, `heroHeightRatio` |
 | Benefit rows | `benefits` |
 | Free/Pro comparison table | `featureComparison` |
@@ -129,6 +135,29 @@ selected plan and `freeTrial` prop:
 Use `copy.formatPurchaseButtonLabel` only when the app needs product-specific
 CTA text. The app still owns the RevenueCat/customer logic that decides whether
 `freeTrial` should be enabled.
+
+`freeTrial` accepts the existing global forms and optional plan-specific
+overrides:
+
+```tsx
+freeTrial={true}
+freeTrial={false}
+freeTrial={{ duration: { value: 7, unit: "day" } }}
+freeTrial={{
+  duration: { value: 7, unit: "day" },
+  byPeriod: {
+    weekly: { duration: { value: 3, unit: "day" } },
+    monthly: true,
+    annual: { duration: { value: 2, unit: "week" } },
+  },
+  byPlanId: {
+    "custom-monthly-intro": false,
+  },
+}}
+```
+
+For the selected plan, `byPlanId` overrides `byPeriod`, and both override the
+global `duration`. Lifetime plans never show a free trial.
 
 ```tsx
 const copy = getDefaultPaywallCopy(locale, {
