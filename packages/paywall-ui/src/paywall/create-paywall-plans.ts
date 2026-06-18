@@ -5,6 +5,7 @@ import type {
   PurchasesPackageLike,
 } from "../types";
 
+const DEFAULT_WEEKLY_PACKAGE_IDS = ["$rc_weekly"];
 const DEFAULT_MONTHLY_PACKAGE_IDS = ["$rc_monthly"];
 const DEFAULT_ANNUAL_PACKAGE_IDS = ["$rc_annual"];
 const DEFAULT_LIFETIME_PACKAGE_IDS = ["$rc_lifetime"];
@@ -12,6 +13,7 @@ const DEFAULT_DISPLAY_ORDER: PaywallPlanPeriod[] = [
   "annual",
   "lifetime",
   "monthly",
+  "weekly",
 ];
 const DEFAULT_RECOMMENDED_PERIOD: PaywallPlanPeriod = "annual";
 
@@ -27,7 +29,9 @@ const defaultFormatPricePerPeriodText = (
   priceText: string,
   period: Exclude<PaywallPlanPeriod, "lifetime">,
 ): string => {
-  return period === "annual" ? `${priceText} / year` : `${priceText} / month`;
+  if (period === "annual") return `${priceText} / year`;
+  if (period === "weekly") return `${priceText} / week`;
+  return `${priceText} / month`;
 };
 
 const getPeriod = (
@@ -35,10 +39,14 @@ const getPeriod = (
   options: Required<
     Pick<
       CreatePaywallPlansOptions,
-      "monthlyPackageIds" | "annualPackageIds" | "lifetimePackageIds"
+      | "weeklyPackageIds"
+      | "monthlyPackageIds"
+      | "annualPackageIds"
+      | "lifetimePackageIds"
     >
   >,
 ): PaywallPlanPeriod | null => {
+  if (options.weeklyPackageIds.includes(pack.identifier)) return "weekly";
   if (options.monthlyPackageIds.includes(pack.identifier)) return "monthly";
   if (options.annualPackageIds.includes(pack.identifier)) return "annual";
   if (options.lifetimePackageIds.includes(pack.identifier)) return "lifetime";
@@ -94,6 +102,8 @@ const getProductPricePerPeriodText = (
     pack.product.price_per_period ??
     (period === "annual"
       ? pack.product.pricePerYearString
+      : period === "weekly"
+      ? pack.product.pricePerWeekString
       : pack.product.pricePerMonthString) ??
     formatText(pack.product.priceString, period)
   );
@@ -118,6 +128,8 @@ export const createPaywallPlans = <TPackage extends PurchasesPackageLike>(
   packages: TPackage[],
   options: CreatePaywallPlansOptions = {},
 ): PaywallPlan<TPackage>[] => {
+  const weeklyPackageIds =
+    options.weeklyPackageIds ?? DEFAULT_WEEKLY_PACKAGE_IDS;
   const monthlyPackageIds =
     options.monthlyPackageIds ?? DEFAULT_MONTHLY_PACKAGE_IDS;
   const annualPackageIds =
@@ -134,6 +146,7 @@ export const createPaywallPlans = <TPackage extends PurchasesPackageLike>(
   const monthlyPackage = packages.find((pack) => {
     return (
       getPeriod(pack, {
+        weeklyPackageIds,
         monthlyPackageIds,
         annualPackageIds,
         lifetimePackageIds,
@@ -143,6 +156,7 @@ export const createPaywallPlans = <TPackage extends PurchasesPackageLike>(
 
   const plans = packages.reduce<PaywallPlan<TPackage>[]>((acc, pack) => {
     const period = getPeriod(pack, {
+      weeklyPackageIds,
       monthlyPackageIds,
       annualPackageIds,
       lifetimePackageIds,
@@ -151,6 +165,7 @@ export const createPaywallPlans = <TPackage extends PurchasesPackageLike>(
 
     const isAnnual = period === "annual";
     const isLifetime = period === "lifetime";
+    const isWeekly = period === "weekly";
     const discountText =
       isAnnual && monthlyPackage
         ? formatDiscountText(pack, monthlyPackage, formatDiscountTextOption)
@@ -167,8 +182,16 @@ export const createPaywallPlans = <TPackage extends PurchasesPackageLike>(
           ? options.annualTitle
           : isLifetime
           ? options.lifetimeTitle
+          : isWeekly
+          ? options.weeklyTitle
           : options.monthlyTitle) ??
-        (isAnnual ? "Yearly" : isLifetime ? "Lifetime" : "Monthly"),
+        (isAnnual
+          ? "Yearly"
+          : isLifetime
+          ? "Lifetime"
+          : isWeekly
+          ? "Weekly"
+          : "Monthly"),
       priceText: pack.product.priceString,
       pricePerPeriodText: getProductPricePerPeriodText(
         pack,
@@ -187,12 +210,16 @@ export const createPaywallPlans = <TPackage extends PurchasesPackageLike>(
           ? options.annualDescription
           : isLifetime
           ? options.lifetimeDescription
+          : isWeekly
+          ? options.weeklyDescription
           : options.monthlyDescription) ??
         pack.product.description,
       selectedDescription: isAnnual
         ? options.annualSelectedDescription
         : isLifetime
         ? options.lifetimeSelectedDescription
+        : isWeekly
+        ? options.weeklySelectedDescription
         : options.monthlySelectedDescription,
       isRecommended: period === DEFAULT_RECOMMENDED_PERIOD,
       rawPackage: pack,

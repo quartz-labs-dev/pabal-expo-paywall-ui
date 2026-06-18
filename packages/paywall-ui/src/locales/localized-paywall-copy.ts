@@ -85,6 +85,7 @@ export const getDefaultPaywallPlanOptions = (
     lifetimeBadgeText: text.oneTime,
     lifetimeTitle: text.lifetimePlanTitle,
     monthlyTitle: text.monthlyPlanTitle,
+    weeklyTitle: text.weeklyPlanTitle,
     formatDiscountText: text.saveDiscount,
     formatMonthlyPriceText: text.monthlyPrice,
   };
@@ -176,6 +177,7 @@ export const getDefaultProfilePlanLabel = (
   const text = getPaywallText(locale);
 
   if (period === "lifetime") return text.lifetimeProfilePlan(productName);
+  if (period === "weekly") return text.weeklyProfilePlan(productName);
   if (period === "monthly") return text.monthlyProfilePlan(productName);
   return text.annualProfilePlan(productName);
 };

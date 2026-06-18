@@ -17,6 +17,7 @@ export interface PaywallText {
   lifetimePlanTitle: string;
   manageSubscription: string;
   monthlyPlanTitle: string;
+  weeklyPlanTitle: string;
   oneTime: string;
   oneTimePayment: string;
   opening: string;
@@ -55,6 +56,7 @@ export interface PaywallText {
   renewsOn: (dateText: string) => string;
   saveDiscount: (discountPercentage: number) => string;
   upgradeTo: (productName: string) => string;
+  weeklyProfilePlan: (productName: string) => string;
 }
 
 export interface PaywallValueStepText {
@@ -81,6 +83,7 @@ interface PaywallTextInput
     | "renewsOn"
     | "saveDiscount"
     | "upgradeTo"
+    | "weeklyProfilePlan"
   > {
   annualPlanPrefix?: string;
   formatPricePerPeriodText?: (
@@ -98,10 +101,12 @@ interface PaywallTextInput
   ) => string;
   lifetimePlanPrefix?: string;
   monthlyPlanPrefix?: string;
+  weeklyPlanPrefix?: string;
   monthlyPricePrefix: string;
   monthlyPriceSuffix: string;
   pricePerAnnualPeriodSuffix: string;
   pricePerMonthlyPeriodSuffix: string;
+  pricePerWeeklyPeriodSuffix: string;
   renewsOnPrefix: string;
   renewsOnSuffix: string;
   savePrefix: string;
@@ -161,6 +166,8 @@ const createPaywallText = (text: PaywallTextInput): PaywallText => {
       ((priceText, period) =>
         period === "annual"
           ? `${priceText}${text.pricePerAnnualPeriodSuffix}`
+          : period === "weekly"
+          ? `${priceText}${text.pricePerWeeklyPeriodSuffix}`
           : `${priceText}${text.pricePerMonthlyPeriodSuffix}`),
     formatPurchaseButtonLabel:
       text.formatPurchaseButtonLabel ??
@@ -201,6 +208,8 @@ const createPaywallText = (text: PaywallTextInput): PaywallText => {
       `${text.savePrefix}${discountPercentage}%${text.saveSuffix}`,
     upgradeTo: (productName) =>
       `${text.upgradePrefix}${productName}${text.upgradeSuffix}`,
+    weeklyProfilePlan: (productName) =>
+      `${text.weeklyPlanPrefix ?? text.weeklyPlanTitle} ${productName}`,
   };
 };
 

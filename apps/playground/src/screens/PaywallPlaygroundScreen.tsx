@@ -181,6 +181,8 @@ export const PaywallPlaygroundScreen = ({
         lifetimeSelectedDescription: "One payment for every aurora season.",
         monthlySelectedDescription:
           "Flexible access for your next aurora window.",
+        weeklySelectedDescription:
+          "Short-term access for a single aurora trip.",
       },
     );
   }, [scenario, selectedLocale]);

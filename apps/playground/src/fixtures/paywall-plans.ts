@@ -7,6 +7,7 @@ import { getMockRevenueCatPackages } from "./revenuecat-mock-data";
 export const packageScenarioLabels: Record<PlaygroundPackageScenario, string> = {
   lifetimeOnly: "Lifetime only",
   standard: "Monthly + annual",
+  weeklyOnly: "Weekly only",
 };
 
 export const packageScenarioDescriptions: Record<
@@ -15,6 +16,7 @@ export const packageScenarioDescriptions: Record<
 > = {
   lifetimeOnly: "Checks fallback behavior when the offering has only lifetime.",
   standard: "Default offering with both monthly and annual packages.",
+  weeklyOnly: "Checks fallback behavior when the offering has only weekly.",
 };
 
 export const scenarioLabels: Record<PlaygroundScenario, string> = {

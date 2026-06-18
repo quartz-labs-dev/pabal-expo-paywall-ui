@@ -6,6 +6,7 @@ import {
   PAYWALL_TEXT_LOCALES,
   getDefaultPaywallCopy,
   getDefaultPaywallPlanOptions,
+  getDefaultProfilePlanLabel,
   getDefaultProfileIdentifiersCopy,
   getDefaultProfileSubscriptionCopy,
   resolvePaywallTextLocale,
@@ -50,8 +51,9 @@ const makePackage = (
   },
 });
 
-test("keeps monthly, annual, and lifetime packages by default", () => {
+test("keeps weekly, monthly, annual, and lifetime packages by default", () => {
   const plans = createPaywallPlans([
+    makePackage("$rc_weekly", 1.99, "$1.99"),
     makePackage("$rc_monthly", 4.99, "$4.99"),
     makePackage("$rc_annual", 29.99, "$29.99"),
     makePackage("$rc_lifetime", 99.99, "$99.99"),
@@ -61,6 +63,7 @@ test("keeps monthly, annual, and lifetime packages by default", () => {
     "$rc_annual",
     "$rc_lifetime",
     "$rc_monthly",
+    "$rc_weekly",
   ]);
 });
 
@@ -93,11 +96,13 @@ test("preserves the raw package for app-owned purchase callbacks", () => {
 test("supports app-specific package identifiers", () => {
   const plans = createPaywallPlans(
     [
+      makePackage("weekly-pro", 1.99, "$1.99"),
       makePackage("monthly-pro", 6.99, "$6.99"),
       makePackage("yearly-pro", 49.99, "$49.99"),
       makePackage("forever-pro", 99.99, "$99.99"),
     ],
     {
+      weeklyPackageIds: ["weekly-pro"],
       annualPackageIds: ["yearly-pro"],
       lifetimePackageIds: ["forever-pro"],
       monthlyPackageIds: ["monthly-pro"],
@@ -108,7 +113,17 @@ test("supports app-specific package identifiers", () => {
     "annual",
     "lifetime",
     "monthly",
+    "weekly",
   ]);
+});
+
+test("supports a single weekly package offering", () => {
+  const plans = createPaywallPlans([makePackage("$rc_weekly", 1.99, "$1.99")]);
+
+  assert.deepEqual(plans.map((plan) => plan.period), ["weekly"]);
+  assert.equal(plans[0]?.title, "Weekly");
+  assert.equal(plans[0]?.pricePerPeriodText, "$1.99 / week");
+  assert.equal(getDefaultSelectedPlanId(plans), "$rc_weekly");
 });
 
 test("supports a single lifetime package offering", () => {
@@ -148,6 +163,7 @@ test("supports custom lifetime plan copy", () => {
 test("supports selected-only plan descriptions from app config", () => {
   const plans = createPaywallPlans(
     [
+      makePackage("$rc_weekly", 1.99, "$1.99"),
       makePackage("$rc_monthly", 4.99, "$4.99"),
       makePackage("$rc_annual", 29.99, "$29.99"),
       makePackage("$rc_lifetime", 99.99, "$99.99"),
@@ -156,6 +172,7 @@ test("supports selected-only plan descriptions from app config", () => {
       annualSelectedDescription: "About 90% less than a guided aurora tour.",
       lifetimeSelectedDescription: "One payment, no renewal.",
       monthlySelectedDescription: "Flexible access without annual commitment.",
+      weeklySelectedDescription: "Try Pro one week at a time.",
     },
   );
 
@@ -170,6 +187,10 @@ test("supports selected-only plan descriptions from app config", () => {
   assert.equal(
     plans.find((plan) => plan.period === "monthly")?.selectedDescription,
     "Flexible access without annual commitment.",
+  );
+  assert.equal(
+    plans.find((plan) => plan.period === "weekly")?.selectedDescription,
+    "Try Pro one week at a time.",
   );
 });
 
@@ -204,6 +225,7 @@ test("adds annual discount text compared to monthly pricing", () => {
 test("supports localized annual pricing copy", () => {
   const plans = createPaywallPlans(
     [
+      makePackage("$rc_weekly", 3000, "KRW 3,000"),
       makePackage("$rc_monthly", 10000, "KRW 10,000"),
       makePackage("$rc_annual", 80000, "KRW 80,000"),
     ],
@@ -223,12 +245,17 @@ test("supports localized annual pricing copy", () => {
 test("adds localized price-per-period copy for trial disclosures", () => {
   const plans = createPaywallPlans(
     [
+      makePackage("$rc_weekly", 3000, "KRW 3,000"),
       makePackage("$rc_monthly", 10000, "KRW 10,000"),
       makePackage("$rc_annual", 80000, "KRW 80,000"),
     ],
     getDefaultPaywallPlanOptions("ko-KR"),
   );
 
+  assert.equal(
+    plans.find((plan) => plan.period === "weekly")?.pricePerPeriodText,
+    "KRW 3,000 / 주",
+  );
   assert.equal(
     plans.find((plan) => plan.period === "monthly")?.pricePerPeriodText,
     "KRW 10,000 / 월",
@@ -323,6 +350,7 @@ test("formats default purchase CTA from trial eligibility and selected price", (
 test("provides localized default plan copy from locale strings", () => {
   const plans = createPaywallPlans(
     [
+      makePackage("$rc_weekly", 3000, "KRW 3,000"),
       makePackage("$rc_monthly", 10000, "KRW 10,000"),
       makePackage("$rc_annual", 80000, "KRW 80,000"),
       makePackage("$rc_lifetime", 120000, "KRW 120,000"),
@@ -332,6 +360,7 @@ test("provides localized default plan copy from locale strings", () => {
 
   const annualPlan = plans.find((plan) => plan.period === "annual");
   const lifetimePlan = plans.find((plan) => plan.period === "lifetime");
+  const weeklyPlan = plans.find((plan) => plan.period === "weekly");
 
   assert.equal(resolvePaywallTextLocale("pt-BR"), "ptBr");
   assert.equal(resolvePaywallTextLocale("zh-Hant"), "zhHant");
@@ -339,6 +368,9 @@ test("provides localized default plan copy from locale strings", () => {
   assert.equal(annualPlan?.badgeText, "33% 할인");
   assert.equal(annualPlan?.monthlyPriceText, "월 KRW 6,667");
   assert.equal(lifetimePlan?.badgeText, "일회성 구매");
+  assert.equal(weeklyPlan?.title, "주간");
+  assert.equal(weeklyPlan?.pricePerPeriodText, "KRW 3,000 / 주");
+  assert.equal(getDefaultProfilePlanLabel("weekly", "ko-KR"), "주간 Pro");
   assert.equal(
     getDefaultPaywallCopy("ko-KR", { title: "Pro" }).continueButton,
     "계속",
@@ -483,6 +515,31 @@ test("localizes continue button copy for every non-English paywall locale", () =
     }
 
     assert.notEqual(copy.continueButton, "Continue", locale);
+  }
+});
+
+test("localizes weekly plan copy for every non-English paywall locale", () => {
+  for (const locale of PAYWALL_TEXT_LOCALES) {
+    const plans = createPaywallPlans(
+      [makePackage("$rc_weekly", 1.99, "$1.99")],
+      getDefaultPaywallPlanOptions(locale),
+    );
+
+    const weeklyPlan = plans[0];
+
+    assert.equal(weeklyPlan?.period, "weekly", locale);
+    assert.ok(weeklyPlan?.title, locale);
+    assert.ok(weeklyPlan?.pricePerPeriodText, locale);
+    assert.ok(getDefaultProfilePlanLabel("weekly", locale), locale);
+
+    if (locale === "en") {
+      assert.equal(weeklyPlan.title, "Weekly");
+      assert.equal(weeklyPlan.pricePerPeriodText, "$1.99 / week");
+      continue;
+    }
+
+    assert.notEqual(weeklyPlan.title, "Weekly", locale);
+    assert.notEqual(getDefaultProfilePlanLabel("weekly", locale), "Weekly Pro");
   }
 });
 

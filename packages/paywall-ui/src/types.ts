@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-export type PaywallPlanPeriod = "monthly" | "annual" | "lifetime";
+export type PaywallPlanPeriod = "weekly" | "monthly" | "annual" | "lifetime";
 
 export type PaywallTrialUnit = "day" | "week";
 
@@ -292,6 +292,7 @@ export interface PurchasesPackageLike {
     priceString: string;
     pricePerPeriodString?: string | null;
     price_per_period?: string | null;
+    pricePerWeekString?: string | null;
     pricePerMonthString?: string | null;
     pricePerYearString?: string | null;
     title?: string;
@@ -301,15 +302,19 @@ export interface PurchasesPackageLike {
 }
 
 export interface CreatePaywallPlansOptions {
+  weeklyPackageIds?: string[];
   monthlyPackageIds?: string[];
   annualPackageIds?: string[];
   lifetimePackageIds?: string[];
+  weeklyTitle?: string;
   monthlyTitle?: string;
   annualTitle?: string;
   lifetimeTitle?: string;
+  weeklyDescription?: string;
   monthlyDescription?: string;
   annualDescription?: string;
   lifetimeDescription?: string;
+  weeklySelectedDescription?: string;
   monthlySelectedDescription?: string;
   annualSelectedDescription?: string;
   lifetimeSelectedDescription?: string;

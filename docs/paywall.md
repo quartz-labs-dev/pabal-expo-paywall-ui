@@ -41,7 +41,7 @@ const paywallConfig = {
   }),
   planOptions: {
     ...getDefaultPaywallPlanOptions(),
-    displayOrder: ["annual", "monthly"],
+    displayOrder: ["annual", "monthly", "weekly"],
   },
   theme: {
     accentColor: "#5AC8B7",
@@ -66,6 +66,11 @@ const defaultSelectedPlanId = getDefaultSelectedPlanId(plans);
 `createPaywallPlans()` accepts RevenueCat-like packages and preserves the
 original object as `plan.rawPackage`, so the app can pass it back to RevenueCat
 during purchase.
+
+By default, the adapter recognizes RevenueCat package identifiers
+`$rc_weekly`, `$rc_monthly`, `$rc_annual`, and `$rc_lifetime`. Apps with custom
+package identifiers can pass `weeklyPackageIds`, `monthlyPackageIds`,
+`annualPackageIds`, and `lifetimePackageIds` through `planOptions`.
 
 ## Render
 

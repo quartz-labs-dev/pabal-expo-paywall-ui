@@ -6,8 +6,9 @@ profile subscription surfaces.
 The consuming app owns RevenueCat configuration, offering fetch, purchase,
 restore, analytics, navigation, legal links, permissions, and clipboard behavior.
 This package receives normalized data and app-owned callbacks only.
-Pass `freeTrial`, selected plans, and purchase/restore loading flags into
-`Paywall`; the package localizes the default CTA text from those props.
+Pass `freeTrial`, selected weekly/monthly/annual/lifetime plans, and
+purchase/restore loading flags into `Paywall`; the package localizes the
+default CTA text from those props.
 
 It does not import `react-native-purchases` or `react-native-purchases-ui`.
 

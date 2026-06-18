@@ -4,6 +4,7 @@ export type PlaygroundScenario =
   | "standard"
   | "annualOnly"
   | "monthlyOnly"
+  | "weeklyOnly"
   | "lifetimeOnly"
   | "longPrice";
 

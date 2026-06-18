@@ -186,6 +186,8 @@ const createOffering = ({
     availablePackages.find((pack) => pack.packageType === "LIFETIME") ?? null;
   const monthly =
     availablePackages.find((pack) => pack.packageType === "MONTHLY") ?? null;
+  const weekly =
+    availablePackages.find((pack) => pack.packageType === "WEEKLY") ?? null;
 
   return {
     identifier,
@@ -198,7 +200,7 @@ const createOffering = ({
     threeMonth: null,
     twoMonth: null,
     monthly,
-    weekly: null,
+    weekly,
     webCheckoutUrl: null,
   };
 };
@@ -232,6 +234,28 @@ const usdMonthlyPackage = createPackage({
     priceString: "$4.99",
     subscriptionPeriod: "P1M",
     title: "Monthly Pro",
+  }),
+});
+
+const usdWeeklyPackage = createPackage({
+  identifier: "$rc_weekly",
+  offeringIdentifier: usdOfferingIdentifier,
+  packageType: "WEEKLY",
+  product: createStoreProduct({
+    currencyCode: "USD",
+    description: "Short-term access with weekly billing.",
+    identifier: "pabal_pro_weekly",
+    offeringIdentifier: usdOfferingIdentifier,
+    price: 1.99,
+    pricePerMonth: 8.62,
+    pricePerMonthString: "$8.62",
+    pricePerWeek: 1.99,
+    pricePerWeekString: "$1.99",
+    pricePerYear: 103.48,
+    pricePerYearString: "$103.48",
+    priceString: "$1.99",
+    subscriptionPeriod: "P1W",
+    title: "Weekly Pro",
   }),
 });
 
@@ -371,6 +395,18 @@ const lifetimeOnlyOffering = createOffering({
   ],
 });
 
+const weeklyOnlyOffering = createOffering({
+  identifier: "weekly_only",
+  serverDescription: "Offering with only a weekly package.",
+  availablePackages: [
+    {
+      ...usdWeeklyPackage,
+      offeringIdentifier: "weekly_only",
+      presentedOfferingContext: createPresentedOfferingContext("weekly_only"),
+    },
+  ],
+});
+
 const longPriceOffering = createOffering({
   identifier: krwOfferingIdentifier,
   serverDescription: "Offering with long localized KRW price strings.",
@@ -387,6 +423,7 @@ export const mockRevenueCatOfferingsByScenario: Record<
   standard: createOfferings(standardOffering),
   annualOnly: createOfferings(annualOnlyOffering),
   monthlyOnly: createOfferings(monthlyOnlyOffering),
+  weeklyOnly: createOfferings(weeklyOnlyOffering),
   lifetimeOnly: createOfferings(lifetimeOnlyOffering),
   longPrice: createOfferings(longPriceOffering),
 };
