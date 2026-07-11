@@ -229,6 +229,20 @@ test("keeps profile benefit list and usage modes explicit", () => {
   assert.doesNotMatch(usageSource, /item\.icon/);
 });
 
+test("shows subscription management only when the app provides an action", () => {
+  const profileSource = readProfileSubscriptionSource();
+  const typesSource = readTypesSource();
+
+  assert.match(
+    profileSource,
+    /isSubscribed && Boolean\(onManageSubscription\)/,
+  );
+  assert.match(
+    typesSource,
+    /onManageSubscription\?: \(\) => Promise<void> \| void/,
+  );
+});
+
 test("keeps developer note icon app-provided only", () => {
   const source = readSupportMessageBubbleSource();
 

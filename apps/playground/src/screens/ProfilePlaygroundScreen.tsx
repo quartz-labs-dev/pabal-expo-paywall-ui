@@ -117,6 +117,7 @@ export const ProfilePlaygroundScreen = ({
 }: ProfilePlaygroundScreenProps) => {
   const insets = useSafeAreaInsets();
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const [isLifetime, setIsLifetime] = useState(false);
   const [showPromoCodeButton, setShowPromoCodeButton] = useState(true);
   const [showProfileIdentifiers, setShowProfileIdentifiers] = useState(false);
   const [benefitDisplayMode, setBenefitDisplayMode] =
@@ -125,7 +126,7 @@ export const ProfilePlaygroundScreen = ({
   const [isManagingSubscription, setIsManagingSubscription] = useState(false);
   const [isRestoringPurchases, setIsRestoringPurchases] = useState(false);
   const [isRedeemingPromoCode, setIsRedeemingPromoCode] = useState(false);
-  const subscribedPeriod = profilePeriods[scenario];
+  const subscribedPeriod = isLifetime ? "lifetime" : profilePeriods[scenario];
   const profileCopy = useMemo(() => {
     return {
       ...getDefaultProfileSubscriptionCopy(selectedLocale, {
@@ -205,6 +206,11 @@ export const ProfilePlaygroundScreen = ({
             onPress={() => setIsSubscribed((previousValue) => !previousValue)}
           />
           <ToggleButton
+            isSelected={isLifetime}
+            label="Lifetime"
+            onPress={() => setIsLifetime((previousValue) => !previousValue)}
+          />
+          <ToggleButton
             isSelected={showPromoCodeButton}
             label={showPromoCodeButton ? "Promo" : "No promo"}
             onPress={() =>
@@ -244,8 +250,10 @@ export const ProfilePlaygroundScreen = ({
           planLabel={planLabel}
           renewalLabel={renewalLabel}
           showPromoCodeButton={showPromoCodeButton}
-          onManageSubscription={() =>
-            runLoadingState(setIsManagingSubscription)
+          onManageSubscription={
+            subscribedPeriod === "lifetime"
+              ? undefined
+              : () => runLoadingState(setIsManagingSubscription)
           }
           onOpenDeveloperWebsite={() =>
             Alert.alert("Developer website callback")

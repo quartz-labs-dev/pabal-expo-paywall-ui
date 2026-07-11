@@ -278,7 +278,7 @@ export interface ProfileSubscriptionSectionProps {
   isRedeemingPromoCode?: boolean;
   onOpenDeveloperWebsite?: () => Promise<void> | void;
   onUpgrade?: () => Promise<void> | void;
-  onManageSubscription: () => Promise<void> | void;
+  onManageSubscription?: () => Promise<void> | void;
   onRestorePurchases: () => Promise<void> | void;
   onRedeemPromoCode?: () => Promise<void> | void;
 }

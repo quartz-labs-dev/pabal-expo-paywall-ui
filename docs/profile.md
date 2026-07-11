@@ -54,8 +54,10 @@ const profileSubscriptionConfig = {
 />;
 ```
 
-When `isSubscribed` is true, upgrade and restore actions are hidden.
-Subscription management remains visible.
+When `isSubscribed` is true, upgrade and restore actions are hidden. Subscription
+management is visible only when `onManageSubscription` is provided. Omit that
+callback for non-renewing access such as a lifetime purchase, where there is no
+subscription to manage.
 
 ## Benefit Display Modes
 

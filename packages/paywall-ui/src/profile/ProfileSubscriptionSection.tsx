@@ -54,7 +54,8 @@ export const ProfileSubscriptionSection = ({
     : copy.notSubscribedBadge;
   const shouldShowUpgrade =
     !isSubscribed && Boolean(onUpgrade) && Boolean(copy.upgradeButton);
-  const shouldShowManageSubscription = isSubscribed;
+  const shouldShowManageSubscription =
+    isSubscribed && Boolean(onManageSubscription);
   const shouldShowRestorePurchases = !isSubscribed;
   const shouldShowPromoCode =
     !isSubscribed &&
