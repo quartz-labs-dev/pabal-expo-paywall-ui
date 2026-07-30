@@ -189,6 +189,23 @@ test("keeps prelude tap hint color aligned with prelude copy color", () => {
   );
 });
 
+test("keeps custom pre-onboarding media behind interactive content", () => {
+  const frameSource = readSource("src/onboarding/PreOnboardingFrame.tsx");
+  const welcomeSource = readSource("src/onboarding/PreOnboardingWelcome.tsx");
+
+  for (const source of [frameSource, welcomeSource]) {
+    assert.match(
+      source,
+      /<View pointerEvents="none" style=\{styles\.background\}>/,
+    );
+    assert.match(source, /background: \{[\s\S]*zIndex: 0,/);
+  }
+
+  assert.match(frameSource, /bodyScroll: \{[\s\S]*zIndex: 1,/);
+  assert.match(frameSource, /footer: \{[\s\S]*zIndex: 1,/);
+  assert.match(welcomeSource, /content: \{[\s\S]*zIndex: 1,/);
+});
+
 test("keeps shared onboarding body transition disabled by default", () => {
   const stepFrameSource = readSource("src/onboarding/OnboardingStepFrame.tsx");
   const preludeFrameSource = readSource(

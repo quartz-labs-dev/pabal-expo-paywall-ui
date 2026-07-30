@@ -13,6 +13,11 @@ plan period or plan id.
 
 It does not import `react-native-purchases` or `react-native-purchases-ui`.
 
+Pre-onboarding `background` and video preview slots accept app-owned
+`ReactNode` renderers. Apps can pass an image, video component, or animated
+visual while keeping media dependencies and playback state outside this
+package.
+
 ## Install
 
 ```bash

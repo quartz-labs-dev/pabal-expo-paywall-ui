@@ -54,7 +54,11 @@ export const PreOnboardingFrame = ({
 
   return (
     <View style={[styles.root, { backgroundColor: theme.backgroundColor }]}>
-      {background ? <View style={styles.background}>{background}</View> : null}
+      {background ? (
+        <View pointerEvents="none" style={styles.background}>
+          {background}
+        </View>
+      ) : null}
       <ScrollView
         bounces={false}
         contentContainerStyle={[
@@ -117,9 +121,13 @@ const styles = StyleSheet.create({
   },
   background: {
     ...StyleSheet.absoluteFillObject,
+    overflow: "hidden",
+    zIndex: 0,
   },
   bodyScroll: {
     flex: 1,
+    position: "relative",
+    zIndex: 1,
   },
   bodyContent: {
     flexGrow: 1,
@@ -130,6 +138,8 @@ const styles = StyleSheet.create({
   footer: {
     paddingHorizontal: 20,
     paddingTop: 12,
+    position: "relative",
+    zIndex: 1,
   },
   footerContent: {
     gap: 12,

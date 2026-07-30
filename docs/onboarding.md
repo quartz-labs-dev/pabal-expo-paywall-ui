@@ -439,6 +439,48 @@ copy, the language card, the primary CTA, and the login prompt. Keep the actual
 background image/video, app logo, locale selector, phone mock, purchase/login
 actions, and routing in the consuming app.
 
+`background` is a `ReactNode` media slot, not a URL prop. The consuming app may
+pass an image, an Expo `VideoView`, or a custom animated component without
+adding that renderer as a package dependency. The package keeps the slot
+non-interactive and behind the title, selector, and footer. The passed media
+component owns its source, playback lifecycle, accessibility, and full-screen
+layout:
+
+```tsx
+const player = useVideoPlayer(landingVideoUrl, (videoPlayer) => {
+  videoPlayer.loop = true;
+  videoPlayer.muted = true;
+  videoPlayer.play();
+});
+
+<PreOnboardingFrame
+  background={
+    <VideoView
+      contentFit="cover"
+      nativeControls={false}
+      player={player}
+      style={StyleSheet.absoluteFillObject}
+    />
+  }
+  continueLabel={copy.continueButton}
+  onContinue={goNext}
+>
+  <PreOnboardingLandingContent {...landingContentProps} />
+</PreOnboardingFrame>;
+```
+
+The same slot accepts an app-owned grid or other visual:
+
+```tsx
+<PreOnboardingFrame
+  background={<AnimatedVenueGrid style={StyleSheet.absoluteFillObject} />}
+  continueLabel={copy.continueButton}
+  onContinue={goNext}
+>
+  <PreOnboardingLandingContent {...landingContentProps} />
+</PreOnboardingFrame>;
+```
+
 The playground passes `PreOnboardingLanguageSelector` into the
 `PreOnboardingPlaygroundScreen` `languageSelector` slot. That selector reuses the
 shared playground locale labels, flags, and unified locale list so `/pre-onboarding`

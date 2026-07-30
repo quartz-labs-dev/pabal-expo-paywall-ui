@@ -54,7 +54,7 @@ export const PreOnboardingWelcome = ({
       ]}
     >
       {background ? (
-        <View style={styles.background}>
+        <View pointerEvents="none" style={styles.background}>
           {background}
           <View
             pointerEvents="none"
@@ -149,6 +149,7 @@ const styles = StyleSheet.create({
   background: {
     ...StyleSheet.absoluteFillObject,
     overflow: "hidden",
+    zIndex: 0,
   },
   backgroundOverlay: {
     ...StyleSheet.absoluteFillObject,
@@ -158,6 +159,8 @@ const styles = StyleSheet.create({
     gap: 28,
     justifyContent: "space-between",
     paddingHorizontal: 24,
+    position: "relative",
+    zIndex: 1,
   },
   hero: {
     alignItems: "center",
