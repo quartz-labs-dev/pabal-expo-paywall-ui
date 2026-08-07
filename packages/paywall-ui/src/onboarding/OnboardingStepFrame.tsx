@@ -315,23 +315,37 @@ export const OnboardingStepFrame = ({
             )}
           </View>
         ) : null}
-        <ScrollView
-          bounces={isBodyScrollEnabled}
-          contentContainerStyle={[
-            styles.bodyContent,
-            isInputContentLayout && styles.bodyContentInput,
-            contentContainerStyle,
-            !showHeader && {
-              paddingTop: Math.max(insets.top, 12) + 22,
-            },
-          ]}
-          keyboardShouldPersistTaps="handled"
-          scrollEnabled={isBodyScrollEnabled}
-          showsVerticalScrollIndicator={false}
-          style={styles.bodyScroll}
-        >
-          {children}
-        </ScrollView>
+        {isBodyScrollEnabled ? (
+          <ScrollView
+            bounces
+            contentContainerStyle={[
+              styles.bodyContent,
+              isInputContentLayout && styles.bodyContentInput,
+              contentContainerStyle,
+              !showHeader && {
+                paddingTop: Math.max(insets.top, 12) + 22,
+              },
+            ]}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+            style={styles.bodyScroll}
+          >
+            {children}
+          </ScrollView>
+        ) : (
+          <View
+            style={[
+              styles.bodyStatic,
+              isInputContentLayout && styles.bodyContentInput,
+              contentContainerStyle,
+              !showHeader && {
+                paddingTop: Math.max(insets.top, 12) + 22,
+              },
+            ]}
+          >
+            {children}
+          </View>
+        )}
       </Animated.View>
     </>
   );
@@ -689,6 +703,12 @@ const styles = StyleSheet.create({
   bodyContentInput: {
     justifyContent: "flex-start",
     paddingTop: 72,
+  },
+  bodyStatic: {
+    flex: 1,
+    justifyContent: "center",
+    paddingHorizontal: 24,
+    paddingVertical: 22,
   },
   footer: {
     paddingHorizontal: 20,

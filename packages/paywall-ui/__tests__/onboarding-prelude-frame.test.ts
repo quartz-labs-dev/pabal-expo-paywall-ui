@@ -201,9 +201,40 @@ test("keeps custom pre-onboarding media behind interactive content", () => {
     assert.match(source, /background: \{[\s\S]*zIndex: 0,/);
   }
 
-  assert.match(frameSource, /bodyScroll: \{[\s\S]*zIndex: 1,/);
-  assert.match(frameSource, /footer: \{[\s\S]*zIndex: 1,/);
+  assert.match(
+    frameSource,
+    /<View collapsable=\{false\} style=\{styles\.foreground\}>[\s\S]*<View collapsable=\{false\} style=\{styles\.contentFrame\}>[\s\S]*<ScrollView[\s\S]*styles\.footer/,
+  );
+  assert.match(frameSource, /foreground: \{[\s\S]*zIndex: 1,/);
   assert.match(welcomeSource, /content: \{[\s\S]*zIndex: 1,/);
+});
+
+test("exercises the custom background slot in the playground", () => {
+  const appSource = readFileSync(
+    join(process.cwd(), "..", "..", "apps", "playground", "App.tsx"),
+    "utf8",
+  );
+  const backgroundSource = readFileSync(
+    join(
+      process.cwd(),
+      "..",
+      "..",
+      "apps",
+      "playground",
+      "src",
+      "components",
+      "onboarding",
+      "PlaygroundLandingBackground.tsx",
+    ),
+    "utf8",
+  );
+
+  assert.match(
+    appSource,
+    /landingBackground=\{<PlaygroundLandingBackground \/>\}/,
+  );
+  assert.match(backgroundSource, /Animated\.loop/);
+  assert.match(backgroundSource, /StyleSheet\.absoluteFillObject/);
 });
 
 test("keeps shared onboarding body transition disabled by default", () => {

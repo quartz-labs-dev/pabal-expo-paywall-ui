@@ -59,57 +59,61 @@ export const PreOnboardingFrame = ({
           {background}
         </View>
       ) : null}
-      <ScrollView
-        bounces={false}
-        contentContainerStyle={[
-          styles.bodyContent,
-          {
-            paddingTop: Math.max(insets.top, 12) + 22,
-          },
-          contentContainerStyle,
-        ]}
-        keyboardShouldPersistTaps="handled"
-        scrollEnabled={false}
-        showsVerticalScrollIndicator={false}
-        style={styles.bodyScroll}
-      >
-        {children}
-      </ScrollView>
-      <View
-        style={[
-          styles.footer,
-          { backgroundColor: footerBackgroundColor },
-          footerStyle,
-          {
-            paddingBottom: getOnboardingFooterBottomPadding(insets.bottom),
-          },
-        ]}
-      >
-        <Animated.View
-          pointerEvents={footerContentPointerEvents}
-          style={[styles.footerContent, footerContentStyle]}
-        >
-          {footerTopAccessory}
-          <Pressable
-            accessibilityRole="button"
-            onPress={onContinue}
+      <View collapsable={false} style={styles.foreground}>
+        <View collapsable={false} style={styles.contentFrame}>
+          <ScrollView
+            bounces={false}
+            contentContainerStyle={[
+              styles.bodyContent,
+              {
+                paddingTop: Math.max(insets.top, 12) + 22,
+              },
+              contentContainerStyle,
+            ]}
+            keyboardShouldPersistTaps="handled"
+            scrollEnabled={false}
+            showsVerticalScrollIndicator={false}
+            style={styles.bodyScroll}
+          >
+            {children}
+          </ScrollView>
+          <View
             style={[
-              styles.continueButton,
-              { backgroundColor: theme.continueButtonBackgroundColor },
-              continueButtonStyle,
+              styles.footer,
+              { backgroundColor: footerBackgroundColor },
+              footerStyle,
+              {
+                paddingBottom: getOnboardingFooterBottomPadding(insets.bottom),
+              },
             ]}
           >
-            <Text
-              style={[
-                styles.continueButtonText,
-                { color: theme.continueButtonTextColor },
-              ]}
+            <Animated.View
+              pointerEvents={footerContentPointerEvents}
+              style={[styles.footerContent, footerContentStyle]}
             >
-              {continueLabel}
-            </Text>
-          </Pressable>
-          {footerAccessory}
-        </Animated.View>
+              {footerTopAccessory}
+              <Pressable
+                accessibilityRole="button"
+                onPress={onContinue}
+                style={[
+                  styles.continueButton,
+                  { backgroundColor: theme.continueButtonBackgroundColor },
+                  continueButtonStyle,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.continueButtonText,
+                    { color: theme.continueButtonTextColor },
+                  ]}
+                >
+                  {continueLabel}
+                </Text>
+              </Pressable>
+              {footerAccessory}
+            </Animated.View>
+          </View>
+        </View>
       </View>
     </View>
   );
@@ -124,10 +128,16 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     zIndex: 0,
   },
-  bodyScroll: {
+  foreground: {
     flex: 1,
     position: "relative",
     zIndex: 1,
+  },
+  contentFrame: {
+    flex: 1,
+  },
+  bodyScroll: {
+    flex: 1,
   },
   bodyContent: {
     flexGrow: 1,
@@ -138,8 +148,6 @@ const styles = StyleSheet.create({
   footer: {
     paddingHorizontal: 20,
     paddingTop: 12,
-    position: "relative",
-    zIndex: 1,
   },
   footerContent: {
     gap: 12,
