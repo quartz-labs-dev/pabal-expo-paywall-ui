@@ -176,6 +176,20 @@ Keep the glow subtle (alpha ≤ 0.25 at the top). `heroFade` blends the bottom
 of the hero into `theme.backgroundColor` with an embedded alpha-ramp image,
 so full-bleed hero art no longer ends in a hard edge.
 
+Pick one: an opaque hero image **or** the ambient glow. An opaque full-bleed
+photo covers the top of the screen, which is where the glow is strongest, so
+the glow is hidden behind the hero and only appears part-way down its own ramp
+at the hero's bottom edge. The two then read as separate layers stacked on each
+other rather than one atmosphere, and `heroFade` can not hide that seam — it
+ramps the hero to `theme.backgroundColor`, not to whatever the glow is doing
+below it. A photo hero already carries its own color and depth, so it does not
+need the glow.
+
+Use the glow with heroes that let it through: `PaywallHeroBeforeAfter`,
+`PaywallHeroCarousel`, and any app hero drawn on a transparent background. The
+playground's `aurora` preset shows the photo-hero-without-glow pairing; `tide`
+and `drift` show the glow with transparent heroes.
+
 ### Pinned Hero Layout
 
 By default (`heroLayout: "scroll"`) the hero scrolls with the rest of the

@@ -11,16 +11,12 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { LocaleSelector } from "../components/LocaleSelector";
 import type { PlaygroundOnboardingPlatform } from "../components/onboarding-context";
-import {
-  packageScenarioDescriptions,
-  packageScenarioLabels,
-} from "../fixtures/paywall-plans";
+import { packageScenarioLabels } from "../fixtures/paywall-plans";
 import { getPlaygroundTrialPreviewRows } from "../fixtures/paywall-trial-policy";
 import type {
   PlaygroundFreeTrialMode,
   PlaygroundPackageScenario,
   PlaygroundPaywallAnimation,
-  PlaygroundPaywallDesign,
   PlaygroundPaywallProduct,
   PlaygroundPaywallFlow,
   PlaygroundLocale,
@@ -32,7 +28,6 @@ interface HomeScreenProps {
   selectedLocale: PlaygroundLocale;
   paywallFlow: PlaygroundPaywallFlow;
   paywallAnimation: PlaygroundPaywallAnimation;
-  paywallDesign: PlaygroundPaywallDesign;
   paywallProduct: PlaygroundPaywallProduct;
   onboardingPlatform: PlaygroundOnboardingPlatform;
   freeTrialMode: PlaygroundFreeTrialMode;
@@ -47,7 +42,6 @@ interface HomeScreenProps {
   onChangePaywallAnimation: (
     paywallAnimation: PlaygroundPaywallAnimation,
   ) => void;
-  onChangePaywallDesign: (paywallDesign: PlaygroundPaywallDesign) => void;
   onChangePaywallProduct: (paywallProduct: PlaygroundPaywallProduct) => void;
   onChangeOnboardingPlatform: (
     onboardingPlatform: PlaygroundOnboardingPlatform,
@@ -76,11 +70,6 @@ const paywallAnimationLabels: Record<PlaygroundPaywallAnimation, string> = {
   default: "Move",
   opacity: "Fade",
   none: "No animation",
-};
-const paywallDesigns: PlaygroundPaywallDesign[] = ["refresh", "legacy"];
-const paywallDesignLabels: Record<PlaygroundPaywallDesign, string> = {
-  refresh: "Refresh",
-  legacy: "Legacy",
 };
 const paywallProducts: PlaygroundPaywallProduct[] = [
   "aurora",
@@ -119,7 +108,6 @@ export const HomeScreen = ({
   selectedLocale,
   paywallFlow,
   paywallAnimation,
-  paywallDesign,
   paywallProduct,
   onboardingPlatform,
   freeTrialMode,
@@ -132,7 +120,6 @@ export const HomeScreen = ({
   onTogglePreOnboardingLoginPrompt,
   onChangePaywallFlow,
   onChangePaywallAnimation,
-  onChangePaywallDesign,
   onChangePaywallProduct,
   onChangeOnboardingPlatform,
   onChangeFreeTrialMode,
@@ -230,13 +217,6 @@ export const HomeScreen = ({
           selectedOption={paywallAnimation}
           labels={paywallAnimationLabels}
           onChangeOption={onChangePaywallAnimation}
-        />
-        <SegmentedSettings
-          title="Design"
-          options={paywallDesigns}
-          selectedOption={paywallDesign}
-          labels={paywallDesignLabels}
-          onChangeOption={onChangePaywallDesign}
         />
         <SegmentedSettings
           title="Product"
@@ -395,28 +375,13 @@ const PackageScenarioSettings = ({
                 isSelected && styles.scenarioCardSelected,
               ]}
             >
-              <View style={styles.scenarioHeader}>
-                <Text
-                  style={[
-                    styles.scenarioTitle,
-                    isSelected && styles.scenarioTitleSelected,
-                  ]}
-                >
-                  {packageScenarioLabels[item]}
-                </Text>
-                <View
-                  style={[styles.radio, isSelected && styles.radioSelected]}
-                >
-                  {isSelected && <View style={styles.radioDot} />}
-                </View>
-              </View>
               <Text
                 style={[
-                  styles.scenarioDescription,
-                  isSelected && styles.scenarioDescriptionSelected,
+                  styles.scenarioTitle,
+                  isSelected && styles.scenarioTitleSelected,
                 ]}
               >
-                {packageScenarioDescriptions[item]}
+                {packageScenarioLabels[item]}
               </Text>
             </Pressable>
           );
@@ -882,62 +847,30 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   scenarioCard: {
+    alignItems: "center",
     backgroundColor: "#151D25",
     borderColor: "#2B3845",
     borderRadius: 8,
     borderWidth: 1,
     flexBasis: "47%",
     flexGrow: 1,
-    minHeight: 86,
+    justifyContent: "center",
+    minHeight: 54,
     padding: 12,
-    gap: 8,
   },
   scenarioCardSelected: {
     backgroundColor: "#102A2A",
     borderColor: "#5AC8B7",
-  },
-  scenarioHeader: {
-    alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    gap: 12,
   },
   scenarioTitle: {
     color: "#F5F7FA",
     flexShrink: 1,
     fontSize: 14,
     fontWeight: "600",
+    textAlign: "center",
   },
   scenarioTitleSelected: {
     color: "#5AC8B7",
-  },
-  scenarioDescription: {
-    color: "#7F8B96",
-    flexShrink: 1,
-    fontSize: 12,
-    fontWeight: "400",
-    lineHeight: 16,
-  },
-  scenarioDescriptionSelected: {
-    color: "#B7E8DF",
-  },
-  radio: {
-    alignItems: "center",
-    borderColor: "#7F8B96",
-    borderRadius: 10,
-    borderWidth: 2,
-    height: 20,
-    justifyContent: "center",
-    width: 20,
-  },
-  radioSelected: {
-    borderColor: "#5AC8B7",
-  },
-  radioDot: {
-    backgroundColor: "#5AC8B7",
-    borderRadius: 5,
-    height: 8,
-    width: 8,
   },
   flowOption: {
     alignItems: "center",

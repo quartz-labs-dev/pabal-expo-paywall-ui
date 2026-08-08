@@ -21,7 +21,6 @@ import { getPlaygroundFreeTrialConfig } from "../fixtures/paywall-trial-policy";
 import { playgroundBenefits } from "../fixtures/playground-benefits";
 import type {
   PlaygroundPaywallAnimation,
-  PlaygroundPaywallDesign,
   PlaygroundPaywallProduct,
   PlaygroundFreeTrialMode,
   PlaygroundPaywallFlow,
@@ -191,13 +190,20 @@ interface PlaygroundProductPreset {
   heroHeightRatio?: PaywallConfig["heroHeightRatio"];
   heroFade: boolean;
   heroLayout?: PaywallConfig["heroLayout"];
+  /**
+   * Opt out of the ambient glow. Opaque photo heroes cover the glow's
+   * strongest part and then reveal it mid-ramp at their bottom edge, so the
+   * two read as separate layers instead of one atmosphere.
+   */
+  ambientGlow?: boolean;
   accentColor: string;
   theme: PaywallConfig["theme"];
   featureComparison?: PaywallConfig["featureComparison"];
 }
 
 // Five fake products covering the hero and comparison variants:
-// - aurora: opaque photo hero (glow only peeks out below it), text cells
+// - aurora: opaque photo hero, no ambient glow (see docs/paywall.md), text
+//   cells
 // - tide: transparent floating-widget hero (glow fully visible), green checks
 // - ember: before/after stats hero (Opal style), collapsed comparison table
 // - drift: auto-advancing feature carousel hero, green checks
@@ -214,6 +220,7 @@ const productPresets: Record<PlaygroundPaywallProduct, PlaygroundProductPreset> 
         <PhotoHero uri="https://images.unsplash.com/photo-1531366936337-7c912a4589a7?auto=format&fit=crop&w=1200&q=80" />
       ),
       heroFade: true,
+      ambientGlow: false,
       accentColor: "#5AC8B7",
       theme: {
         accentColor: "#5AC8B7",
@@ -368,42 +375,20 @@ interface PlaygroundPresentation {
 
 const getPresentation = (
   product: PlaygroundPaywallProduct,
-  design: PlaygroundPaywallDesign,
 ): PlaygroundPresentation => {
   const preset = productPresets[product];
   const featureComparison =
     preset.featureComparison ?? playgroundPaywallConfig.featureComparison;
-
-  if (design === "legacy") {
-    return {
-      hero: preset.hero,
-      heroHeightRatio: preset.heroHeightRatio,
-      heroFade: false,
-      heroLayout: preset.heroLayout,
-      backgroundOverlay: undefined,
-      featureComparison,
-      valueStep: {
-        title: "Get the full Pabal experience",
-        subtitle: "See the value first, then choose a plan on the next step.",
-      },
-      theme: {
-        ...preset.theme,
-        cardBorderRadius: 8,
-        buttonBorderRadius: 8,
-        titleFontSize: 26,
-      },
-      copyTitleSegments: undefined,
-    };
-  }
 
   return {
     hero: preset.hero,
     heroHeightRatio: preset.heroHeightRatio,
     heroFade: preset.heroFade,
     heroLayout: preset.heroLayout,
-    backgroundOverlay: (
-      <PlaygroundAmbientGlow accentColor={preset.accentColor} />
-    ),
+    backgroundOverlay:
+      preset.ambientGlow === false ? undefined : (
+        <PlaygroundAmbientGlow accentColor={preset.accentColor} />
+      ),
     featureComparison,
     valueStep: {
       title: "Get the full Pabal experience",
@@ -424,7 +409,6 @@ interface PaywallPlaygroundScreenProps {
   selectedLocale: PlaygroundLocale;
   paywallFlow: PlaygroundPaywallFlow;
   paywallAnimation: PlaygroundPaywallAnimation;
-  paywallDesign: PlaygroundPaywallDesign;
   paywallProduct: PlaygroundPaywallProduct;
   freeTrialMode: PlaygroundFreeTrialMode;
   isTrialEligible: boolean;
@@ -436,7 +420,6 @@ export const PaywallPlaygroundScreen = ({
   selectedLocale,
   paywallFlow,
   paywallAnimation,
-  paywallDesign,
   paywallProduct,
   freeTrialMode,
   isTrialEligible,
@@ -462,8 +445,8 @@ export const PaywallPlaygroundScreen = ({
   }, [scenario, selectedLocale]);
 
   const designPresentation = useMemo(
-    () => getPresentation(paywallProduct, paywallDesign),
-    [paywallDesign, paywallProduct],
+    () => getPresentation(paywallProduct),
+    [paywallProduct],
   );
 
   const copy = useMemo(() => {

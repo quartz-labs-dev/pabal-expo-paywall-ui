@@ -23,8 +23,6 @@ export type PlaygroundRoute =
 
 export type PlaygroundPaywallFlow = "twoStep" | "singleStep";
 
-export type PlaygroundPaywallDesign = "refresh" | "legacy";
-
 export type PlaygroundPaywallProduct =
   | "aurora"
   | "tide"
