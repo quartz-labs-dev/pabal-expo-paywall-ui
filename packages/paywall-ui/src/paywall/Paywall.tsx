@@ -34,6 +34,7 @@ import {
   DEFAULT_HERO_FADE_HEIGHT_RATIO,
   HERO_FADE_IMAGE_URI,
 } from "../shared/hero-fade";
+import { getPinnedContentPaddingTop } from "./pinned-hero-layout";
 import { normalizeTitleSegments } from "./title-segments";
 import { TrialNotice } from "./TrialNotice";
 import { resolveFreeTrialConfig } from "./free-trial-config";
@@ -104,6 +105,7 @@ const FIXED_FOOTER_TOP_PADDING = 12;
 const FIXED_FOOTER_MIN_BOTTOM_PADDING = 12;
 const FIXED_FOOTER_SCROLL_GAP = 24;
 const DEFAULT_HERO_HEIGHT_RATIO = 0.23;
+const PINNED_HERO_SHEET_TOP_PADDING = 20;
 const NAV_ICON_BACKGROUND_COLOR = "rgba(0, 0, 0, 0.22)";
 const NAV_ICON_COLOR = "#FFFFFF";
 const PAYWALL_HORIZONTAL_PADDING = 12;
@@ -114,6 +116,7 @@ export const Paywall = <TPackage,>({
   hero,
   heroHeightRatio = DEFAULT_HERO_HEIGHT_RATIO,
   heroFade = false,
+  heroLayout = "scroll",
   backgroundOverlay,
   stepMode = "twoStep",
   animationMode = "default",
@@ -186,7 +189,9 @@ export const Paywall = <TPackage,>({
         })
       : defaultPurchaseButtonLabel;
   const isProcessing = isPurchasing || isRestoring;
+  const isHeroPinned = heroLayout === "pinned";
   const heroHeight = Math.round(windowHeight * heroHeightRatio);
+  const pinnedContentPaddingTop = getPinnedContentPaddingTop(heroHeight);
   const [measuredFooterHeight, setMeasuredFooterHeight] = useState(0);
   const footerBottomPadding =
     Math.max(insets.bottom, FIXED_FOOTER_MIN_BOTTOM_PADDING) + 8;
@@ -297,11 +302,38 @@ export const Paywall = <TPackage,>({
     transitionToStep("value");
   };
 
+  const heroLayer = (
+    <>
+      {hero}
+      {heroFade && (
+        <Image
+          resizeMode="stretch"
+          source={{ uri: HERO_FADE_IMAGE_URI }}
+          style={[
+            styles.heroFade,
+            {
+              height: Math.round(
+                heroHeight * DEFAULT_HERO_FADE_HEIGHT_RATIO
+              ),
+              tintColor: theme.backgroundColor,
+            },
+          ]}
+        />
+      )}
+    </>
+  );
+
   return (
     <View style={[styles.root, { backgroundColor: theme.backgroundColor }]}>
       {backgroundOverlay && (
         <View pointerEvents="none" style={styles.backgroundOverlay}>
           {backgroundOverlay}
+        </View>
+      )}
+
+      {isHeroPinned && (
+        <View style={[styles.pinnedHero, { height: heroHeight }]}>
+          {heroLayer}
         </View>
       )}
 
@@ -356,32 +388,26 @@ export const Paywall = <TPackage,>({
           {
             paddingBottom: fixedFooterHeight + FIXED_FOOTER_SCROLL_GAP,
           },
+          isHeroPinned && { paddingTop: pinnedContentPaddingTop },
         ]}
         showsVerticalScrollIndicator={false}
       >
-        <View style={[styles.hero, { height: heroHeight }]}>
-          {hero}
-          {heroFade && (
-            <Image
-              resizeMode="stretch"
-              source={{ uri: HERO_FADE_IMAGE_URI }}
-              style={[
-                styles.heroFade,
-                {
-                  height: Math.round(
-                    heroHeight * DEFAULT_HERO_FADE_HEIGHT_RATIO
-                  ),
-                  tintColor: theme.backgroundColor,
-                },
-              ]}
-            />
-          )}
-        </View>
+        {!isHeroPinned && (
+          <View style={[styles.hero, { height: heroHeight }]}>
+            {heroLayer}
+          </View>
+        )}
 
         <Animated.View
           style={[
             styles.body,
             isValueStep && styles.valueBody,
+            isHeroPinned && styles.pinnedBody,
+            isHeroPinned && {
+              backgroundColor: theme.backgroundColor,
+              borderTopLeftRadius: theme.cardBorderRadius,
+              borderTopRightRadius: theme.cardBorderRadius,
+            },
             animatedMovementStyle,
             animatedOpacityStyle,
           ]}
@@ -670,9 +696,21 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     width: "100%",
   },
+  pinnedHero: {
+    left: 0,
+    overflow: "hidden",
+    position: "absolute",
+    right: 0,
+    top: 0,
+    width: "100%",
+  },
   body: {
     gap: 24,
     paddingHorizontal: PAYWALL_HORIZONTAL_PADDING,
+  },
+  pinnedBody: {
+    borderCurve: "continuous",
+    paddingTop: PINNED_HERO_SHEET_TOP_PADDING,
   },
   customContent: {
     width: "100%",

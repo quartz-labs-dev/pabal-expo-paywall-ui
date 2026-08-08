@@ -110,17 +110,22 @@ const carouselIconStyle = { fontSize: 22, lineHeight: 28 } as const;
 
 interface PlaygroundProductPreset {
   hero: PaywallConfig["hero"];
+  heroHeightRatio?: PaywallConfig["heroHeightRatio"];
   heroFade: boolean;
+  heroLayout?: PaywallConfig["heroLayout"];
   accentColor: string;
   theme: PaywallConfig["theme"];
   featureComparison?: PaywallConfig["featureComparison"];
 }
 
-// Four fake products covering the hero and comparison variants:
+// Five fake products covering the hero and comparison variants:
 // - aurora: opaque photo hero (glow only peeks out below it), text cells
 // - tide: transparent floating-widget hero (glow fully visible), green checks
 // - ember: before/after stats hero (Opal style), text cells
 // - drift: auto-advancing feature carousel hero, green checks
+// - summit: tall opaque photo hero (heroHeightRatio 0.42, ~2x the 0.23
+//   default) with heroFade and heroLayout "pinned" — the hero stays fixed
+//   behind the screen while the content sheet rises and scrolls over it
 const productPresets: Record<PlaygroundPaywallProduct, PlaygroundProductPreset> =
   {
     aurora: {
@@ -217,6 +222,27 @@ const productPresets: Record<PlaygroundPaywallProduct, PlaygroundProductPreset> 
         surfaceColor: "#122031",
       },
     },
+    summit: {
+      hero: (
+        <PhotoHero uri="https://images.unsplash.com/photo-1522163182402-834f871fd851?auto=format&fit=crop&w=1200&q=80" />
+      ),
+      heroHeightRatio: 0.42,
+      heroFade: true,
+      heroLayout: "pinned",
+      accentColor: "#D6D9DE",
+      theme: {
+        accentColor: "#D6D9DE",
+        accentTextColor: "#15171A",
+        backgroundColor: "#0B0C0E",
+        borderColor: "#33363B",
+        mutedTextColor: "#8B8F96",
+        primaryTextColor: "#F5F6F7",
+        secondaryTextColor: "#C6C9CE",
+        selectedBorderColor: "#D6D9DE",
+        selectedSurfaceColor: "#232527",
+        surfaceColor: "#191A1C",
+      },
+    },
   };
 
 const playgroundPaywallConfig = {
@@ -305,7 +331,9 @@ const playgroundPaywallConfig = {
 
 interface PlaygroundPresentation {
   hero: PaywallConfig["hero"];
+  heroHeightRatio?: PaywallConfig["heroHeightRatio"];
   heroFade: boolean;
+  heroLayout?: PaywallConfig["heroLayout"];
   backgroundOverlay: PaywallConfig["backgroundOverlay"];
   valueStep: PaywallConfig["valueStep"];
   theme: PaywallConfig["theme"];
@@ -324,7 +352,9 @@ const getPresentation = (
   if (design === "legacy") {
     return {
       hero: preset.hero,
+      heroHeightRatio: preset.heroHeightRatio,
       heroFade: false,
+      heroLayout: preset.heroLayout,
       backgroundOverlay: undefined,
       featureComparison,
       valueStep: {
@@ -343,7 +373,9 @@ const getPresentation = (
 
   return {
     hero: preset.hero,
+    heroHeightRatio: preset.heroHeightRatio,
     heroFade: preset.heroFade,
+    heroLayout: preset.heroLayout,
     backgroundOverlay: (
       <PlaygroundAmbientGlow accentColor={preset.accentColor} />
     ),
@@ -440,6 +472,8 @@ export const PaywallPlaygroundScreen = ({
       <Paywall
         {...playgroundPaywallConfig}
         hero={designPresentation.hero}
+        heroHeightRatio={designPresentation.heroHeightRatio}
+        heroLayout={designPresentation.heroLayout}
         backgroundOverlay={designPresentation.backgroundOverlay}
         featureComparison={designPresentation.featureComparison}
         heroFade={designPresentation.heroFade}

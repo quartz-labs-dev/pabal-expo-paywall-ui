@@ -143,6 +143,9 @@ The playground demonstrates every refresh feature (`apps/playground`):
     comparison cells.
   - `Drift` — blue accent, package `PaywallHeroCarousel` hero (swipe it),
     circled-check comparison with hidden excluded cells.
+  - `Summit` — monochrome accent, tall opaque photo hero
+    (`heroHeightRatio: 0.42`, ~2x the 0.23 default) with `heroFade`.
+    Proves both are per-`Paywall`-instance, not global package settings.
 - The glow color is app-injected (`PlaygroundAmbientGlow` takes
   `accentColor`), mirroring how real apps pass their own gradient into
   `backgroundOverlay`.

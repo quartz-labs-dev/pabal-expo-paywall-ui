@@ -118,6 +118,7 @@ are running so the CTA shows the localized processing label and spinner.
 | Before/after stats hero | `hero={<PaywallHeroBeforeAfter ... />}` |
 | Feature carousel hero | `hero={<PaywallHeroCarousel ... />}` |
 | Fade hero media into the background | `heroFade` |
+| Fixed hero background with content rising over it as a sheet | `heroLayout: "pinned"` |
 | Ambient background layer (gradient, glow) | `backgroundOverlay` |
 | Accent-colored keywords in the title | `copy.titleSegments`, `valueStep.titleSegments` |
 | Card and CTA shape language | `theme.cardBorderRadius`, `theme.buttonBorderRadius` |
@@ -173,6 +174,28 @@ const paywallConfig = {
 Keep the glow subtle (alpha ≤ 0.25 at the top). `heroFade` blends the bottom
 of the hero into `theme.backgroundColor` with an embedded alpha-ramp image,
 so full-bleed hero art no longer ends in a hard edge.
+
+### Pinned Hero Layout
+
+By default (`heroLayout: "scroll"`) the hero scrolls with the rest of the
+content, as one continuous page. Set `heroLayout: "pinned"` to keep the
+hero fixed behind the screen instead: the content becomes a rounded-top
+sheet (using `theme.cardBorderRadius`) that starts slightly overlapping
+into the hero and rises to fully cover it as the user scrolls. The hero
+image itself never moves.
+
+```tsx
+const paywallConfig = {
+  // ...
+  hero: <TallPhotoHero />,
+  heroHeightRatio: 0.42, // a taller hero reads better pinned
+  heroFade: true,
+  heroLayout: "pinned",
+} satisfies Partial<PaywallConfig>;
+```
+
+Works with both step modes and both hero-scroll steps (value/purchase);
+close/back buttons stay fixed above the hero either way, unchanged.
 
 Title emphasis uses segments; `title` stays as the plain fallback string:
 

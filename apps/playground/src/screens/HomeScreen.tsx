@@ -87,12 +87,14 @@ const paywallProducts: PlaygroundPaywallProduct[] = [
   "tide",
   "ember",
   "drift",
+  "summit",
 ];
 const paywallProductLabels: Record<PlaygroundPaywallProduct, string> = {
   aurora: "Aurora (photo)",
   tide: "Tide (floating)",
   ember: "Ember (before/after)",
   drift: "Drift (carousel)",
+  summit: "Summit (tall hero)",
 };
 const freeTrialModes: PlaygroundFreeTrialMode[] = [
   "sevenDays",

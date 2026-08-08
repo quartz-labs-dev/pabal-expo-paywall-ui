@@ -25,7 +25,12 @@ export type PlaygroundPaywallFlow = "twoStep" | "singleStep";
 
 export type PlaygroundPaywallDesign = "refresh" | "legacy";
 
-export type PlaygroundPaywallProduct = "aurora" | "tide" | "ember" | "drift";
+export type PlaygroundPaywallProduct =
+  | "aurora"
+  | "tide"
+  | "ember"
+  | "drift"
+  | "summit";
 
 export type PlaygroundPaywallAnimation = "default" | "opacity" | "none";
 

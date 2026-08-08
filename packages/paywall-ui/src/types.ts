@@ -145,6 +145,15 @@ export interface PaywallFeatureComparison {
 
 export type PaywallStepMode = "twoStep" | "singleStep";
 
+/**
+ * `scroll` (default): the hero scrolls with the rest of the content, as
+ * one continuous page.
+ * `pinned`: the hero stays fixed behind the screen and the content
+ * becomes a rounded-top sheet that rises up and scrolls over it, so the
+ * hero image never moves.
+ */
+export type PaywallHeroLayout = "scroll" | "pinned";
+
 export type PaywallAnimationMode = "default" | "opacity" | "none";
 
 export interface PaywallValueStep {
@@ -188,6 +197,7 @@ export interface PaywallProps<TPackage = unknown> {
   hero: ReactNode;
   heroHeightRatio?: number;
   heroFade?: boolean;
+  heroLayout?: PaywallHeroLayout;
   backgroundOverlay?: ReactNode;
   stepMode?: PaywallStepMode;
   animationMode?: PaywallAnimationMode;
@@ -217,6 +227,7 @@ export interface PaywallConfig {
   hero: ReactNode;
   heroHeightRatio?: number;
   heroFade?: boolean;
+  heroLayout?: PaywallHeroLayout;
   backgroundOverlay?: ReactNode;
   stepMode?: PaywallStepMode;
   animationMode?: PaywallAnimationMode;

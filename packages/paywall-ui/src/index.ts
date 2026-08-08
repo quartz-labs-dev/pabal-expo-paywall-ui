@@ -189,6 +189,7 @@ export type {
   PaywallFeatureComparisonIncludedStyle,
   PaywallFeatureComparisonRow,
   PaywallFreeTrialConfig,
+  PaywallHeroLayout,
   PaywallPlan,
   PaywallPlanFreeTrialConfig,
   PaywallPlanPeriod,
