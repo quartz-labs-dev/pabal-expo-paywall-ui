@@ -16,6 +16,7 @@
     "src/shared/theme.ts",
     "src/paywall/comparison-cells.ts",
     "src/paywall/create-paywall-plans.ts",
+    "src/paywall/feature-comparison-collapse.ts",
     "src/paywall/hero-carousel-math.ts",
     "src/paywall/pinned-hero-layout.ts",
     "src/paywall/title-segments.ts",

@@ -9,6 +9,7 @@ import {
   getDefaultPaywallPlanOptions,
   getDefaultSelectedPlanId,
   type PaywallConfig,
+  type PaywallFeatureComparisonRow,
   type PaywallPlan,
   type PurchasesPackageLike,
 } from "pabal-expo-paywall-ui";
@@ -104,6 +105,83 @@ const checkFeatureComparison = {
   ],
 } satisfies PaywallConfig["featureComparison"];
 
+// The nine-row default table, shared by every product that does not bring its
+// own comparison. Extracted so the summit preset can reuse the same rows with
+// a collapse toggle on top.
+const defaultComparisonRows = [
+  {
+    id: "home-screen-widget",
+    label: "Home Screen Widget",
+    labelContent: <FeatureTitle title="Home Screen Widget" />,
+    free: { kind: "excluded", accessibilityLabel: "Not included" },
+    paid: { kind: "included", accessibilityLabel: "Included" },
+    onPress: () => Alert.alert("Home Screen Widget details"),
+  },
+  {
+    id: "custom-locations",
+    label: "Custom Location Settings",
+    free: { kind: "text", text: "3" },
+    paid: { kind: "text", text: "\u221e" },
+  },
+  {
+    id: "custom-colors",
+    label: "Custom Color Palette Settings",
+    free: { kind: "excluded", accessibilityLabel: "Not included" },
+    paid: { kind: "included", accessibilityLabel: "Included" },
+    onPress: () => Alert.alert("Color palette details"),
+  },
+  {
+    id: "forecast-alerts",
+    label: "Forecast Alerts",
+    free: { kind: "text", text: "1" },
+    paid: { kind: "text", text: "\u221e" },
+  },
+  {
+    id: "saved-observation-notes",
+    label: "Saved Observation Notes",
+    free: { kind: "text", text: "5" },
+    paid: { kind: "text", text: "\u221e" },
+  },
+  {
+    id: "advanced-maps",
+    label: "Advanced Map Layers",
+    free: { kind: "text", text: "0" },
+    paid: { kind: "text", text: "6" },
+  },
+  {
+    id: "historical-activity-timeline",
+    label: "Historical Activity Timeline",
+    free: { kind: "text", text: "24h" },
+    paid: { kind: "text", text: "90d" },
+  },
+  {
+    id: "multi-day-trip-planner",
+    label: "Multi-Day Trip Planner",
+    free: { kind: "excluded", accessibilityLabel: "Not included" },
+    paid: { kind: "included", accessibilityLabel: "Included" },
+  },
+  {
+    id: "priority-data-refresh",
+    label: "Priority Data Refresh",
+    free: { kind: "text", text: "15m" },
+    paid: { kind: "text", text: "5m" },
+  },
+] satisfies PaywallFeatureComparisonRow[];
+
+// Collapsed comparison variant: the same nine rows, but only the first four
+// are shown until the toggle expands the rest. The labels carry the remaining
+// count because the package leaves them to the app.
+const collapsedFeatureComparison = {
+  freeColumnTitle: "Free",
+  paidColumnTitle: "Pro",
+  collapse: {
+    visibleRowCount: 4,
+    expandLabel: "Show 5 more features",
+    collapseLabel: "Show fewer features",
+  },
+  rows: defaultComparisonRows,
+} satisfies PaywallConfig["featureComparison"];
+
 // Defined before productPresets (which is evaluated at module load, ahead
 // of the StyleSheet at the bottom of this file).
 const carouselIconStyle = { fontSize: 22, lineHeight: 28 } as const;
@@ -121,11 +199,14 @@ interface PlaygroundProductPreset {
 // Five fake products covering the hero and comparison variants:
 // - aurora: opaque photo hero (glow only peeks out below it), text cells
 // - tide: transparent floating-widget hero (glow fully visible), green checks
-// - ember: before/after stats hero (Opal style), text cells
+// - ember: before/after stats hero (Opal style), collapsed comparison table
 // - drift: auto-advancing feature carousel hero, green checks
 // - summit: tall opaque photo hero (heroHeightRatio 0.42, ~2x the 0.23
 //   default) with heroFade and heroLayout "pinned" — the hero stays fixed
-//   behind the screen while the content sheet rises and scrolls over it
+//   behind the screen while the content sheet rises and scrolls over it, plus
+//   a collapsed comparison table
+// ember and summit share the collapsed table (4 of 9 rows visible); aurora
+// keeps the same rows uncollapsed as the comparison case.
 const productPresets: Record<PlaygroundPaywallProduct, PlaygroundProductPreset> =
   {
     aurora: {
@@ -170,6 +251,7 @@ const productPresets: Record<PlaygroundPaywallProduct, PlaygroundProductPreset> 
       ),
       heroFade: false,
       accentColor: "#FF9D5C",
+      featureComparison: collapsedFeatureComparison,
       theme: {
         accentColor: "#FF9D5C",
         accentTextColor: "#2A1404",
@@ -230,6 +312,7 @@ const productPresets: Record<PlaygroundPaywallProduct, PlaygroundProductPreset> 
       heroFade: true,
       heroLayout: "pinned",
       accentColor: "#D6D9DE",
+      featureComparison: collapsedFeatureComparison,
       theme: {
         accentColor: "#D6D9DE",
         accentTextColor: "#15171A",
@@ -250,65 +333,7 @@ const playgroundPaywallConfig = {
   featureComparison: {
     freeColumnTitle: "Free",
     paidColumnTitle: "Pro",
-    rows: [
-      {
-        id: "home-screen-widget",
-        label: "Home Screen Widget",
-        labelContent: <FeatureTitle title="Home Screen Widget" />,
-        free: { kind: "excluded", accessibilityLabel: "Not included" },
-        paid: { kind: "included", accessibilityLabel: "Included" },
-        onPress: () => Alert.alert("Home Screen Widget details"),
-      },
-      {
-        id: "custom-locations",
-        label: "Custom Location Settings",
-        free: { kind: "text", text: "3" },
-        paid: { kind: "text", text: "\u221e" },
-      },
-      {
-        id: "custom-colors",
-        label: "Custom Color Palette Settings",
-        free: { kind: "excluded", accessibilityLabel: "Not included" },
-        paid: { kind: "included", accessibilityLabel: "Included" },
-        onPress: () => Alert.alert("Color palette details"),
-      },
-      {
-        id: "forecast-alerts",
-        label: "Forecast Alerts",
-        free: { kind: "text", text: "1" },
-        paid: { kind: "text", text: "\u221e" },
-      },
-      {
-        id: "saved-observation-notes",
-        label: "Saved Observation Notes",
-        free: { kind: "text", text: "5" },
-        paid: { kind: "text", text: "\u221e" },
-      },
-      {
-        id: "advanced-maps",
-        label: "Advanced Map Layers",
-        free: { kind: "text", text: "0" },
-        paid: { kind: "text", text: "6" },
-      },
-      {
-        id: "historical-activity-timeline",
-        label: "Historical Activity Timeline",
-        free: { kind: "text", text: "24h" },
-        paid: { kind: "text", text: "90d" },
-      },
-      {
-        id: "multi-day-trip-planner",
-        label: "Multi-Day Trip Planner",
-        free: { kind: "excluded", accessibilityLabel: "Not included" },
-        paid: { kind: "included", accessibilityLabel: "Included" },
-      },
-      {
-        id: "priority-data-refresh",
-        label: "Priority Data Refresh",
-        free: { kind: "text", text: "15m" },
-        paid: { kind: "text", text: "5m" },
-      },
-    ],
+    rows: defaultComparisonRows,
   },
   reviewSection: {
     reviews: [

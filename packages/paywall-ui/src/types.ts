@@ -117,11 +117,31 @@ export type PaywallFeatureComparisonIncludedStyle = "check" | "circledCheck";
 
 export type PaywallFeatureComparisonExcludedStyle = "dash" | "hidden";
 
+export interface PaywallFeatureComparisonCollapse {
+  /**
+   * How many rows stay visible before the user expands the table. Values at
+   * or above `rows.length` disable collapsing.
+   */
+  visibleRowCount: number;
+  /**
+   * Toggle labels. App-provided and app-localized, the same contract as
+   * `freeColumnTitle` and `paidColumnTitle`, so apps can fold a remaining
+   * count into the label.
+   */
+  expandLabel: string;
+  collapseLabel: string;
+}
+
 export interface PaywallFeatureComparison {
   title?: string;
   featureColumnTitle?: string;
   freeColumnTitle: string;
   paidColumnTitle: string;
+  /**
+   * Renders only the first `visibleRowCount` rows with a toggle that expands
+   * the rest in place. Omit to always show every row.
+   */
+  collapse?: PaywallFeatureComparisonCollapse;
   /**
    * Color for "included" checkmarks in both columns. Defaults to the
    * theme accent for `circledCheck`, and to the legacy column colors

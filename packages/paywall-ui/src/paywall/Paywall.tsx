@@ -13,6 +13,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { getDefaultSelectedPlanId } from "./create-paywall-plans";
+import { resolveExpandScrollTarget } from "./feature-comparison-collapse";
 import { ChevronLeftIcon, CloseIcon } from "../shared/icons";
 import { LegalLinks } from "./LegalLinks";
 import type {
@@ -154,6 +155,7 @@ export const Paywall = <TPackage,>({
   const stepTransition = useRef(new Animated.Value(1)).current;
   const isStepTransitioningRef = useRef(false);
   const scrollViewRef = useRef<ScrollView>(null);
+  const scrollOffsetRef = useRef(0);
   const [currentStep, setCurrentStep] = useState<PaywallStep>(() =>
     shouldUseValueStep ? "value" : "purchase"
   );
@@ -272,6 +274,10 @@ export const Paywall = <TPackage,>({
   }, [shouldUseValueStep, stepTransition]);
 
   useEffect(() => {
+    // Keep the tracked offset in step with the programmatic reset. A stale
+    // offset here would make the next expand nudge scroll from the position
+    // the previous step was left at.
+    scrollOffsetRef.current = 0;
     scrollViewRef.current?.scrollTo({ y: 0, animated: false });
   }, [currentStep]);
 
@@ -390,6 +396,10 @@ export const Paywall = <TPackage,>({
           },
           isHeroPinned && { paddingTop: pinnedContentPaddingTop },
         ]}
+        onScroll={(event) => {
+          scrollOffsetRef.current = event.nativeEvent.contentOffset.y;
+        }}
+        scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}
       >
         {!isHeroPinned && (
@@ -482,6 +492,15 @@ export const Paywall = <TPackage,>({
             <PaywallFeatureComparison
               comparison={featureComparison}
               theme={theme}
+              onExpand={(revealedHeight) => {
+                scrollViewRef.current?.scrollTo({
+                  animated: true,
+                  y: resolveExpandScrollTarget(
+                    scrollOffsetRef.current,
+                    revealedHeight
+                  ),
+                });
+              }}
             />
           )}
 

@@ -125,6 +125,7 @@ are running so the CTA shows the localized processing label and spinner.
 | Title size | `theme.titleFontSize` |
 | Benefit rows | `benefits` |
 | Free/Pro comparison table | `featureComparison` |
+| Long comparison behind an expand toggle | `featureComparison.collapse` |
 | Circle-badge checkmarks (accent-tinted) | `featureComparison.includedStyle: "circledCheck"` |
 | Hide the dash on excluded cells | `featureComparison.excludedStyle: "hidden"` |
 | Green (or any) color for included checkmarks | `featureComparison.includedColor` |
@@ -212,6 +213,36 @@ copy: {
 ```
 
 Emphasized segments render in `theme.accentColor`.
+
+## Collapsing A Long Comparison
+
+A comparison long enough to become a scroll wall can open on its strongest
+rows and keep the rest one tap away:
+
+```tsx
+featureComparison: {
+  freeColumnTitle: "Free",
+  paidColumnTitle: "Pro",
+  collapse: {
+    visibleRowCount: 10,
+    expandLabel: `${t("viewAll")} +${rows.length - 10}`,
+    collapseLabel: t("viewLess"),
+  },
+  rows,
+}
+```
+
+Pass every row; the component splits them. The toggle labels are app-provided
+and app-localized, the same contract as the column titles, so an app can fold
+a remaining count into the label. Collapsing turns itself off when
+`visibleRowCount` would hide nothing, or when it is zero or negative.
+
+The hidden rows stay mounted and animate open by height, and the paywall
+scrolls down by about five rows — never further than the expansion revealed —
+so the reader lands inside the new rows instead of watching them open below
+the fold. The package ships no animation dependency, so this uses React
+Native's `Animated` without the native driver — height is a layout prop and
+can not be driven natively.
 
 ## Hero Presets
 

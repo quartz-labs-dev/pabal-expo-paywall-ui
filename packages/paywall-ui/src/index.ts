@@ -185,6 +185,7 @@ export type {
   PaywallCopy,
   PaywallFeatureComparison,
   PaywallFeatureComparisonCell,
+  PaywallFeatureComparisonCollapse,
   PaywallFeatureComparisonExcludedStyle,
   PaywallFeatureComparisonIncludedStyle,
   PaywallFeatureComparisonRow,
