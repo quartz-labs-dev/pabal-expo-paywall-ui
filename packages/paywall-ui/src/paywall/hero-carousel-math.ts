@@ -50,3 +50,28 @@ export const resolveLoopedCarouselPosition = (
     requiresSnap: false,
   };
 };
+
+/**
+ * Starting position for a carousel opened on a given slide. Apps that want a
+ * specific slide first should pass `initialIndex` rather than reordering
+ * `slides`: the dots read as a position within a fixed list, so reordering
+ * makes the first dot mean a different slide on every visit and turns a
+ * backward swipe into an arbitrary jump.
+ *
+ * Out-of-range values clamp to the nearest real slide.
+ */
+export const resolveInitialCarouselPosition = (
+  initialIndex: number,
+  slideCount: number
+): Pick<LoopedCarouselPosition, "virtualIndex" | "realIndex"> => {
+  if (slideCount <= 0) return { virtualIndex: 0, realIndex: 0 };
+
+  const safeIndex = Number.isFinite(initialIndex)
+    ? Math.min(Math.max(Math.trunc(initialIndex), 0), slideCount - 1)
+    : 0;
+
+  return {
+    virtualIndex: slideCount > 1 ? safeIndex + 1 : safeIndex,
+    realIndex: safeIndex,
+  };
+};

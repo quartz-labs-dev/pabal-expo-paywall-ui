@@ -11,6 +11,7 @@ import {
 import {
   getSlideIndexFromOffset,
   getLoopedPageCount,
+  resolveInitialCarouselPosition,
   resolveLoopedCarouselPosition,
 } from "./hero-carousel-math";
 
@@ -48,6 +49,13 @@ export interface PaywallHeroCarouselProps {
    * slide has no title at all.
    */
   titleHeight?: number;
+  /**
+   * Slide the carousel opens on, 0-based. Prefer this over reordering
+   * `slides`: the dots read as a position within a fixed list, so reordering
+   * makes the first dot mean a different slide on every visit. Applied on
+   * mount only; out-of-range values clamp.
+   */
+  initialIndex?: number;
   textColor?: string;
   secondaryTextColor?: string;
 }
@@ -71,17 +79,22 @@ export const PaywallHeroCarousel = ({
   autoAdvanceIntervalMs = DEFAULT_AUTO_ADVANCE_INTERVAL_MS,
   contentHeight,
   titleHeight,
+  initialIndex = 0,
   textColor = "#FFFFFF",
   secondaryTextColor = "rgba(255, 255, 255, 0.66)",
 }: PaywallHeroCarouselProps) => {
   const slideCount = slides.length;
   const isLooping = slideCount > 1;
+  const initialPosition = resolveInitialCarouselPosition(
+    initialIndex,
+    slideCount
+  );
   const scrollViewRef = useRef<ScrollView>(null);
   // Page position within [1, slideCount] (see hero-carousel-math).
-  const virtualIndexRef = useRef(isLooping ? 1 : 0);
+  const virtualIndexRef = useRef(initialPosition.virtualIndex);
   const isUserScrollingRef = useRef(false);
   const [containerWidth, setContainerWidth] = useState(0);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(initialPosition.realIndex);
 
   const pages = isLooping
     ? [slides[slideCount - 1], ...slides, slides[0]]

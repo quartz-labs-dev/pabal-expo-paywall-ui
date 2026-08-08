@@ -119,6 +119,7 @@ are running so the CTA shows the localized processing label and spinner.
 | Feature carousel hero | `hero={<PaywallHeroCarousel ... />}` |
 | Carousel of real screens rather than icons | `slides[].content`, `contentHeight`, `titleHeight` |
 | Carousel that only moves on swipe | `autoAdvanceIntervalMs={0}` |
+| Carousel opened on a particular slide | `initialIndex` |
 | Fade hero media into the background | `heroFade` |
 | Fixed hero background with content rising over it as a sheet | `heroLayout: "pinned"` |
 | Ambient background layer (gradient, glow) | `backgroundOverlay` |
@@ -304,6 +305,11 @@ hero: (
     // height clips it.
     contentHeight={150}
     titleHeight={22}
+    // Open on the slide the user's entry point earned. Do this rather than
+    // reordering `slides`: the dots read as a position in a fixed list, so
+    // reordering makes the first dot mean a different slide on every visit
+    // and turns a backward swipe into an arbitrary jump.
+    initialIndex={2}
     slides={[
       { key: "widget", content: <WidgetPreview />, title: "Home widget" },
       { key: "recap", content: <AttendanceGrid />, title: "Recap" },

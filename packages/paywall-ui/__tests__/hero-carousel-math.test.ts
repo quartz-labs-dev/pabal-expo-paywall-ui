@@ -4,6 +4,7 @@ import test from "node:test";
 import {
   getLoopedPageCount,
   getSlideIndexFromOffset,
+  resolveInitialCarouselPosition,
   resolveLoopedCarouselPosition,
 } from "../src/paywall/hero-carousel-math";
 
@@ -69,5 +70,45 @@ test("single-slide carousels never loop", () => {
     virtualIndex: 0,
     realIndex: 0,
     requiresSnap: false,
+  });
+});
+
+test("opens a looping carousel on the requested slide", () => {
+  assert.deepEqual(resolveInitialCarouselPosition(0, 5), {
+    virtualIndex: 1,
+    realIndex: 0,
+  });
+  assert.deepEqual(resolveInitialCarouselPosition(3, 5), {
+    virtualIndex: 4,
+    realIndex: 3,
+  });
+});
+
+test("skips the clone offset when there is nothing to loop", () => {
+  assert.deepEqual(resolveInitialCarouselPosition(0, 1), {
+    virtualIndex: 0,
+    realIndex: 0,
+  });
+});
+
+test("clamps an initial index outside the slide range", () => {
+  assert.deepEqual(resolveInitialCarouselPosition(9, 3), {
+    virtualIndex: 3,
+    realIndex: 2,
+  });
+  assert.deepEqual(resolveInitialCarouselPosition(-2, 3), {
+    virtualIndex: 1,
+    realIndex: 0,
+  });
+  assert.deepEqual(resolveInitialCarouselPosition(Number.NaN, 3), {
+    virtualIndex: 1,
+    realIndex: 0,
+  });
+});
+
+test("handles an empty slide list", () => {
+  assert.deepEqual(resolveInitialCarouselPosition(2, 0), {
+    virtualIndex: 0,
+    realIndex: 0,
   });
 });
