@@ -11,6 +11,9 @@ export const defaultPaywallTheme: PaywallTheme = {
   accentColor: "#5AC8B7",
   accentTextColor: "#071312",
   mutedTextColor: "#7F8B96",
+  cardBorderRadius: 16,
+  buttonBorderRadius: 999,
+  titleFontSize: 28,
 };
 
 export const mergePaywallTheme = (

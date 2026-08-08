@@ -28,9 +28,10 @@ export const PlanCard = <TPackage,>({
   ).current;
   const badgeShine = useRef(new Animated.Value(0)).current;
   const annualBorderGlow = useRef(new Animated.Value(0)).current;
-  const shouldAnimateBadge = shouldAnimate && Boolean(plan.badgeText);
   const shouldHighlightAnnualPlan = isSelected && plan.period === "annual";
   const shouldAnimateAnnualGlow = shouldAnimate && shouldHighlightAnnualPlan;
+  const shouldAnimateBadge =
+    shouldAnimate && Boolean(plan.badgeText) && !shouldAnimateAnnualGlow;
   const annualBorderGlowOpacity = annualBorderGlow.interpolate({
     inputRange: [0, 0.5, 1],
     outputRange: [0.18, 0.48, 0.18],
@@ -148,6 +149,7 @@ export const PlanCard = <TPackage,>({
           borderColor: isSelected
             ? theme.selectedBorderColor
             : theme.borderColor,
+          borderRadius: theme.cardBorderRadius,
           borderWidth: shouldHighlightAnnualPlan ? 2 : isSelected ? 1.5 : 1,
         },
       ]}
@@ -159,6 +161,7 @@ export const PlanCard = <TPackage,>({
             styles.annualGlow,
             {
               borderColor: theme.selectedBorderColor,
+              borderRadius: theme.cardBorderRadius + 2,
               opacity: annualBorderGlowOpacity,
               transform: [{ scale: annualBorderGlowScale }],
             },
@@ -296,7 +299,7 @@ export const PlanCard = <TPackage,>({
 const styles = StyleSheet.create({
   container: {
     alignItems: "flex-start",
-    borderRadius: 8,
+    borderCurve: "continuous",
     flexDirection: "row",
     gap: 12,
     minHeight: 92,
@@ -306,7 +309,7 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   annualGlow: {
-    borderRadius: 10,
+    borderCurve: "continuous",
     borderWidth: 3,
     bottom: -3,
     left: -3,

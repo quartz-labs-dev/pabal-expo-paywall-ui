@@ -49,6 +49,7 @@ export interface PaywallPurchaseButtonLabelContext<TPackage = unknown> {
 
 export interface PaywallCopy {
   title: string;
+  titleSegments?: PaywallTitleSegment[];
   subtitle?: string;
   purchaseButton: string;
   continueButton?: string;
@@ -82,6 +83,13 @@ export interface PaywallBenefitDetail {
 
 export type PaywallBenefit = string | PaywallBenefitDetail;
 
+export type PaywallTitleSegment =
+  | string
+  | {
+      text: string;
+      emphasized?: boolean;
+    };
+
 export type PaywallFeatureComparisonCell =
   | {
       kind: "included";
@@ -105,11 +113,33 @@ export interface PaywallFeatureComparisonRow {
   onPress?: () => Promise<void> | void;
 }
 
+export type PaywallFeatureComparisonIncludedStyle = "check" | "circledCheck";
+
+export type PaywallFeatureComparisonExcludedStyle = "dash" | "hidden";
+
 export interface PaywallFeatureComparison {
   title?: string;
   featureColumnTitle?: string;
   freeColumnTitle: string;
   paidColumnTitle: string;
+  /**
+   * Color for "included" checkmarks in both columns. Defaults to the
+   * theme accent for `circledCheck`, and to the legacy column colors
+   * (accent for paid, primary text for free) for plain `check`.
+   * Set e.g. a green to make checkmarks read as universal "yes" marks.
+   */
+  includedColor?: string;
+  /**
+   * `check` renders a plain checkmark glyph; `circledCheck` renders the
+   * checkmark inside a tinted circular badge. Defaults to `check`.
+   */
+  includedStyle?: PaywallFeatureComparisonIncludedStyle;
+  /**
+   * `dash` renders an en-dash for excluded cells; `hidden` leaves the
+   * cell visually empty (accessibility label still applies). Defaults
+   * to `dash`.
+   */
+  excludedStyle?: PaywallFeatureComparisonExcludedStyle;
   rows: PaywallFeatureComparisonRow[];
 }
 
@@ -119,6 +149,7 @@ export type PaywallAnimationMode = "default" | "opacity" | "none";
 
 export interface PaywallValueStep {
   title: string;
+  titleSegments?: PaywallTitleSegment[];
   subtitle?: string;
   content?: ReactNode;
   closeButtonVisibility?: "hidden" | "visible";
@@ -147,12 +178,17 @@ export interface PaywallTheme {
   accentColor: string;
   accentTextColor: string;
   mutedTextColor: string;
+  cardBorderRadius: number;
+  buttonBorderRadius: number;
+  titleFontSize: number;
 }
 
 export interface PaywallProps<TPackage = unknown> {
   plans: PaywallPlan<TPackage>[];
   hero: ReactNode;
   heroHeightRatio?: number;
+  heroFade?: boolean;
+  backgroundOverlay?: ReactNode;
   stepMode?: PaywallStepMode;
   animationMode?: PaywallAnimationMode;
   valueStep?: PaywallValueStep;
@@ -180,6 +216,8 @@ export interface PaywallProps<TPackage = unknown> {
 export interface PaywallConfig {
   hero: ReactNode;
   heroHeightRatio?: number;
+  heroFade?: boolean;
+  backgroundOverlay?: ReactNode;
   stepMode?: PaywallStepMode;
   animationMode?: PaywallAnimationMode;
   valueStep?: PaywallValueStep;

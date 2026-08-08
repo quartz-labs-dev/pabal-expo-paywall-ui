@@ -18,6 +18,8 @@ import { ProfilePlaygroundScreen } from "./src/screens/ProfilePlaygroundScreen";
 import type {
   PlaygroundFreeTrialMode,
   PlaygroundPaywallAnimation,
+  PlaygroundPaywallDesign,
+  PlaygroundPaywallProduct,
   PlaygroundPaywallFlow,
   PlaygroundLocale,
   PlaygroundPackageScenario,
@@ -66,6 +68,10 @@ export default function App() {
     useState<PlaygroundPaywallFlow>("twoStep");
   const [paywallAnimation, setPaywallAnimation] =
     useState<PlaygroundPaywallAnimation>("default");
+  const [paywallDesign, setPaywallDesign] =
+    useState<PlaygroundPaywallDesign>("refresh");
+  const [paywallProduct, setPaywallProduct] =
+    useState<PlaygroundPaywallProduct>("aurora");
   const [freeTrialMode, setFreeTrialMode] =
     useState<PlaygroundFreeTrialMode>("sevenDays");
   const [isTrialEligible, setIsTrialEligible] = useState(true);
@@ -116,6 +122,8 @@ export default function App() {
           selectedLocale={selectedLocale}
           paywallFlow={paywallFlow}
           paywallAnimation={paywallAnimation}
+          paywallDesign={paywallDesign}
+          paywallProduct={paywallProduct}
           freeTrialMode={freeTrialMode}
           isTrialEligible={isTrialEligible}
           onClose={() => navigate("home")}
@@ -152,6 +160,8 @@ export default function App() {
           selectedLocale={selectedLocale}
           paywallFlow={paywallFlow}
           paywallAnimation={paywallAnimation}
+          paywallDesign={paywallDesign}
+          paywallProduct={paywallProduct}
           onboardingPlatform={onboardingPlatform}
           freeTrialMode={freeTrialMode}
           isTrialEligible={isTrialEligible}
@@ -165,6 +175,8 @@ export default function App() {
           onChangeLocale={setSelectedLocale}
           onChangePaywallFlow={setPaywallFlow}
           onChangePaywallAnimation={setPaywallAnimation}
+          onChangePaywallDesign={setPaywallDesign}
+          onChangePaywallProduct={setPaywallProduct}
           onChangeOnboardingPlatform={setOnboardingPlatform}
           onChangeFreeTrialMode={setFreeTrialMode}
           onOpenOnboarding={() => navigate("onboarding")}

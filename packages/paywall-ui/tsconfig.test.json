@@ -12,7 +12,12 @@
   },
   "include": [
     "src/shared/color-utils.ts",
+    "src/shared/hero-fade.ts",
+    "src/shared/theme.ts",
+    "src/paywall/comparison-cells.ts",
     "src/paywall/create-paywall-plans.ts",
+    "src/paywall/hero-carousel-math.ts",
+    "src/paywall/title-segments.ts",
     "src/types.ts",
     "__tests__"
   ]

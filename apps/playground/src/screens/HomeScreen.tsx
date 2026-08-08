@@ -20,6 +20,8 @@ import type {
   PlaygroundFreeTrialMode,
   PlaygroundPackageScenario,
   PlaygroundPaywallAnimation,
+  PlaygroundPaywallDesign,
+  PlaygroundPaywallProduct,
   PlaygroundPaywallFlow,
   PlaygroundLocale,
 } from "../types/playground";
@@ -30,6 +32,8 @@ interface HomeScreenProps {
   selectedLocale: PlaygroundLocale;
   paywallFlow: PlaygroundPaywallFlow;
   paywallAnimation: PlaygroundPaywallAnimation;
+  paywallDesign: PlaygroundPaywallDesign;
+  paywallProduct: PlaygroundPaywallProduct;
   onboardingPlatform: PlaygroundOnboardingPlatform;
   freeTrialMode: PlaygroundFreeTrialMode;
   isTrialEligible: boolean;
@@ -43,6 +47,8 @@ interface HomeScreenProps {
   onChangePaywallAnimation: (
     paywallAnimation: PlaygroundPaywallAnimation,
   ) => void;
+  onChangePaywallDesign: (paywallDesign: PlaygroundPaywallDesign) => void;
+  onChangePaywallProduct: (paywallProduct: PlaygroundPaywallProduct) => void;
   onChangeOnboardingPlatform: (
     onboardingPlatform: PlaygroundOnboardingPlatform,
   ) => void;
@@ -71,6 +77,23 @@ const paywallAnimationLabels: Record<PlaygroundPaywallAnimation, string> = {
   opacity: "Fade",
   none: "No animation",
 };
+const paywallDesigns: PlaygroundPaywallDesign[] = ["refresh", "legacy"];
+const paywallDesignLabels: Record<PlaygroundPaywallDesign, string> = {
+  refresh: "Refresh",
+  legacy: "Legacy",
+};
+const paywallProducts: PlaygroundPaywallProduct[] = [
+  "aurora",
+  "tide",
+  "ember",
+  "drift",
+];
+const paywallProductLabels: Record<PlaygroundPaywallProduct, string> = {
+  aurora: "Aurora (photo)",
+  tide: "Tide (floating)",
+  ember: "Ember (before/after)",
+  drift: "Drift (carousel)",
+};
 const freeTrialModes: PlaygroundFreeTrialMode[] = [
   "sevenDays",
   "twoWeeks",
@@ -94,6 +117,8 @@ export const HomeScreen = ({
   selectedLocale,
   paywallFlow,
   paywallAnimation,
+  paywallDesign,
+  paywallProduct,
   onboardingPlatform,
   freeTrialMode,
   isTrialEligible,
@@ -105,6 +130,8 @@ export const HomeScreen = ({
   onTogglePreOnboardingLoginPrompt,
   onChangePaywallFlow,
   onChangePaywallAnimation,
+  onChangePaywallDesign,
+  onChangePaywallProduct,
   onChangeOnboardingPlatform,
   onChangeFreeTrialMode,
   onOpenOnboarding,
@@ -201,6 +228,20 @@ export const HomeScreen = ({
           selectedOption={paywallAnimation}
           labels={paywallAnimationLabels}
           onChangeOption={onChangePaywallAnimation}
+        />
+        <SegmentedSettings
+          title="Design"
+          options={paywallDesigns}
+          selectedOption={paywallDesign}
+          labels={paywallDesignLabels}
+          onChangeOption={onChangePaywallDesign}
+        />
+        <SegmentedSettings
+          title="Product"
+          options={paywallProducts}
+          selectedOption={paywallProduct}
+          labels={paywallProductLabels}
+          onChangeOption={onChangePaywallProduct}
         />
         <TrialPolicySettings
           scenario={scenario}

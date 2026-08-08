@@ -51,6 +51,7 @@ export const SupportMessageBubble = ({
           {
             backgroundColor: theme.surfaceColor,
             borderColor: theme.borderColor,
+            borderRadius: theme.cardBorderRadius,
           },
         ]}
       >
@@ -105,7 +106,6 @@ const styles = StyleSheet.create({
   },
   bubble: {
     borderCurve: "continuous",
-    borderRadius: 8,
     borderWidth: StyleSheet.hairlineWidth,
     flex: 1,
     gap: 6,

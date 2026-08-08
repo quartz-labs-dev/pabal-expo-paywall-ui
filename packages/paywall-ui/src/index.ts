@@ -161,6 +161,19 @@ export type {
 export type { OnboardingAcquisitionSourceText } from "./locales/onboarding/acquisition-source";
 export type { OnboardingNicknameInputText } from "./locales/onboarding/nickname-input";
 export { Paywall } from "./paywall/Paywall";
+export { PaywallHeroBeforeAfter } from "./paywall/PaywallHeroBeforeAfter";
+export { PaywallHeroCarousel } from "./paywall/PaywallHeroCarousel";
+export type { PaywallHeroBeforeAfterProps } from "./paywall/PaywallHeroBeforeAfter";
+export type {
+  PaywallHeroCarouselProps,
+  PaywallHeroCarouselSlide,
+} from "./paywall/PaywallHeroCarousel";
+export { defaultPaywallTheme, mergePaywallTheme } from "./shared/theme";
+export {
+  getTitleSegmentsText,
+  normalizeTitleSegments,
+} from "./paywall/title-segments";
+export type { NormalizedTitleSegment } from "./paywall/title-segments";
 export { ProfileSubscriptionSection } from "./profile/ProfileSubscriptionSection";
 export { isUnifiedLocale, UNIFIED_LOCALES } from "./locales/unified-locales";
 export type {
@@ -172,6 +185,8 @@ export type {
   PaywallCopy,
   PaywallFeatureComparison,
   PaywallFeatureComparisonCell,
+  PaywallFeatureComparisonExcludedStyle,
+  PaywallFeatureComparisonIncludedStyle,
   PaywallFeatureComparisonRow,
   PaywallFreeTrialConfig,
   PaywallPlan,
@@ -184,6 +199,7 @@ export type {
   PaywallReviewSection,
   PaywallStepMode,
   PaywallTheme,
+  PaywallTitleSegment,
   PaywallTrialDuration,
   PaywallTrialUnit,
   PaywallValueStep,

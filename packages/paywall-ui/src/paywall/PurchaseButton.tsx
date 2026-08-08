@@ -69,6 +69,7 @@ export const PurchaseButton = ({
         styles.button,
         {
           backgroundColor: background ? "transparent" : theme.accentColor,
+          borderRadius: theme.buttonBorderRadius,
           opacity: isDisabled ? 0.45 : pressed ? 0.82 : 1,
         },
       ]}
@@ -100,7 +101,7 @@ export const PurchaseButton = ({
 const styles = StyleSheet.create({
   button: {
     alignItems: "center",
-    borderRadius: 8,
+    borderCurve: "continuous",
     justifyContent: "center",
     minHeight: 52,
     overflow: "hidden",

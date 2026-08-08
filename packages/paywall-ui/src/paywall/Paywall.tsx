@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import {
   Animated,
+  Image,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -29,6 +30,11 @@ import { PlanSelector } from "./PlanSelector";
 import { PurchaseButton } from "./PurchaseButton";
 import { SupportMessageBubble } from "./SupportMessageBubble";
 import { mergePaywallTheme } from "../shared/theme";
+import {
+  DEFAULT_HERO_FADE_HEIGHT_RATIO,
+  HERO_FADE_IMAGE_URI,
+} from "../shared/hero-fade";
+import { normalizeTitleSegments } from "./title-segments";
 import { TrialNotice } from "./TrialNotice";
 import { resolveFreeTrialConfig } from "./free-trial-config";
 import type {
@@ -107,6 +113,8 @@ export const Paywall = <TPackage,>({
   plans,
   hero,
   heroHeightRatio = DEFAULT_HERO_HEIGHT_RATIO,
+  heroFade = false,
+  backgroundOverlay,
   stepMode = "twoStep",
   animationMode = "default",
   valueStep,
@@ -190,6 +198,12 @@ export const Paywall = <TPackage,>({
   );
   const isValueStep = shouldUseValueStep && currentStep === "value";
   const title = isValueStep ? valueStep?.title : copy.title;
+  const titleSegments = isValueStep
+    ? valueStep?.titleSegments
+    : copy.titleSegments;
+  const normalizedTitleSegments = titleSegments?.length
+    ? normalizeTitleSegments(titleSegments)
+    : undefined;
   const subtitle = isValueStep ? valueStep?.subtitle : copy.subtitle;
   const shouldHideBenefits = shouldUseValueStep && currentStep === "purchase";
   const bodyBenefits = benefits;
@@ -285,6 +299,12 @@ export const Paywall = <TPackage,>({
 
   return (
     <View style={[styles.root, { backgroundColor: theme.backgroundColor }]}>
+      {backgroundOverlay && (
+        <View pointerEvents="none" style={styles.backgroundOverlay}>
+          {backgroundOverlay}
+        </View>
+      )}
+
       {shouldShowBackButton && (
         <TouchableOpacity
           accessibilityLabel="Back to previous step"
@@ -339,7 +359,24 @@ export const Paywall = <TPackage,>({
         ]}
         showsVerticalScrollIndicator={false}
       >
-        <View style={[styles.hero, { height: heroHeight }]}>{hero}</View>
+        <View style={[styles.hero, { height: heroHeight }]}>
+          {hero}
+          {heroFade && (
+            <Image
+              resizeMode="stretch"
+              source={{ uri: HERO_FADE_IMAGE_URI }}
+              style={[
+                styles.heroFade,
+                {
+                  height: Math.round(
+                    heroHeight * DEFAULT_HERO_FADE_HEIGHT_RATIO
+                  ),
+                  tintColor: theme.backgroundColor,
+                },
+              ]}
+            />
+          )}
+        </View>
 
         <Animated.View
           style={[
@@ -350,8 +387,30 @@ export const Paywall = <TPackage,>({
           ]}
         >
           <View style={styles.header}>
-            <Text style={[styles.title, { color: theme.primaryTextColor }]}>
-              {title}
+            <Text
+              style={[
+                styles.title,
+                {
+                  color: theme.primaryTextColor,
+                  fontSize: theme.titleFontSize,
+                  lineHeight: Math.round(theme.titleFontSize * 1.22),
+                },
+              ]}
+            >
+              {normalizedTitleSegments
+                ? normalizedTitleSegments.map((segment, index) => (
+                    <Text
+                      key={`${segment.text}-${index}`}
+                      style={
+                        segment.emphasized
+                          ? { color: theme.accentColor }
+                          : undefined
+                      }
+                    >
+                      {segment.text}
+                    </Text>
+                  ))
+                : title}
             </Text>
             {subtitle && (
               <Text
@@ -514,6 +573,7 @@ const StepNextButton = ({
         styles.nextButton,
         {
           backgroundColor: theme.accentColor,
+          borderRadius: theme.buttonBorderRadius,
           opacity: pressed ? 0.82 : 1,
         },
       ]}
@@ -528,6 +588,18 @@ const StepNextButton = ({
 const styles = StyleSheet.create({
   root: {
     flex: 1,
+  },
+  backgroundOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 0,
+  },
+  heroFade: {
+    bottom: 0,
+    left: 0,
+    pointerEvents: "none",
+    position: "absolute",
+    right: 0,
+    width: "100%",
   },
   backButton: {
     alignItems: "center",
@@ -578,7 +650,7 @@ const styles = StyleSheet.create({
   },
   nextButton: {
     alignItems: "center",
-    borderRadius: 8,
+    borderCurve: "continuous",
     justifyContent: "center",
     minHeight: 44,
     minWidth: 104,
@@ -616,10 +688,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: PAYWALL_HEADER_HORIZONTAL_PADDING,
   },
   title: {
-    fontSize: 26,
     fontWeight: "600",
     letterSpacing: 0,
-    lineHeight: 32,
     textAlign: "center",
   },
   subtitle: {

@@ -1,6 +1,10 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { getColorWithAlpha } from "../shared/color-utils";
+import {
+  resolveComparisonCellColor,
+  resolveComparisonCellGlyph,
+} from "./comparison-cells";
 import type {
   PaywallFeatureComparison as PaywallFeatureComparisonConfig,
   PaywallFeatureComparisonCell,
@@ -11,17 +15,6 @@ interface PaywallFeatureComparisonProps {
   comparison: PaywallFeatureComparisonConfig;
   theme: PaywallTheme;
 }
-
-const CHECK_MARK = "\u2713";
-const EXCLUDED_MARK = "\u2013";
-
-const getCellTextColor = (
-  column: "free" | "paid",
-  theme: PaywallTheme,
-): string => {
-  if (column === "free") return theme.primaryTextColor;
-  return theme.accentColor;
-};
 
 const getCellAccessibilityLabel = (
   cell: PaywallFeatureComparisonCell,
@@ -37,24 +30,50 @@ const renderCellContent = (
   cell: PaywallFeatureComparisonCell,
   column: "free" | "paid",
   theme: PaywallTheme,
+  comparison: PaywallFeatureComparisonConfig,
 ) => {
-  const label =
-    cell.kind === "included"
-      ? CHECK_MARK
-      : cell.kind === "excluded"
-        ? EXCLUDED_MARK
-        : cell.text;
+  const glyph = resolveComparisonCellGlyph(cell, comparison.excludedStyle);
+  const accessibilityLabel = getCellAccessibilityLabel(cell);
+
+  if (glyph === null) {
+    return (
+      <View
+        accessibilityLabel={accessibilityLabel}
+        accessible={Boolean(accessibilityLabel)}
+        style={styles.hiddenCell}
+      />
+    );
+  }
+
+  const color = resolveComparisonCellColor(cell, column, theme, comparison);
+  const shouldRenderBadge =
+    cell.kind === "included" && comparison.includedStyle === "circledCheck";
+
+  if (shouldRenderBadge) {
+    return (
+      <View
+        accessibilityLabel={accessibilityLabel}
+        accessible={Boolean(accessibilityLabel)}
+        style={[
+          styles.checkBadge,
+          { backgroundColor: getColorWithAlpha(color, 0.16) },
+        ]}
+      >
+        <Text style={[styles.checkBadgeText, { color }]}>{glyph}</Text>
+      </View>
+    );
+  }
 
   return (
     <Text
-      accessibilityLabel={getCellAccessibilityLabel(cell)}
+      accessibilityLabel={accessibilityLabel}
       style={[
         styles.cellText,
         cell.kind !== "text" && styles.symbolText,
-        { color: getCellTextColor(column, theme) },
+        { color },
       ]}
     >
-      {label}
+      {glyph}
     </Text>
   );
 };
@@ -83,6 +102,7 @@ export const PaywallFeatureComparison = ({
               theme.borderColor,
             ),
             backgroundColor: "transparent",
+            borderRadius: theme.cardBorderRadius,
           },
         ]}
       >
@@ -162,10 +182,10 @@ export const PaywallFeatureComparison = ({
                 <View style={styles.featureButton}>{featureLabel}</View>
               )}
               <View style={styles.cell}>
-                {renderCellContent(row.free, "free", theme)}
+                {renderCellContent(row.free, "free", theme, comparison)}
               </View>
               <View style={[styles.cell, isLastRow && styles.paidCellLast]}>
-                {renderCellContent(row.paid, "paid", theme)}
+                {renderCellContent(row.paid, "paid", theme, comparison)}
               </View>
             </View>
           );
@@ -186,7 +206,6 @@ const styles = StyleSheet.create({
   },
   table: {
     borderCurve: "continuous",
-    borderRadius: 8,
     borderWidth: 1,
     overflow: "hidden",
     padding: 12,
@@ -271,5 +290,21 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "600",
     lineHeight: 24,
+  },
+  checkBadge: {
+    alignItems: "center",
+    borderRadius: 13,
+    height: 26,
+    justifyContent: "center",
+    width: 26,
+  },
+  checkBadgeText: {
+    fontSize: 14,
+    fontWeight: "700",
+    lineHeight: 18,
+  },
+  hiddenCell: {
+    height: 26,
+    width: 26,
   },
 });

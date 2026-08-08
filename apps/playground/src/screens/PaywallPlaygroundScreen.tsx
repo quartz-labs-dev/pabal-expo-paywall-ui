@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { Alert, ImageBackground, StyleSheet, Text, View } from "react-native";
 import {
   Paywall,
+  PaywallHeroBeforeAfter,
+  PaywallHeroCarousel,
   createPaywallPlans,
   getDefaultPaywallCopy,
   getDefaultPaywallPlanOptions,
@@ -11,23 +13,29 @@ import {
   type PurchasesPackageLike,
 } from "pabal-expo-paywall-ui";
 
+import { PlaygroundAmbientGlow } from "../components/PlaygroundAmbientGlow";
+import { PlaygroundFloatingHero } from "../components/PlaygroundFloatingHero";
 import { getPackagesForScenario } from "../fixtures/paywall-plans";
 import { getPlaygroundFreeTrialConfig } from "../fixtures/paywall-trial-policy";
 import { playgroundBenefits } from "../fixtures/playground-benefits";
 import type {
   PlaygroundPaywallAnimation,
+  PlaygroundPaywallDesign,
+  PlaygroundPaywallProduct,
   PlaygroundFreeTrialMode,
   PlaygroundPaywallFlow,
   PlaygroundLocale,
   PlaygroundScenario,
 } from "../types/playground";
 
-const Hero = () => {
+interface PhotoHeroProps {
+  uri: string;
+}
+
+const PhotoHero = ({ uri }: PhotoHeroProps) => {
   return (
     <ImageBackground
-      source={{
-        uri: "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?auto=format&fit=crop&w=1200&q=80",
-      }}
+      source={{ uri }}
       imageStyle={styles.heroImage}
       style={styles.hero}
     >
@@ -48,12 +56,170 @@ const FeatureTitle = ({ title }: FeatureTitleProps) => {
   );
 };
 
+// Check-only comparison variant: every cell is included/excluded.
+// circledCheck renders accent-colored checks in tinted circle badges, and
+// hidden leaves excluded cells visually empty (a11y labels still apply).
+const checkFeatureComparison = {
+  freeColumnTitle: "Free",
+  paidColumnTitle: "Pro",
+  includedStyle: "circledCheck",
+  excludedStyle: "hidden",
+  rows: [
+    {
+      id: "current-conditions",
+      label: "Current Conditions",
+      free: { kind: "included", accessibilityLabel: "Included" },
+      paid: { kind: "included", accessibilityLabel: "Included" },
+    },
+    {
+      id: "home-screen-widget",
+      label: "Home Screen Widget",
+      free: { kind: "excluded", accessibilityLabel: "Not included" },
+      paid: { kind: "included", accessibilityLabel: "Included" },
+    },
+    {
+      id: "live-activities",
+      label: "Live Activities",
+      free: { kind: "excluded", accessibilityLabel: "Not included" },
+      paid: { kind: "included", accessibilityLabel: "Included" },
+    },
+    {
+      id: "smart-alerts",
+      label: "Smart Alerts",
+      free: { kind: "excluded", accessibilityLabel: "Not included" },
+      paid: { kind: "included", accessibilityLabel: "Included" },
+    },
+    {
+      id: "watch-complications",
+      label: "Watch Complications",
+      free: { kind: "excluded", accessibilityLabel: "Not included" },
+      paid: { kind: "included", accessibilityLabel: "Included" },
+    },
+    {
+      id: "custom-locations",
+      label: "Custom Locations",
+      free: { kind: "excluded", accessibilityLabel: "Not included" },
+      paid: { kind: "included", accessibilityLabel: "Included" },
+    },
+  ],
+} satisfies PaywallConfig["featureComparison"];
+
+// Defined before productPresets (which is evaluated at module load, ahead
+// of the StyleSheet at the bottom of this file).
+const carouselIconStyle = { fontSize: 22, lineHeight: 28 } as const;
+
+interface PlaygroundProductPreset {
+  hero: PaywallConfig["hero"];
+  heroFade: boolean;
+  accentColor: string;
+  theme: PaywallConfig["theme"];
+  featureComparison?: PaywallConfig["featureComparison"];
+}
+
+// Four fake products covering the hero and comparison variants:
+// - aurora: opaque photo hero (glow only peeks out below it), text cells
+// - tide: transparent floating-widget hero (glow fully visible), green checks
+// - ember: before/after stats hero (Opal style), text cells
+// - drift: auto-advancing feature carousel hero, green checks
+const productPresets: Record<PlaygroundPaywallProduct, PlaygroundProductPreset> =
+  {
+    aurora: {
+      hero: (
+        <PhotoHero uri="https://images.unsplash.com/photo-1531366936337-7c912a4589a7?auto=format&fit=crop&w=1200&q=80" />
+      ),
+      heroFade: true,
+      accentColor: "#5AC8B7",
+      theme: {
+        accentColor: "#5AC8B7",
+        backgroundColor: "#05080C",
+        primaryTextColor: "#F5F7FA",
+      },
+    },
+    tide: {
+      hero: <PlaygroundFloatingHero accentColor="#8B7CFF" />,
+      heroFade: false,
+      accentColor: "#8B7CFF",
+      featureComparison: checkFeatureComparison,
+      theme: {
+        accentColor: "#8B7CFF",
+        accentTextColor: "#120C2E",
+        backgroundColor: "#140F2E",
+        borderColor: "#3A3170",
+        mutedTextColor: "#8E86BE",
+        primaryTextColor: "#F4F2FF",
+        secondaryTextColor: "#C2BBE8",
+        selectedBorderColor: "#8B7CFF",
+        selectedSurfaceColor: "#2A2158",
+        surfaceColor: "#221B45",
+      },
+    },
+    ember: {
+      hero: (
+        <PaywallHeroBeforeAfter
+          accentColor="#FF9D5C"
+          beforeLabel="Before"
+          afterLabel="After"
+          beforeValue="6h 32m"
+          afterValue="1h 49m"
+        />
+      ),
+      heroFade: false,
+      accentColor: "#FF9D5C",
+      theme: {
+        accentColor: "#FF9D5C",
+        accentTextColor: "#2A1404",
+        backgroundColor: "#170D07",
+        borderColor: "#45301F",
+        mutedTextColor: "#9C8672",
+        primaryTextColor: "#FBF4EE",
+        secondaryTextColor: "#D8C4B4",
+        selectedBorderColor: "#FF9D5C",
+        selectedSurfaceColor: "#33200F",
+        surfaceColor: "#261510",
+      },
+    },
+    drift: {
+      hero: (
+        <PaywallHeroCarousel
+          accentColor="#5CB8FF"
+          slides={[
+            {
+              icon: <Text style={carouselIconStyle}>⚡</Text>,
+              title: "Live Activities",
+              description: "Realtime progress on your Home Screen.",
+            },
+            {
+              icon: <Text style={carouselIconStyle}>⏰</Text>,
+              title: "Smart Alerts",
+              description: "Get notified the moment conditions change.",
+            },
+            {
+              icon: <Text style={carouselIconStyle}>📊</Text>,
+              title: "Deep Insights",
+              description: "90-day trends across all your data.",
+            },
+          ]}
+        />
+      ),
+      heroFade: false,
+      accentColor: "#5CB8FF",
+      featureComparison: checkFeatureComparison,
+      theme: {
+        accentColor: "#5CB8FF",
+        accentTextColor: "#04263D",
+        backgroundColor: "#071018",
+        borderColor: "#24384E",
+        mutedTextColor: "#7E93A8",
+        primaryTextColor: "#F2F8FD",
+        secondaryTextColor: "#B7C9DA",
+        selectedBorderColor: "#5CB8FF",
+        selectedSurfaceColor: "#0F2438",
+        surfaceColor: "#122031",
+      },
+    },
+  };
+
 const playgroundPaywallConfig = {
-  hero: <Hero />,
-  valueStep: {
-    title: "Get the full Pabal experience",
-    subtitle: "See the value first, then choose a plan on the next step.",
-  },
   benefits: playgroundBenefits,
   featureComparison: {
     freeColumnTitle: "Free",
@@ -132,18 +298,77 @@ const playgroundPaywallConfig = {
       },
     ],
   },
-  theme: {
-    accentColor: "#5AC8B7",
-    backgroundColor: "#05080C",
-    primaryTextColor: "#F5F7FA",
-  },
-} satisfies Omit<PaywallConfig, "copy" | "planOptions">;
+} satisfies Pick<
+  PaywallConfig,
+  "benefits" | "featureComparison" | "reviewSection"
+>;
+
+interface PlaygroundPresentation {
+  hero: PaywallConfig["hero"];
+  heroFade: boolean;
+  backgroundOverlay: PaywallConfig["backgroundOverlay"];
+  valueStep: PaywallConfig["valueStep"];
+  theme: PaywallConfig["theme"];
+  featureComparison: PaywallConfig["featureComparison"];
+  copyTitleSegments: PaywallConfig["copy"]["titleSegments"];
+}
+
+const getPresentation = (
+  product: PlaygroundPaywallProduct,
+  design: PlaygroundPaywallDesign,
+): PlaygroundPresentation => {
+  const preset = productPresets[product];
+  const featureComparison =
+    preset.featureComparison ?? playgroundPaywallConfig.featureComparison;
+
+  if (design === "legacy") {
+    return {
+      hero: preset.hero,
+      heroFade: false,
+      backgroundOverlay: undefined,
+      featureComparison,
+      valueStep: {
+        title: "Get the full Pabal experience",
+        subtitle: "See the value first, then choose a plan on the next step.",
+      },
+      theme: {
+        ...preset.theme,
+        cardBorderRadius: 8,
+        buttonBorderRadius: 8,
+        titleFontSize: 26,
+      },
+      copyTitleSegments: undefined,
+    };
+  }
+
+  return {
+    hero: preset.hero,
+    heroFade: preset.heroFade,
+    backgroundOverlay: (
+      <PlaygroundAmbientGlow accentColor={preset.accentColor} />
+    ),
+    featureComparison,
+    valueStep: {
+      title: "Get the full Pabal experience",
+      titleSegments: [
+        "Get the ",
+        { text: "full Pabal", emphasized: true },
+        " experience",
+      ],
+      subtitle: "See the value first, then choose a plan on the next step.",
+    },
+    theme: preset.theme,
+    copyTitleSegments: ["Upgrade to ", { text: "Pro", emphasized: true }],
+  };
+};
 
 interface PaywallPlaygroundScreenProps {
   scenario: PlaygroundScenario;
   selectedLocale: PlaygroundLocale;
   paywallFlow: PlaygroundPaywallFlow;
   paywallAnimation: PlaygroundPaywallAnimation;
+  paywallDesign: PlaygroundPaywallDesign;
+  paywallProduct: PlaygroundPaywallProduct;
   freeTrialMode: PlaygroundFreeTrialMode;
   isTrialEligible: boolean;
   onClose: () => void;
@@ -154,6 +379,8 @@ export const PaywallPlaygroundScreen = ({
   selectedLocale,
   paywallFlow,
   paywallAnimation,
+  paywallDesign,
+  paywallProduct,
   freeTrialMode,
   isTrialEligible,
   onClose,
@@ -177,12 +404,18 @@ export const PaywallPlaygroundScreen = ({
     );
   }, [scenario, selectedLocale]);
 
+  const designPresentation = useMemo(
+    () => getPresentation(paywallProduct, paywallDesign),
+    [paywallDesign, paywallProduct],
+  );
+
   const copy = useMemo(() => {
     return getDefaultPaywallCopy(selectedLocale, {
       title: "Upgrade to Pro",
+      titleSegments: designPresentation.copyTitleSegments,
       subtitle: "Unlock every feature.",
     });
-  }, [selectedLocale]);
+  }, [designPresentation.copyTitleSegments, selectedLocale]);
 
   useEffect(() => {
     setSelectedPlanId((currentPlanId) => {
@@ -206,6 +439,12 @@ export const PaywallPlaygroundScreen = ({
     <View style={styles.root}>
       <Paywall
         {...playgroundPaywallConfig}
+        hero={designPresentation.hero}
+        backgroundOverlay={designPresentation.backgroundOverlay}
+        featureComparison={designPresentation.featureComparison}
+        heroFade={designPresentation.heroFade}
+        theme={designPresentation.theme}
+        valueStep={designPresentation.valueStep}
         copy={copy}
         plans={plans}
         stepMode={paywallFlow}

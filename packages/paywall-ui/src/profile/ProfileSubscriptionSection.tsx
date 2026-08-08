@@ -95,6 +95,7 @@ export const ProfileSubscriptionSection = ({
           styles.card,
           {
             backgroundColor: theme.surfaceColor,
+            borderRadius: theme.cardBorderRadius,
             opacity: isCardActionDisabled ? 0.82 : 1,
           },
         ]}
@@ -342,6 +343,7 @@ const ProfileActionButton = ({
         !isPrimary && styles.textButton,
         {
           backgroundColor: isPrimary ? theme.accentColor : "transparent",
+          borderRadius: theme.buttonBorderRadius,
           opacity: isDisabled ? 0.52 : pressed ? 0.82 : 1,
         },
       ]}
@@ -370,7 +372,6 @@ const styles = StyleSheet.create({
   },
   card: {
     borderCurve: "continuous",
-    borderRadius: 8,
     overflow: "hidden",
   },
   headerSection: {
@@ -482,7 +483,6 @@ const styles = StyleSheet.create({
   actionButton: {
     alignItems: "center",
     borderCurve: "continuous",
-    borderRadius: 8,
     justifyContent: "center",
     minHeight: 46,
     paddingHorizontal: 14,

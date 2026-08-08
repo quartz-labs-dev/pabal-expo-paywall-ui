@@ -13,6 +13,12 @@ plan period or plan id.
 
 It does not import `react-native-purchases` or `react-native-purchases-ui`.
 
+The paywall theme carries shape and typography tokens (`cardBorderRadius`,
+`buttonBorderRadius`, `titleFontSize`) alongside colors. Depth effects stay
+dependency-free: apps pass gradients into the `backgroundOverlay` slot, and
+`heroFade` blends hero media into the background with an embedded alpha-ramp
+image. See [Design Tokens And Ambient Background](../../docs/paywall.md#design-tokens-and-ambient-background).
+
 Pre-onboarding `background` and video preview slots accept app-owned
 `ReactNode` renderers. Apps can pass an image, video component, or animated
 visual while keeping media dependencies and playback state outside this

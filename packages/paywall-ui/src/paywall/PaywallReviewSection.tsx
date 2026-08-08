@@ -55,6 +55,7 @@ export const PaywallReviewSection = ({
           styles.panel,
           {
             backgroundColor: getColorWithAlpha(theme.accentColor, 0.09),
+            borderRadius: theme.cardBorderRadius,
           },
         ]}
       >
@@ -124,7 +125,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 2,
   },
   panel: {
-    borderRadius: 8,
     overflow: "hidden",
   },
   review: {

@@ -117,6 +117,7 @@ export const ProfileIdentifiersSection = ({
             {
               backgroundColor: cardBackgroundColor,
               borderColor: theme.borderColor,
+              borderRadius: theme.cardBorderRadius,
               opacity: expandProgress,
               transform: [{ translateY: contentOffset }],
             },
@@ -243,7 +244,6 @@ const styles = StyleSheet.create({
   },
   identifierCard: {
     borderCurve: "continuous",
-    borderRadius: 8,
     borderWidth: 1,
     gap: 18,
     padding: 14,

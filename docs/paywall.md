@@ -7,6 +7,8 @@ eligibility, performs purchases, handles analytics, and owns navigation.
 ## What The Package Provides
 
 - `Paywall`: the React Native paywall screen
+- `PaywallHeroBeforeAfter`: Opal-style before/after stats hero preset
+- `PaywallHeroCarousel`: swipeable, auto-advancing feature carousel hero preset
 - `createPaywallPlans()`: converts RevenueCat-like packages into `PaywallPlan[]`
 - `getDefaultSelectedPlanId()`: selects the default plan from normalized plans
 - `getDefaultPaywallCopy()`: localized default paywall copy
@@ -113,8 +115,18 @@ are running so the CTA shows the localized processing label and spinner.
 | Moving, fade-only, or no transition | `animationMode` |
 | Trial duration, no trial, or plan-specific trials | `freeTrial` |
 | Top media | `hero`, `heroHeightRatio` |
+| Before/after stats hero | `hero={<PaywallHeroBeforeAfter ... />}` |
+| Feature carousel hero | `hero={<PaywallHeroCarousel ... />}` |
+| Fade hero media into the background | `heroFade` |
+| Ambient background layer (gradient, glow) | `backgroundOverlay` |
+| Accent-colored keywords in the title | `copy.titleSegments`, `valueStep.titleSegments` |
+| Card and CTA shape language | `theme.cardBorderRadius`, `theme.buttonBorderRadius` |
+| Title size | `theme.titleFontSize` |
 | Benefit rows | `benefits` |
 | Free/Pro comparison table | `featureComparison` |
+| Circle-badge checkmarks (accent-tinted) | `featureComparison.includedStyle: "circledCheck"` |
+| Hide the dash on excluded cells | `featureComparison.excludedStyle: "hidden"` |
+| Green (or any) color for included checkmarks | `featureComparison.includedColor` |
 | App review quotes | `reviewSection` |
 | Custom body below benefits/comparison | `content`, `valueStep.content` |
 | Plan card order and package mapping | `planOptions` |
@@ -122,6 +134,102 @@ are running so the CTA shows the localized processing label and spinner.
 | Selected-plan CTA text | localized by default, override with `copy.formatPurchaseButtonLabel` |
 | Trial footer reassurance copy | `copy.trialNoPaymentDueNow` |
 | Legal links and developer site | callback props |
+
+## Design Tokens And Ambient Background
+
+The theme carries shape and typography tokens alongside colors. Defaults are
+`cardBorderRadius: 16`, `buttonBorderRadius: 999` (pill CTA), and
+`titleFontSize: 28`. Apps that want the legacy look set them back to `8`,
+`8`, and `26`.
+
+The package ships no gradient dependency. To add depth, pass any component
+into `backgroundOverlay`; it renders absolutely behind the scroll content
+with touches disabled. Recommended recipe — a top-weighted ambient glow in
+the app's accent color:
+
+```tsx
+import { LinearGradient } from "expo-linear-gradient";
+import { getColorWithAlpha } from "pabal-expo-paywall-ui";
+
+const accent = "#5AC8B7";
+
+const paywallConfig = {
+  // ...
+  heroFade: true,
+  backgroundOverlay: (
+    <LinearGradient
+      colors={[
+        getColorWithAlpha(accent, 0.22),
+        getColorWithAlpha(accent, 0.06),
+        "transparent",
+      ]}
+      locations={[0, 0.35, 0.7]}
+      style={{ flex: 1 }}
+    />
+  ),
+} satisfies Partial<PaywallConfig>;
+```
+
+Keep the glow subtle (alpha ≤ 0.25 at the top). `heroFade` blends the bottom
+of the hero into `theme.backgroundColor` with an embedded alpha-ramp image,
+so full-bleed hero art no longer ends in a hard edge.
+
+Title emphasis uses segments; `title` stays as the plain fallback string:
+
+```tsx
+copy: {
+  ...getDefaultPaywallCopy(locale),
+  title: "Start your free week and gain 2+ hours back",
+  titleSegments: [
+    "Start your free week and gain ",
+    { text: "2+ hours", emphasized: true },
+    " back",
+  ],
+},
+```
+
+Emphasized segments render in `theme.accentColor`.
+
+## Hero Presets
+
+Both presets render on a transparent background so the `backgroundOverlay`
+glow stays visible behind them (unlike an opaque full-bleed photo hero,
+which covers it). All copy is app-provided and app-localized.
+
+```tsx
+import {
+  PaywallHeroBeforeAfter,
+  PaywallHeroCarousel,
+} from "pabal-expo-paywall-ui";
+
+// Opal-style before/after stats. The area under each value is an open
+// slot (`beforeContent` / `afterContent`); when omitted, a default mini
+// bar chart renders as the example (tune with `beforeBarHeights` /
+// `afterBarHeights`).
+hero: (
+  <PaywallHeroBeforeAfter
+    accentColor="#5AC8B7"
+    beforeLabel="Before"
+    afterLabel="After"
+    beforeValue="6h 32m"
+    afterValue="1h 49m"
+    // beforeContent={<MyChart data={before} />}
+    // afterContent={<MyChart data={after} />}
+  />
+),
+
+// Swipeable feature carousel; auto-advances (pausing while the user
+// swipes), `autoAdvanceIntervalMs` to tune, 0 to disable
+hero: (
+  <PaywallHeroCarousel
+    accentColor="#5AC8B7"
+    slides={[
+      { icon: <MyIcon />, title: "Live Activities", description: "…" },
+      { title: "Smart Alerts", description: "…" },
+    ]}
+  />
+),
+```
 
 ## Dynamic CTA Labels
 

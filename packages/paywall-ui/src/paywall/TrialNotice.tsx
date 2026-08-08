@@ -20,6 +20,7 @@ export const TrialNotice = ({
         styles.container,
         {
           backgroundColor: getColorWithAlpha(theme.surfaceColor, 0.36),
+          borderRadius: theme.cardBorderRadius,
         },
       ]}
     >
@@ -36,7 +37,6 @@ export const TrialNotice = ({
 const styles = StyleSheet.create({
   container: {
     alignSelf: "center",
-    borderRadius: 8,
     gap: 2,
     maxWidth: 520,
     paddingHorizontal: 12,
