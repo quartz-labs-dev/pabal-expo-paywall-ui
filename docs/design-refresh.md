@@ -103,7 +103,10 @@ Radii that stay hardcoded: radio dot, nav icons, badges (already pill).
   example.
 - `PaywallHeroCarousel`: feature carousel hero. Swipeable (paging
   ScrollView) and auto-advancing; auto-advance pauses while the user
-  swipes. `autoAdvanceIntervalMs` tunes the cadence (0 disables).
+  swipes. Loops infinitely in both directions via edge-clone pages with a
+  silent snap after the scroll settles (`hero-carousel-math.ts` holds the
+  tested position logic). `autoAdvanceIntervalMs` tunes the cadence
+  (0 disables).
 - Both render on transparent backgrounds so the `backgroundOverlay` glow
   stays visible behind them.
 

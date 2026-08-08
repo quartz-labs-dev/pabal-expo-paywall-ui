@@ -9,8 +9,9 @@ import {
 } from "react-native";
 
 import {
-  getNextSlideIndex,
   getSlideIndexFromOffset,
+  getLoopedPageCount,
+  resolveLoopedCarouselPosition,
 } from "./hero-carousel-math";
 
 export interface PaywallHeroCarouselSlide {
@@ -34,9 +35,12 @@ export interface PaywallHeroCarouselProps {
 
 const DEFAULT_AUTO_ADVANCE_INTERVAL_MS = 3200;
 
-// Swipeable, auto-advancing feature carousel for the `hero` slot. Renders
-// on a transparent background so an app-provided `backgroundOverlay` glow
-// stays visible behind it.
+// Swipeable, auto-advancing feature carousel for the `hero` slot. Loops
+// infinitely in both directions (1 -> 2 -> 3 -> 1 keeps moving forward)
+// by rendering clone pages at both edges and silently snapping to the
+// matching real page after the scroll settles. Renders on a transparent
+// background so an app-provided `backgroundOverlay` glow stays visible
+// behind it.
 export const PaywallHeroCarousel = ({
   slides,
   accentColor,
@@ -44,48 +48,85 @@ export const PaywallHeroCarousel = ({
   textColor = "#FFFFFF",
   secondaryTextColor = "rgba(255, 255, 255, 0.66)",
 }: PaywallHeroCarouselProps) => {
+  const slideCount = slides.length;
+  const isLooping = slideCount > 1;
   const scrollViewRef = useRef<ScrollView>(null);
-  const activeIndexRef = useRef(0);
+  // Page position within [1, slideCount] (see hero-carousel-math).
+  const virtualIndexRef = useRef(isLooping ? 1 : 0);
   const isUserScrollingRef = useRef(false);
   const [containerWidth, setContainerWidth] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
 
+  const pages = isLooping
+    ? [slides[slideCount - 1], ...slides, slides[0]]
+    : slides;
+
+  // Start on (and re-snap to) the current real page whenever the
+  // container width becomes known or changes.
   useEffect(() => {
-    activeIndexRef.current = activeIndex;
-  }, [activeIndex]);
+    if (!isLooping || containerWidth <= 0) return;
+    scrollViewRef.current?.scrollTo({
+      animated: false,
+      x: virtualIndexRef.current * containerWidth,
+    });
+  }, [containerWidth, isLooping]);
 
   useEffect(() => {
-    if (containerWidth <= 0 || slides.length < 2 || autoAdvanceIntervalMs <= 0) {
+    if (containerWidth <= 0 || !isLooping || autoAdvanceIntervalMs <= 0) {
       return undefined;
     }
 
     const interval = setInterval(() => {
       if (isUserScrollingRef.current) return;
-      const nextIndex = getNextSlideIndex(
-        activeIndexRef.current,
-        slides.length
-      );
+
+      // Safety net: if a scroll-settled event was missed while parked on
+      // the first-slide clone, silently snap to the real first page before
+      // advancing so motion always continues forward.
+      let currentVirtualIndex = virtualIndexRef.current;
+      if (currentVirtualIndex > slideCount) {
+        currentVirtualIndex = 1;
+        scrollViewRef.current?.scrollTo({
+          animated: false,
+          x: currentVirtualIndex * containerWidth,
+        });
+      }
+
+      // Advancing past the last real page lands on the first-slide clone;
+      // the scroll-end handler snaps back to the real first page.
+      const nextVirtualIndex = currentVirtualIndex + 1;
+      virtualIndexRef.current = nextVirtualIndex;
       scrollViewRef.current?.scrollTo({
         animated: true,
-        x: nextIndex * containerWidth,
+        x: nextVirtualIndex * containerWidth,
       });
-      setActiveIndex(nextIndex);
+      setActiveIndex((nextVirtualIndex - 1) % slideCount);
     }, autoAdvanceIntervalMs);
 
     return () => clearInterval(interval);
-  }, [autoAdvanceIntervalMs, containerWidth, slides.length]);
+  }, [autoAdvanceIntervalMs, containerWidth, isLooping, slideCount]);
 
-  const syncIndexFromScroll = (
+  const handleScrollSettled = (
     event: NativeSyntheticEvent<NativeScrollEvent>
   ) => {
     isUserScrollingRef.current = false;
-    setActiveIndex(
-      getSlideIndexFromOffset(
-        event.nativeEvent.contentOffset.x,
-        containerWidth,
-        slides.length
-      )
+    if (!isLooping || containerWidth <= 0) return;
+
+    const rawPageIndex = getSlideIndexFromOffset(
+      event.nativeEvent.contentOffset.x,
+      containerWidth,
+      getLoopedPageCount(slideCount)
     );
+    const position = resolveLoopedCarouselPosition(rawPageIndex, slideCount);
+
+    virtualIndexRef.current = position.virtualIndex;
+    setActiveIndex(position.realIndex);
+
+    if (position.requiresSnap) {
+      scrollViewRef.current?.scrollTo({
+        animated: false,
+        x: position.virtualIndex * containerWidth,
+      });
+    }
   };
 
   return (
@@ -104,12 +145,12 @@ export const PaywallHeroCarousel = ({
           onScrollBeginDrag={() => {
             isUserScrollingRef.current = true;
           }}
-          onScrollEndDrag={syncIndexFromScroll}
-          onMomentumScrollEnd={syncIndexFromScroll}
+          onScrollEndDrag={handleScrollSettled}
+          onMomentumScrollEnd={handleScrollSettled}
         >
-          {slides.map((slide, index) => (
+          {pages.map((slide, pageIndex) => (
             <View
-              key={slide.key ?? `${slide.title}-${index}`}
+              key={`page-${pageIndex}`}
               style={[styles.slide, { width: containerWidth }]}
             >
               {slide.icon && (
@@ -131,7 +172,7 @@ export const PaywallHeroCarousel = ({
           ))}
         </ScrollView>
       )}
-      {slides.length > 1 && (
+      {isLooping && (
         <View style={styles.dots}>
           {slides.map((slide, index) => (
             <View

@@ -218,7 +218,9 @@ hero: (
   />
 ),
 
-// Swipeable feature carousel; auto-advances (pausing while the user
+// Swipeable feature carousel; loops infinitely in both directions
+// (1 -> 2 -> 3 -> 1 keeps moving forward, and swiping back from the
+// first slide reaches the last). Auto-advances (pausing while the user
 // swipes), `autoAdvanceIntervalMs` to tune, 0 to disable
 hero: (
   <PaywallHeroCarousel
