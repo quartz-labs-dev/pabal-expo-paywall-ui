@@ -23,13 +23,12 @@ export type PlaygroundRoute =
 
 export type PlaygroundPaywallFlow = "twoStep" | "singleStep";
 
-export type PlaygroundPaywallProduct =
-  | "aurora"
-  | "tide"
-  | "ember"
-  | "drift"
-  | "summit"
-  | "atlas";
+/**
+ * Three products, each covering a hero pairing rather than a single hero:
+ * `aurora` splits photo → screens, `tide` splits widget → before/after, and
+ * `drift` shares one hero across both steps.
+ */
+export type PlaygroundPaywallProduct = "aurora" | "tide" | "drift";
 
 export type PlaygroundPaywallAnimation = "default" | "opacity" | "none";
 

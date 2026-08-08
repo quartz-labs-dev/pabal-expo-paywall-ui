@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
   Animated,
   Image,
@@ -36,6 +36,7 @@ import {
   HERO_FADE_IMAGE_URI,
 } from "../shared/hero-fade";
 import { getPinnedContentPaddingTop } from "./pinned-hero-layout";
+import { hasStepHeroOverride, resolveStepHeroSettings } from "./step-hero";
 import { normalizeTitleSegments } from "./title-segments";
 import { TrialNotice } from "./TrialNotice";
 import { resolveFreeTrialConfig } from "./free-trial-config";
@@ -191,8 +192,16 @@ export const Paywall = <TPackage,>({
         })
       : defaultPurchaseButtonLabel;
   const isProcessing = isPurchasing || isRestoring;
-  const isHeroPinned = heroLayout === "pinned";
-  const heroHeight = Math.round(windowHeight * heroHeightRatio);
+  const isValueStep = shouldUseValueStep && currentStep === "value";
+  const stepHero = resolveStepHeroSettings<ReactNode>(
+    { hero, heroHeightRatio, heroFade, heroLayout },
+    valueStep,
+    isValueStep
+  );
+  const shouldCrossfadeHero =
+    shouldAnimate && shouldUseValueStep && hasStepHeroOverride(valueStep);
+  const isHeroPinned = stepHero.heroLayout === "pinned";
+  const heroHeight = Math.round(windowHeight * stepHero.heroHeightRatio);
   const pinnedContentPaddingTop = getPinnedContentPaddingTop(heroHeight);
   const [measuredFooterHeight, setMeasuredFooterHeight] = useState(0);
   const footerBottomPadding =
@@ -203,7 +212,6 @@ export const Paywall = <TPackage,>({
     measuredFooterHeight,
     fallbackFooterHeight
   );
-  const isValueStep = shouldUseValueStep && currentStep === "value";
   const title = isValueStep ? valueStep?.title : copy.title;
   const titleSegments = isValueStep
     ? valueStep?.titleSegments
@@ -308,10 +316,18 @@ export const Paywall = <TPackage,>({
     transitionToStep("value");
   };
 
+  // A paywall that swaps heroes between steps fades the new one in. The hero
+  // sits outside the body that rises on a step change, so without this the
+  // swap lands in a single frame while the content is still animating.
   const heroLayer = (
-    <>
-      {hero}
-      {heroFade && (
+    <Animated.View
+      style={[
+        styles.heroLayer,
+        shouldCrossfadeHero && { opacity: stepTransition },
+      ]}
+    >
+      {stepHero.hero}
+      {stepHero.heroFade && (
         <Image
           resizeMode="stretch"
           source={{ uri: HERO_FADE_IMAGE_URI }}
@@ -326,7 +342,7 @@ export const Paywall = <TPackage,>({
           ]}
         />
       )}
-    </>
+    </Animated.View>
   );
 
   return (
@@ -714,6 +730,9 @@ const styles = StyleSheet.create({
   hero: {
     overflow: "hidden",
     width: "100%",
+  },
+  heroLayer: {
+    flex: 1,
   },
   pinnedHero: {
     left: 0,

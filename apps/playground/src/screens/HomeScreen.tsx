@@ -71,24 +71,17 @@ const paywallAnimationLabels: Record<PlaygroundPaywallAnimation, string> = {
   opacity: "Fade",
   none: "No animation",
 };
-const paywallProducts: PlaygroundPaywallProduct[] = [
-  "aurora",
-  "tide",
-  "ember",
-  "drift",
-  "summit",
-  "atlas",
-];
+const paywallProducts: PlaygroundPaywallProduct[] = ["aurora", "tide", "drift"];
+// The detail is the product's hero pairing: what the value step opens with,
+// then what the purchase step sells with. Switch to the two-step flow to see
+// both halves.
 const paywallProductLabels: Record<
   PlaygroundPaywallProduct,
   { name: string; detail: string }
 > = {
-  aurora: { detail: "photo hero", name: "Aurora" },
-  tide: { detail: "floating hero", name: "Tide" },
-  ember: { detail: "before / after", name: "Ember" },
-  drift: { detail: "icon carousel", name: "Drift" },
-  summit: { detail: "tall pinned hero", name: "Summit" },
-  atlas: { detail: "screen carousel", name: "Atlas" },
+  aurora: { detail: "photo → screens", name: "Aurora" },
+  tide: { detail: "widget → before/after", name: "Tide" },
+  drift: { detail: "one shared hero", name: "Drift" },
 };
 const freeTrialModes: PlaygroundFreeTrialMode[] = [
   "sevenDays",

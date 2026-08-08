@@ -19,6 +19,11 @@ dependency-free: apps pass gradients into the `backgroundOverlay` slot, and
 `heroFade` blends hero media into the background with an embedded alpha-ramp
 image. See [Design Tokens And Ambient Background](../../docs/paywall.md#design-tokens-and-ambient-background).
 
+A two-step paywall can carry a hero per step: `valueStep.hero` and its layout
+props override the top-level ones on the value step, and each falls back on
+its own when omitted. Leave them out and both steps share one hero. See
+[A Hero Per Step](../../docs/paywall.md#a-hero-per-step).
+
 Pre-onboarding `background` and video preview slots accept app-owned
 `ReactNode` renderers. Apps can pass an image, video component, or animated
 visual while keeping media dependencies and playback state outside this

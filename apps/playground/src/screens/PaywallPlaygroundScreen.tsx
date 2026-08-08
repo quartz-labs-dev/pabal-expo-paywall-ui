@@ -105,7 +105,7 @@ const checkFeatureComparison = {
 } satisfies PaywallConfig["featureComparison"];
 
 // The nine-row default table, shared by every product that does not bring its
-// own comparison. Extracted so the summit preset can reuse the same rows with
+// own comparison. Extracted so the drift preset can reuse the same rows with
 // a collapse toggle on top.
 const defaultComparisonRows = [
   {
@@ -169,7 +169,8 @@ const defaultComparisonRows = [
 
 // Collapsed comparison variant: the same nine rows, but only the first four
 // are shown until the toggle expands the rest. The labels carry the remaining
-// count because the package leaves them to the app.
+// count because the package leaves them to the app. Carried by drift; aurora
+// keeps the same rows uncollapsed as the comparison case.
 const collapsedFeatureComparison = {
   freeColumnTitle: "Free",
   paidColumnTitle: "Pro",
@@ -227,10 +228,23 @@ const screenSlideStyles = StyleSheet.create({
 });
 
 interface PlaygroundProductPreset {
+  /**
+   * The purchase-step hero, and the shared hero for both steps when
+   * `valueStepHero` is absent.
+   */
   hero: PaywallConfig["hero"];
   heroHeightRatio?: PaywallConfig["heroHeightRatio"];
   heroFade: boolean;
   heroLayout?: PaywallConfig["heroLayout"];
+  /**
+   * Value-step hero overrides. Omit them and both steps share `hero`, which
+   * is the behavior every paywall had before per-step heroes existed — the
+   * drift product keeps that path covered.
+   */
+  valueStepHero?: Pick<
+    NonNullable<PaywallConfig["valueStep"]>,
+    "hero" | "heroHeightRatio" | "heroFade" | "heroLayout"
+  >;
   /**
    * Opt out of the ambient glow. Opaque photo heroes cover the glow's
    * strongest part and then reveal it mid-ramp at their bottom edge, so the
@@ -242,28 +256,85 @@ interface PlaygroundProductPreset {
   featureComparison?: PaywallConfig["featureComparison"];
 }
 
-// Six fake products covering the hero and comparison variants:
-// - aurora: opaque photo hero, no ambient glow (see docs/paywall.md), text
-//   cells
-// - tide: transparent floating-widget hero (glow fully visible), green checks
-// - ember: before/after stats hero (Opal style), collapsed comparison table
-// - drift: auto-advancing feature carousel hero, green checks
-// - atlas: carousel of full-width `content` slides with auto-advance off —
-//   the shape an app uses to show real screens rather than icons
-// - summit: tall opaque photo hero (heroHeightRatio 0.42, ~2x the 0.23
-//   default) with heroFade and heroLayout "pinned" — the hero stays fixed
-//   behind the screen while the content sheet rises and scrolls over it, plus
-//   a collapsed comparison table
-// ember and summit share the collapsed table (4 of 9 rows visible); aurora
-// keeps the same rows uncollapsed as the comparison case.
+// Three fake products, each covering a hero *pairing* rather than a single
+// hero. Per-step heroes let one product carry two, so the six products this
+// replaced collapsed into three without losing a variant:
+//
+// - aurora: screens → photo, each hero matching the body under it. The value
+//   step argues features (benefits or the comparison table), so it opens on a
+//   carousel of full-width `content` slides with auto-advance off — the shape
+//   an app uses to show real screens rather than icons, saying what a table
+//   can not. The purchase step is plans and price, so it swaps in a tall
+//   pinned photo (heroHeightRatio 0.42, ~2x the 0.23 default) with heroFade:
+//   the payoff being bought, held still behind the sheet of plans rising over
+//   it. Covers both hero layouts in one run, and the value-step override
+//   turns the shared fade and pin back off. The ambient glow reads on the
+//   value step's transparent hero and is fully hidden behind the photo and
+//   its opaque sheet on the purchase step, so the seam docs/paywall.md warns
+//   about never appears. Nine-row comparison, uncollapsed.
+// - tide: widget → before/after. A transparent floating-widget hero opens,
+//   then the packaged before/after stats hero (Opal style) sells. Both are
+//   transparent, so the ambient glow stays visible through the whole flow.
+//   Green check-only comparison.
+// - drift: one shared hero. No value-step override, so the auto-advancing
+//   icon carousel renders on both steps and holds still across the
+//   transition — the pre-per-step-hero behavior, kept under test. Collapsed
+//   comparison table (4 of 9 rows visible).
 const productPresets: Record<PlaygroundPaywallProduct, PlaygroundProductPreset> =
   {
     aurora: {
       hero: (
         <PhotoHero uri="https://images.unsplash.com/photo-1531366936337-7c912a4589a7?auto=format&fit=crop&w=1200&q=80" />
       ),
+      heroHeightRatio: 0.42,
       heroFade: true,
-      ambientGlow: false,
+      heroLayout: "pinned",
+      valueStepHero: {
+        hero: (
+          <PaywallHeroCarousel
+            accentColor="#5AC8B7"
+            // Off on purpose: `content` slides are screens the user is meant
+            // to study, and the hero sits directly above the paywall title, so
+            // a slide that advances on its own competes with reading it. The
+            // dots are what signal there is more.
+            autoAdvanceIntervalMs={0}
+            // Fixed so the caption stays at one height while the slides, which
+            // have different row counts, swipe past behind it.
+            contentHeight={110}
+            titleHeight={22}
+            slides={[
+              {
+                key: "widget",
+                content: (
+                  <ScreenSlide accentColor="#5AC8B7" rows={[70, 100, 46]} />
+                ),
+                title: "Home widget",
+              },
+              {
+                key: "history",
+                content: (
+                  <ScreenSlide accentColor="#5AC8B7" rows={[52, 88, 100, 34]} />
+                ),
+                title: "Full history",
+              },
+              {
+                key: "trends",
+                content: (
+                  <ScreenSlide accentColor="#5AC8B7" rows={[100, 62, 78]} />
+                ),
+                title: "Trends",
+              },
+            ]}
+            textColor="#F5F7FA"
+          />
+        ),
+        heroHeightRatio: 0.3,
+        // Both off for the value step: the carousel is transparent, so it has
+        // no edge to fade, and pinning an interactive hero behind a rising
+        // sheet would bury the swipe.
+        heroFade: false,
+        heroLayout: "scroll",
+      },
       accentColor: "#5AC8B7",
       theme: {
         accentColor: "#5AC8B7",
@@ -272,8 +343,19 @@ const productPresets: Record<PlaygroundPaywallProduct, PlaygroundProductPreset> 
       },
     },
     tide: {
-      hero: <PlaygroundFloatingHero accentColor="#8B7CFF" />,
+      hero: (
+        <PaywallHeroBeforeAfter
+          accentColor="#8B7CFF"
+          beforeLabel="Before"
+          afterLabel="After"
+          beforeValue="6h 32m"
+          afterValue="1h 49m"
+        />
+      ),
       heroFade: false,
+      valueStepHero: {
+        hero: <PlaygroundFloatingHero accentColor="#8B7CFF" />,
+      },
       accentColor: "#8B7CFF",
       featureComparison: checkFeatureComparison,
       theme: {
@@ -287,32 +369,6 @@ const productPresets: Record<PlaygroundPaywallProduct, PlaygroundProductPreset> 
         selectedBorderColor: "#8B7CFF",
         selectedSurfaceColor: "#2A2158",
         surfaceColor: "#221B45",
-      },
-    },
-    ember: {
-      hero: (
-        <PaywallHeroBeforeAfter
-          accentColor="#FF9D5C"
-          beforeLabel="Before"
-          afterLabel="After"
-          beforeValue="6h 32m"
-          afterValue="1h 49m"
-        />
-      ),
-      heroFade: false,
-      accentColor: "#FF9D5C",
-      featureComparison: collapsedFeatureComparison,
-      theme: {
-        accentColor: "#FF9D5C",
-        accentTextColor: "#2A1404",
-        backgroundColor: "#170D07",
-        borderColor: "#45301F",
-        mutedTextColor: "#9C8672",
-        primaryTextColor: "#FBF4EE",
-        secondaryTextColor: "#D8C4B4",
-        selectedBorderColor: "#FF9D5C",
-        selectedSurfaceColor: "#33200F",
-        surfaceColor: "#261510",
       },
     },
     drift: {
@@ -338,9 +394,11 @@ const productPresets: Record<PlaygroundPaywallProduct, PlaygroundProductPreset> 
           ]}
         />
       ),
+      // No valueStepHero on purpose: this is the shared-hero path, where one
+      // hero renders on both steps and holds still across the transition.
       heroFade: false,
       accentColor: "#5CB8FF",
-      featureComparison: checkFeatureComparison,
+      featureComparison: collapsedFeatureComparison,
       theme: {
         accentColor: "#5CB8FF",
         accentTextColor: "#04263D",
@@ -352,79 +410,6 @@ const productPresets: Record<PlaygroundPaywallProduct, PlaygroundProductPreset> 
         selectedBorderColor: "#5CB8FF",
         selectedSurfaceColor: "#0F2438",
         surfaceColor: "#122031",
-      },
-    },
-    summit: {
-      hero: (
-        <PhotoHero uri="https://images.unsplash.com/photo-1522163182402-834f871fd851?auto=format&fit=crop&w=1200&q=80" />
-      ),
-      heroHeightRatio: 0.42,
-      heroFade: true,
-      heroLayout: "pinned",
-      accentColor: "#D6D9DE",
-      featureComparison: collapsedFeatureComparison,
-      theme: {
-        accentColor: "#D6D9DE",
-        accentTextColor: "#15171A",
-        backgroundColor: "#0B0C0E",
-        borderColor: "#33363B",
-        mutedTextColor: "#8B8F96",
-        primaryTextColor: "#F5F6F7",
-        secondaryTextColor: "#C6C9CE",
-        selectedBorderColor: "#D6D9DE",
-        selectedSurfaceColor: "#232527",
-        surfaceColor: "#191A1C",
-      },
-    },
-    atlas: {
-      hero: (
-        <PaywallHeroCarousel
-          accentColor="#7CE0A3"
-          // Off on purpose: `content` slides are screens the user is meant to
-          // study, and the hero sits directly above the paywall title, so a
-          // slide that advances on its own competes with reading it. The dots
-          // are what signal there is more.
-          autoAdvanceIntervalMs={0}
-          // Fixed so the caption stays at one height while the slides, which
-          // have different row counts, swipe past behind it.
-          contentHeight={110}
-          secondaryTextColor="#7C8A80"
-          titleHeight={22}
-          slides={[
-            {
-              key: "widget",
-              content: <ScreenSlide accentColor="#7CE0A3" rows={[70, 100, 46]} />,
-              title: "Home widget",
-            },
-            {
-              key: "history",
-              content: <ScreenSlide accentColor="#7CE0A3" rows={[52, 88, 100, 34]} />,
-              title: "Full history",
-            },
-            {
-              key: "trends",
-              content: <ScreenSlide accentColor="#7CE0A3" rows={[100, 62, 78]} />,
-              title: "Trends",
-            },
-          ]}
-          textColor="#E9F5EE"
-        />
-      ),
-      heroHeightRatio: 0.3,
-      heroFade: false,
-      accentColor: "#7CE0A3",
-      featureComparison: collapsedFeatureComparison,
-      theme: {
-        accentColor: "#7CE0A3",
-        accentTextColor: "#06210F",
-        backgroundColor: "#070C09",
-        borderColor: "#26332B",
-        mutedTextColor: "#7C8A80",
-        primaryTextColor: "#EDF6F0",
-        secondaryTextColor: "#BACDC0",
-        selectedBorderColor: "#7CE0A3",
-        selectedSurfaceColor: "#102019",
-        surfaceColor: "#111815",
       },
     },
   };
@@ -492,6 +477,9 @@ const getPresentation = (
         " experience",
       ],
       subtitle: "See the value first, then choose a plan on the next step.",
+      // Absent for the shared-hero product, which then renders the top-level
+      // hero on both steps.
+      ...preset.valueStepHero,
     },
     theme: preset.theme,
     copyTitleSegments: ["Upgrade to ", { text: "Pro", emphasized: true }],

@@ -182,6 +182,22 @@ export interface PaywallValueStep {
   subtitle?: string;
   content?: ReactNode;
   closeButtonVisibility?: "hidden" | "visible";
+  /**
+   * Hero rendered on the value step instead of the top-level `hero`, for a
+   * paywall that leads with one hero and sells with another — an aspirational
+   * photo first, the product itself once the user reaches the plans.
+   *
+   * Omit it and both steps share the top-level hero, unchanged.
+   */
+  hero?: ReactNode;
+  /**
+   * Value-step overrides for the top-level hero layout props. Each falls back
+   * to its top-level value on its own, so a value step carrying only `hero`
+   * keeps the shared ratio, fade, and layout.
+   */
+  heroHeightRatio?: number;
+  heroFade?: boolean;
+  heroLayout?: PaywallHeroLayout;
 }
 
 export type PaywallReviewRating = 1 | 2 | 3 | 4 | 5;

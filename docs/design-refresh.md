@@ -131,24 +131,11 @@ The playground demonstrates every refresh feature (`apps/playground`):
 - **Design** toggle (Paywall settings): `Refresh` vs `Legacy` — legacy
   reproduces the pre-refresh look (radius 8, title 26, no fade/glow) for
   side-by-side comparison.
-- **Product** selector: four fake products proving the system works across
-  brand colors, hero types, and comparison styles:
-  - `Aurora` — teal accent, opaque photo hero, text comparison cells. The
-    ambient glow only peeks out below an opaque full-bleed hero; expected.
-  - `Tide` — violet accent, transparent floating-widget hero
-    (`PlaygroundFloatingHero`), green check-only comparison. The glow is
-    fully visible behind the hero — use this shape when the glow should
-    carry the screen.
-  - `Ember` — amber accent, package `PaywallHeroBeforeAfter` hero, text
-    comparison cells.
-  - `Drift` — blue accent, package `PaywallHeroCarousel` hero (swipe it),
-    circled-check comparison with hidden excluded cells.
-  - `Summit` — monochrome accent, tall opaque photo hero
-    (`heroHeightRatio: 0.42`, ~2x the 0.23 default) with `heroFade`.
-    Proves both are per-`Paywall`-instance, not global package settings.
-- The glow color is app-injected (`PlaygroundAmbientGlow` takes
-  `accentColor`), mirroring how real apps pass their own gradient into
-  `backgroundOverlay`.
+- **Product** selector: fake products proving the system works across brand
+  colors, hero types, and comparison styles. Heroes later became per step, so
+  each product now carries a hero *pairing* and the original six collapsed
+  into three. See [Playground Products](./paywall.md#playground-products) for
+  the current list; that section is canonical and this plan does not track it.
 
 ## Docs and validation
 

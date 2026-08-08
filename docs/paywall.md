@@ -122,6 +122,7 @@ are running so the CTA shows the localized processing label and spinner.
 | Carousel opened on a particular slide | `initialIndex` |
 | Fade hero media into the background | `heroFade` |
 | Fixed hero background with content rising over it as a sheet | `heroLayout: "pinned"` |
+| A different hero on each step of a two-step paywall | `valueStep.hero` |
 | Ambient background layer (gradient, glow) | `backgroundOverlay` |
 | Accent-colored keywords in the title | `copy.titleSegments`, `valueStep.titleSegments` |
 | Card and CTA shape language | `theme.cardBorderRadius`, `theme.buttonBorderRadius` |
@@ -189,9 +190,15 @@ below it. A photo hero already carries its own color and depth, so it does not
 need the glow.
 
 Use the glow with heroes that let it through: `PaywallHeroBeforeAfter`,
-`PaywallHeroCarousel`, and any app hero drawn on a transparent background. The
-playground's `aurora` preset shows the photo-hero-without-glow pairing; `tide`
-and `drift` show the glow with transparent heroes.
+`PaywallHeroCarousel`, and any app hero drawn on a transparent background.
+
+That rule is per step, not per paywall. `backgroundOverlay` is a single
+top-level layer, but a paywall with [a hero per step](#a-hero-per-step) can
+still keep the glow: it serves the step whose hero is transparent, and the
+step with the photo covers it. A pinned photo covers it completely — the photo
+holds the top of the screen and the opaque sheet holds everything below it, so
+the seam has nowhere to appear. The playground's `aurora` product runs exactly
+that pairing.
 
 ### Pinned Hero Layout
 
@@ -214,6 +221,63 @@ const paywallConfig = {
 
 Works with both step modes and both hero-scroll steps (value/purchase);
 close/back buttons stay fixed above the hero either way, unchanged.
+
+### A Hero Per Step
+
+The two steps of a two-step paywall argue different things, and each hero
+should match the body under it rather than repeat it.
+
+The value step carries the benefit list or the comparison table — it is the
+feature screen, so its hero is where the features can be *shown*, which a
+table can not do. The purchase step hides both and carries the plans, the
+price, and the reviews — it is the decision screen, so its hero is where the
+payoff being bought belongs, next to what it costs.
+
+`valueStep` can therefore override the hero and its layout props. Anything it
+leaves out falls back to the top level, so the two steps share whatever the
+override does not replace:
+
+```tsx
+const paywallConfig = {
+  // The purchase step prices the product, so it shows what the money buys.
+  hero: <AuroraPhoto />,
+  heroHeightRatio: 0.42,
+  heroFade: true,
+  heroLayout: "pinned",
+
+  valueStep: {
+    title: "Chase the light",
+    // The value step argues features, so it shows the product itself.
+    hero: <FeatureCarousel />,
+    heroHeightRatio: 0.3,
+    heroFade: false,
+    heroLayout: "scroll",
+  },
+} satisfies Partial<PaywallConfig>;
+```
+
+Each of `hero`, `heroHeightRatio`, `heroFade`, and `heroLayout` resolves on its
+own, so a value step carrying only `hero` keeps the shared ratio, fade, and
+layout. `heroLayout` in particular is per step: a paywall can let a shorter
+hero scroll away on the value step and pin a tall photo behind the purchase
+step, as the playground's `aurora` product does. Pinning suits a photo the
+sheet should rise over; an interactive hero like `PaywallHeroCarousel` stays
+on `scroll`, since a rising sheet would bury the swipe.
+
+Only `undefined` counts as absent. A value step can pass `hero: null` to render
+no hero node at all, or `heroFade: false` to turn a shared fade off for one
+step.
+
+Omit all four and both steps share the top-level hero, unchanged — the
+behavior every paywall had before per-step heroes existed. The playground's
+`drift` product keeps that path visible.
+
+When a step does override the hero, the hero crossfades on the step
+transition. The hero sits outside the body that rises on a step change, so
+without the fade the swap would land in a single frame while the content is
+still animating. A shared hero never fades: holding still is what makes the
+two steps read as one screen. `animationMode: "none"` disables the crossfade
+with every other transition.
 
 Title emphasis uses segments; `title` stays as the plain fallback string:
 
@@ -331,6 +395,28 @@ hero: (
   />
 ),
 ```
+
+## Playground Products
+
+`apps/playground` carries three fake products under the **Product** selector.
+Each one covers a hero *pairing* rather than a single hero, so switch **Flow**
+to two-step to see both halves. Between them they exercise every hero type,
+both layouts, the fade, the glow, and all three comparison styles.
+
+| | Value step hero | Purchase step hero | Also covers |
+| --- | --- | --- | --- |
+| **Aurora** (teal) | `PaywallHeroCarousel`, full-width `content` slides, auto-advance off, `0.3`, scrolling | `PhotoHero`, `0.42`, `heroFade`, `heroLayout: "pinned"` | Both layouts in one run; a value step turning the shared fade and pin back off; the glow surviving a photo hero; nine-row comparison, uncollapsed |
+| **Tide** (violet) | `PlaygroundFloatingHero`, transparent | `PaywallHeroBeforeAfter` | An override carrying only `hero`, so the ratio, fade, and layout stay shared; the glow behind transparent heroes on both steps; check-only comparison (`circledCheck` + hidden excluded cells) |
+| **Drift** (blue) | — | `PaywallHeroCarousel`, icon slides, auto-advancing | One shared hero across both steps, holding still through the transition — the behavior every paywall had before per-step heroes; collapsed comparison table (4 of 9 rows) |
+
+Aurora is the reference for matching each hero to the body under it: the value
+step argues features, so it shows the product; the purchase step prices them,
+so it shows the payoff. Drift is the regression case — a shared hero must not
+crossfade, because holding still is what makes the two steps read as one
+screen.
+
+The glow color is app-injected (`PlaygroundAmbientGlow` takes `accentColor`),
+mirroring how a real app passes its own gradient into `backgroundOverlay`.
 
 ## Dynamic CTA Labels
 
