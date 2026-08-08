@@ -185,6 +185,47 @@ const collapsedFeatureComparison = {
 // of the StyleSheet at the bottom of this file).
 const carouselIconStyle = { fontSize: 22, lineHeight: 28 } as const;
 
+// Stand-ins for the real app screens a consuming app drops into a `content`
+// slide. They are deliberately wider and taller than an icon: the point of
+// `content` is that it is not a glyph in a 48pt bubble.
+const ScreenSlide = ({
+  accentColor,
+  rows,
+}: {
+  accentColor: string;
+  rows: number[];
+}) => (
+  <View style={screenSlideStyles.card}>
+    {rows.map((width, index) => (
+      <View
+        key={`row-${index}`}
+        style={[
+          screenSlideStyles.row,
+          {
+            backgroundColor:
+              index === 0 ? accentColor : "rgba(255, 255, 255, 0.16)",
+            width: `${width}%`,
+          },
+        ]}
+      />
+    ))}
+  </View>
+);
+
+const screenSlideStyles = StyleSheet.create({
+  card: {
+    backgroundColor: "rgba(255, 255, 255, 0.06)",
+    borderRadius: 16,
+    gap: 8,
+    padding: 16,
+    width: "100%",
+  },
+  row: {
+    borderRadius: 4,
+    height: 10,
+  },
+});
+
 interface PlaygroundProductPreset {
   hero: PaywallConfig["hero"];
   heroHeightRatio?: PaywallConfig["heroHeightRatio"];
@@ -201,12 +242,14 @@ interface PlaygroundProductPreset {
   featureComparison?: PaywallConfig["featureComparison"];
 }
 
-// Five fake products covering the hero and comparison variants:
+// Six fake products covering the hero and comparison variants:
 // - aurora: opaque photo hero, no ambient glow (see docs/paywall.md), text
 //   cells
 // - tide: transparent floating-widget hero (glow fully visible), green checks
 // - ember: before/after stats hero (Opal style), collapsed comparison table
 // - drift: auto-advancing feature carousel hero, green checks
+// - atlas: carousel of full-width `content` slides with auto-advance off —
+//   the shape an app uses to show real screens rather than icons
 // - summit: tall opaque photo hero (heroHeightRatio 0.42, ~2x the 0.23
 //   default) with heroFade and heroLayout "pinned" — the hero stays fixed
 //   behind the screen while the content sheet rises and scrolls over it, plus
@@ -331,6 +374,57 @@ const productPresets: Record<PlaygroundPaywallProduct, PlaygroundProductPreset> 
         selectedBorderColor: "#D6D9DE",
         selectedSurfaceColor: "#232527",
         surfaceColor: "#191A1C",
+      },
+    },
+    atlas: {
+      hero: (
+        <PaywallHeroCarousel
+          accentColor="#7CE0A3"
+          // Off on purpose: `content` slides are screens the user is meant to
+          // study, and the hero sits directly above the paywall title, so a
+          // slide that advances on its own competes with reading it. The dots
+          // are what signal there is more.
+          autoAdvanceIntervalMs={0}
+          // Fixed so the caption stays at one height while the slides, which
+          // have different row counts, swipe past behind it.
+          contentHeight={110}
+          secondaryTextColor="#7C8A80"
+          titleHeight={22}
+          slides={[
+            {
+              key: "widget",
+              content: <ScreenSlide accentColor="#7CE0A3" rows={[70, 100, 46]} />,
+              title: "Home widget",
+            },
+            {
+              key: "history",
+              content: <ScreenSlide accentColor="#7CE0A3" rows={[52, 88, 100, 34]} />,
+              title: "Full history",
+            },
+            {
+              key: "trends",
+              content: <ScreenSlide accentColor="#7CE0A3" rows={[100, 62, 78]} />,
+              title: "Trends",
+            },
+          ]}
+          textColor="#E9F5EE"
+        />
+      ),
+      heroHeightRatio: 0.3,
+      heroFade: false,
+      accentColor: "#7CE0A3",
+      featureComparison: collapsedFeatureComparison,
+      theme: {
+        accentColor: "#7CE0A3",
+        accentTextColor: "#06210F",
+        backgroundColor: "#070C09",
+        borderColor: "#26332B",
+        mutedTextColor: "#7C8A80",
+        primaryTextColor: "#EDF6F0",
+        secondaryTextColor: "#BACDC0",
+        selectedBorderColor: "#7CE0A3",
+        selectedSurfaceColor: "#102019",
+        surfaceColor: "#111815",
       },
     },
   };

@@ -17,7 +17,13 @@ import {
 export interface PaywallHeroCarouselSlide {
   key?: string;
   icon?: ReactNode;
-  title: string;
+  /**
+   * Full-width slide body, for apps that show a real screen or component
+   * rather than an icon. Rendered in place of the `icon` bubble, which is
+   * sized for a glyph. `title` becomes the caption underneath it.
+   */
+  content?: ReactNode;
+  title?: string;
   description?: string;
 }
 
@@ -29,11 +35,29 @@ export interface PaywallHeroCarouselProps {
    * while the user is swiping. Pass 0 to disable. Defaults to 3200.
    */
   autoAdvanceIntervalMs?: number;
+  /**
+   * Fixed height for the slide body. Without it a `content` slide is only as
+   * tall as what it renders, so the caption underneath sits at a different
+   * height on every slide and jumps as the user swipes. Set it to the tallest
+   * body and every caption lines up.
+   */
+  contentHeight?: number;
+  /**
+   * Fixed height for the caption row, for the same reason: it keeps the
+   * description from moving when one slide's title wraps to two lines or a
+   * slide has no title at all.
+   */
+  titleHeight?: number;
   textColor?: string;
   secondaryTextColor?: string;
 }
 
 const DEFAULT_AUTO_ADVANCE_INTERVAL_MS = 3200;
+
+// `content` is a ReactNode, so a bare truthiness check can yield 0 or "" and
+// leak a non-style value into a style array.
+const hasContent = (slide: PaywallHeroCarouselSlide) =>
+  slide.content !== undefined && slide.content !== null;
 
 // Swipeable, auto-advancing feature carousel for the `hero` slot. Loops
 // infinitely in both directions (1 -> 2 -> 3 -> 1 keeps moving forward)
@@ -45,6 +69,8 @@ export const PaywallHeroCarousel = ({
   slides,
   accentColor,
   autoAdvanceIntervalMs = DEFAULT_AUTO_ADVANCE_INTERVAL_MS,
+  contentHeight,
+  titleHeight,
   textColor = "#FFFFFF",
   secondaryTextColor = "rgba(255, 255, 255, 0.66)",
 }: PaywallHeroCarouselProps) => {
@@ -151,19 +177,56 @@ export const PaywallHeroCarousel = ({
           {pages.map((slide, pageIndex) => (
             <View
               key={`page-${pageIndex}`}
-              style={[styles.slide, { width: containerWidth }]}
+              style={[
+                styles.slide,
+                hasContent(slide) ? styles.contentSlide : styles.iconSlide,
+                { width: containerWidth },
+              ]}
             >
-              {slide.icon && (
-                <View style={[styles.iconBubble, { borderColor: accentColor }]}>
-                  {slide.icon}
+              {hasContent(slide) ? (
+                <View
+                  style={[
+                    styles.content,
+                    contentHeight === undefined ? null : { height: contentHeight },
+                  ]}
+                >
+                  {slide.content}
+                </View>
+              ) : (
+                slide.icon && (
+                  <View
+                    style={[styles.iconBubble, { borderColor: accentColor }]}
+                  >
+                    {slide.icon}
+                  </View>
+                )
+              )}
+              {(slide.title || titleHeight !== undefined) && (
+                <View
+                  style={[
+                    styles.titleRow,
+                    titleHeight === undefined ? null : { height: titleHeight },
+                  ]}
+                >
+                  {slide.title && (
+                    <Text
+                      style={[
+                        styles.title,
+                        hasContent(slide) && styles.contentTitle,
+                        { color: textColor },
+                      ]}
+                    >
+                      {slide.title}
+                    </Text>
+                  )}
                 </View>
               )}
-              <Text style={[styles.title, { color: textColor }]}>
-                {slide.title}
-              </Text>
               {slide.description && (
                 <Text
-                  style={[styles.description, { color: secondaryTextColor }]}
+                  style={[
+                    styles.description,
+                    { color: secondaryTextColor },
+                  ]}
                 >
                   {slide.description}
                 </Text>
@@ -176,7 +239,7 @@ export const PaywallHeroCarousel = ({
         <View style={styles.dots}>
           {slides.map((slide, index) => (
             <View
-              key={slide.key ?? `${slide.title}-${index}`}
+              key={slide.key ?? `slide-${index}`}
               style={[
                 styles.dot,
                 index === activeIndex
@@ -201,8 +264,37 @@ const styles = StyleSheet.create({
   slide: {
     alignItems: "center",
     gap: 4,
+  },
+  iconSlide: {
     justifyContent: "flex-end",
     paddingHorizontal: 32,
+  },
+  // Both slide kinds sit on the baseline. Centering a content slide leaves
+  // dead space between its caption and the dots whenever the carousel is
+  // taller than the slide, which is most of the time.
+  contentSlide: {
+    gap: 10,
+    justifyContent: "flex-end",
+    paddingHorizontal: 12,
+  },
+  content: {
+    alignItems: "center",
+    flexShrink: 1,
+    justifyContent: "center",
+    width: "100%",
+  },
+  titleRow: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+  },
+  contentTitle: {
+    fontSize: 14,
+    // Must be set alongside fontSize: the base title's lineHeight of 24 would
+    // otherwise survive and overflow a caption row sized for 14pt text. The
+    // gap to the content lives on the slide, not as a margin here, so
+    // `titleHeight` measures the caption box and nothing else.
+    lineHeight: 18,
   },
   iconBubble: {
     alignItems: "center",

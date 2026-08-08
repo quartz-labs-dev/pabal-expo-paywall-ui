@@ -28,7 +28,8 @@ export type PlaygroundPaywallProduct =
   | "tide"
   | "ember"
   | "drift"
-  | "summit";
+  | "summit"
+  | "atlas";
 
 export type PlaygroundPaywallAnimation = "default" | "opacity" | "none";
 

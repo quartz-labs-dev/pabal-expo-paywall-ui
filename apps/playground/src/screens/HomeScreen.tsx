@@ -77,13 +77,18 @@ const paywallProducts: PlaygroundPaywallProduct[] = [
   "ember",
   "drift",
   "summit",
+  "atlas",
 ];
-const paywallProductLabels: Record<PlaygroundPaywallProduct, string> = {
-  aurora: "Aurora (photo)",
-  tide: "Tide (floating)",
-  ember: "Ember (before/after)",
-  drift: "Drift (carousel)",
-  summit: "Summit (tall hero)",
+const paywallProductLabels: Record<
+  PlaygroundPaywallProduct,
+  { name: string; detail: string }
+> = {
+  aurora: { detail: "photo hero", name: "Aurora" },
+  tide: { detail: "floating hero", name: "Tide" },
+  ember: { detail: "before / after", name: "Ember" },
+  drift: { detail: "icon carousel", name: "Drift" },
+  summit: { detail: "tall pinned hero", name: "Summit" },
+  atlas: { detail: "screen carousel", name: "Atlas" },
 };
 const freeTrialModes: PlaygroundFreeTrialMode[] = [
   "sevenDays",
@@ -391,8 +396,16 @@ const PackageScenarioSettings = ({
   );
 };
 
+// A label is either plain text or a name plus the descriptor that used to be
+// crammed into the same line in parentheses. Splitting them lets the option
+// read as "what it is" over "why it exists" instead of one wrapping run-on.
+type SegmentedLabel = string | { name: string; detail?: string };
+
+const resolveSegmentedLabel = (label: SegmentedLabel) =>
+  typeof label === "string" ? { detail: undefined, name: label } : label;
+
 interface SegmentedSettingsProps<TOption extends string> {
-  labels: Record<TOption, string>;
+  labels: Record<TOption, SegmentedLabel>;
   options: TOption[];
   selectedOption: TOption;
   title: string;
@@ -412,6 +425,7 @@ const SegmentedSettings = <TOption extends string>({
       <View style={styles.segmentedList}>
         {options.map((item) => {
           const isSelected = item === selectedOption;
+          const { detail, name } = resolveSegmentedLabel(labels[item]);
 
           return (
             <Pressable
@@ -428,8 +442,18 @@ const SegmentedSettings = <TOption extends string>({
                   isSelected && styles.flowTitleSelected,
                 ]}
               >
-                {labels[item]}
+                {name}
               </Text>
+              {detail && (
+                <Text
+                  style={[
+                    styles.flowDetail,
+                    isSelected && styles.flowDetailSelected,
+                  ]}
+                >
+                  {detail}
+                </Text>
+              )}
             </Pressable>
           );
         })}
@@ -878,10 +902,15 @@ const styles = StyleSheet.create({
     borderColor: "#2B3845",
     borderRadius: 8,
     borderWidth: 1,
-    flex: 1,
+    // Basis rather than flex: six options sharing one row squeezed each to a
+    // single character per line.
+    flexBasis: "30%",
+    flexGrow: 1,
+    gap: 3,
     justifyContent: "center",
     minHeight: 54,
-    padding: 12,
+    paddingHorizontal: 10,
+    paddingVertical: 12,
   },
   flowOptionSelected: {
     backgroundColor: "#102A2A",
@@ -894,6 +923,15 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     lineHeight: 18,
     textAlign: "center",
+  },
+  flowDetail: {
+    color: "#7E93A8",
+    fontSize: 11,
+    lineHeight: 14,
+    textAlign: "center",
+  },
+  flowDetailSelected: {
+    color: "#8FD8CC",
   },
   flowTitleSelected: {
     color: "#5AC8B7",

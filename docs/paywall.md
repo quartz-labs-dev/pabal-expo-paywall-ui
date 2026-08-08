@@ -117,6 +117,8 @@ are running so the CTA shows the localized processing label and spinner.
 | Top media | `hero`, `heroHeightRatio` |
 | Before/after stats hero | `hero={<PaywallHeroBeforeAfter ... />}` |
 | Feature carousel hero | `hero={<PaywallHeroCarousel ... />}` |
+| Carousel of real screens rather than icons | `slides[].content`, `contentHeight`, `titleHeight` |
+| Carousel that only moves on swipe | `autoAdvanceIntervalMs={0}` |
 | Fade hero media into the background | `heroFade` |
 | Fixed hero background with content rising over it as a sheet | `heroLayout: "pinned"` |
 | Ambient background layer (gradient, glow) | `backgroundOverlay` |
@@ -283,6 +285,29 @@ hero: (
     afterValue="1h 49m"
     // beforeContent={<MyChart data={before} />}
     // afterContent={<MyChart data={after} />}
+  />
+),
+
+// A slide can carry a full-width `content` node instead of an icon, for
+// showing a real screen or component rather than a glyph. `title` then
+// reads as its caption, and both `icon` and `title` are optional.
+hero: (
+  <PaywallHeroCarousel
+    accentColor="#5AC8B7"
+    // Motion sits directly above the paywall title, so a hero that keeps
+    // advancing competes with reading. Disable auto-advance when the slides
+    // are product screens the user is meant to study.
+    autoAdvanceIntervalMs={0}
+    // Pin the slot heights, or the caption sits at a different height on
+    // every slide and jumps as the user swipes. Size them to the tallest
+    // body and the longest caption; a `titleHeight` below the caption's line
+    // height clips it.
+    contentHeight={150}
+    titleHeight={22}
+    slides={[
+      { key: "widget", content: <WidgetPreview />, title: "Home widget" },
+      { key: "recap", content: <AttendanceGrid />, title: "Recap" },
+    ]}
   />
 ),
 
