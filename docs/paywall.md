@@ -134,6 +134,7 @@ are running so the CTA shows the localized processing label and spinner.
 | Circle-badge checkmarks (accent-tinted) | `featureComparison.includedStyle: "circledCheck"` |
 | Hide the dash on excluded cells | `featureComparison.excludedStyle: "hidden"` |
 | Green (or any) color for included checkmarks | `featureComparison.includedColor` |
+| Spoken wording for a symbol cell such as "∞" | cell `accessibilityLabel` on a `text` cell |
 | App review quotes | `reviewSection` |
 | Custom body below benefits/comparison | `content`, `valueStep.content` |
 | Plan card order and package mapping | `planOptions` |
@@ -295,6 +296,31 @@ copy: {
 ```
 
 Emphasized segments render in `theme.accentColor`.
+
+## Comparison Cell Accessibility
+
+`included` and `excluded` cells carry no text, so they announce nothing
+unless the app labels them — pass `accessibilityLabel` on each.
+
+A `text` cell announces its own `text`, which is right for a value like `3`
+and wrong for a symbol. Give those an `accessibilityLabel` so the row reads
+as words in the app's language rather than leaving the glyph to the platform:
+
+```tsx
+{
+  id: "sport-venues",
+  label: t("sportVenues"),
+  free: { kind: "text", text: "3" },
+  paid: {
+    kind: "text",
+    text: "∞",
+    accessibilityLabel: t("unlimited"),
+  },
+}
+```
+
+Labels are app-provided and app-localized, the same contract as the column
+titles.
 
 ## Collapsing A Long Comparison
 

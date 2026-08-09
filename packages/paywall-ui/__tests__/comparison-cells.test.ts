@@ -4,6 +4,7 @@ import test from "node:test";
 import {
   COMPARISON_CHECK_MARK,
   COMPARISON_EXCLUDED_MARK,
+  resolveComparisonCellAccessibilityLabel,
   resolveComparisonCellColor,
   resolveComparisonCellGlyph,
 } from "../src/paywall/comparison-cells";
@@ -69,4 +70,40 @@ test("includedColor overrides both styles", () => {
     { includedColor: "#34C759", includedStyle: "circledCheck" }
   );
   assert.equal(color, "#34C759");
+});
+
+test("a text cell reads itself when the app gives no label", () => {
+  assert.equal(
+    resolveComparisonCellAccessibilityLabel({ kind: "text", text: "3" }),
+    "3"
+  );
+});
+
+test("a text cell label wins over the glyph it shows", () => {
+  assert.equal(
+    resolveComparisonCellAccessibilityLabel({
+      accessibilityLabel: "Unlimited",
+      kind: "text",
+      text: "∞",
+    }),
+    "Unlimited"
+  );
+});
+
+test("included and excluded cells stay silent without a label", () => {
+  assert.equal(
+    resolveComparisonCellAccessibilityLabel({ kind: "included" }),
+    undefined
+  );
+  assert.equal(
+    resolveComparisonCellAccessibilityLabel({ kind: "excluded" }),
+    undefined
+  );
+  assert.equal(
+    resolveComparisonCellAccessibilityLabel({
+      accessibilityLabel: "Included",
+      kind: "included",
+    }),
+    "Included"
+  );
 });

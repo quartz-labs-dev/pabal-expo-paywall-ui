@@ -29,6 +29,18 @@ export const resolveComparisonCellGlyph = (
   return cell.text;
 };
 
+// What a screen reader announces for a cell. Included and excluded cells have
+// no text to fall back on, so they read nothing unless the app labels them.
+// A text cell reads itself, which is right for a value like "3" and wrong for
+// a symbol like "∞" — hence the optional override.
+export const resolveComparisonCellAccessibilityLabel = (
+  cell: PaywallFeatureComparisonCell
+): string | undefined => {
+  if (cell.kind === "text") return cell.accessibilityLabel ?? cell.text;
+
+  return cell.accessibilityLabel;
+};
+
 export const resolveComparisonCellColor = (
   cell: PaywallFeatureComparisonCell,
   column: PaywallComparisonColumn,

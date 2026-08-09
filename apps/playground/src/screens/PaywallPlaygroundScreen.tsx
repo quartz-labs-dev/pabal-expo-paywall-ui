@@ -120,7 +120,11 @@ const defaultComparisonRows = [
     id: "custom-locations",
     label: "Custom Location Settings",
     free: { kind: "text", text: "3" },
-    paid: { kind: "text", text: "\u221e" },
+    paid: {
+      accessibilityLabel: "Unlimited",
+      kind: "text",
+      text: "\u221e",
+    },
   },
   {
     id: "custom-colors",
@@ -133,13 +137,21 @@ const defaultComparisonRows = [
     id: "forecast-alerts",
     label: "Forecast Alerts",
     free: { kind: "text", text: "1" },
-    paid: { kind: "text", text: "\u221e" },
+    paid: {
+      accessibilityLabel: "Unlimited",
+      kind: "text",
+      text: "\u221e",
+    },
   },
   {
     id: "saved-observation-notes",
     label: "Saved Observation Notes",
     free: { kind: "text", text: "5" },
-    paid: { kind: "text", text: "\u221e" },
+    paid: {
+      accessibilityLabel: "Unlimited",
+      kind: "text",
+      text: "\u221e",
+    },
   },
   {
     id: "advanced-maps",

@@ -4,6 +4,7 @@ import { Animated, Pressable, StyleSheet, Text, View } from "react-native";
 import { getColorWithAlpha } from "../shared/color-utils";
 import { ChevronDownIcon } from "../shared/icons";
 import {
+  resolveComparisonCellAccessibilityLabel,
   resolveComparisonCellColor,
   resolveComparisonCellGlyph,
 } from "./comparison-cells";
@@ -28,16 +29,6 @@ interface PaywallFeatureComparisonProps {
   onExpand?: (revealedHeight: number) => void;
 }
 
-const getCellAccessibilityLabel = (
-  cell: PaywallFeatureComparisonCell,
-): string | undefined => {
-  if (cell.kind === "included" || cell.kind === "excluded") {
-    return cell.accessibilityLabel;
-  }
-
-  return cell.text;
-};
-
 const renderCellContent = (
   cell: PaywallFeatureComparisonCell,
   column: "free" | "paid",
@@ -45,7 +36,8 @@ const renderCellContent = (
   comparison: PaywallFeatureComparisonConfig,
 ) => {
   const glyph = resolveComparisonCellGlyph(cell, comparison.excludedStyle);
-  const accessibilityLabel = getCellAccessibilityLabel(cell);
+  const accessibilityLabel =
+    resolveComparisonCellAccessibilityLabel(cell);
 
   if (glyph === null) {
     return (

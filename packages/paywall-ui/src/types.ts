@@ -102,6 +102,13 @@ export type PaywallFeatureComparisonCell =
   | {
       kind: "text";
       text: string;
+      /**
+       * What a screen reader announces instead of `text`. Defaults to `text`,
+       * which is right for a plain value like "3" and wrong for a symbol:
+       * a cell reading "∞" should announce "Unlimited" in the app's language
+       * rather than leave the glyph to the platform.
+       */
+      accessibilityLabel?: string;
     };
 
 export interface PaywallFeatureComparisonRow {

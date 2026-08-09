@@ -28,6 +28,13 @@ const readFeatureComparisonSource = (): string => {
   );
 };
 
+const readComparisonCellsSource = (): string => {
+  return readFileSync(
+    join(process.cwd(), "src", "paywall", "comparison-cells.ts"),
+    "utf8",
+  );
+};
+
 const readReviewSectionSource = (): string => {
   return readFileSync(
     join(process.cwd(), "src", "paywall", "PaywallReviewSection.tsx"),
@@ -167,6 +174,7 @@ test("disables restore while purchase or restore is processing", () => {
 
 test("renders feature comparison cells from explicit cell kinds", () => {
   const paywallSource = readPaywallSource();
+  const comparisonCellsSource = readComparisonCellsSource();
   const featureComparisonSource = readFeatureComparisonSource();
   const typesSource = readTypesSource();
 
@@ -178,9 +186,15 @@ test("renders feature comparison cells from explicit cell kinds", () => {
     paywallSource,
     /benefits=\{shouldShowFeatureComparison \? \[\] : visibleBenefits\}/,
   );
-  assert.match(featureComparisonSource, /kind === "included"/);
-  assert.match(featureComparisonSource, /kind === "excluded"/);
-  assert.match(featureComparisonSource, /cell\.text/);
+  // Cell kinds resolve in the pure module, which has its own unit tests; the
+  // component consumes those resolvers rather than branching on kinds itself.
+  assert.match(comparisonCellsSource, /kind === "included"/);
+  assert.match(comparisonCellsSource, /kind === "excluded"/);
+  assert.match(comparisonCellsSource, /cell\.text/);
+  assert.match(
+    featureComparisonSource,
+    /resolveComparisonCellAccessibilityLabel\(cell\)/,
+  );
   assert.match(featureComparisonSource, /accessibilityRole="button"/);
   assert.match(featureComparisonSource, /accessibilityLabel=\{row\.label\}/);
   assert.match(featureComparisonSource, /row\.onPress/);
