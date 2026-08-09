@@ -14,6 +14,7 @@
     "src/shared/color-utils.ts",
     "src/shared/hero-fade.ts",
     "src/shared/theme.ts",
+    "src/paywall/carousel-dots.ts",
     "src/paywall/comparison-cells.ts",
     "src/paywall/create-paywall-plans.ts",
     "src/paywall/feature-comparison-collapse.ts",

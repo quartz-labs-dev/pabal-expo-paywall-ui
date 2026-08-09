@@ -24,6 +24,10 @@ props override the top-level ones on the value step, and each falls back on
 its own when omitted. Leave them out and both steps share one hero. See
 [A Hero Per Step](../../docs/paywall.md#a-hero-per-step).
 
+Package defaults assume the dark paywall the theme describes. An app on a
+light `theme.backgroundColor` has to pass `PaywallHeroCarousel`'s
+`inactiveDotColor`; the default is translucent white and disappears there.
+
 Pre-onboarding `background` and video preview slots accept app-owned
 `ReactNode` renderers. Apps can pass an image, video component, or animated
 visual while keeping media dependencies and playback state outside this

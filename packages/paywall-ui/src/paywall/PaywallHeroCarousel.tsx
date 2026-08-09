@@ -14,6 +14,7 @@ import {
   resolveInitialCarouselPosition,
   resolveLoopedCarouselPosition,
 } from "./hero-carousel-math";
+import { resolveCarouselDotAppearance } from "./carousel-dots";
 
 export interface PaywallHeroCarouselSlide {
   key?: string;
@@ -58,6 +59,14 @@ export interface PaywallHeroCarouselProps {
   initialIndex?: number;
   textColor?: string;
   secondaryTextColor?: string;
+  /**
+   * Color of the dots that are not the current slide. Defaults to translucent
+   * white, which reads on the dark paywall the theme defaults describe and
+   * disappears on a light one. Apps with a light `theme.backgroundColor` must
+   * pass a color of their own, or the carousel looks like it has a single
+   * dot. The active dot follows `accentColor`.
+   */
+  inactiveDotColor?: string;
 }
 
 const DEFAULT_AUTO_ADVANCE_INTERVAL_MS = 3200;
@@ -82,6 +91,7 @@ export const PaywallHeroCarousel = ({
   initialIndex = 0,
   textColor = "#FFFFFF",
   secondaryTextColor = "rgba(255, 255, 255, 0.66)",
+  inactiveDotColor,
 }: PaywallHeroCarouselProps) => {
   const slideCount = slides.length;
   const isLooping = slideCount > 1;
@@ -255,9 +265,11 @@ export const PaywallHeroCarousel = ({
               key={slide.key ?? `slide-${index}`}
               style={[
                 styles.dot,
-                index === activeIndex
-                  ? { backgroundColor: accentColor, width: 18 }
-                  : styles.dotInactive,
+                resolveCarouselDotAppearance(
+                  index === activeIndex,
+                  accentColor,
+                  inactiveDotColor
+                ),
               ]}
             />
           ))}
@@ -338,12 +350,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 6,
   },
+  // Color and width come from `resolveCarouselDotAppearance`, so the active
+  // pill and the inactive dot stay described in one place.
   dot: {
     borderRadius: 3,
     height: 6,
-    width: 6,
-  },
-  dotInactive: {
-    backgroundColor: "rgba(255, 255, 255, 0.28)",
   },
 });

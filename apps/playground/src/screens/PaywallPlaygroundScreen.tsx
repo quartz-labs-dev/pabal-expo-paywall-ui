@@ -302,6 +302,11 @@ const productPresets: Record<PlaygroundPaywallProduct, PlaygroundProductPreset> 
             // have different row counts, swipe past behind it.
             contentHeight={110}
             titleHeight={22}
+            // Every playground product is dark, so the translucent-white
+            // default would be enough here. Setting it anyway keeps the prop
+            // on a path that is actually rendered — a light-background app
+            // has no dots at all without it.
+            inactiveDotColor="rgba(90, 200, 183, 0.32)"
             slides={[
               {
                 key: "widget",

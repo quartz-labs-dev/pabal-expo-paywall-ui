@@ -120,6 +120,7 @@ are running so the CTA shows the localized processing label and spinner.
 | Carousel of real screens rather than icons | `slides[].content`, `contentHeight`, `titleHeight` |
 | Carousel that only moves on swipe | `autoAdvanceIntervalMs={0}` |
 | Carousel opened on a particular slide | `initialIndex` |
+| Carousel dots on a light paywall background | `inactiveDotColor` |
 | Fade hero media into the background | `heroFade` |
 | Fixed hero background with content rising over it as a sheet | `heroLayout: "pinned"` |
 | A different hero on each step of a two-step paywall | `valueStep.hero` |
@@ -374,6 +375,10 @@ hero: (
     // reordering makes the first dot mean a different slide on every visit
     // and turns a backward swipe into an arbitrary jump.
     initialIndex={2}
+    // The dots sit on the paywall background, and the inactive one defaults
+    // to translucent white for the dark theme this package ships. On a light
+    // background it vanishes and the carousel looks like it has one slide.
+    inactiveDotColor="#B8C7DA"
     slides={[
       { key: "widget", content: <WidgetPreview />, title: "Home widget" },
       { key: "recap", content: <AttendanceGrid />, title: "Recap" },
