@@ -179,10 +179,121 @@ const defaultComparisonRows = [
   },
 ] satisfies PaywallFeatureComparisonRow[];
 
+// The first product demonstrates a longer paid-feature list: 15 rows stay
+// visible and the remaining 10 expand in place from the comparison toggle.
+const auroraFeatureComparison = {
+  freeColumnTitle: "Free",
+  paidColumnTitle: "Pro",
+  collapse: {
+    visibleRowCount: 15,
+    expandLabel: "Show 10 more features",
+    collapseLabel: "Show fewer features",
+  },
+  rows: [
+    ...defaultComparisonRows,
+    {
+      id: "weather-radar",
+      label: "Interactive Weather Radar",
+      free: { kind: "excluded", accessibilityLabel: "Not included" },
+      paid: { kind: "included", accessibilityLabel: "Included" },
+    },
+    {
+      id: "precipitation-forecast",
+      label: "Precipitation Forecast",
+      free: { kind: "text", text: "1h" },
+      paid: { kind: "text", text: "24h" },
+    },
+    {
+      id: "air-quality-insights",
+      label: "Air Quality Insights",
+      free: { kind: "excluded", accessibilityLabel: "Not included" },
+      paid: { kind: "included", accessibilityLabel: "Included" },
+    },
+    {
+      id: "uv-index-forecast",
+      label: "UV Index Forecast",
+      free: { kind: "text", text: "Today" },
+      paid: { kind: "text", text: "10d" },
+    },
+    {
+      id: "severe-weather-alerts",
+      label: "Severe Weather Alerts",
+      free: { kind: "excluded", accessibilityLabel: "Not included" },
+      paid: { kind: "included", accessibilityLabel: "Included" },
+    },
+    {
+      id: "offline-maps",
+      label: "Offline Maps",
+      free: { kind: "excluded", accessibilityLabel: "Not included" },
+      paid: { kind: "included", accessibilityLabel: "Included" },
+    },
+    {
+      id: "cloud-sync",
+      label: "Cloud Sync",
+      free: { kind: "excluded", accessibilityLabel: "Not included" },
+      paid: { kind: "included", accessibilityLabel: "Included" },
+    },
+    {
+      id: "family-sharing",
+      label: "Family Sharing",
+      free: { kind: "excluded", accessibilityLabel: "Not included" },
+      paid: { kind: "included", accessibilityLabel: "Included" },
+    },
+    {
+      id: "calendar-integration",
+      label: "Calendar Integration",
+      free: { kind: "excluded", accessibilityLabel: "Not included" },
+      paid: { kind: "included", accessibilityLabel: "Included" },
+    },
+    {
+      id: "widget-customization",
+      label: "Widget Customization",
+      free: { kind: "text", text: "Basic" },
+      paid: { kind: "text", text: "Full" },
+    },
+    {
+      id: "route-forecasts",
+      label: "Route Forecasts",
+      free: { kind: "excluded", accessibilityLabel: "Not included" },
+      paid: { kind: "included", accessibilityLabel: "Included" },
+    },
+    {
+      id: "minute-by-minute-forecast",
+      label: "Minute-by-Minute Forecast",
+      free: { kind: "excluded", accessibilityLabel: "Not included" },
+      paid: { kind: "included", accessibilityLabel: "Included" },
+    },
+    {
+      id: "sun-and-moon-details",
+      label: "Sun & Moon Details",
+      free: { kind: "text", text: "Basic" },
+      paid: { kind: "text", text: "Full" },
+    },
+    {
+      id: "data-export",
+      label: "Data Export",
+      free: { kind: "excluded", accessibilityLabel: "Not included" },
+      paid: { kind: "included", accessibilityLabel: "Included" },
+    },
+    {
+      id: "priority-support",
+      label: "Priority Support",
+      free: { kind: "excluded", accessibilityLabel: "Not included" },
+      paid: { kind: "included", accessibilityLabel: "Included" },
+    },
+    {
+      id: "early-access",
+      label: "Early Access Features",
+      free: { kind: "excluded", accessibilityLabel: "Not included" },
+      paid: { kind: "included", accessibilityLabel: "Included" },
+    },
+  ],
+} satisfies PaywallConfig["featureComparison"];
+
 // Collapsed comparison variant: the same nine rows, but only the first four
 // are shown until the toggle expands the rest. The labels carry the remaining
-// count because the package leaves them to the app. Carried by drift; aurora
-// keeps the same rows uncollapsed as the comparison case.
+// count because the package leaves them to the app. Carried by drift as the
+// compact comparison case.
 const collapsedFeatureComparison = {
   freeColumnTitle: "Free",
   paidColumnTitle: "Pro",
@@ -283,7 +394,8 @@ interface PlaygroundProductPreset {
 //   turns the shared fade and pin back off. The ambient glow reads on the
 //   value step's transparent hero and is fully hidden behind the photo and
 //   its opaque sheet on the purchase step, so the seam docs/paywall.md warns
-//   about never appears. Nine-row comparison, uncollapsed.
+//   about never appears. Twenty-five-row comparison, with 15 rows visible and
+//   10 more behind the expand toggle.
 // - tide: widget → before/after. A transparent floating-widget hero opens,
 //   then the packaged before/after stats hero (Opal style) sells. Both are
 //   transparent, so the ambient glow stays visible through the whole flow.
@@ -353,6 +465,7 @@ const productPresets: Record<PlaygroundPaywallProduct, PlaygroundProductPreset> 
         heroLayout: "scroll",
       },
       accentColor: "#5AC8B7",
+      featureComparison: auroraFeatureComparison,
       theme: {
         accentColor: "#5AC8B7",
         backgroundColor: "#05080C",
