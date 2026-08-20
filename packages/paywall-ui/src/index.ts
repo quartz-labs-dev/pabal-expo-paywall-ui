@@ -33,6 +33,7 @@ export {
   useOnboardingPhoneFrameEntranceAnimation,
 } from "./onboarding/onboarding-animations";
 export { OnboardingChoiceList } from "./onboarding/OnboardingChoiceList";
+export { OnboardingCompanionPreview } from "./onboarding/OnboardingCompanionPreview";
 export { OnboardingCompletion } from "./onboarding/OnboardingCompletion";
 export { OnboardingGalleryGrid } from "./onboarding/OnboardingGalleryGrid";
 export { OnboardingNotificationMock } from "./onboarding/OnboardingNotificationMock";
@@ -83,6 +84,12 @@ export type {
 export type {
   OnboardingChoiceListProps,
 } from "./onboarding/OnboardingChoiceList";
+export type {
+  OnboardingCompanionPreviewProps,
+} from "./onboarding/OnboardingCompanionPreview";
+export type {
+  OnboardingCompanionPreviewVariant,
+} from "./onboarding/onboarding-companion-preview-layout";
 export type {
   OnboardingGalleryGridItem,
   OnboardingGalleryGridProps,

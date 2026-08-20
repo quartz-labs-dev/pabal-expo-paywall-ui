@@ -24,6 +24,7 @@ import type { ImageSourcePropType } from "react-native";
 
 import type { PlaygroundOnboardingContext } from "../components/onboarding-context";
 import type { PlaygroundOnboardingTheme } from "../components/onboarding-theme";
+import { OnboardingCompanionPreviewExample } from "../components/OnboardingCompanionPreviewExample";
 import { createOnboardingPreludeSteps } from "../fixtures/onboarding-prelude-steps";
 
 interface OnboardingPlaygroundScreenProps {
@@ -241,6 +242,13 @@ export const OnboardingPlaygroundScreen = ({
             theme={theme}
           />
         ),
+      },
+      {
+        canContinue: true,
+        content: <OnboardingCompanionPreviewExample theme={theme} />,
+        description:
+          "Switch between the reusable widget, watch, and combined companion layouts.",
+        title: "Keep progress close",
       },
       {
         title: "Enable smarter reminders",

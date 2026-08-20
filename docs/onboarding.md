@@ -59,6 +59,7 @@ Available main content:
 | `choice-list` | Package-owned one-choice selectable list, with optional inverted tone | Package primitive + app state |
 | `acquisition-source` | "Where did you hear about us?" choice list | App state + package options |
 | `gallery-grid` | Animated three-row gallery of app-provided title/image/color tiles | Package primitive + app data |
+| `companion-preview` | Phone widget, watch, or combined device stage with app-provided preview slots | Package frame + app preview data/copy |
 | `nickname-flow` | Localized nickname input followed by typed welcome | Package frame + app state |
 | `social-proof` | Headline, optional metric, and review cards | App |
 | `permission-prompt` | Preview before asking for native permissions | Package primitive |
@@ -124,6 +125,8 @@ The package currently exposes these onboarding primitives:
   tap hint footer, intro spacing, hidden header, and inverted-tone background
 - `OnboardingNicknameFlowFrame` for the package-owned nickname capture and
   personalized welcome flow
+- `OnboardingCompanionPreview` for `widget`, `watch`, and `widget-watch`
+  device stages with app-provided widget and watch content
 - `OnboardingPreludeContent`, `OnboardingChoiceList`,
   `OnboardingTextInputContent`, `OnboardingNicknameInput`,
   `OnboardingTypingText`, `OnboardingGalleryGrid`,
@@ -138,6 +141,51 @@ The package currently exposes these onboarding primitives:
 
 Apps still own screen order, selected state, permission APIs, analytics,
 navigation, media, and product-specific copy.
+
+## Widget And Watch Companion Preview
+
+`OnboardingCompanionPreview` owns only the reusable device composition. The app
+keeps the step title, description, CTA, localized device labels, and the actual
+widget/watch renderers. This keeps the package independent from app-specific
+widget data and native watch implementations.
+
+Use `variant="widget"` for the phone alone, `variant="watch"` for the watch
+alone, or `variant="widget-watch"` for the overlapping combined stage.
+`phoneWidgets` accepts one required preview and one optional secondary preview.
+Set `stageAccentColor` to tint the soft circle behind the devices independently
+from the onboarding theme. When omitted, it falls back to `theme.accentColor`.
+
+```tsx
+import {
+  OnboardingCompanionPreview,
+  OnboardingStepFrame,
+} from "pabal-expo-paywall-ui";
+
+<OnboardingStepFrame
+  title={copy.companionsTitle}
+  description={copy.companionsDescription}
+  {...frameProps}
+>
+  <OnboardingCompanionPreview
+    accessibilityLabel={copy.companionsAccessibility}
+    phoneDateLabel={copy.previewDate}
+    phoneLabel={copy.phoneLabel}
+    phoneTimeLabel="9:41"
+    phoneWidgets={[
+      <HomeWidgetPreview key="home" />,
+      <LockWidgetPreview key="lock" />,
+    ]}
+    stageAccentColor={brandColors.companionPreview}
+    theme={contentTheme}
+    variant="widget-watch"
+    watchContent={<WatchWidgetPreview />}
+    watchLabel={copy.watchLabel}
+  />
+</OnboardingStepFrame>;
+```
+
+Pass `isAnimated={false}` when the consuming app has reduced motion enabled.
+No default user-visible labels are embedded in the component.
 
 ## Locale Files
 

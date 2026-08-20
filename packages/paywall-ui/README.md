@@ -33,6 +33,13 @@ Pre-onboarding `background` and video preview slots accept app-owned
 visual while keeping media dependencies and playback state outside this
 package.
 
+Main onboarding can use `OnboardingCompanionPreview` as a reusable phone/widget
+and watch stage. Choose `widget`, `watch`, or `widget-watch`, then pass the
+app's real widget and watch previews as ReactNode slots. Titles, descriptions,
+CTA copy, device labels, and accessibility copy remain app-owned. The optional
+`stageAccentColor` prop customizes the soft background circle without changing
+the rest of the onboarding theme.
+
 ## Install
 
 ```bash

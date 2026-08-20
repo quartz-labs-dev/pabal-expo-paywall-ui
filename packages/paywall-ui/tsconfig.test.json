@@ -22,6 +22,7 @@
     "src/paywall/pinned-hero-layout.ts",
     "src/paywall/step-hero.ts",
     "src/paywall/title-segments.ts",
+    "src/onboarding/onboarding-companion-preview-layout.ts",
     "src/types.ts",
     "__tests__"
   ]
