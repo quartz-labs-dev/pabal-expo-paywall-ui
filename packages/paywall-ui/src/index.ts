@@ -36,6 +36,7 @@ export { OnboardingChoiceList } from "./onboarding/OnboardingChoiceList";
 export { OnboardingCompanionPreview } from "./onboarding/OnboardingCompanionPreview";
 export { OnboardingCompletion } from "./onboarding/OnboardingCompletion";
 export { OnboardingGalleryGrid } from "./onboarding/OnboardingGalleryGrid";
+export { OnboardingHealthSyncMock } from "./onboarding/OnboardingHealthSyncMock";
 export { OnboardingNotificationMock } from "./onboarding/OnboardingNotificationMock";
 export { OnboardingNicknameFlowFrame } from "./onboarding/OnboardingNicknameFlowFrame";
 export { OnboardingNicknameInput } from "./onboarding/OnboardingNicknameInput";
@@ -94,6 +95,12 @@ export type {
   OnboardingGalleryGridItem,
   OnboardingGalleryGridProps,
 } from "./onboarding/OnboardingGalleryGrid";
+export type {
+  OnboardingHealthSyncMockProps,
+} from "./onboarding/OnboardingHealthSyncMock";
+export type {
+  OnboardingHealthSyncMockPlatform,
+} from "./onboarding/health-sync-mock-palette";
 export type {
   OnboardingNotificationItem,
   OnboardingNotificationMockProps,

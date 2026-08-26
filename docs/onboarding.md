@@ -293,6 +293,35 @@ copy for screenshots.
 />;
 ```
 
+## Health Sync Mock
+
+Use `OnboardingHealthSyncMock` for the health-store connection step. It
+renders a health-app-style workout card flowing into the app's check-in
+card through an animated dot connector, so the step shows the value
+("your workout lands in the app by itself") instead of a lock-screen
+notification.
+
+`platform` flavors the source card's heart badge: `"apple-health"` uses
+a pink heart on a white square, `"health-connect"` a blue heart on a
+soft round badge. The marks are generic primitives — the real Apple
+Health and Health Connect icons are trademarked and must not be shipped
+in the package. Pass `healthIcon` to override the mark, and `appIcon`
+or `appIconSource` for the result card's app logo. All copy is owned by
+the app.
+
+```tsx
+<OnboardingHealthSyncMock
+  appIconSource={require("../assets/icon.png")}
+  healthAppName={copy.healthAppName}
+  platform={Platform.OS === "android" ? "health-connect" : "apple-health"}
+  resultDescription={copy.addedToRecord}
+  resultTitle={copy.sessionResultTitle}
+  theme={theme}
+  workoutDetail={copy.sessionDetail}
+  workoutTitle={copy.sessionTitle}
+/>;
+```
+
 ## Onboarding Prelude
 
 Use `OnboardingPreludeFrame` for the opening full-screen problem/solution beats
