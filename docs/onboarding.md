@@ -301,13 +301,12 @@ card through an animated dot connector, so the step shows the value
 ("your workout lands in the app by itself") instead of a lock-screen
 notification.
 
-`platform` flavors the source card's heart badge: `"apple-health"` uses
-a pink heart on a white square, `"health-connect"` a blue heart on a
-soft round badge. The marks are generic primitives — the real Apple
-Health and Health Connect icons are trademarked and must not be shipped
-in the package. Pass `healthIcon` to override the mark, and `appIcon`
-or `appIconSource` for the result card's app logo. All copy is owned by
-the app.
+`platform` picks the bundled store artwork for the source card:
+`"apple-health"` renders the Apple Health icon, `"health-connect"` the
+Health Connect icon on a soft round badge. Both ship in the package as
+size-optimized 120px PNGs. Pass `healthIcon` to override the icon, and
+`appIcon` or `appIconSource` for the result card's app logo. All copy
+is owned by the app.
 
 ```tsx
 <OnboardingHealthSyncMock

@@ -1,6 +1,6 @@
 import { type ComponentProps, type ReactNode, useMemo, useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import { Image, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import {
   createOnboardingAcquisitionSourceOptions,
   OnboardingChoiceList,
@@ -258,17 +258,6 @@ export const OnboardingPlaygroundScreen = ({
             healthAppName={
               platform === "android" ? "Health Connect" : "Apple Health"
             }
-            healthIcon={
-              <Image
-                resizeMode="contain"
-                source={
-                  platform === "android"
-                    ? require("../../assets/health/health-connect.png")
-                    : require("../../assets/health/apple-health.png")
-                }
-                style={styles.healthAppIcon}
-              />
-            }
             platform={
               platform === "android" ? "health-connect" : "apple-health"
             }
@@ -280,7 +269,7 @@ export const OnboardingPlaygroundScreen = ({
           />
         ),
         description:
-          "Connect your health app and recorded workouts check in by themselves. The platform toggle switches the Apple Health / Health Connect flavor; the real store icons come through the healthIcon slot.",
+          "Connect your health app and recorded workouts check in by themselves. The platform toggle switches the bundled Apple Health / Health Connect artwork.",
         title: "Log workouts automatically",
       },
       {
@@ -657,11 +646,6 @@ const INVERTED_FRAME_LIST_OPTIONS = [
 const styles = StyleSheet.create({
   edgeToEdgeContent: {
     paddingHorizontal: 0,
-  },
-  healthAppIcon: {
-    borderRadius: 9,
-    height: 40,
-    width: 40,
   },
   weightInputCard: {
     alignSelf: "center",

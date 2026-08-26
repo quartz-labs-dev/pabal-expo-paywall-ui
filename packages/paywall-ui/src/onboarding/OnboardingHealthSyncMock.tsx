@@ -23,7 +23,7 @@ export interface OnboardingHealthSyncMockProps {
   // Localized platform health surface name ("Apple Health",
   // "Health Connect"). The app owns this copy.
   healthAppName: string;
-  // Overrides the generic platform heart mark.
+  // Overrides the bundled platform store icon.
   healthIcon?: ReactNode;
   platform: OnboardingHealthSyncMockPlatform;
   // Result card copy, e.g. "Added to your record".
@@ -87,7 +87,17 @@ export const OnboardingHealthSyncMock = ({
             },
           ]}
         >
-          {healthIcon ?? <HeartMark color={palette.heartColor} />}
+          {healthIcon ?? (
+            <Image
+              resizeMode="contain"
+              source={
+                platform === "health-connect"
+                  ? require("../assets/health/health-connect.png")
+                  : require("../assets/health/apple-health.png")
+              }
+              style={styles.healthIconImage}
+            />
+          )}
         </View>
         <View style={styles.cardCopy}>
           <Text
@@ -308,36 +318,6 @@ const ConnectorDot = ({ color, index }: ConnectorDotProps) => {
   );
 };
 
-interface HeartMarkProps {
-  color: string;
-}
-
-// A generic heart drawn from primitives: two lobes over a rotated
-// square. Deliberately not a recreation of any platform's icon.
-const HeartMark = ({ color }: HeartMarkProps) => {
-  return (
-    <View style={styles.heart}>
-      <View
-        style={[styles.heartBase, { backgroundColor: color }]}
-      />
-      <View
-        style={[
-          styles.heartLobe,
-          styles.heartLobeLeft,
-          { backgroundColor: color },
-        ]}
-      />
-      <View
-        style={[
-          styles.heartLobe,
-          styles.heartLobeRight,
-          { backgroundColor: color },
-        ]}
-      />
-    </View>
-  );
-};
-
 interface CheckMarkProps {
   color: string;
   small?: boolean;
@@ -440,31 +420,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: 22,
   },
-  heart: {
-    height: 22,
-    width: 22,
-  },
-  heartBase: {
-    borderRadius: 2.5,
-    height: 13.5,
-    left: 4.25,
-    position: "absolute",
-    top: 5.5,
-    transform: [{ rotate: "45deg" }],
-    width: 13.5,
-  },
-  heartLobe: {
-    borderRadius: 6,
-    height: 12,
-    position: "absolute",
-    top: 2,
-    width: 12,
-  },
-  heartLobeLeft: {
-    left: 1,
-  },
-  heartLobeRight: {
-    right: 1,
+  healthIconImage: {
+    height: 40,
+    width: 40,
   },
   check: {
     height: 22,

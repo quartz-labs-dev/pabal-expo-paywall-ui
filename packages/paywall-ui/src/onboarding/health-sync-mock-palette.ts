@@ -3,15 +3,13 @@ export type OnboardingHealthSyncMockPlatform =
   | "health-connect";
 
 export interface HealthSyncMockPalette {
-  // Rounded-square badge behind the heart mark.
+  // Backing behind the platform icon; the Health Connect artwork is
+  // transparent and needs a soft ground, the Apple Health artwork is
+  // its own white squircle.
   badgeBackgroundColor: string;
   badgeBorderRadius: number;
-  heartColor: string;
 }
 
-// Platform-flavored heart badges. These evoke each platform's health
-// surface with generic marks; the real Apple Health / Health Connect
-// icons are trademarked assets and must not be recreated.
 export const resolveHealthSyncMockPalette = (
   platform: OnboardingHealthSyncMockPlatform,
 ): HealthSyncMockPalette => {
@@ -19,12 +17,10 @@ export const resolveHealthSyncMockPalette = (
     return {
       badgeBackgroundColor: "#E8F0FE",
       badgeBorderRadius: 20,
-      heartColor: "#1A73E8",
     };
   }
   return {
     badgeBackgroundColor: "#FFFFFF",
     badgeBorderRadius: 9,
-    heartColor: "#FF2D55",
   };
 };
