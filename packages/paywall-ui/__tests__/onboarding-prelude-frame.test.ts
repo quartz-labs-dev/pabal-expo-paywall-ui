@@ -607,12 +607,22 @@ test("keeps playground onboarding prelude mandatory before main steps", () => {
   );
 
   assert.match(fixtureSource, /RequiredOnboardingPreludeSteps/);
+  // The preludes and nickname flow stay mandatory on the default
+  // flow; only the explicit "healthCompanion" review focus skips them.
+  assert.match(playgroundSource, /focus = "all"/);
+  assert.match(playgroundSource, /hasIntroFlow = focus === "all"/);
   assert.match(playgroundSource, /currentStepIndex < preludeSteps\.length/);
-  assert.match(playgroundSource, /isNicknameFlowStep = currentStepIndex === preludeSteps\.length/);
   assert.match(
     playgroundSource,
-    /Math\.max\(\n    currentStepIndex - preludeSteps\.length - 1,\n    0,\n  \)/,
+    /isNicknameFlowStep =\n    hasIntroFlow && currentStepIndex === preludeSteps\.length/,
+  );
+  assert.match(
+    playgroundSource,
+    /Math\.max\(\n    currentStepIndex - preludeSteps\.length - nicknameOffset,\n    0,\n  \)/,
   );
   assert.match(playgroundSource, /<OnboardingNicknameFlowFrame/);
-  assert.match(playgroundSource, /currentStepIndex=\{mainSlideStepIndex \+ 2\}/);
+  assert.match(
+    playgroundSource,
+    /currentStepIndex=\{mainSlideStepIndex \+ 1 \+ nicknameOffset\}/,
+  );
 });

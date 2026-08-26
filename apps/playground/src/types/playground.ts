@@ -17,6 +17,7 @@ export type PlaygroundPackageScenario = Exclude<
 export type PlaygroundRoute =
   | "home"
   | "onboarding"
+  | "onboardingHealth"
   | "paywall"
   | "preOnboarding"
   | "profile";

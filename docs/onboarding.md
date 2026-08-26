@@ -321,6 +321,30 @@ is owned by the app.
 />;
 ```
 
+## Health Backfill Summary
+
+Use `OnboardingHealthBackfillSummary` for the dedicated review moment
+after the health connection is granted: `isScanning` shows pulsing
+dots with `scanningLabel` while the app reads the store, then the
+found groups render as a staggered list of `items` (icon, title,
+detail) with an optional `note` for sessions that still need
+confirmation. The step frame owns the headline and the add/skip CTAs.
+
+```tsx
+<OnboardingHealthBackfillSummary
+  isScanning={phase === "scanning"}
+  items={groups.map((group) => ({
+    detail: copy.sessionCount(group.count),
+    iconSource: group.previewSource,
+    id: group.venueId,
+    title: group.sportTitle,
+  }))}
+  note={copy.ambiguousNote}
+  scanningLabel={copy.scanningLabel}
+  theme={theme}
+/>;
+```
+
 ## Onboarding Prelude
 
 Use `OnboardingPreludeFrame` for the opening full-screen problem/solution beats

@@ -33,6 +33,7 @@ const getInitialRoute = (): PlaygroundRoute => {
 
   if (window.location.pathname === "/profile") return "profile";
   if (window.location.pathname === "/onboarding") return "onboarding";
+  if (window.location.pathname === "/onboarding-health") return "onboardingHealth";
   if (window.location.pathname === "/pre-onboarding") return "preOnboarding";
 
   return window.location.pathname === "/paywall" ? "paywall" : "home";
@@ -50,6 +51,8 @@ const pushWebPath = (route: PlaygroundRoute) => {
         ? "/profile"
         : route === "onboarding"
           ? "/onboarding"
+          : route === "onboardingHealth"
+            ? "/onboarding-health"
           : route === "preOnboarding"
             ? "/pre-onboarding"
             : "/";
@@ -135,6 +138,12 @@ export default function App() {
           onboardingContext={onboardingContext}
           onClose={() => navigate("home")}
         />
+      ) : route === "onboardingHealth" ? (
+        <OnboardingPlaygroundScreen
+          focus="healthCompanion"
+          onboardingContext={onboardingContext}
+          onClose={() => navigate("home")}
+        />
       ) : route === "preOnboarding" ? (
         <PreOnboardingPlaygroundScreen
           isLoginPromptVisible={isPreOnboardingLoginPromptVisible}
@@ -174,6 +183,7 @@ export default function App() {
           onChangeOnboardingPlatform={setOnboardingPlatform}
           onChangeFreeTrialMode={setFreeTrialMode}
           onOpenOnboarding={() => navigate("onboarding")}
+          onOpenOnboardingHealth={() => navigate("onboardingHealth")}
           onOpenPaywall={() => navigate("paywall")}
           onOpenPreOnboarding={() => navigate("preOnboarding")}
           onOpenProfile={() => navigate("profile")}

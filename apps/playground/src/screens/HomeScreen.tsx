@@ -48,6 +48,7 @@ interface HomeScreenProps {
   ) => void;
   onChangeFreeTrialMode: (freeTrialMode: PlaygroundFreeTrialMode) => void;
   onOpenOnboarding: () => void;
+  onOpenOnboardingHealth: () => void;
   onOpenPaywall: () => void;
   onOpenPreOnboarding: () => void;
   onOpenProfile: () => void;
@@ -122,6 +123,7 @@ export const HomeScreen = ({
   onChangeOnboardingPlatform,
   onChangeFreeTrialMode,
   onOpenOnboarding,
+  onOpenOnboardingHealth,
   onOpenPaywall,
   onOpenPreOnboarding,
   onOpenProfile,
@@ -173,6 +175,14 @@ export const HomeScreen = ({
           </Pressable>
           <Pressable onPress={onOpenOnboarding} style={styles.secondaryAction}>
             <Text style={styles.secondaryActionText}>Open /onboarding</Text>
+          </Pressable>
+          <Pressable
+            onPress={onOpenOnboardingHealth}
+            style={styles.secondaryAction}
+          >
+            <Text style={styles.secondaryActionText}>
+              Open /onboarding-health (health & companion only)
+            </Text>
           </Pressable>
         </View>
 

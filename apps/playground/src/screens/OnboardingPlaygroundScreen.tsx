@@ -1,4 +1,4 @@
-import { type ComponentProps, type ReactNode, useMemo, useState } from "react";
+import { type ComponentProps, type ReactNode, useEffect, useMemo, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import {
@@ -6,6 +6,7 @@ import {
   OnboardingChoiceList,
   OnboardingCompletion,
   OnboardingGalleryGrid,
+  OnboardingHealthBackfillSummary,
   OnboardingHealthSyncMock,
   OnboardingNicknameFlowFrame,
   OnboardingNotificationMock,
@@ -29,6 +30,9 @@ import { OnboardingCompanionPreviewExample } from "../components/OnboardingCompa
 import { createOnboardingPreludeSteps } from "../fixtures/onboarding-prelude-steps";
 
 interface OnboardingPlaygroundScreenProps {
+  // "healthCompanion" strips the preludes and nickname flow and keeps
+  // only the companion + health steps for quick review.
+  focus?: "all" | "healthCompanion";
   notificationContent?: OnboardingNotificationContent;
   onboardingContext: PlaygroundOnboardingContext;
   onClose: () => void;
@@ -147,6 +151,7 @@ const createCompletionSlide = ({
 });
 
 export const OnboardingPlaygroundScreen = ({
+  focus = "all",
   notificationContent = DEFAULT_NOTIFICATION_CONTENT,
   onboardingContext,
   onClose,
@@ -183,13 +188,56 @@ export const OnboardingPlaygroundScreen = ({
     [locale, storePlatform],
   );
 
+  const hasIntroFlow = focus === "all";
   const preludeSteps = useMemo(
-    () => createOnboardingPreludeSteps(theme),
-    [theme],
+    () =>
+      hasIntroFlow ? createOnboardingPreludeSteps(theme) : [],
+    [hasIntroFlow, theme],
   );
 
-  const slides = useMemo<PlaygroundOnboardingSlide[]>(
-    () => [
+  const slides = useMemo<PlaygroundOnboardingSlide[]>(() => {
+    const companionSlide: PlaygroundOnboardingSlide = {
+      canContinue: true,
+      content: <OnboardingCompanionPreviewExample theme={theme} />,
+      description:
+        "Switch between the reusable widget, watch, and combined companion layouts.",
+      title: "Keep progress close",
+    };
+    const healthSyncSlide: PlaygroundOnboardingSlide = {
+      canContinue: true,
+      content: (
+        <OnboardingHealthSyncMock
+          healthAppName={
+            platform === "android" ? "Health Connect" : "Apple Health"
+          }
+          platform={
+            platform === "android" ? "health-connect" : "apple-health"
+          }
+          resultDescription="Added to your workout record"
+          resultTitle="Table tennis · 60 min"
+          theme={theme}
+          workoutDetail="6:30 PM · 60 min · 320kcal"
+          workoutTitle="Table tennis"
+        />
+      ),
+      description:
+        "Connect your health app and recorded workouts check in by themselves. The platform toggle switches the bundled Apple Health / Health Connect artwork.",
+      title: "Log workouts automatically",
+    };
+    const backfillSlide: PlaygroundOnboardingSlide = {
+      canContinue: true,
+      content: <BackfillSummaryDemo theme={theme} />,
+      description:
+        "The scanning state plays first, then the found groups land as a staggered list.",
+      showSecondaryAction: true,
+      title: "Found 12 workouts in the last 30 days",
+    };
+
+    if (focus === "healthCompanion") {
+      return [companionSlide, healthSyncSlide, backfillSlide];
+    }
+
+    return [
       {
         canContinue: Boolean(weight.trim()),
         content: (
@@ -244,34 +292,8 @@ export const OnboardingPlaygroundScreen = ({
           />
         ),
       },
-      {
-        canContinue: true,
-        content: <OnboardingCompanionPreviewExample theme={theme} />,
-        description:
-          "Switch between the reusable widget, watch, and combined companion layouts.",
-        title: "Keep progress close",
-      },
-      {
-        canContinue: true,
-        content: (
-          <OnboardingHealthSyncMock
-            healthAppName={
-              platform === "android" ? "Health Connect" : "Apple Health"
-            }
-            platform={
-              platform === "android" ? "health-connect" : "apple-health"
-            }
-            resultDescription="Added to your workout record"
-            resultTitle="Table tennis · 60 min"
-            theme={theme}
-            workoutDetail="6:30 PM · 60 min · 320kcal"
-            workoutTitle="Table tennis"
-          />
-        ),
-        description:
-          "Connect your health app and recorded workouts check in by themselves. The platform toggle switches the bundled Apple Health / Health Connect artwork.",
-        title: "Log workouts automatically",
-      },
+      companionSlide,
+      healthSyncSlide,
       {
         title: "Enable smarter reminders",
         description:
@@ -311,30 +333,32 @@ export const OnboardingPlaygroundScreen = ({
         doneLabel: localizedCopy.doneButton,
         theme,
       }),
-    ],
-    [
-      selectedSource,
-      selectedProgressStep,
-      acquisitionSourceText.title,
-      acquisitionSourceOptions,
-      locale,
-      localizedCopy.doneButton,
-      localizedCopy.notificationNowLabel,
-      notificationContent,
-      platform,
-      theme,
-      weight,
-      weightUnit,
-    ],
-  );
+    ];
+  }, [
+    selectedSource,
+    selectedProgressStep,
+    acquisitionSourceText.title,
+    acquisitionSourceOptions,
+    focus,
+    locale,
+    localizedCopy.doneButton,
+    localizedCopy.notificationNowLabel,
+    notificationContent,
+    platform,
+    theme,
+    weight,
+    weightUnit,
+  ]);
 
   const isPreludeStep = currentStepIndex < preludeSteps.length;
   const currentPreludeStep = isPreludeStep
     ? preludeSteps[currentStepIndex]
     : undefined;
-  const isNicknameFlowStep = currentStepIndex === preludeSteps.length;
+  const nicknameOffset = hasIntroFlow ? 1 : 0;
+  const isNicknameFlowStep =
+    hasIntroFlow && currentStepIndex === preludeSteps.length;
   const mainSlideStepIndex = Math.max(
-    currentStepIndex - preludeSteps.length - 1,
+    currentStepIndex - preludeSteps.length - nicknameOffset,
     0,
   );
   const currentSlide = slides[mainSlideStepIndex];
@@ -346,8 +370,12 @@ export const OnboardingPlaygroundScreen = ({
       currentSlide.tone === "inverted");
   const isFirstStep = currentStepIndex === 0;
   const isLastStep =
-    currentStepIndex === preludeSteps.length + slides.length;
-  const headerStepCount = Math.max(slides.length + 2, 1);
+    currentStepIndex ===
+    preludeSteps.length + nicknameOffset + slides.length - 1;
+  const headerStepCount = Math.max(
+    slides.length + 1 + nicknameOffset,
+    1,
+  );
 
   const goBack = () => {
     if (isFirstStep) {
@@ -411,7 +439,7 @@ export const OnboardingPlaygroundScreen = ({
           contentTransitionIndex={currentStepIndex}
           contentContainerStyle={currentSlide.contentContainerStyle}
           contentVerticalAlignment={currentSlide.contentVerticalAlignment}
-          currentStepIndex={mainSlideStepIndex + 2}
+          currentStepIndex={mainSlideStepIndex + 1 + nicknameOffset}
           description={currentSlide.description}
           isBackButtonDisabled={currentSlide.isBackButtonDisabled}
           isContentTransitionEnabled
@@ -468,6 +496,40 @@ function NotificationGlyph({ color, label }: NotificationGlyphProps) {
     <View style={styles.notificationGlyph}>
       <Text style={[styles.notificationGlyphText, { color }]}>{label}</Text>
     </View>
+  );
+}
+
+interface BackfillSummaryDemoProps {
+  theme: Required<PlaygroundOnboardingTheme>;
+}
+
+// Plays the scanning state briefly, then reveals the fixture groups —
+// the same sequence the consuming app drives with real sync results.
+function BackfillSummaryDemo({ theme }: BackfillSummaryDemoProps) {
+  const [isScanning, setIsScanning] = useState(true);
+
+  useEffect(() => {
+    setIsScanning(true);
+    const timeout = setTimeout(() => setIsScanning(false), 1600);
+    return () => clearTimeout(timeout);
+  }, []);
+
+  return (
+    <OnboardingHealthBackfillSummary
+      isScanning={isScanning}
+      items={[
+        { detail: "8 sessions", id: "tennis", title: "Tennis" },
+        {
+          detail: "3 sessions",
+          id: "martial-arts",
+          title: "Martial arts",
+        },
+        { detail: "1 session", id: "soccer", title: "Soccer" },
+      ]}
+      note="2 sessions need a quick confirmation later."
+      scanningLabel="Checking the last 30 days of workouts…"
+      theme={theme}
+    />
   );
 }
 
