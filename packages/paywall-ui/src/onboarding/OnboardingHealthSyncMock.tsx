@@ -37,9 +37,11 @@ export interface OnboardingHealthSyncMockProps {
   workoutTitle: string;
 }
 
-const SOURCE_CARD_ENTRANCE_DELAY_MS = 120;
-const CONNECTOR_START_DELAY_MS = 520;
-const RESULT_CARD_ENTRANCE_DELAY_MS = 1040;
+const SOURCE_CARD_ENTRANCE_DELAY_MS = 100;
+const CONNECTOR_START_DELAY_MS = 320;
+// The result card lands while the first dot pulse is still running:
+// any later and the flow reads as stalled.
+const RESULT_CARD_ENTRANCE_DELAY_MS = 560;
 const CONNECTOR_DOT_COUNT = 3;
 const CONNECTOR_DOT_STAGGER_MS = 190;
 const CONNECTOR_LOOP_PAUSE_MS = 620;
