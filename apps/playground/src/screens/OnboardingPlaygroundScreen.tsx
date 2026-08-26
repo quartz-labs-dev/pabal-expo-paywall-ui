@@ -6,6 +6,7 @@ import {
   OnboardingChoiceList,
   OnboardingCompletion,
   OnboardingGalleryGrid,
+  OnboardingHealthSyncMock,
   OnboardingNicknameFlowFrame,
   OnboardingNotificationMock,
   OnboardingPreludeFrame,
@@ -249,6 +250,27 @@ export const OnboardingPlaygroundScreen = ({
         description:
           "Switch between the reusable widget, watch, and combined companion layouts.",
         title: "Keep progress close",
+      },
+      {
+        canContinue: true,
+        content: (
+          <OnboardingHealthSyncMock
+            healthAppName={
+              platform === "android" ? "Health Connect" : "Apple Health"
+            }
+            platform={
+              platform === "android" ? "health-connect" : "apple-health"
+            }
+            resultDescription="Added to your workout record"
+            resultTitle="Table tennis · 60 min"
+            theme={theme}
+            workoutDetail="6:30 PM · 60 min · 320kcal"
+            workoutTitle="Table tennis"
+          />
+        ),
+        description:
+          "Connect your health app and recorded workouts check in by themselves. The platform toggle switches the Apple Health / Health Connect flavor.",
+        title: "Log workouts automatically",
       },
       {
         title: "Enable smarter reminders",
