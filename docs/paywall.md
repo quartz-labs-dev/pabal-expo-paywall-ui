@@ -99,6 +99,7 @@ import { Paywall, type PaywallPlan } from "pabal-expo-paywall-ui";
   onClose={() => router.back()}
   onOpenTerms={openTerms}
   onOpenPrivacy={openPrivacy}
+  onStepView={(step) => trackPaywallStep(step)}
 />;
 ```
 
@@ -112,6 +113,7 @@ are running so the CTA shows the localized processing label and spinner.
 | Need | Use |
 | --- | --- |
 | One-step or two-step paywall | `stepMode` |
+| Knowing which step the user is on (analytics) | `onStepView` |
 | Moving, fade-only, or no transition | `animationMode` |
 | Trial duration, no trial, or plan-specific trials | `freeTrial` |
 | Top media | `hero`, `heroHeightRatio` |
@@ -142,6 +144,33 @@ are running so the CTA shows the localized processing label and spinner.
 | Selected-plan CTA text | localized by default, override with `copy.formatPurchaseButtonLabel` |
 | Trial footer reassurance copy | `copy.trialNoPaymentDueNow` |
 | Legal links and developer site | callback props |
+
+## Step Analytics
+
+The current step is the paywall's own state, so an app cannot observe it by
+watching props. `onStepView` reports it:
+
+```tsx
+<Paywall
+  {...paywallPresentation}
+  onStepView={(step) => {
+    // step: "value" | "purchase"
+    trackEvent("View Paywall Step", { stepName: step, sourceScreen });
+  }}
+/>;
+```
+
+It fires on **entry**, not on change:
+
+- once on mount for the opening step — `value` for a two-step paywall,
+  `purchase` for a single-step one,
+- again each time the user reaches another step, the purchase step's back
+  button included.
+
+Entry semantics keep the funnel self-contained: counting `value` against
+`purchase` gives the advance rate without the app re-deriving where the paywall
+started from `stepMode` and `valueStep`. The callback is read through a ref, so
+passing an inline arrow does not make it fire again on every render.
 
 ## Design Tokens And Ambient Background
 

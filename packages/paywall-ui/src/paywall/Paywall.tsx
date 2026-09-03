@@ -40,14 +40,14 @@ import { hasStepHeroOverride, resolveStepHeroSettings } from "./step-hero";
 import { normalizeTitleSegments } from "./title-segments";
 import { TrialNotice } from "./TrialNotice";
 import { resolveFreeTrialConfig } from "./free-trial-config";
+import { getInitialPaywallStep, usesValueStep } from "./paywall-step";
 import type {
   PaywallPlan,
   PaywallProps,
+  PaywallStep,
   PaywallTheme,
   PaywallTrialDuration,
 } from "../types";
-
-type PaywallStep = "value" | "purchase";
 
 const getSelectedPlan = <TPackage,>(
   plans: PaywallPlan<TPackage>[],
@@ -142,11 +142,12 @@ export const Paywall = <TPackage,>({
   onClose,
   onOpenTerms,
   onOpenPrivacy,
+  onStepView,
 }: PaywallProps<TPackage>) => {
   const theme = mergePaywallTheme(themeOverride);
   const insets = useSafeAreaInsets();
   const { height: windowHeight } = useWindowDimensions();
-  const shouldUseValueStep = stepMode === "twoStep" && Boolean(valueStep);
+  const shouldUseValueStep = usesValueStep(stepMode, valueStep);
   const shouldAnimate = animationMode !== "none";
   const shouldAnimateMovement = animationMode === "default";
   const shouldAnimateOpacity = animationMode === "opacity";
@@ -158,8 +159,14 @@ export const Paywall = <TPackage,>({
   const scrollViewRef = useRef<ScrollView>(null);
   const scrollOffsetRef = useRef(0);
   const [currentStep, setCurrentStep] = useState<PaywallStep>(() =>
-    shouldUseValueStep ? "value" : "purchase"
+    getInitialPaywallStep(shouldUseValueStep)
   );
+  // Held in a ref so an inline arrow from the consumer does not re-run the
+  // notify effect: a step view must fire on the step, not on every render.
+  // Seeded with the mount-time callback and refreshed after each commit
+  // rather than during render, so a render React throws away cannot leave
+  // its callback behind.
+  const onStepViewRef = useRef(onStepView);
   const selectedPlan = getSelectedPlan(plans, selectedPlanId);
   const resolvedSelectedPlanId = selectedPlan?.id;
   const freeTrialConfig = resolveFreeTrialConfig(freeTrial, selectedPlan);
@@ -278,8 +285,20 @@ export const Paywall = <TPackage,>({
   useEffect(() => {
     isStepTransitioningRef.current = false;
     stepTransition.setValue(1);
-    setCurrentStep(shouldUseValueStep ? "value" : "purchase");
+    setCurrentStep(getInitialPaywallStep(shouldUseValueStep));
   }, [shouldUseValueStep, stepTransition]);
+
+  useEffect(() => {
+    onStepViewRef.current = onStepView;
+  });
+
+  // Fires on mount for the opening step and on every step the user reaches
+  // after it. React's own effect dependency does the de-duplication, so a
+  // step never reports twice for one visit to it. Declared after the ref
+  // refresh above so both run in that order within one commit.
+  useEffect(() => {
+    onStepViewRef.current?.(currentStep);
+  }, [currentStep]);
 
   useEffect(() => {
     // Keep the tracked offset in step with the programmatic reset. A stale

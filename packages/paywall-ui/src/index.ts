@@ -218,6 +218,7 @@ export type {
   PaywallReview,
   PaywallReviewRating,
   PaywallReviewSection,
+  PaywallStep,
   PaywallStepMode,
   PaywallTheme,
   PaywallTitleSegment,

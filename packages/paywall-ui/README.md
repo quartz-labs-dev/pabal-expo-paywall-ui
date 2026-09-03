@@ -24,6 +24,11 @@ props override the top-level ones on the value step, and each falls back on
 its own when omitted. Leave them out and both steps share one hero. See
 [A Hero Per Step](../../docs/paywall.md#a-hero-per-step).
 
+The step itself is internal state, so `onStepView` is how an app follows it.
+It reports every step the user lands on, the opening one included, which makes
+a `value` → `purchase` funnel countable from one event. See
+[Step Analytics](../../docs/paywall.md#step-analytics).
+
 Package defaults assume the dark paywall the theme describes. An app on a
 light `theme.backgroundColor` has to pass `PaywallHeroCarousel`'s
 `inactiveDotColor`; the default is translucent white and disappears there.

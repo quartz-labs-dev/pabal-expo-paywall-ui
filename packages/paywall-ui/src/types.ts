@@ -173,6 +173,12 @@ export interface PaywallFeatureComparison {
 export type PaywallStepMode = "twoStep" | "singleStep";
 
 /**
+ * The step a two-step paywall is showing: `value` argues why, `purchase`
+ * asks for the sale. A single-step paywall is always on `purchase`.
+ */
+export type PaywallStep = "value" | "purchase";
+
+/**
  * `scroll` (default): the hero scrolls with the rest of the content, as
  * one continuous page.
  * `pinned`: the hero stays fixed behind the screen and the content
@@ -264,6 +270,18 @@ export interface PaywallProps<TPackage = unknown> {
   onClose: () => void;
   onOpenTerms: () => void;
   onOpenPrivacy: () => void;
+  /**
+   * Called once for every step the user lands on, the first one included:
+   * a two-step paywall reports `value` on mount and `purchase` when the
+   * user advances, a single-step paywall reports `purchase` on mount.
+   *
+   * Entry rather than change, because the step lives inside this component
+   * and a consumer that only heard about changes could not tell where the
+   * user started — every analytics adapter would have to re-derive the
+   * initial step from `stepMode` and `valueStep` to count the funnel.
+   * Returning to a step (the purchase step's back button) reports it again.
+   */
+  onStepView?: (step: PaywallStep) => void;
 }
 
 export interface PaywallConfig {
