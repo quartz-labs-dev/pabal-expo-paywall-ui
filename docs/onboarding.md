@@ -154,6 +154,13 @@ alone, or `variant="widget-watch"` for the overlapping combined stage.
 `phoneWidgets` accepts one required preview and one optional secondary preview.
 Set `stageAccentColor` to tint the soft circle behind the devices independently
 from the onboarding theme. When omitted, it falls back to `theme.accentColor`.
+Pass `showsStageGlow={false}` to drop that circle entirely.
+
+`watchHealthPlatform="apple-health" | "health-connect"` floats the bundled
+health logo as an app-icon tile above the watch, so a step that also introduces health sync can
+keep the same device stage. `watchBadge` replaces the logo with an app-owned
+ReactNode. Both are ignored on `variant="widget"` because there is no watch to
+attach them to.
 
 ```tsx
 import {
@@ -178,7 +185,9 @@ import {
     stageAccentColor={brandColors.companionPreview}
     theme={contentTheme}
     variant="widget-watch"
+    watchBadgeLabel={copy.healthLabel}
     watchContent={<WatchWidgetPreview />}
+    watchHealthPlatform={Platform.OS === "ios" ? "apple-health" : "health-connect"}
     watchLabel={copy.watchLabel}
   />
 </OnboardingStepFrame>;

@@ -1,25 +1,31 @@
 import { useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import {
   OnboardingCompanionPreview,
   type OnboardingCompanionPreviewVariant,
   type OnboardingContentTheme,
+  type OnboardingHealthSyncMockPlatform,
 } from "pabal-expo-paywall-ui";
+
+import {
+  PlaygroundSegmentedControl,
+  type PlaygroundSegmentedOption,
+} from "./PlaygroundSegmentedControl";
 
 interface OnboardingCompanionPreviewExampleProps {
   theme: OnboardingContentTheme;
 }
 
-interface VariantOption {
-  label: string;
-  value: OnboardingCompanionPreviewVariant;
-}
+type WatchBadgeOption = OnboardingHealthSyncMockPlatform | "none";
+type StageGlowOption = "off" | "on";
 
 export const OnboardingCompanionPreviewExample = ({
   theme,
 }: OnboardingCompanionPreviewExampleProps) => {
   const [variant, setVariant] =
     useState<OnboardingCompanionPreviewVariant>("widget-watch");
+  const [watchBadge, setWatchBadge] = useState<WatchBadgeOption>("none");
+  const [stageGlow, setStageGlow] = useState<StageGlowOption>("on");
 
   return (
     <View style={styles.root}>
@@ -33,49 +39,38 @@ export const OnboardingCompanionPreviewExample = ({
             <PlaygroundHomeWidget key="home" />,
             <PlaygroundLockWidget key="lock" />,
           ]}
+          showsStageGlow={stageGlow === "on"}
           stageAccentColor="#7C6CF2"
           theme={theme}
           variant={variant}
+          watchBadgeLabel="HEALTH"
           watchContent={<PlaygroundWatchWidget />}
+          watchHealthPlatform={watchBadge === "none" ? undefined : watchBadge}
           watchLabel="WATCH"
         />
       </View>
 
-      <View
+      <PlaygroundSegmentedControl
         accessibilityLabel="Companion preview type"
-        accessibilityRole="radiogroup"
-        style={[styles.selector, { backgroundColor: theme.cardBackgroundColor }]}
-      >
-        {VARIANT_OPTIONS.map((option) => {
-          const isSelected = option.value === variant;
-
-          return (
-            <Pressable
-              accessibilityRole="radio"
-              accessibilityState={{ checked: isSelected }}
-              key={option.value}
-              onPress={() => setVariant(option.value)}
-              style={[
-                styles.selectorOption,
-                isSelected && { backgroundColor: theme.accentColor },
-              ]}
-            >
-              <Text
-                style={[
-                  styles.selectorLabel,
-                  {
-                    color: isSelected
-                      ? theme.buttonTextColor
-                      : theme.secondaryTextColor,
-                  },
-                ]}
-              >
-                {option.label}
-              </Text>
-            </Pressable>
-          );
-        })}
-      </View>
+        onChange={setVariant}
+        options={VARIANT_OPTIONS}
+        theme={theme}
+        value={variant}
+      />
+      <PlaygroundSegmentedControl
+        accessibilityLabel="Watch health badge"
+        onChange={setWatchBadge}
+        options={WATCH_BADGE_OPTIONS}
+        theme={theme}
+        value={watchBadge}
+      />
+      <PlaygroundSegmentedControl
+        accessibilityLabel="Stage glow"
+        onChange={setStageGlow}
+        options={STAGE_GLOW_OPTIONS}
+        theme={theme}
+        value={stageGlow}
+      />
     </View>
   );
 };
@@ -114,11 +109,25 @@ const PlaygroundWatchWidget = () => (
   </View>
 );
 
-const VARIANT_OPTIONS: readonly VariantOption[] = [
-  { label: "Widget", value: "widget" },
-  { label: "Watch", value: "watch" },
-  { label: "Both", value: "widget-watch" },
-];
+const VARIANT_OPTIONS: readonly PlaygroundSegmentedOption<OnboardingCompanionPreviewVariant>[] =
+  [
+    { label: "Widget", value: "widget" },
+    { label: "Watch", value: "watch" },
+    { label: "Both", value: "widget-watch" },
+  ];
+
+const WATCH_BADGE_OPTIONS: readonly PlaygroundSegmentedOption<WatchBadgeOption>[] =
+  [
+    { label: "No badge", value: "none" },
+    { label: "Apple Health", value: "apple-health" },
+    { label: "Health Connect", value: "health-connect" },
+  ];
+
+const STAGE_GLOW_OPTIONS: readonly PlaygroundSegmentedOption<StageGlowOption>[] =
+  [
+    { label: "Glow on", value: "on" },
+    { label: "Glow off", value: "off" },
+  ];
 
 const styles = StyleSheet.create({
   root: {
@@ -131,23 +140,6 @@ const styles = StyleSheet.create({
     height: 350,
     justifyContent: "center",
     width: "100%",
-  },
-  selector: {
-    borderRadius: 14,
-    flexDirection: "row",
-    gap: 4,
-    padding: 4,
-  },
-  selectorOption: {
-    borderRadius: 10,
-    minWidth: 72,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-  },
-  selectorLabel: {
-    fontSize: 12,
-    fontWeight: "600",
-    textAlign: "center",
   },
   homeWidget: {
     backgroundColor: "rgba(16,16,19,0.92)",

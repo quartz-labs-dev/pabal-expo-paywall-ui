@@ -43,7 +43,10 @@ and watch stage. Choose `widget`, `watch`, or `widget-watch`, then pass the
 app's real widget and watch previews as ReactNode slots. Titles, descriptions,
 CTA copy, device labels, and accessibility copy remain app-owned. The optional
 `stageAccentColor` prop customizes the soft background circle without changing
-the rest of the onboarding theme.
+the rest of the onboarding theme, and `showsStageGlow={false}` removes it.
+`watchHealthPlatform` floats the bundled Apple Health / Health Connect logo as
+an app-icon tile above the watch, `watchBadgeLabel` captions it, and
+`watchBadge` swaps in an app-owned tile instead.
 
 ## Install
 

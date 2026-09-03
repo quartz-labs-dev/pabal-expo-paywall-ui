@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import {
   Animated,
+  Image,
   type StyleProp,
   StyleSheet,
   Text,
@@ -9,9 +10,12 @@ import {
 } from "react-native";
 
 import { getColorWithAlpha } from "../shared/color-utils";
+import type { OnboardingHealthSyncMockPlatform } from "./health-sync-mock-palette";
 import {
+  COMPANION_WATCH_BADGE_SIZE,
   getOnboardingCompanionPreviewVisibility,
   resolveOnboardingCompanionPreviewAccentColor,
+  resolveOnboardingCompanionWatchBadgePalette,
   type OnboardingCompanionPreviewVariant,
 } from "./onboarding-companion-preview-layout";
 import { useOnboardingPhoneFrameEntranceAnimation } from "./onboarding-animations";
@@ -24,12 +28,24 @@ export interface OnboardingCompanionPreviewProps {
   phoneLabel?: string;
   phoneTimeLabel?: string;
   phoneWidgets?: readonly [ReactNode, ReactNode?];
+  // Soft accent circle behind the devices. Pass false to drop it when the
+  // step already sits on a busy background.
+  showsStageGlow?: boolean;
   stageAccentColor?: string;
   style?: StyleProp<ViewStyle>;
   testID?: string;
   theme: OnboardingContentTheme;
   variant: OnboardingCompanionPreviewVariant;
+  // Custom content for the app-icon tile floating above the watch. Wins
+  // over `watchHealthPlatform` when both are given.
+  watchBadge?: ReactNode;
+  // Caption under the badge tile, e.g. "HEALTH". App-owned like the
+  // device labels.
+  watchBadgeLabel?: string;
   watchContent?: ReactNode;
+  // Floats the bundled Apple Health / Health Connect logo above the watch
+  // so a health-sync step can reuse the same device stage.
+  watchHealthPlatform?: OnboardingHealthSyncMockPlatform;
   watchLabel?: string;
 }
 
@@ -40,16 +56,24 @@ export const OnboardingCompanionPreview = ({
   phoneLabel,
   phoneTimeLabel,
   phoneWidgets,
+  showsStageGlow = true,
   stageAccentColor,
   style,
   testID = "onboarding-companion-preview",
   theme,
   variant,
+  watchBadge,
+  watchBadgeLabel,
   watchContent,
+  watchHealthPlatform,
   watchLabel,
 }: OnboardingCompanionPreviewProps) => {
-  const { showsPhone, showsWatch } =
-    getOnboardingCompanionPreviewVisibility(variant);
+  const { showsPhone, showsWatch, showsWatchBadge, showsStageGlow: showsGlow } =
+    getOnboardingCompanionPreviewVisibility(variant, {
+      hasWatchBadge: watchBadge !== undefined && watchBadge !== null,
+      showsStageGlow,
+      watchHealthPlatform,
+    });
   const isCombined = showsPhone && showsWatch;
   const phoneAnimatedStyle = useOnboardingPhoneFrameEntranceAnimation(
     60,
@@ -60,6 +84,13 @@ export const OnboardingCompanionPreview = ({
     180,
     18,
     12,
+  );
+  // Lands after the watch so it reads as something arriving on the watch,
+  // not as part of the watch itself.
+  const watchBadgeAnimatedStyle = useOnboardingPhoneFrameEntranceAnimation(
+    420,
+    0,
+    10,
   );
   const [primaryWidget, secondaryWidget] = phoneWidgets ?? [];
   const resolvedStageAccentColor =
@@ -72,10 +103,9 @@ export const OnboardingCompanionPreview = ({
     0.12,
     theme.backgroundColor,
   );
-  const phoneScreenGlow = getColorWithAlpha(
-    resolvedStageAccentColor,
-    0.14,
-    "#12151A",
+  const watchBadgePalette = resolveOnboardingCompanionWatchBadgePalette(
+    watchHealthPlatform,
+    theme.cardBackgroundColor,
   );
 
   return (
@@ -86,19 +116,23 @@ export const OnboardingCompanionPreview = ({
       style={[
         styles.root,
         showsPhone ? styles.phoneStage : styles.watchStage,
+        !showsPhone && showsWatchBadge ? styles.watchStageWithBadge : null,
         style,
       ]}
       testID={testID}
     >
-      <View
-        importantForAccessibility="no"
-        pointerEvents="none"
-        style={[
-          styles.glow,
-          showsPhone ? styles.phoneGlow : styles.watchGlow,
-          { backgroundColor: accentGlow },
-        ]}
-      />
+      {showsGlow ? (
+        <View
+          importantForAccessibility="no"
+          pointerEvents="none"
+          style={[
+            styles.glow,
+            showsPhone ? styles.phoneGlow : styles.watchGlow,
+            { backgroundColor: accentGlow },
+          ]}
+          testID={`${testID}-glow`}
+        />
+      ) : null}
 
       {showsPhone ? (
         <Animated.View
@@ -113,13 +147,6 @@ export const OnboardingCompanionPreview = ({
           <View style={styles.phoneSideButtonBottom} />
           <View style={styles.phoneFrame}>
             <View style={styles.phoneScreen}>
-              <View
-                pointerEvents="none"
-                style={[
-                  styles.phoneScreenGlow,
-                  { backgroundColor: phoneScreenGlow },
-                ]}
-              />
               <View style={styles.dynamicIsland} />
               {phoneDateLabel ? (
                 <Text style={styles.phoneDate}>{phoneDateLabel}</Text>
@@ -160,6 +187,51 @@ export const OnboardingCompanionPreview = ({
           <View style={styles.watchCase}>
             <View style={styles.watchScreen}>{watchContent}</View>
           </View>
+          {showsWatchBadge ? (
+            <Animated.View
+              pointerEvents="none"
+              style={[
+                styles.watchBadgeSlot,
+                isCombined
+                  ? styles.watchBadgeSlotCombined
+                  : styles.watchBadgeSlotStandalone,
+                isAnimated ? watchBadgeAnimatedStyle : null,
+              ]}
+              testID={`${testID}-watch-badge`}
+            >
+              <View
+                style={[
+                  styles.watchBadge,
+                  {
+                    backgroundColor: watchBadgePalette.backgroundColor,
+                    borderRadius: watchBadgePalette.borderRadius,
+                  },
+                ]}
+              >
+                {watchBadge ?? (
+                  <Image
+                    resizeMode="contain"
+                    source={
+                      watchHealthPlatform === "health-connect"
+                        ? require("../assets/health/health-connect.png")
+                        : require("../assets/health/apple-health.png")
+                    }
+                    style={styles.watchBadgeImage}
+                  />
+                )}
+              </View>
+              {watchBadgeLabel ? (
+                <Text
+                  style={[
+                    styles.deviceLabel,
+                    { color: theme.secondaryTextColor },
+                  ]}
+                >
+                  {watchBadgeLabel}
+                </Text>
+              ) : null}
+            </Animated.View>
+          ) : null}
           {watchLabel ? (
             <Text style={[styles.deviceLabel, { color: theme.secondaryTextColor }]}>
               {watchLabel}
@@ -185,6 +257,11 @@ const styles = StyleSheet.create({
   },
   watchStage: {
     height: 190,
+  },
+  // Makes room for the badge above the watch when there is no phone.
+  watchStageWithBadge: {
+    height: 290,
+    paddingTop: 100,
   },
   glow: {
     position: "absolute",
@@ -252,14 +329,6 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     paddingHorizontal: 9,
     paddingTop: 9,
-  },
-  phoneScreenGlow: {
-    borderRadius: 110,
-    height: 220,
-    position: "absolute",
-    right: -90,
-    top: 54,
-    width: 220,
   },
   dynamicIsland: {
     backgroundColor: "#000000",
@@ -352,6 +421,35 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     overflow: "hidden",
+  },
+  watchBadgeSlot: {
+    alignItems: "center",
+    alignSelf: "center",
+    position: "absolute",
+    zIndex: 2,
+  },
+  // Sits in the empty stage area above the watch band, clear of the phone.
+  watchBadgeSlotCombined: {
+    top: -118,
+  },
+  watchBadgeSlotStandalone: {
+    top: -100,
+  },
+  watchBadge: {
+    alignItems: "center",
+    elevation: 8,
+    height: COMPANION_WATCH_BADGE_SIZE,
+    justifyContent: "center",
+    overflow: "hidden",
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.18,
+    shadowRadius: 14,
+    width: COMPANION_WATCH_BADGE_SIZE,
+  },
+  watchBadgeImage: {
+    height: COMPANION_WATCH_BADGE_SIZE,
+    width: COMPANION_WATCH_BADGE_SIZE,
   },
   deviceLabel: {
     fontSize: 9,
