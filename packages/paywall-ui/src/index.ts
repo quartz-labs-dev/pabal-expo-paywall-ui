@@ -180,6 +180,12 @@ export type {
 export type { OnboardingAcquisitionSourceText } from "./locales/onboarding/acquisition-source";
 export type { OnboardingNicknameInputText } from "./locales/onboarding/nickname-input";
 export { Paywall } from "./paywall/Paywall";
+export { LimitedTimeOfferPaywall } from "./offer/LimitedTimeOfferPaywall";
+export {
+  getLimitedTimeOfferCountdownParts,
+  resolveLimitedTimeOfferWindow,
+  resolvePaywallVariant,
+} from "./offer/limited-time-offer";
 export { PaywallHeroBeforeAfter } from "./paywall/PaywallHeroBeforeAfter";
 export { PaywallHeroCarousel } from "./paywall/PaywallHeroCarousel";
 export type { PaywallHeroBeforeAfterProps } from "./paywall/PaywallHeroBeforeAfter";
@@ -197,6 +203,12 @@ export { ProfileSubscriptionSection } from "./profile/ProfileSubscriptionSection
 export { isUnifiedLocale, UNIFIED_LOCALES } from "./locales/unified-locales";
 export type {
   CreatePaywallPlansOptions,
+  LimitedTimeOfferCopy,
+  LimitedTimeOfferCountdownParts,
+  LimitedTimeOfferDuration,
+  LimitedTimeOfferDurationUnit,
+  LimitedTimeOfferPaywallProps,
+  LimitedTimeOfferWindow,
   PaywallAnimationMode,
   PaywallBenefit,
   PaywallBenefitDetail,
@@ -214,6 +226,7 @@ export type {
   PaywallPlanFreeTrialConfig,
   PaywallPlanPeriod,
   PaywallProps,
+  PaywallVariant,
   PaywallPurchaseButtonLabelContext,
   PaywallReview,
   PaywallReviewRating,

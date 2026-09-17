@@ -7,6 +7,12 @@ eligibility, performs purchases, handles analytics, and owns navigation.
 ## What The Package Provides
 
 - `Paywall`: the React Native paywall screen
+- `LimitedTimeOfferPaywall`: a focused one-plan offer with countdown and a
+  route back to the standard plan list
+- `resolveLimitedTimeOfferWindow()`: resolves active, expired, and invalid
+  campaign windows from an app-owned start time and duration
+- `resolvePaywallVariant()`: selects the offer only when eligibility, time,
+  and product availability all agree
 - `PaywallHeroBeforeAfter`: Opal-style before/after stats hero preset
 - `PaywallHeroCarousel`: swipeable, auto-advancing feature carousel hero preset
 - `createPaywallPlans()`: converts RevenueCat-like packages into `PaywallPlan[]`
@@ -79,6 +85,60 @@ By default, the adapter recognizes RevenueCat package identifiers
 `$rc_weekly`, `$rc_monthly`, `$rc_annual`, and `$rc_lifetime`. Apps with custom
 package identifiers can pass `weeklyPackageIds`, `monthlyPackageIds`,
 `annualPackageIds`, and `lifetimePackageIds` through `planOptions`.
+
+## Limited-Time Install Offers
+
+The app owns eligibility persistence and store configuration. Persist the first
+launch timestamp before onboarding completes, fetch the separate promotional
+offering, and fall back to the standard paywall whenever state is invalid,
+expired, or the promotional product is unavailable.
+
+```tsx
+import {
+  LimitedTimeOfferPaywall,
+  resolveLimitedTimeOfferWindow,
+  resolvePaywallVariant,
+} from "pabal-expo-paywall-ui";
+
+const offerWindow = resolveLimitedTimeOfferWindow({
+  startedAt: installOffer.startedAt,
+  duration: { unit: "hour", value: 24 },
+});
+const variant = resolvePaywallVariant({
+  hasOfferProduct: Boolean(offerPlan),
+  isEligible: installOffer.eligibility === "eligible",
+  offerWindow,
+});
+
+if (variant === "limitedTimeOffer" && offerPlan && offerWindow.expiresAt) {
+  return (
+    <LimitedTimeOfferPaywall
+      plan={offerPlan}
+      originalPriceText={standardPlan.priceText}
+      discountText="30% off"
+      billingDisclosure="One-time purchase. No subscription."
+      expiresAt={offerWindow.expiresAt}
+      hero={<HeroImage />}
+      benefits={benefits}
+      copy={appLocalizedOfferCopy}
+      onPurchase={purchasePlan}
+      onRestore={restorePurchases}
+      onViewAllPlans={() => setVariant("standard")}
+      onExpire={() => setVariant("standard")}
+      onClose={() => router.back()}
+      onOpenTerms={openTerms}
+      onOpenPrivacy={openPrivacy}
+    />
+  );
+}
+```
+
+`now === expiresAt` is expired. Invalid timestamps and non-positive durations
+resolve to `invalid`; both must render the standard paywall. The countdown uses
+an absolute `expiresAt`, so closing or backgrounding the app never pauses it.
+`formatRemainingTime` belongs to the app-provided copy for localization. The
+package does not infer discounts, billing terms, RevenueCat offerings, or
+whether an install is eligible.
 
 ## Render
 

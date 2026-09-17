@@ -13,6 +13,14 @@ plan period or plan id.
 
 It does not import `react-native-purchases` or `react-native-purchases-ui`.
 
+`LimitedTimeOfferPaywall` renders a single annual or lifetime promotion with an
+absolute countdown, original/offer prices, benefits, and an explicit “all
+plans” escape hatch. Apps persist eligibility and start time, select the
+promotional store product, calculate discount copy, and use
+`resolveLimitedTimeOfferWindow()` plus `resolvePaywallVariant()` for a safe
+standard-paywall fallback. See
+[Limited-Time Install Offers](../../docs/paywall.md#limited-time-install-offers).
+
 The paywall theme carries shape and typography tokens (`cardBorderRadius`,
 `buttonBorderRadius`, `titleFontSize`) alongside colors. Depth effects stay
 dependency-free: apps pass gradients into the `backgroundOverlay` slot, and

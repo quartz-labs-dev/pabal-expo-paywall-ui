@@ -2,6 +2,28 @@ import type { ReactNode } from "react";
 
 export type PaywallPlanPeriod = "weekly" | "monthly" | "annual" | "lifetime";
 
+export type LimitedTimeOfferDurationUnit = "hour" | "day";
+
+export interface LimitedTimeOfferDuration {
+  unit: LimitedTimeOfferDurationUnit;
+  value: number;
+}
+
+export interface LimitedTimeOfferWindow {
+  expiresAt: number | null;
+  remainingMs: number;
+  status: "active" | "expired" | "invalid";
+}
+
+export interface LimitedTimeOfferCountdownParts {
+  hours: number;
+  minutes: number;
+  seconds: number;
+  totalSeconds: number;
+}
+
+export type PaywallVariant = "limitedTimeOffer" | "standard";
+
 export type PaywallTrialUnit = "day" | "week";
 
 export interface PaywallTrialDuration {
@@ -39,6 +61,46 @@ export interface PaywallPlan<TPackage = unknown> {
   selectedDescription?: string;
   isRecommended?: boolean;
   rawPackage: TPackage;
+}
+
+export interface LimitedTimeOfferCopy {
+  badgeText: string;
+  title: string;
+  subtitle?: string;
+  countdownLabel: string;
+  purchaseButton: string;
+  purchasingButton?: string;
+  viewAllPlansButton: string;
+  restoreButton: string;
+  termsText: string;
+  privacyText: string;
+  closeButtonAccessibilityLabel?: string;
+  formatRemainingTime?: (
+    parts: LimitedTimeOfferCountdownParts,
+  ) => string;
+}
+
+export interface LimitedTimeOfferPaywallProps<TPackage = unknown> {
+  plan: PaywallPlan<TPackage>;
+  originalPriceText?: string;
+  discountText?: string;
+  billingDisclosure: string;
+  expiresAt: number;
+  hero: ReactNode;
+  benefits?: PaywallBenefit[];
+  content?: ReactNode;
+  purchaseButtonBackground?: ReactNode;
+  copy: LimitedTimeOfferCopy;
+  theme?: Partial<PaywallTheme>;
+  isPurchasing?: boolean;
+  isRestoring?: boolean;
+  onPurchase: (plan: PaywallPlan<TPackage>) => Promise<void> | void;
+  onRestore: () => Promise<void> | void;
+  onViewAllPlans: () => void;
+  onExpire: () => void;
+  onClose: () => void;
+  onOpenTerms: () => void;
+  onOpenPrivacy: () => void;
 }
 
 export interface PaywallPurchaseButtonLabelContext<TPackage = unknown> {
