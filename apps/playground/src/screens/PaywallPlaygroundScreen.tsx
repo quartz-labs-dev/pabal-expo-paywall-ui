@@ -24,6 +24,7 @@ import {
 
 import { PlaygroundAmbientGlow } from "../components/PlaygroundAmbientGlow";
 import { PlaygroundFloatingHero } from "../components/PlaygroundFloatingHero";
+import { getLimitedTimeOfferPreview } from "../fixtures/limited-time-offer-copy";
 import { getPackagesForScenario } from "../fixtures/paywall-plans";
 import { getPlaygroundFreeTrialConfig } from "../fixtures/paywall-trial-policy";
 import { playgroundBenefits } from "../fixtures/playground-benefits";
@@ -704,28 +705,18 @@ export const PaywallPlaygroundScreen = ({
     getPackagesForScenario("lifetimeOnly"),
     getDefaultPaywallPlanOptions(selectedLocale),
   )[0];
+  const offerPreview = getLimitedTimeOfferPreview(selectedLocale);
 
   if (shouldShowOfferPreview && lifetimeOfferPlan) {
     return (
       <View style={styles.root}>
         <LimitedTimeOfferPaywall
           benefits={playgroundBenefits.slice(0, 3)}
-          billingDisclosure="Pay once and enjoy Pro forever. No subscription."
-          copy={{
-            badgeText: "24-HOUR SPECIAL DEAL",
-            closeButtonAccessibilityLabel: "Close special offer",
-            countdownLabel: "Your special price ends in",
-            privacyText: "Privacy",
-            purchaseButton: "Unlock Lifetime Pro",
-            purchasingButton: "Unlocking Pro…",
-            restoreButton: "Restore purchase",
-            subtitle:
-              "A one-time price that disappears when this timer reaches zero.",
-            termsText: "Terms",
-            title: "One moment. Pro forever.",
-            viewAllPlansButton: "View all plans",
-          }}
-          discountText="30% OFF"
+          billingDisclosure={offerPreview.billingDisclosure}
+          copy={offerPreview.copy}
+          discountText={getDefaultPaywallPlanOptions(
+            selectedLocale,
+          ).formatDiscountText?.(30)}
           expiresAt={offerExpiresAt}
           hero={designPresentation.hero}
           isPurchasing={isPurchasing}

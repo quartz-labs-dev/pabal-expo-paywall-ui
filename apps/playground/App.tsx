@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { Platform } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { isUnifiedLocale } from "pabal-expo-paywall-ui";
 
 import {
   DEFAULT_PLAYGROUND_ONBOARDING_PLATFORM,
@@ -61,6 +62,15 @@ const pushWebPath = (route: PlaygroundRoute) => {
   window.history.pushState({ route }, "", nextPath);
 };
 
+const getInitialLocale = (): PlaygroundLocale => {
+  if (Platform.OS !== "web" || typeof window?.location?.search !== "string") {
+    return "en-US";
+  }
+
+  const locale = new URLSearchParams(window.location.search).get("locale");
+  return locale && isUnifiedLocale(locale) ? locale : "en-US";
+};
+
 export default function App() {
   const [route, setRoute] = useState<PlaygroundRoute>(getInitialRoute);
   const [scenario, setScenario] =
@@ -82,7 +92,7 @@ export default function App() {
       DEFAULT_PLAYGROUND_ONBOARDING_PLATFORM,
     );
   const [selectedLocale, setSelectedLocale] =
-    useState<PlaygroundLocale>("en-US");
+    useState<PlaygroundLocale>(getInitialLocale);
   const onboardingContext = useMemo(
     () =>
       resolvePlaygroundOnboardingContext({

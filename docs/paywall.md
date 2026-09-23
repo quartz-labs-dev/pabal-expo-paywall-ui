@@ -143,6 +143,11 @@ Pass `onViewAllPlans` only when the promotion should offer an explicit escape
 to a broader catalog. Omit it for a dedicated one-time deal; purchase restore,
 privacy, terms, close, and expiry fallback remain available.
 
+The playground offer preview accepts a locale query for its translated fixture,
+for example `/paywall?offer=1&locale=ko-KR` or
+`/paywall?offer=1&locale=ja-JP`. Unsupported offer-copy locales intentionally
+fall back to English while the standard package copy keeps the selected locale.
+
 ## Render
 
 ```tsx
