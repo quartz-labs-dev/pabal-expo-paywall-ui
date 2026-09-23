@@ -1,6 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
-import { Alert, ImageBackground, StyleSheet, Text, View } from "react-native";
 import {
+  Alert,
+  ImageBackground,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import {
+  LimitedTimeOfferPaywall,
   Paywall,
   PaywallHeroBeforeAfter,
   PaywallHeroCarousel,
@@ -639,6 +647,7 @@ export const PaywallPlaygroundScreen = ({
 }: PaywallPlaygroundScreenProps) => {
   const [selectedPlanId, setSelectedPlanId] = useState<string | undefined>();
   const [isPurchasing, setIsPurchasing] = useState(false);
+  const [offerExpiresAt] = useState(() => Date.now() + 24 * 60 * 60 * 1000);
 
   const plans = useMemo(() => {
     return createPaywallPlans(
@@ -686,6 +695,64 @@ export const PaywallPlaygroundScreen = ({
       `App receives rawPackage.identifier: ${plan.rawPackage.identifier}`,
     );
   };
+
+  const shouldShowOfferPreview =
+    Platform.OS === "web" &&
+    typeof window?.location?.search === "string" &&
+    new URLSearchParams(window.location.search).get("offer") === "1";
+  const lifetimeOfferPlan = createPaywallPlans(
+    getPackagesForScenario("lifetimeOnly"),
+    getDefaultPaywallPlanOptions(selectedLocale),
+  )[0];
+
+  if (shouldShowOfferPreview && lifetimeOfferPlan) {
+    return (
+      <View style={styles.root}>
+        <LimitedTimeOfferPaywall
+          benefits={playgroundBenefits.slice(0, 3)}
+          billingDisclosure="Pay once and enjoy Pro forever. No subscription."
+          copy={{
+            badgeText: "24-HOUR SPECIAL DEAL",
+            closeButtonAccessibilityLabel: "Close special offer",
+            countdownLabel: "Your special price ends in",
+            privacyText: "Privacy",
+            purchaseButton: "Unlock Lifetime Pro",
+            purchasingButton: "Unlocking Pro…",
+            restoreButton: "Restore purchase",
+            subtitle:
+              "A one-time price that disappears when this timer reaches zero.",
+            termsText: "Terms",
+            title: "One moment. Pro forever.",
+            viewAllPlansButton: "View all plans",
+          }}
+          discountText="30% OFF"
+          expiresAt={offerExpiresAt}
+          hero={designPresentation.hero}
+          isPurchasing={isPurchasing}
+          originalPriceText="$99.99"
+          plan={{ ...lifetimeOfferPlan, priceText: "$69.99" }}
+          theme={{
+            accentColor: "#F5C451",
+            accentTextColor: "#101A2A",
+            backgroundColor: "#0B1423",
+            borderColor: "#2A3950",
+            mutedTextColor: "#8696AC",
+            primaryTextColor: "#FFF8E7",
+            secondaryTextColor: "#C8D2E0",
+            selectedBorderColor: "#F5C451",
+            selectedSurfaceColor: "#16243A",
+            surfaceColor: "#111F33",
+          }}
+          onClose={onClose}
+          onExpire={onClose}
+          onOpenPrivacy={() => Alert.alert("Privacy callback")}
+          onOpenTerms={() => Alert.alert("Terms callback")}
+          onPurchase={handlePurchase}
+          onRestore={() => Alert.alert("Restore callback")}
+        />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.root}>

@@ -96,7 +96,7 @@ export interface LimitedTimeOfferPaywallProps<TPackage = unknown> {
   isRestoring?: boolean;
   onPurchase: (plan: PaywallPlan<TPackage>) => Promise<void> | void;
   onRestore: () => Promise<void> | void;
-  onViewAllPlans: () => void;
+  onViewAllPlans?: () => void;
   onExpire: () => void;
   onClose: () => void;
   onOpenTerms: () => void;

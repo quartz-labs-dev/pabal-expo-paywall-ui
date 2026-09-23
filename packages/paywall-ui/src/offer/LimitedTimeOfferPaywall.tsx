@@ -37,6 +37,7 @@ export const LimitedTimeOfferPaywall = <TPackage,>({
 }: LimitedTimeOfferPaywallProps<TPackage>) => {
   const insets = useSafeAreaInsets();
   const theme = mergePaywallTheme(themeOverride);
+  const hasAllPlansAction = Boolean(onViewAllPlans);
   const legalCopy: PaywallCopy = {
     privacyText: copy.privacyText,
     purchaseButton: copy.purchaseButton,
@@ -50,7 +51,11 @@ export const LimitedTimeOfferPaywall = <TPackage,>({
       <ScrollView
         contentContainerStyle={[
           styles.scrollContent,
-          { paddingBottom: Math.max(insets.bottom, 12) + 176 },
+          {
+            paddingBottom:
+              Math.max(insets.bottom, 12) +
+              (hasAllPlansAction ? 176 : 138),
+          },
         ]}
         showsVerticalScrollIndicator={false}
       >
@@ -67,7 +72,15 @@ export const LimitedTimeOfferPaywall = <TPackage,>({
         >
           <CloseIcon color="#FFFFFF" />
         </Pressable>
-        <View style={styles.content}>
+        <View
+          style={[
+            styles.content,
+            {
+              backgroundColor: theme.backgroundColor,
+              borderColor: theme.borderColor,
+            },
+          ]}
+        >
           <View style={styles.titleBlock}>
             <View style={[styles.offerBadge, { backgroundColor: theme.accentColor }]}>
               <Text style={[styles.offerBadgeText, { color: theme.accentTextColor }]}>
@@ -124,16 +137,21 @@ export const LimitedTimeOfferPaywall = <TPackage,>({
           theme={theme}
           onPress={() => void onPurchase(plan)}
         />
-        <Pressable
-          accessibilityRole="button"
-          disabled={isPurchasing || isRestoring}
-          onPress={onViewAllPlans}
-          style={({ pressed }) => [styles.allPlansButton, pressed && styles.pressed]}
-        >
-          <Text style={[styles.allPlansText, { color: theme.accentColor }]}>
-            {copy.viewAllPlansButton}
-          </Text>
-        </Pressable>
+        {onViewAllPlans ? (
+          <Pressable
+            accessibilityRole="button"
+            disabled={isPurchasing || isRestoring}
+            onPress={onViewAllPlans}
+            style={({ pressed }) => [
+              styles.allPlansButton,
+              pressed && styles.pressed,
+            ]}
+          >
+            <Text style={[styles.allPlansText, { color: theme.accentColor }]}>
+              {copy.viewAllPlansButton}
+            </Text>
+          </Pressable>
+        ) : null}
         <LegalLinks
           copy={legalCopy}
           isRestoreDisabled={isPurchasing || isRestoring}
@@ -156,7 +174,7 @@ const styles = StyleSheet.create({
   },
   allPlansText: {
     fontSize: 14,
-    fontWeight: "800",
+    fontWeight: "700",
     lineHeight: 20,
   },
   closeButton: {
@@ -169,9 +187,13 @@ const styles = StyleSheet.create({
     width: 36,
   },
   content: {
-    gap: 22,
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    gap: 24,
+    marginTop: -28,
     paddingHorizontal: 20,
-    paddingTop: 22,
+    paddingTop: 28,
   },
   footer: {
     borderTopWidth: StyleSheet.hairlineWidth,
@@ -184,21 +206,21 @@ const styles = StyleSheet.create({
     right: 0,
   },
   hero: {
-    height: 214,
+    height: 252,
     overflow: "hidden",
     width: "100%",
   },
   offerBadge: {
     alignSelf: "center",
     borderRadius: 999,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingHorizontal: 14,
+    paddingVertical: 7,
   },
   offerBadgeText: {
-    fontSize: 12,
-    fontWeight: "900",
-    letterSpacing: 0.4,
-    lineHeight: 16,
+    fontSize: 13,
+    fontWeight: "700",
+    letterSpacing: 0.8,
+    lineHeight: 18,
     textTransform: "uppercase",
   },
   pressed: {
@@ -212,20 +234,20 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 15,
-    fontWeight: "600",
-    lineHeight: 22,
+    fontWeight: "500",
+    lineHeight: 23,
     maxWidth: 420,
     textAlign: "center",
   },
   title: {
-    fontSize: 29,
-    fontWeight: "900",
-    lineHeight: 35,
+    fontSize: 30,
+    fontWeight: "700",
+    lineHeight: 38,
     maxWidth: 420,
     textAlign: "center",
   },
   titleBlock: {
     alignItems: "center",
-    gap: 9,
+    gap: 10,
   },
 });

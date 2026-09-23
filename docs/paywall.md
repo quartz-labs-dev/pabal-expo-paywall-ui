@@ -7,8 +7,8 @@ eligibility, performs purchases, handles analytics, and owns navigation.
 ## What The Package Provides
 
 - `Paywall`: the React Native paywall screen
-- `LimitedTimeOfferPaywall`: a focused one-plan offer with countdown and a
-  route back to the standard plan list
+- `LimitedTimeOfferPaywall`: a focused one-plan offer with a segmented countdown
+  and an optional route back to the standard plan list
 - `resolveLimitedTimeOfferWindow()`: resolves active, expired, and invalid
   campaign windows from an app-owned start time and duration
 - `resolvePaywallVariant()`: selects the offer only when eligibility, time,
@@ -123,7 +123,6 @@ if (variant === "limitedTimeOffer" && offerPlan && offerWindow.expiresAt) {
       copy={appLocalizedOfferCopy}
       onPurchase={purchasePlan}
       onRestore={restorePurchases}
-      onViewAllPlans={() => setVariant("standard")}
       onExpire={() => setVariant("standard")}
       onClose={() => router.back()}
       onOpenTerms={openTerms}
@@ -139,6 +138,10 @@ an absolute `expiresAt`, so closing or backgrounding the app never pauses it.
 `formatRemainingTime` belongs to the app-provided copy for localization. The
 package does not infer discounts, billing terms, RevenueCat offerings, or
 whether an install is eligible.
+
+Pass `onViewAllPlans` only when the promotion should offer an explicit escape
+to a broader catalog. Omit it for a dedicated one-time deal; purchase restore,
+privacy, terms, close, and expiry fallback remain available.
 
 ## Render
 

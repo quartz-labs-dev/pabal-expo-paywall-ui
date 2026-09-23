@@ -68,19 +68,21 @@ const styles = StyleSheet.create({
   },
   badgeText: {
     fontSize: 12,
-    fontWeight: "800",
+    fontWeight: "700",
+    letterSpacing: 0.3,
     lineHeight: 16,
   },
   card: {
     borderCurve: "continuous",
-    borderWidth: 2,
-    gap: 10,
-    padding: 18,
+    borderWidth: 1.5,
+    gap: 12,
+    paddingHorizontal: 18,
+    paddingVertical: 20,
   },
   disclosure: {
     fontSize: 13,
-    fontWeight: "600",
-    lineHeight: 18,
+    fontWeight: "500",
+    lineHeight: 19,
   },
   headingRow: {
     alignItems: "center",
@@ -89,9 +91,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   offerPrice: {
-    fontSize: 32,
-    fontWeight: "800",
-    lineHeight: 39,
+    fontSize: 38,
+    fontWeight: "700",
+    letterSpacing: -0.8,
+    lineHeight: 45,
   },
   originalPrice: {
     fontSize: 17,
@@ -101,8 +104,9 @@ const styles = StyleSheet.create({
   },
   planTitle: {
     flex: 1,
-    fontSize: 17,
-    fontWeight: "800",
+    fontSize: 15,
+    fontWeight: "700",
+    letterSpacing: 0.3,
     lineHeight: 23,
   },
   priceRow: {

@@ -57,6 +57,9 @@ export const OfferCountdown = ({
   const visibleTime = [parts.hours, parts.minutes, parts.seconds]
     .map(padTimeUnit)
     .join(":");
+  const visibleParts = [parts.hours, parts.minutes, parts.seconds].map(
+    padTimeUnit,
+  );
 
   return (
     <View
@@ -67,9 +70,34 @@ export const OfferCountdown = ({
       <Text style={[styles.label, { color: theme.secondaryTextColor }]}>
         {label}
       </Text>
-      <Text style={[styles.time, { color: theme.primaryTextColor }]}>
-        {visibleTime}
-      </Text>
+      <View style={styles.timeRow}>
+        {visibleParts.map((part, index) => (
+          <View key={index} style={styles.timePartRow}>
+            {index > 0 ? (
+              <Text
+                accessibilityElementsHidden
+                importantForAccessibility="no-hide-descendants"
+                style={[styles.separator, { color: theme.accentColor }]}
+              >
+                :
+              </Text>
+            ) : null}
+            <View
+              style={[
+                styles.timePart,
+                {
+                  backgroundColor: theme.surfaceColor,
+                  borderColor: theme.borderColor,
+                },
+              ]}
+            >
+              <Text style={[styles.time, { color: theme.primaryTextColor }]}>
+                {part}
+              </Text>
+            </View>
+          </View>
+        ))}
+      </View>
     </View>
   );
 };
@@ -77,20 +105,45 @@ export const OfferCountdown = ({
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
-    gap: 4,
+    gap: 10,
   },
   label: {
     fontSize: 13,
-    fontWeight: "700",
+    fontWeight: "600",
+    letterSpacing: 0.3,
     lineHeight: 18,
     textAlign: "center",
   },
+  separator: {
+    fontSize: 24,
+    fontWeight: "700",
+    lineHeight: 32,
+    marginHorizontal: 6,
+  },
   time: {
     fontVariant: ["tabular-nums"],
-    fontSize: 31,
-    fontWeight: "800",
-    letterSpacing: 1.5,
-    lineHeight: 38,
+    fontSize: 28,
+    fontWeight: "700",
+    letterSpacing: 1,
+    lineHeight: 34,
     textAlign: "center",
+  },
+  timePart: {
+    alignItems: "center",
+    borderCurve: "continuous",
+    borderRadius: 14,
+    borderWidth: StyleSheet.hairlineWidth,
+    minWidth: 62,
+    paddingHorizontal: 10,
+    paddingVertical: 9,
+  },
+  timePartRow: {
+    alignItems: "center",
+    flexDirection: "row",
+  },
+  timeRow: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "center",
   },
 });
