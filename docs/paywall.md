@@ -7,7 +7,8 @@ eligibility, performs purchases, handles analytics, and owns navigation.
 ## What The Package Provides
 
 - `Paywall`: the React Native paywall screen
-- `LimitedTimeOfferPaywall`: a focused one-plan offer with a segmented countdown
+- `LimitedTimeOfferPaywall`: a focused offer with an optional collapsed list of
+  normal-price alternatives and a segmented countdown
   and an optional route back to the standard plan list
 - `resolveLimitedTimeOfferWindow()`: resolves active, expired, and invalid
   campaign windows from an app-owned start time and duration
@@ -114,6 +115,7 @@ if (variant === "limitedTimeOffer" && offerPlan && offerWindow.expiresAt) {
   return (
     <LimitedTimeOfferPaywall
       plan={offerPlan}
+      alternativePlans={[monthlyPlan, annualPlan]}
       originalPriceText={standardPlan.priceText}
       discountText="30% off"
       billingDisclosure="One-time purchase. No subscription."
@@ -122,6 +124,7 @@ if (variant === "limitedTimeOffer" && offerPlan && offerWindow.expiresAt) {
       benefits={benefits}
       copy={appLocalizedOfferCopy}
       onPurchase={purchasePlan}
+      onSelectPlan={trackPlanSelection}
       onRestore={restorePurchases}
       onExpire={() => setVariant("standard")}
       onClose={() => router.back()}
@@ -142,6 +145,14 @@ whether an install is eligible.
 Pass `onViewAllPlans` only when the promotion should offer an explicit escape
 to a broader catalog. Omit it for a dedicated one-time deal; purchase restore,
 privacy, terms, close, and expiry fallback remain available.
+
+For a focused offer that still supports normal subscriptions, pass monthly and
+annual products through `alternativePlans`. They remain collapsed below the
+featured offer until `copy.viewAllPlansButton` is pressed. Selection updates the
+single purchase callback and CTA; collapsing restores the featured offer.
+`copy.purchaseButtonByPeriod` and `copy.collapseAlternativePlansButton` are
+app-localized optional overrides. The countdown always describes the featured
+offer, so its label should name that product explicitly when alternatives exist.
 
 The playground offer preview accepts a locale query for its translated fixture,
 for example `/paywall?offer=1&locale=ko-KR` or

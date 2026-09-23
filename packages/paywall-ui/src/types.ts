@@ -71,6 +71,8 @@ export interface LimitedTimeOfferCopy {
   purchaseButton: string;
   purchasingButton?: string;
   viewAllPlansButton: string;
+  collapseAlternativePlansButton?: string;
+  purchaseButtonByPeriod?: Partial<Record<PaywallPlanPeriod, string>>;
   restoreButton: string;
   termsText: string;
   privacyText: string;
@@ -82,6 +84,7 @@ export interface LimitedTimeOfferCopy {
 
 export interface LimitedTimeOfferPaywallProps<TPackage = unknown> {
   plan: PaywallPlan<TPackage>;
+  alternativePlans?: PaywallPlan<TPackage>[];
   originalPriceText?: string;
   discountText?: string;
   billingDisclosure: string;
@@ -95,6 +98,7 @@ export interface LimitedTimeOfferPaywallProps<TPackage = unknown> {
   isPurchasing?: boolean;
   isRestoring?: boolean;
   onPurchase: (plan: PaywallPlan<TPackage>) => Promise<void> | void;
+  onSelectPlan?: (plan: PaywallPlan<TPackage>) => void;
   onRestore: () => Promise<void> | void;
   onViewAllPlans?: () => void;
   onExpire: () => void;

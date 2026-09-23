@@ -2,6 +2,7 @@ import type {
   LimitedTimeOfferCountdownParts,
   LimitedTimeOfferDuration,
   LimitedTimeOfferWindow,
+  PaywallPlan,
   PaywallVariant,
 } from "../types";
 
@@ -85,3 +86,25 @@ export const getLimitedTimeOfferCountdownParts = (
     totalSeconds,
   };
 };
+
+export const getLimitedTimeOfferAlternativePlans = <TPackage>(
+  primaryPlan: PaywallPlan<TPackage>,
+  alternativePlans: PaywallPlan<TPackage>[],
+): PaywallPlan<TPackage>[] => {
+  const seenPlanIds = new Set([primaryPlan.id]);
+
+  return alternativePlans.filter((plan) => {
+    if (seenPlanIds.has(plan.id)) return false;
+    seenPlanIds.add(plan.id);
+    return true;
+  });
+};
+
+export const resolveLimitedTimeOfferSelectedPlan = <TPackage>(
+  primaryPlan: PaywallPlan<TPackage>,
+  alternativePlans: PaywallPlan<TPackage>[],
+  selectedPlanId: string,
+): PaywallPlan<TPackage> =>
+  [primaryPlan, ...alternativePlans].find(
+    (candidate) => candidate.id === selectedPlanId,
+  ) ?? primaryPlan;

@@ -13,11 +13,12 @@ plan period or plan id.
 
 It does not import `react-native-purchases` or `react-native-purchases-ui`.
 
-`LimitedTimeOfferPaywall` renders a visually distinct single annual or lifetime
-promotion with an absolute segmented countdown, original/offer prices, benefits,
-and an optional “all plans” escape hatch. Omit `onViewAllPlans` for a focused
-single-offer experience. Apps persist eligibility and start time, select the
-promotional store product, calculate discount copy, and use
+`LimitedTimeOfferPaywall` renders a visually distinct annual or lifetime
+promotion with an absolute segmented countdown, original/offer prices, and
+benefits. Pass `alternativePlans` to reveal normal monthly or annual products
+inline while keeping the featured offer selected by default, or use the optional
+`onViewAllPlans` escape hatch for external navigation. Apps persist eligibility
+and start time, select the promotional store product, calculate discount copy, and use
 `resolveLimitedTimeOfferWindow()` plus `resolvePaywallVariant()` for a safe
 standard-paywall fallback. See
 [Limited-Time Install Offers](../../docs/paywall.md#limited-time-install-offers).

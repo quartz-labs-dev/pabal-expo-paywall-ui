@@ -2,10 +2,21 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  getLimitedTimeOfferAlternativePlans,
   getLimitedTimeOfferCountdownParts,
   resolveLimitedTimeOfferWindow,
+  resolveLimitedTimeOfferSelectedPlan,
   resolvePaywallVariant,
 } from "../src/offer/limited-time-offer";
+import type { PaywallPlan } from "../src/types";
+
+const createPlan = (id: string, period: PaywallPlan["period"]): PaywallPlan => ({
+  id,
+  period,
+  priceText: `$${id}`,
+  rawPackage: {},
+  title: id,
+});
 
 test("keeps a 24 hour offer active until its exact boundary", () => {
   const startedAt = 1_800_000_000_000;
@@ -76,4 +87,34 @@ test("rounds countdown seconds up so time never disappears early", () => {
     totalSeconds: 3_662,
   });
   assert.equal(getLimitedTimeOfferCountdownParts(Number.NaN).totalSeconds, 0);
+});
+
+test("keeps alternative plans unique and excludes the featured offer", () => {
+  const lifetime = createPlan("lifetime", "lifetime");
+  const monthly = createPlan("monthly", "monthly");
+  const annual = createPlan("annual", "annual");
+
+  assert.deepEqual(
+    getLimitedTimeOfferAlternativePlans(lifetime, [
+      monthly,
+      lifetime,
+      annual,
+      monthly,
+    ]).map((plan) => plan.id),
+    ["monthly", "annual"],
+  );
+});
+
+test("selects a visible subscription plan and falls back to the offer", () => {
+  const lifetime = createPlan("lifetime", "lifetime");
+  const monthly = createPlan("monthly", "monthly");
+
+  assert.equal(
+    resolveLimitedTimeOfferSelectedPlan(lifetime, [monthly], "monthly"),
+    monthly,
+  );
+  assert.equal(
+    resolveLimitedTimeOfferSelectedPlan(lifetime, [monthly], "missing"),
+    lifetime,
+  );
 });

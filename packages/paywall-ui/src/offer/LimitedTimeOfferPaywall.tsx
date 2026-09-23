@@ -1,12 +1,25 @@
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { useMemo, useState } from "react";
+import {
+  LayoutAnimation,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { OfferCountdown } from "./OfferCountdown";
 import { OfferPriceCard } from "./OfferPriceCard";
+import {
+  getLimitedTimeOfferAlternativePlans,
+  resolveLimitedTimeOfferSelectedPlan,
+} from "./limited-time-offer";
 import { LegalLinks } from "../paywall/LegalLinks";
 import { PaywallBenefitList } from "../paywall/PaywallBenefitList";
+import { PlanCard } from "../paywall/PlanCard";
 import { PurchaseButton } from "../paywall/PurchaseButton";
-import { CloseIcon } from "../shared/icons";
+import { ChevronDownIcon, CloseIcon } from "../shared/icons";
 import { mergePaywallTheme } from "../shared/theme";
 import type {
   LimitedTimeOfferPaywallProps,
@@ -14,6 +27,7 @@ import type {
 } from "../types";
 
 export const LimitedTimeOfferPaywall = <TPackage,>({
+  alternativePlans: alternativePlanCandidates = [],
   benefits = [],
   billingDisclosure,
   content,
@@ -33,17 +47,43 @@ export const LimitedTimeOfferPaywall = <TPackage,>({
   onOpenTerms,
   onPurchase,
   onRestore,
+  onSelectPlan,
   onViewAllPlans,
 }: LimitedTimeOfferPaywallProps<TPackage>) => {
   const insets = useSafeAreaInsets();
   const theme = mergePaywallTheme(themeOverride);
+  const [isAlternativePlansExpanded, setIsAlternativePlansExpanded] =
+    useState(false);
+  const [selectedPlanId, setSelectedPlanId] = useState(plan.id);
+  const alternativePlans = useMemo(
+    () =>
+      getLimitedTimeOfferAlternativePlans(plan, alternativePlanCandidates),
+    [alternativePlanCandidates, plan],
+  );
+  const selectedPlan = resolveLimitedTimeOfferSelectedPlan(
+    plan,
+    alternativePlans,
+    selectedPlanId,
+  );
+  const hasAlternativePlans = alternativePlans.length > 0;
   const hasAllPlansAction = Boolean(onViewAllPlans);
+  const purchaseButtonLabel =
+    copy.purchaseButtonByPeriod?.[selectedPlan.period] ?? copy.purchaseButton;
   const legalCopy: PaywallCopy = {
     privacyText: copy.privacyText,
     purchaseButton: copy.purchaseButton,
     restoreButton: copy.restoreButton,
     termsText: copy.termsText,
     title: copy.title,
+  };
+  const selectPlan = (nextPlan: typeof selectedPlan) => {
+    setSelectedPlanId(nextPlan.id);
+    onSelectPlan?.(nextPlan);
+  };
+  const toggleAlternativePlans = () => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    if (isAlternativePlansExpanded) selectPlan(plan);
+    setIsAlternativePlansExpanded(!isAlternativePlansExpanded);
   };
 
   return (
@@ -106,10 +146,61 @@ export const LimitedTimeOfferPaywall = <TPackage,>({
           <OfferPriceCard
             billingDisclosure={billingDisclosure}
             discountText={discountText}
+            isSelected={selectedPlan.id === plan.id}
             originalPriceText={originalPriceText}
             plan={plan}
             theme={theme}
+            onPress={hasAlternativePlans ? () => selectPlan(plan) : undefined}
           />
+          {hasAlternativePlans ? (
+            <View style={styles.alternativePlansSection}>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityState={{ expanded: isAlternativePlansExpanded }}
+                disabled={isPurchasing || isRestoring}
+                onPress={toggleAlternativePlans}
+                style={({ pressed }) => [
+                  styles.alternativePlansButton,
+                  pressed && styles.pressed,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.alternativePlansText,
+                    { color: theme.secondaryTextColor },
+                  ]}
+                >
+                  {isAlternativePlansExpanded
+                    ? copy.collapseAlternativePlansButton ??
+                      copy.viewAllPlansButton
+                    : copy.viewAllPlansButton}
+                </Text>
+                <View
+                  style={
+                    isAlternativePlansExpanded
+                      ? styles.alternativePlansChevronExpanded
+                      : undefined
+                  }
+                >
+                  <ChevronDownIcon color={theme.secondaryTextColor} />
+                </View>
+              </Pressable>
+              {isAlternativePlansExpanded ? (
+                <View style={styles.alternativePlansList}>
+                  {alternativePlans.map((alternativePlan) => (
+                    <PlanCard
+                      key={alternativePlan.id}
+                      isSelected={selectedPlan.id === alternativePlan.id}
+                      plan={alternativePlan}
+                      shouldAnimate={false}
+                      theme={theme}
+                      onPress={() => selectPlan(alternativePlan)}
+                    />
+                  ))}
+                </View>
+              ) : null}
+            </View>
+          ) : null}
           <PaywallBenefitList
             benefits={benefits}
             content={content}
@@ -132,10 +223,10 @@ export const LimitedTimeOfferPaywall = <TPackage,>({
           background={purchaseButtonBackground}
           isDisabled={isRestoring}
           isLoading={isPurchasing}
-          label={copy.purchaseButton}
+          label={purchaseButtonLabel}
           loadingLabel={copy.purchasingButton}
           theme={theme}
-          onPress={() => void onPurchase(plan)}
+          onPress={() => void onPurchase(selectedPlan)}
         />
         {onViewAllPlans ? (
           <Pressable
@@ -167,6 +258,27 @@ export const LimitedTimeOfferPaywall = <TPackage,>({
 };
 
 const styles = StyleSheet.create({
+  alternativePlansButton: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 8,
+    justifyContent: "center",
+    minHeight: 40,
+  },
+  alternativePlansChevronExpanded: {
+    transform: [{ rotate: "180deg" }],
+  },
+  alternativePlansList: {
+    gap: 10,
+  },
+  alternativePlansSection: {
+    gap: 10,
+  },
+  alternativePlansText: {
+    fontSize: 14,
+    fontWeight: "600",
+    lineHeight: 20,
+  },
   allPlansButton: {
     alignItems: "center",
     minHeight: 34,

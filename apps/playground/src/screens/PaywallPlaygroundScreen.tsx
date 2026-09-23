@@ -704,13 +704,28 @@ export const PaywallPlaygroundScreen = ({
   const lifetimeOfferPlan = createPaywallPlans(
     getPackagesForScenario("lifetimeOnly"),
     getDefaultPaywallPlanOptions(selectedLocale),
-  )[0];
+  ).map((plan) => ({ ...plan, priceText: "$20.99" }))[0];
+  const alternativeOfferPlans = createPaywallPlans(
+    getPackagesForScenario("standard"),
+    getDefaultPaywallPlanOptions(selectedLocale),
+  ).map((plan) => ({
+    ...plan,
+    badgeText: undefined,
+    discountText: undefined,
+    isRecommended: false,
+    monthlyPriceText: undefined,
+    priceText: plan.period === "monthly" ? "$2.99" : "$14.99",
+    selectedDescription: undefined,
+  })).sort((leftPlan, rightPlan) =>
+    leftPlan.period === "monthly" && rightPlan.period === "annual" ? -1 : 1,
+  );
   const offerPreview = getLimitedTimeOfferPreview(selectedLocale);
 
   if (shouldShowOfferPreview && lifetimeOfferPlan) {
     return (
       <View style={styles.root}>
         <LimitedTimeOfferPaywall
+          alternativePlans={alternativeOfferPlans}
           benefits={playgroundBenefits.slice(0, 3)}
           billingDisclosure={offerPreview.billingDisclosure}
           copy={offerPreview.copy}
@@ -720,8 +735,8 @@ export const PaywallPlaygroundScreen = ({
           expiresAt={offerExpiresAt}
           hero={designPresentation.hero}
           isPurchasing={isPurchasing}
-          originalPriceText="$99.99"
-          plan={{ ...lifetimeOfferPlan, priceText: "$69.99" }}
+          originalPriceText="$29.99"
+          plan={lifetimeOfferPlan}
           theme={{
             accentColor: "#F5C451",
             accentTextColor: "#101A2A",
