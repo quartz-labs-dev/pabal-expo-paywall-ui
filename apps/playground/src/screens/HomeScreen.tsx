@@ -11,10 +11,13 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { LocaleSelector } from "../components/LocaleSelector";
 import type { PlaygroundOnboardingPlatform } from "../components/onboarding-context";
+import { playgroundOfferPriceByDiscount } from "../fixtures/limited-time-offer-settings";
 import { packageScenarioLabels } from "../fixtures/paywall-plans";
 import { getPlaygroundTrialPreviewRows } from "../fixtures/paywall-trial-policy";
 import type {
   PlaygroundFreeTrialMode,
+  PlaygroundOfferDiscountPercent,
+  PlaygroundOfferDurationHours,
   PlaygroundPackageScenario,
   PlaygroundPaywallAnimation,
   PlaygroundPaywallProduct,
@@ -32,11 +35,21 @@ interface HomeScreenProps {
   onboardingPlatform: PlaygroundOnboardingPlatform;
   freeTrialMode: PlaygroundFreeTrialMode;
   isTrialEligible: boolean;
+  offerDurationHours: PlaygroundOfferDurationHours;
+  offerDiscountPercent: PlaygroundOfferDiscountPercent;
+  areOfferAlternativePlansVisible: boolean;
   isPreOnboardingLoginPromptVisible: boolean;
   onChangeScenario: (scenario: PlaygroundPackageScenario) => void;
   onChangeLocale: (locale: PlaygroundLocale) => void;
   onToggleLongPrice: (isEnabled: boolean) => void;
   onToggleTrialEligibility: (isEligible: boolean) => void;
+  onChangeOfferDurationHours: (
+    durationHours: PlaygroundOfferDurationHours,
+  ) => void;
+  onChangeOfferDiscountPercent: (
+    discountPercent: PlaygroundOfferDiscountPercent,
+  ) => void;
+  onToggleOfferAlternativePlans: (isVisible: boolean) => void;
   onTogglePreOnboardingLoginPrompt: (isVisible: boolean) => void;
   onChangePaywallFlow: (paywallFlow: PlaygroundPaywallFlow) => void;
   onChangePaywallAnimation: (
@@ -50,6 +63,7 @@ interface HomeScreenProps {
   onOpenOnboarding: () => void;
   onOpenOnboardingHealth: () => void;
   onOpenPaywall: () => void;
+  onOpenOfferPaywall: () => void;
   onOpenPreOnboarding: () => void;
   onOpenProfile: () => void;
 }
@@ -101,6 +115,26 @@ const onboardingPlatformLabels: Record<PlaygroundOnboardingPlatform, string> = {
   ios: "iOS",
   android: "Android",
 };
+const offerDurationOptions: PlaygroundOfferDurationHours[] = [
+  "12",
+  "24",
+  "48",
+];
+const offerDurationLabels: Record<PlaygroundOfferDurationHours, string> = {
+  "12": "12 hours",
+  "24": "24 hours",
+  "48": "48 hours",
+};
+const offerDiscountOptions: PlaygroundOfferDiscountPercent[] = [
+  "20",
+  "30",
+  "40",
+];
+const offerDiscountLabels: Record<PlaygroundOfferDiscountPercent, string> = {
+  "20": "20% off",
+  "30": "30% off",
+  "40": "40% off",
+};
 export const HomeScreen = ({
   scenario,
   isLongPriceEnabled,
@@ -111,11 +145,17 @@ export const HomeScreen = ({
   onboardingPlatform,
   freeTrialMode,
   isTrialEligible,
+  offerDurationHours,
+  offerDiscountPercent,
+  areOfferAlternativePlansVisible,
   isPreOnboardingLoginPromptVisible,
   onChangeScenario,
   onChangeLocale,
   onToggleLongPrice,
   onToggleTrialEligibility,
+  onChangeOfferDurationHours,
+  onChangeOfferDiscountPercent,
+  onToggleOfferAlternativePlans,
   onTogglePreOnboardingLoginPrompt,
   onChangePaywallFlow,
   onChangePaywallAnimation,
@@ -125,15 +165,18 @@ export const HomeScreen = ({
   onOpenOnboarding,
   onOpenOnboardingHealth,
   onOpenPaywall,
+  onOpenOfferPaywall,
   onOpenPreOnboarding,
   onOpenProfile,
 }: HomeScreenProps) => {
   const insets = useSafeAreaInsets();
   const [isPaywallSettingsVisible, setIsPaywallSettingsVisible] =
     useState(false);
+  const [isOfferSettingsVisible, setIsOfferSettingsVisible] = useState(false);
   const [isOnboardingSettingsVisible, setIsOnboardingSettingsVisible] =
     useState(false);
   const closePaywallSettings = () => setIsPaywallSettingsVisible(false);
+  const closeOfferSettings = () => setIsOfferSettingsVisible(false);
   const closeOnboardingSettings = () => setIsOnboardingSettingsVisible(false);
 
   return (
@@ -154,11 +197,33 @@ export const HomeScreen = ({
 
         <View style={styles.sharedSection}>
           <SectionTitleRow
-            title="Paywall"
+            title="Standard paywall"
             onOpenSettings={() => setIsPaywallSettingsVisible(true)}
           />
-          <Pressable onPress={onOpenPaywall} style={styles.primaryAction}>
+          <Pressable
+            accessibilityRole="button"
+            onPress={onOpenPaywall}
+            style={styles.primaryAction}
+          >
             <Text style={styles.primaryActionText}>Open /paywall</Text>
+          </Pressable>
+        </View>
+
+        <View style={[styles.sharedSection, styles.offerSection]}>
+          <SectionTitleRow
+            title="Special offer paywall"
+            onOpenSettings={() => setIsOfferSettingsVisible(true)}
+          />
+          <Text style={styles.offerSectionMeta}>
+            {offerDurationHours}h · {offerDiscountPercent}% lifetime discount ·{" "}
+            {areOfferAlternativePlansVisible ? "alternatives on" : "alternatives off"}
+          </Text>
+          <Pressable
+            accessibilityRole="button"
+            onPress={onOpenOfferPaywall}
+            style={styles.offerAction}
+          >
+            <Text style={styles.offerActionText}>Open /offer-paywall</Text>
           </Pressable>
         </View>
 
@@ -244,6 +309,48 @@ export const HomeScreen = ({
       </SettingsModal>
 
       <SettingsModal
+        title="Special offer settings"
+        visible={isOfferSettingsVisible}
+        onClose={closeOfferSettings}
+      >
+        <SegmentedSettings
+          title="Offer window"
+          options={offerDurationOptions}
+          selectedOption={offerDurationHours}
+          labels={offerDurationLabels}
+          onChangeOption={onChangeOfferDurationHours}
+        />
+        <SegmentedSettings
+          title="Lifetime discount"
+          options={offerDiscountOptions}
+          selectedOption={offerDiscountPercent}
+          labels={offerDiscountLabels}
+          onChangeOption={onChangeOfferDiscountPercent}
+        />
+        <OfferAlternativePlansSettings
+          isVisible={areOfferAlternativePlansVisible}
+          onToggle={onToggleOfferAlternativePlans}
+        />
+        <View style={styles.offerPreviewCard}>
+          <View style={styles.offerPreviewHeader}>
+            <Text style={styles.offerPreviewTitle}>Lifetime price preview</Text>
+            <Text style={styles.offerPreviewBadge}>
+              {offerDiscountPercent}% off
+            </Text>
+          </View>
+          <View style={styles.offerPreviewPrices}>
+            <Text style={styles.offerPreviewOriginalPrice}>$29.99</Text>
+            <Text style={styles.offerPreviewPrice}>
+              {playgroundOfferPriceByDiscount[offerDiscountPercent]}
+            </Text>
+          </View>
+          <Text style={styles.offerPreviewDetail}>
+            Monthly $2.99 and yearly $14.99 stay at their regular prices.
+          </Text>
+        </View>
+      </SettingsModal>
+
+      <SettingsModal
         title="Onboarding settings"
         visible={isOnboardingSettingsVisible}
         onClose={closeOnboardingSettings}
@@ -260,6 +367,52 @@ export const HomeScreen = ({
           onToggleLoginPrompt={onTogglePreOnboardingLoginPrompt}
         />
       </SettingsModal>
+    </View>
+  );
+};
+
+interface OfferAlternativePlansSettingsProps {
+  isVisible: boolean;
+  onToggle: (isVisible: boolean) => void;
+}
+
+const OfferAlternativePlansSettings = ({
+  isVisible,
+  onToggle,
+}: OfferAlternativePlansSettingsProps) => {
+  return (
+    <View style={styles.section}>
+      <Text style={styles.sectionTitle}>Alternative plans</Text>
+      <Pressable
+        accessibilityRole="switch"
+        accessibilityState={{ checked: isVisible }}
+        onPress={() => onToggle(!isVisible)}
+        style={[
+          styles.trialEligibilityCard,
+          isVisible && styles.trialEligibilityCardSelected,
+        ]}
+      >
+        <View style={styles.trialEligibilityHeader}>
+          <View style={styles.offerAlternativeCopy}>
+            <Text
+              style={[
+                styles.trialEligibilityTitle,
+                isVisible && styles.trialEligibilityTitleSelected,
+              ]}
+            >
+              {isVisible ? "Monthly + yearly shown" : "Lifetime only"}
+            </Text>
+            <Text style={styles.offerAlternativeDetail}>
+              Keeps regular-price plans behind “View other plans”.
+            </Text>
+          </View>
+          <View style={[styles.switchTrack, isVisible && styles.switchTrackOn]}>
+            <View
+              style={[styles.switchThumb, isVisible && styles.switchThumbOn]}
+            />
+          </View>
+        </View>
+      </Pressable>
     </View>
   );
 };
@@ -694,6 +847,18 @@ const styles = StyleSheet.create({
   sharedSection: {
     gap: 8,
   },
+  offerSection: {
+    backgroundColor: "#0F1725",
+    borderColor: "#534623",
+    borderRadius: 10,
+    borderWidth: 1,
+    padding: 12,
+  },
+  offerSectionMeta: {
+    color: "#B9C4CF",
+    fontSize: 12,
+    lineHeight: 17,
+  },
   separator: {
     backgroundColor: "#2B3845",
     height: 1,
@@ -731,6 +896,21 @@ const styles = StyleSheet.create({
   },
   primaryActionText: {
     color: "#071312",
+    fontSize: 16,
+    fontWeight: "700",
+    lineHeight: 20,
+    textAlign: "center",
+  },
+  offerAction: {
+    alignItems: "center",
+    backgroundColor: "#F5C451",
+    borderRadius: 8,
+    justifyContent: "center",
+    minHeight: 54,
+    paddingHorizontal: 16,
+  },
+  offerActionText: {
+    color: "#101A2A",
     fontSize: 16,
     fontWeight: "700",
     lineHeight: 20,
@@ -804,6 +984,64 @@ const styles = StyleSheet.create({
   settingsModalContent: {
     gap: 18,
     padding: 14,
+  },
+  offerPreviewCard: {
+    backgroundColor: "#111F33",
+    borderColor: "#534623",
+    borderRadius: 8,
+    borderWidth: 1,
+    gap: 10,
+    padding: 14,
+  },
+  offerPreviewHeader: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 10,
+    justifyContent: "space-between",
+  },
+  offerPreviewTitle: {
+    color: "#FFF8E7",
+    fontSize: 14,
+    fontWeight: "600",
+  },
+  offerPreviewBadge: {
+    backgroundColor: "#F5C451",
+    borderRadius: 999,
+    color: "#101A2A",
+    fontSize: 11,
+    fontWeight: "700",
+    overflow: "hidden",
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  offerPreviewPrices: {
+    alignItems: "baseline",
+    flexDirection: "row",
+    gap: 10,
+  },
+  offerPreviewOriginalPrice: {
+    color: "#8696AC",
+    fontSize: 15,
+    textDecorationLine: "line-through",
+  },
+  offerPreviewPrice: {
+    color: "#F5C451",
+    fontSize: 24,
+    fontWeight: "700",
+  },
+  offerPreviewDetail: {
+    color: "#AAB6C7",
+    fontSize: 12,
+    lineHeight: 18,
+  },
+  offerAlternativeCopy: {
+    flex: 1,
+    gap: 3,
+  },
+  offerAlternativeDetail: {
+    color: "#8696AC",
+    fontSize: 11,
+    lineHeight: 16,
   },
   sectionHeaderRow: {
     alignItems: "center",

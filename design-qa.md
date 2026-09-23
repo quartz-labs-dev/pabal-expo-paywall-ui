@@ -21,3 +21,25 @@
 ## Result
 
 final result: passed
+
+## Playground entry split
+
+- Reference: the supplied Paywall Lab card with a title, settings action, and
+  full-width launch button.
+- The home screen now exposes two independent entries: `Standard paywall` at
+  `/paywall` and `Special offer paywall` at `/offer-paywall`.
+- The standard entry keeps package scenario, flow, animation, product, and
+  trial controls in its own settings modal.
+- The offer entry has a separate settings modal for 12/24/48-hour windows,
+  20/30/40% lifetime discounts, and monthly/yearly alternative visibility.
+- Browser QA confirmed that changing the offer to 40% updates the lifetime
+  preview to `$17.99`, hiding alternatives removes their disclosure, and the
+  dedicated route renders those settings. Defaults were restored to 24 hours,
+  30%, and alternatives visible after the check.
+- Both launch surfaces expose button semantics and route to distinct screens.
+- The standard `/paywall` route was opened independently and still renders the
+  configured standard paywall.
+- No browser errors appeared. Existing React Native Web deprecation and
+  development animation warnings remain outside this change.
+
+final result: passed

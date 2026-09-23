@@ -18,9 +18,16 @@ export type PlaygroundRoute =
   | "home"
   | "onboarding"
   | "onboardingHealth"
+  | "offerPaywall"
   | "paywall"
   | "preOnboarding"
   | "profile";
+
+export type PlaygroundPaywallVariant = "standard" | "offer";
+
+export type PlaygroundOfferDurationHours = "12" | "24" | "48";
+
+export type PlaygroundOfferDiscountPercent = "20" | "30" | "40";
 
 export type PlaygroundPaywallFlow = "twoStep" | "singleStep";
 

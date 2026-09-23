@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import {
   Alert,
   ImageBackground,
-  Platform,
   StyleSheet,
   Text,
   View,
@@ -25,12 +24,16 @@ import {
 import { PlaygroundAmbientGlow } from "../components/PlaygroundAmbientGlow";
 import { PlaygroundFloatingHero } from "../components/PlaygroundFloatingHero";
 import { getLimitedTimeOfferPreview } from "../fixtures/limited-time-offer-copy";
+import { playgroundOfferPriceByDiscount } from "../fixtures/limited-time-offer-settings";
 import { getPackagesForScenario } from "../fixtures/paywall-plans";
 import { getPlaygroundFreeTrialConfig } from "../fixtures/paywall-trial-policy";
 import { playgroundBenefits } from "../fixtures/playground-benefits";
 import type {
   PlaygroundPaywallAnimation,
+  PlaygroundOfferDiscountPercent,
+  PlaygroundOfferDurationHours,
   PlaygroundPaywallProduct,
+  PlaygroundPaywallVariant,
   PlaygroundFreeTrialMode,
   PlaygroundPaywallFlow,
   PlaygroundLocale,
@@ -626,6 +629,7 @@ const getPresentation = (
 };
 
 interface PaywallPlaygroundScreenProps {
+  variant: PlaygroundPaywallVariant;
   scenario: PlaygroundScenario;
   selectedLocale: PlaygroundLocale;
   paywallFlow: PlaygroundPaywallFlow;
@@ -633,10 +637,14 @@ interface PaywallPlaygroundScreenProps {
   paywallProduct: PlaygroundPaywallProduct;
   freeTrialMode: PlaygroundFreeTrialMode;
   isTrialEligible: boolean;
+  offerDurationHours: PlaygroundOfferDurationHours;
+  offerDiscountPercent: PlaygroundOfferDiscountPercent;
+  areOfferAlternativePlansVisible: boolean;
   onClose: () => void;
 }
 
 export const PaywallPlaygroundScreen = ({
+  variant,
   scenario,
   selectedLocale,
   paywallFlow,
@@ -644,11 +652,17 @@ export const PaywallPlaygroundScreen = ({
   paywallProduct,
   freeTrialMode,
   isTrialEligible,
+  offerDurationHours,
+  offerDiscountPercent,
+  areOfferAlternativePlansVisible,
   onClose,
 }: PaywallPlaygroundScreenProps) => {
   const [selectedPlanId, setSelectedPlanId] = useState<string | undefined>();
   const [isPurchasing, setIsPurchasing] = useState(false);
-  const [offerExpiresAt] = useState(() => Date.now() + 24 * 60 * 60 * 1000);
+  const offerExpiresAt = useMemo(
+    () => Date.now() + Number(offerDurationHours) * 60 * 60 * 1000,
+    [offerDurationHours],
+  );
 
   const plans = useMemo(() => {
     return createPaywallPlans(
@@ -697,14 +711,13 @@ export const PaywallPlaygroundScreen = ({
     );
   };
 
-  const shouldShowOfferPreview =
-    Platform.OS === "web" &&
-    typeof window?.location?.search === "string" &&
-    new URLSearchParams(window.location.search).get("offer") === "1";
   const lifetimeOfferPlan = createPaywallPlans(
     getPackagesForScenario("lifetimeOnly"),
     getDefaultPaywallPlanOptions(selectedLocale),
-  ).map((plan) => ({ ...plan, priceText: "$20.99" }))[0];
+  ).map((plan) => ({
+    ...plan,
+    priceText: playgroundOfferPriceByDiscount[offerDiscountPercent],
+  }))[0];
   const alternativeOfferPlans = createPaywallPlans(
     getPackagesForScenario("standard"),
     getDefaultPaywallPlanOptions(selectedLocale),
@@ -721,17 +734,19 @@ export const PaywallPlaygroundScreen = ({
   );
   const offerPreview = getLimitedTimeOfferPreview(selectedLocale);
 
-  if (shouldShowOfferPreview && lifetimeOfferPlan) {
+  if (variant === "offer" && lifetimeOfferPlan) {
     return (
       <View style={styles.root}>
         <LimitedTimeOfferPaywall
-          alternativePlans={alternativeOfferPlans}
+          alternativePlans={
+            areOfferAlternativePlansVisible ? alternativeOfferPlans : undefined
+          }
           benefits={playgroundBenefits.slice(0, 3)}
           billingDisclosure={offerPreview.billingDisclosure}
           copy={offerPreview.copy}
           discountText={getDefaultPaywallPlanOptions(
             selectedLocale,
-          ).formatDiscountText?.(30)}
+          ).formatDiscountText?.(Number(offerDiscountPercent))}
           expiresAt={offerExpiresAt}
           hero={designPresentation.hero}
           isPurchasing={isPurchasing}

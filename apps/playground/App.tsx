@@ -19,6 +19,8 @@ import { ProfilePlaygroundScreen } from "./src/screens/ProfilePlaygroundScreen";
 import type {
   PlaygroundFreeTrialMode,
   PlaygroundPaywallAnimation,
+  PlaygroundOfferDiscountPercent,
+  PlaygroundOfferDurationHours,
   PlaygroundPaywallProduct,
   PlaygroundPaywallFlow,
   PlaygroundLocale,
@@ -36,6 +38,13 @@ const getInitialRoute = (): PlaygroundRoute => {
   if (window.location.pathname === "/onboarding") return "onboarding";
   if (window.location.pathname === "/onboarding-health") return "onboardingHealth";
   if (window.location.pathname === "/pre-onboarding") return "preOnboarding";
+  if (window.location.pathname === "/offer-paywall") return "offerPaywall";
+  if (
+    window.location.pathname === "/paywall" &&
+    new URLSearchParams(window.location.search).get("offer") === "1"
+  ) {
+    return "offerPaywall";
+  }
 
   return window.location.pathname === "/paywall" ? "paywall" : "home";
 };
@@ -48,15 +57,17 @@ const pushWebPath = (route: PlaygroundRoute) => {
   const nextPath =
     route === "paywall"
       ? "/paywall"
-      : route === "profile"
-        ? "/profile"
-        : route === "onboarding"
-          ? "/onboarding"
-          : route === "onboardingHealth"
-            ? "/onboarding-health"
-          : route === "preOnboarding"
-            ? "/pre-onboarding"
-            : "/";
+      : route === "offerPaywall"
+        ? "/offer-paywall"
+        : route === "profile"
+          ? "/profile"
+          : route === "onboarding"
+            ? "/onboarding"
+            : route === "onboardingHealth"
+              ? "/onboarding-health"
+              : route === "preOnboarding"
+                ? "/pre-onboarding"
+                : "/";
   if (window.location.pathname === nextPath) return;
 
   window.history.pushState({ route }, "", nextPath);
@@ -85,6 +96,12 @@ export default function App() {
   const [freeTrialMode, setFreeTrialMode] =
     useState<PlaygroundFreeTrialMode>("sevenDays");
   const [isTrialEligible, setIsTrialEligible] = useState(true);
+  const [offerDurationHours, setOfferDurationHours] =
+    useState<PlaygroundOfferDurationHours>("24");
+  const [offerDiscountPercent, setOfferDiscountPercent] =
+    useState<PlaygroundOfferDiscountPercent>("30");
+  const [areOfferAlternativePlansVisible, setAreOfferAlternativePlansVisible] =
+    useState(true);
   const [isPreOnboardingLoginPromptVisible, setIsPreOnboardingLoginPromptVisible] =
     useState(true);
   const [onboardingPlatform, setOnboardingPlatform] =
@@ -126,8 +143,9 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <StatusBar style="light" />
-      {route === "paywall" ? (
+      {route === "paywall" || route === "offerPaywall" ? (
         <PaywallPlaygroundScreen
+          variant={route === "offerPaywall" ? "offer" : "standard"}
           scenario={effectiveScenario}
           selectedLocale={selectedLocale}
           paywallFlow={paywallFlow}
@@ -135,6 +153,9 @@ export default function App() {
           paywallProduct={paywallProduct}
           freeTrialMode={freeTrialMode}
           isTrialEligible={isTrialEligible}
+          offerDurationHours={offerDurationHours}
+          offerDiscountPercent={offerDiscountPercent}
+          areOfferAlternativePlansVisible={areOfferAlternativePlansVisible}
           onClose={() => navigate("home")}
         />
       ) : route === "profile" ? (
@@ -179,10 +200,16 @@ export default function App() {
           onboardingPlatform={onboardingPlatform}
           freeTrialMode={freeTrialMode}
           isTrialEligible={isTrialEligible}
+          offerDurationHours={offerDurationHours}
+          offerDiscountPercent={offerDiscountPercent}
+          areOfferAlternativePlansVisible={areOfferAlternativePlansVisible}
           isPreOnboardingLoginPromptVisible={isPreOnboardingLoginPromptVisible}
           onChangeScenario={setScenario}
           onToggleLongPrice={setIsLongPriceEnabled}
           onToggleTrialEligibility={setIsTrialEligible}
+          onChangeOfferDurationHours={setOfferDurationHours}
+          onChangeOfferDiscountPercent={setOfferDiscountPercent}
+          onToggleOfferAlternativePlans={setAreOfferAlternativePlansVisible}
           onTogglePreOnboardingLoginPrompt={
             setIsPreOnboardingLoginPromptVisible
           }
@@ -195,6 +222,7 @@ export default function App() {
           onOpenOnboarding={() => navigate("onboarding")}
           onOpenOnboardingHealth={() => navigate("onboardingHealth")}
           onOpenPaywall={() => navigate("paywall")}
+          onOpenOfferPaywall={() => navigate("offerPaywall")}
           onOpenPreOnboarding={() => navigate("preOnboarding")}
           onOpenProfile={() => navigate("profile")}
         />

@@ -154,10 +154,18 @@ single purchase callback and CTA; collapsing restores the featured offer.
 app-localized optional overrides. The countdown always describes the featured
 offer, so its label should name that product explicitly when alternatives exist.
 
-The playground offer preview accepts a locale query for its translated fixture,
-for example `/paywall?offer=1&locale=ko-KR` or
-`/paywall?offer=1&locale=ja-JP`. Unsupported offer-copy locales intentionally
-fall back to English while the standard package copy keeps the selected locale.
+The playground exposes the standard and offer previews independently:
+
+- `/paywall` opens the standard paywall and uses its package, flow, animation,
+  product, and trial settings.
+- `/offer-paywall` opens the special offer and uses its duration, lifetime
+  discount, and alternative-plan visibility settings.
+
+Both previews share the playground locale selector. A locale can also be passed
+directly, for example `/offer-paywall?locale=ko-KR` or
+`/offer-paywall?locale=ja-JP`. The legacy `/paywall?offer=1` URL remains
+supported. Unsupported offer-copy locales intentionally fall back to English
+while the standard package copy keeps the selected locale.
 
 ## Render
 
