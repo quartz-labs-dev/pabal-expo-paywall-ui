@@ -14,11 +14,13 @@ plan period or plan id.
 It does not import `react-native-purchases` or `react-native-purchases-ui`.
 
 `LimitedTimeOfferPaywall` renders a visually distinct annual or lifetime
-promotion with an absolute segmented countdown, original/offer prices, and
-benefits. Pass `alternativePlans` to reveal normal monthly or annual products
-inline while keeping the featured offer selected by default, or use the optional
-`onViewAllPlans` escape hatch for external navigation. Apps persist eligibility
-and start time, select the promotional store product, calculate discount copy, and use
+promotion with a compact countdown, original/offer prices, a bundled default
+illustration, and the same comparison, review, developer-note, legal, and fixed
+CTA building blocks as the standard paywall. Pass a custom `hero` to replace the
+default illustration. Pass `featureComparison` to show its first 3–5 rows,
+always-visible normal monthly or annual products, and then the remaining rows.
+The featured offer stays selected by default. Apps persist eligibility and start
+time, select the promotional store product, calculate discount copy, and use
 `resolveLimitedTimeOfferWindow()` plus `resolvePaywallVariant()` for a safe
 standard-paywall fallback. See
 [Limited-Time Install Offers](../../docs/paywall.md#limited-time-install-offers).

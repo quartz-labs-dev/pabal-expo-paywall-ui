@@ -38,6 +38,15 @@ test("keeps standard and special-offer paywall entries independent", () => {
     paywallSource,
     /areOfferAlternativePlansVisible \? alternativeOfferPlans : undefined/,
   );
+  assert.match(paywallSource, /featurePreviewCount=\{4\}/);
+  assert.match(
+    paywallSource,
+    /featureComparison=\{playgroundPaywallConfig\.featureComparison\}/,
+  );
+  assert.match(
+    paywallSource,
+    /reviewSection=\{playgroundPaywallConfig\.reviewSection\}/,
+  );
 });
 
 test("preserves the legacy offer query as an offer route", () => {

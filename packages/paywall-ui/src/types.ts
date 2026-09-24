@@ -68,6 +68,7 @@ export interface LimitedTimeOfferCopy {
   title: string;
   subtitle?: string;
   countdownLabel: string;
+  alternativePlansTitle?: string;
   purchaseButton: string;
   purchasingButton?: string;
   viewAllPlansButton: string;
@@ -76,6 +77,10 @@ export interface LimitedTimeOfferCopy {
   restoreButton: string;
   termsText: string;
   privacyText: string;
+  legalPrefix?: string;
+  reviewSectionTitle?: string;
+  supportMessageLabel?: string;
+  supportMessage?: string;
   closeButtonAccessibilityLabel?: string;
   formatRemainingTime?: (
     parts: LimitedTimeOfferCountdownParts,
@@ -89,9 +94,13 @@ export interface LimitedTimeOfferPaywallProps<TPackage = unknown> {
   discountText?: string;
   billingDisclosure: string;
   expiresAt: number;
-  hero: ReactNode;
+  hero?: ReactNode;
   benefits?: PaywallBenefit[];
+  featureComparison?: PaywallFeatureComparison;
+  featurePreviewCount?: number;
   content?: ReactNode;
+  reviewSection?: PaywallReviewSection;
+  supportMessageIcon?: ReactNode;
   purchaseButtonBackground?: ReactNode;
   copy: LimitedTimeOfferCopy;
   theme?: Partial<PaywallTheme>;
@@ -100,6 +109,7 @@ export interface LimitedTimeOfferPaywallProps<TPackage = unknown> {
   onPurchase: (plan: PaywallPlan<TPackage>) => Promise<void> | void;
   onSelectPlan?: (plan: PaywallPlan<TPackage>) => void;
   onRestore: () => Promise<void> | void;
+  onOpenDeveloperWebsite?: () => Promise<void> | void;
   onViewAllPlans?: () => void;
   onExpire: () => void;
   onClose: () => void;

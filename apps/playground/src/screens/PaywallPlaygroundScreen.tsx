@@ -741,31 +741,33 @@ export const PaywallPlaygroundScreen = ({
           alternativePlans={
             areOfferAlternativePlansVisible ? alternativeOfferPlans : undefined
           }
-          benefits={playgroundBenefits.slice(0, 3)}
           billingDisclosure={offerPreview.billingDisclosure}
           copy={offerPreview.copy}
           discountText={getDefaultPaywallPlanOptions(
             selectedLocale,
           ).formatDiscountText?.(Number(offerDiscountPercent))}
           expiresAt={offerExpiresAt}
-          hero={designPresentation.hero}
+          featureComparison={playgroundPaywallConfig.featureComparison}
+          featurePreviewCount={4}
           isPurchasing={isPurchasing}
           originalPriceText="$29.99"
           plan={lifetimeOfferPlan}
+          reviewSection={playgroundPaywallConfig.reviewSection}
           theme={{
-            accentColor: "#F5C451",
-            accentTextColor: "#101A2A",
-            backgroundColor: "#0B1423",
-            borderColor: "#2A3950",
-            mutedTextColor: "#8696AC",
-            primaryTextColor: "#FFF8E7",
-            secondaryTextColor: "#C8D2E0",
-            selectedBorderColor: "#F5C451",
-            selectedSurfaceColor: "#16243A",
-            surfaceColor: "#111F33",
+            accentColor: "#5AC8B7",
+            accentTextColor: "#071312",
+            backgroundColor: "#05080C",
+            borderColor: "#2B3845",
+            mutedTextColor: "#7F8B96",
+            primaryTextColor: "#F5F7FA",
+            secondaryTextColor: "#B9C4CF",
+            selectedBorderColor: "#5AC8B7",
+            selectedSurfaceColor: "#102A2A",
+            surfaceColor: "#151D25",
           }}
           onClose={onClose}
           onExpire={onClose}
+          onOpenDeveloperWebsite={() => Alert.alert("Developer callback")}
           onOpenPrivacy={() => Alert.alert("Privacy callback")}
           onOpenTerms={() => Alert.alert("Terms callback")}
           onPurchase={handlePurchase}

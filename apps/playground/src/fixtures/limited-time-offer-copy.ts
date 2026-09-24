@@ -8,6 +8,7 @@ import {
 import type { PlaygroundLocale } from "../types/playground";
 
 interface LimitedTimeOfferPreviewText {
+  alternativePlansTitle: string;
   annualPurchaseButton: string;
   badgeText: string;
   billingDisclosure: string;
@@ -22,6 +23,7 @@ interface LimitedTimeOfferPreviewText {
 
 const offerTextByLocale = {
   de: {
+    alternativePlansTitle: "Weitere Pro-Tarife",
     annualPurchaseButton: "Jahresabo starten",
     badgeText: "24-STUNDEN-SONDERANGEBOT",
     billingDisclosure: "Einmal zahlen, Pro dauerhaft nutzen. Kein Abo.",
@@ -35,6 +37,7 @@ const offerTextByLocale = {
     viewAllPlansButton: "Monats- und Jahresabo anzeigen",
   },
   en: {
+    alternativePlansTitle: "Other Pro plans",
     annualPurchaseButton: "Start Yearly Pro",
     badgeText: "24-HOUR SPECIAL DEAL",
     billingDisclosure: "Pay once and enjoy Pro forever. No subscription.",
@@ -48,6 +51,7 @@ const offerTextByLocale = {
     viewAllPlansButton: "View monthly and yearly subscriptions",
   },
   es: {
+    alternativePlansTitle: "Otros planes Pro",
     annualPurchaseButton: "Empezar Pro anual",
     badgeText: "OFERTA ESPECIAL DE 24 HORAS",
     billingDisclosure: "Paga una vez y disfruta Pro para siempre. Sin suscripción.",
@@ -61,6 +65,7 @@ const offerTextByLocale = {
     viewAllPlansButton: "Ver suscripciones mensual y anual",
   },
   fr: {
+    alternativePlansTitle: "Autres offres Pro",
     annualPurchaseButton: "Commencer Pro annuel",
     badgeText: "OFFRE SPÉCIALE 24 H",
     billingDisclosure: "Payez une fois et profitez de Pro à vie. Sans abonnement.",
@@ -74,6 +79,7 @@ const offerTextByLocale = {
     viewAllPlansButton: "Voir les abonnements mensuel et annuel",
   },
   it: {
+    alternativePlansTitle: "Altri piani Pro",
     annualPurchaseButton: "Inizia Pro annuale",
     badgeText: "OFFERTA SPECIALE DI 24 ORE",
     billingDisclosure: "Paga una volta e usa Pro per sempre. Nessun abbonamento.",
@@ -87,6 +93,7 @@ const offerTextByLocale = {
     viewAllPlansButton: "Vedi gli abbonamenti mensile e annuale",
   },
   ja: {
+    alternativePlansTitle: "その他のProプラン",
     annualPurchaseButton: "年間Proを始める",
     badgeText: "24時間限定スペシャルセール",
     billingDisclosure: "一度の支払いでProを永久に利用できます。サブスクではありません。",
@@ -99,6 +106,7 @@ const offerTextByLocale = {
     viewAllPlansButton: "月間・年間プランを見る",
   },
   ko: {
+    alternativePlansTitle: "다른 Pro 플랜",
     annualPurchaseButton: "연간 Pro 시작하기",
     badgeText: "24시간 스페셜 타임딜",
     billingDisclosure: "한 번만 결제하고 평생 이용해요. 구독이 아니에요.",
@@ -111,6 +119,7 @@ const offerTextByLocale = {
     viewAllPlansButton: "월간·연간 구독 보기",
   },
   ptBr: {
+    alternativePlansTitle: "Outros planos Pro",
     annualPurchaseButton: "Iniciar Pro anual",
     badgeText: "OFERTA ESPECIAL DE 24 HORAS",
     billingDisclosure: "Pague uma vez e use o Pro para sempre. Sem assinatura.",
@@ -124,6 +133,7 @@ const offerTextByLocale = {
     viewAllPlansButton: "Ver assinaturas mensal e anual",
   },
   zhHans: {
+    alternativePlansTitle: "其他 Pro 方案",
     annualPurchaseButton: "开始使用年度 Pro",
     badgeText: "24 小时专属特惠",
     billingDisclosure: "一次付款，永久使用 Pro。无需订阅。",
@@ -136,6 +146,7 @@ const offerTextByLocale = {
     viewAllPlansButton: "查看月度和年度订阅",
   },
   zhHant: {
+    alternativePlansTitle: "其他 Pro 方案",
     annualPurchaseButton: "開始使用年度 Pro",
     badgeText: "24 小時專屬優惠",
     billingDisclosure: "一次付款，永久使用 Pro。無需訂閱。",
@@ -164,10 +175,14 @@ export const getLimitedTimeOfferPreview = (locale: PlaygroundLocale) => {
     offerTextByLocale[resolvedLocale as keyof typeof offerTextByLocale] ??
     offerTextByLocale.en;
   const paywallCopy = getDefaultPaywallCopy(locale, { title: offerText.title });
+  const extendedPaywallCopy = paywallCopy as typeof paywallCopy & {
+    reviewSectionTitle?: string;
+  };
   const copy: LimitedTimeOfferCopy = {
     ...offerText,
     closeButtonAccessibilityLabel: paywallCopy.closeButtonAccessibilityLabel,
     formatRemainingTime,
+    legalPrefix: paywallCopy.legalPrefix,
     privacyText: paywallCopy.privacyText,
     purchaseButtonByPeriod: {
       annual: offerText.annualPurchaseButton,
@@ -175,7 +190,10 @@ export const getLimitedTimeOfferPreview = (locale: PlaygroundLocale) => {
       monthly: offerText.monthlyPurchaseButton,
     },
     purchasingButton: paywallCopy.purchasingButton,
+    reviewSectionTitle: extendedPaywallCopy.reviewSectionTitle,
     restoreButton: paywallCopy.restoreButton,
+    supportMessage: paywallCopy.supportMessage,
+    supportMessageLabel: paywallCopy.supportMessageLabel,
     termsText: paywallCopy.termsText,
   };
 

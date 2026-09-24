@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import {
-  LayoutAnimation,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -9,17 +8,22 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { DefaultOfferHero } from "./DefaultOfferHero";
 import { OfferCountdown } from "./OfferCountdown";
 import { OfferPriceCard } from "./OfferPriceCard";
 import {
   getLimitedTimeOfferAlternativePlans,
   resolveLimitedTimeOfferSelectedPlan,
+  splitLimitedTimeOfferFeatureRows,
 } from "./limited-time-offer";
 import { LegalLinks } from "../paywall/LegalLinks";
 import { PaywallBenefitList } from "../paywall/PaywallBenefitList";
+import { PaywallFeatureComparison } from "../paywall/PaywallFeatureComparison";
+import { PaywallReviewSection } from "../paywall/PaywallReviewSection";
 import { PlanCard } from "../paywall/PlanCard";
 import { PurchaseButton } from "../paywall/PurchaseButton";
-import { ChevronDownIcon, CloseIcon } from "../shared/icons";
+import { SupportMessageBubble } from "../paywall/SupportMessageBubble";
+import { CloseIcon } from "../shared/icons";
 import { mergePaywallTheme } from "../shared/theme";
 import type {
   LimitedTimeOfferPaywallProps,
@@ -34,15 +38,20 @@ export const LimitedTimeOfferPaywall = <TPackage,>({
   copy,
   discountText,
   expiresAt,
+  featureComparison,
+  featurePreviewCount = 4,
   hero,
   isPurchasing = false,
   isRestoring = false,
   originalPriceText,
   plan,
   purchaseButtonBackground,
+  reviewSection,
+  supportMessageIcon,
   theme: themeOverride,
   onClose,
   onExpire,
+  onOpenDeveloperWebsite,
   onOpenPrivacy,
   onOpenTerms,
   onPurchase,
@@ -52,9 +61,8 @@ export const LimitedTimeOfferPaywall = <TPackage,>({
 }: LimitedTimeOfferPaywallProps<TPackage>) => {
   const insets = useSafeAreaInsets();
   const theme = mergePaywallTheme(themeOverride);
-  const [isAlternativePlansExpanded, setIsAlternativePlansExpanded] =
-    useState(false);
   const [selectedPlanId, setSelectedPlanId] = useState(plan.id);
+  const [measuredFooterHeight, setMeasuredFooterHeight] = useState(0);
   const alternativePlans = useMemo(
     () =>
       getLimitedTimeOfferAlternativePlans(plan, alternativePlanCandidates),
@@ -66,7 +74,31 @@ export const LimitedTimeOfferPaywall = <TPackage,>({
     selectedPlanId,
   );
   const hasAlternativePlans = alternativePlans.length > 0;
-  const hasAllPlansAction = Boolean(onViewAllPlans);
+  const featureRows = useMemo(
+    () =>
+      splitLimitedTimeOfferFeatureRows(
+        featureComparison?.rows ?? [],
+        featurePreviewCount,
+      ),
+    [featureComparison?.rows, featurePreviewCount],
+  );
+  const previewComparison = featureComparison
+    ? {
+        ...featureComparison,
+        collapse: undefined,
+        rows: featureRows.previewRows,
+      }
+    : undefined;
+  const remainingComparison = featureComparison
+    ? {
+        ...featureComparison,
+        collapse: undefined,
+        rows: featureRows.remainingRows,
+      }
+    : undefined;
+  const footerBottomPadding = Math.max(insets.bottom, 12) + 8;
+  const fallbackFooterHeight = 12 + 52 + footerBottomPadding;
+  const footerHeight = Math.max(measuredFooterHeight, fallbackFooterHeight);
   const purchaseButtonLabel =
     copy.purchaseButtonByPeriod?.[selectedPlan.period] ?? copy.purchaseButton;
   const legalCopy: PaywallCopy = {
@@ -75,15 +107,11 @@ export const LimitedTimeOfferPaywall = <TPackage,>({
     restoreButton: copy.restoreButton,
     termsText: copy.termsText,
     title: copy.title,
+    legalPrefix: copy.legalPrefix,
   };
   const selectPlan = (nextPlan: typeof selectedPlan) => {
     setSelectedPlanId(nextPlan.id);
     onSelectPlan?.(nextPlan);
-  };
-  const toggleAlternativePlans = () => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    if (isAlternativePlansExpanded) selectPlan(plan);
-    setIsAlternativePlansExpanded(!isAlternativePlansExpanded);
   };
 
   return (
@@ -91,58 +119,51 @@ export const LimitedTimeOfferPaywall = <TPackage,>({
       <ScrollView
         contentContainerStyle={[
           styles.scrollContent,
-          {
-            paddingBottom:
-              Math.max(insets.bottom, 12) +
-              (hasAllPlansAction ? 176 : 138),
-          },
+          { paddingBottom: footerHeight + 24 },
         ]}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.hero}>{hero}</View>
-        <Pressable
-          accessibilityLabel={copy.closeButtonAccessibilityLabel}
-          accessibilityRole="button"
-          hitSlop={10}
-          onPress={onClose}
-          style={[
-            styles.closeButton,
-            { top: Math.max(insets.top, 12), backgroundColor: "rgba(0,0,0,0.28)" },
-          ]}
-        >
-          <CloseIcon color="#FFFFFF" />
-        </Pressable>
         <View
           style={[
-            styles.content,
-            {
-              backgroundColor: theme.backgroundColor,
-              borderColor: theme.borderColor,
-            },
+            styles.offerHeader,
+            { paddingTop: Math.max(insets.top, 12) },
           ]}
         >
-          <View style={styles.titleBlock}>
-            <View style={[styles.offerBadge, { backgroundColor: theme.accentColor }]}>
-              <Text style={[styles.offerBadgeText, { color: theme.accentTextColor }]}>
-                {copy.badgeText}
-              </Text>
-            </View>
-            <Text style={[styles.title, { color: theme.primaryTextColor }]}>
-              {copy.title}
-            </Text>
-            {copy.subtitle ? (
-              <Text style={[styles.subtitle, { color: theme.secondaryTextColor }]}>
-                {copy.subtitle}
-              </Text>
-            ) : null}
-          </View>
+          <Pressable
+            accessibilityLabel={copy.closeButtonAccessibilityLabel}
+            accessibilityRole="button"
+            hitSlop={10}
+            onPress={onClose}
+            style={[
+              styles.closeButton,
+              { top: Math.max(insets.top, 12) },
+            ]}
+          >
+            <CloseIcon color="#272523" />
+          </Pressable>
+          <View style={styles.hero}>{hero ?? <DefaultOfferHero />}</View>
           <OfferCountdown
+            accentColor="#F04C3A"
             expiresAt={expiresAt}
             formatRemainingTime={copy.formatRemainingTime}
             label={copy.countdownLabel}
             theme={theme}
+            variant="pill"
             onExpire={onExpire}
           />
+          <View style={styles.titleBlock}>
+            <Text style={styles.offerBadgeText}>{copy.badgeText}</Text>
+            <Text style={styles.title}>{copy.title}</Text>
+            {discountText ? (
+              <Text style={styles.headerDiscount}>{discountText}</Text>
+            ) : null}
+            {copy.subtitle ? (
+              <Text style={styles.subtitle}>{copy.subtitle}</Text>
+            ) : null}
+          </View>
+        </View>
+
+        <View style={styles.content}>
           <OfferPriceCard
             billingDisclosure={billingDisclosure}
             discountText={discountText}
@@ -152,70 +173,98 @@ export const LimitedTimeOfferPaywall = <TPackage,>({
             theme={theme}
             onPress={hasAlternativePlans ? () => selectPlan(plan) : undefined}
           />
+
+          {previewComparison && previewComparison.rows.length > 0 ? (
+            <PaywallFeatureComparison
+              comparison={previewComparison}
+              theme={theme}
+            />
+          ) : null}
+
           {hasAlternativePlans ? (
             <View style={styles.alternativePlansSection}>
-              <Pressable
-                accessibilityRole="button"
-                accessibilityState={{ expanded: isAlternativePlansExpanded }}
-                disabled={isPurchasing || isRestoring}
-                onPress={toggleAlternativePlans}
-                style={({ pressed }) => [
-                  styles.alternativePlansButton,
-                  pressed && styles.pressed,
+              <Text
+                style={[
+                  styles.alternativePlansTitle,
+                  { color: theme.primaryTextColor },
                 ]}
               >
-                <Text
-                  style={[
-                    styles.alternativePlansText,
-                    { color: theme.secondaryTextColor },
-                  ]}
-                >
-                  {isAlternativePlansExpanded
-                    ? copy.collapseAlternativePlansButton ??
-                      copy.viewAllPlansButton
-                    : copy.viewAllPlansButton}
-                </Text>
-                <View
-                  style={
-                    isAlternativePlansExpanded
-                      ? styles.alternativePlansChevronExpanded
-                      : undefined
-                  }
-                >
-                  <ChevronDownIcon color={theme.secondaryTextColor} />
-                </View>
-              </Pressable>
-              {isAlternativePlansExpanded ? (
-                <View style={styles.alternativePlansList}>
-                  {alternativePlans.map((alternativePlan) => (
-                    <PlanCard
-                      key={alternativePlan.id}
-                      isSelected={selectedPlan.id === alternativePlan.id}
-                      plan={alternativePlan}
-                      shouldAnimate={false}
-                      theme={theme}
-                      onPress={() => selectPlan(alternativePlan)}
-                    />
-                  ))}
-                </View>
-              ) : null}
+                {copy.alternativePlansTitle ?? copy.viewAllPlansButton}
+              </Text>
+              <View style={styles.alternativePlansList}>
+                {alternativePlans.map((alternativePlan) => (
+                  <PlanCard
+                    key={alternativePlan.id}
+                    isSelected={selectedPlan.id === alternativePlan.id}
+                    plan={alternativePlan}
+                    shouldAnimate={false}
+                    theme={theme}
+                    onPress={() => selectPlan(alternativePlan)}
+                  />
+                ))}
+              </View>
             </View>
           ) : null}
+
+          {remainingComparison && remainingComparison.rows.length > 0 ? (
+            <PaywallFeatureComparison
+              comparison={remainingComparison}
+              shouldShowHeader={false}
+              theme={theme}
+            />
+          ) : null}
+
           <PaywallBenefitList
-            benefits={benefits}
+            benefits={featureComparison ? [] : benefits}
             content={content}
-            size="large"
+            size="regular"
             theme={theme}
+            variant="plain"
+          />
+
+          {reviewSection ? (
+            <PaywallReviewSection
+              reviews={reviewSection.reviews}
+              theme={theme}
+              title={copy.reviewSectionTitle}
+            />
+          ) : null}
+
+          {copy.supportMessage ? (
+            <SupportMessageBubble
+              icon={supportMessageIcon}
+              label={copy.supportMessageLabel}
+              message={copy.supportMessage}
+              theme={theme}
+              onPress={onOpenDeveloperWebsite}
+            />
+          ) : null}
+
+          <LegalLinks
+            copy={legalCopy}
+            isRestoreDisabled={isPurchasing || isRestoring}
+            shouldShowLegalPrefix={hasAlternativePlans}
+            theme={theme}
+            onOpenPrivacy={onOpenPrivacy}
+            onOpenTerms={onOpenTerms}
+            onRestore={onRestore}
           />
         </View>
       </ScrollView>
       <View
+        onLayout={(event) => {
+          const nextFooterHeight = Math.ceil(event.nativeEvent.layout.height);
+          setMeasuredFooterHeight((previousFooterHeight) =>
+            previousFooterHeight === nextFooterHeight
+              ? previousFooterHeight
+              : nextFooterHeight,
+          );
+        }}
         style={[
           styles.footer,
           {
             backgroundColor: theme.backgroundColor,
-            borderColor: theme.borderColor,
-            paddingBottom: Math.max(insets.bottom, 12),
+            paddingBottom: footerBottomPadding,
           },
         ]}
       >
@@ -243,41 +292,22 @@ export const LimitedTimeOfferPaywall = <TPackage,>({
             </Text>
           </Pressable>
         ) : null}
-        <LegalLinks
-          copy={legalCopy}
-          isRestoreDisabled={isPurchasing || isRestoring}
-          shouldShowLegalPrefix={false}
-          theme={theme}
-          onOpenPrivacy={onOpenPrivacy}
-          onOpenTerms={onOpenTerms}
-          onRestore={onRestore}
-        />
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  alternativePlansButton: {
-    alignItems: "center",
-    flexDirection: "row",
-    gap: 8,
-    justifyContent: "center",
-    minHeight: 40,
-  },
-  alternativePlansChevronExpanded: {
-    transform: [{ rotate: "180deg" }],
-  },
   alternativePlansList: {
     gap: 10,
   },
   alternativePlansSection: {
-    gap: 10,
+    gap: 12,
   },
-  alternativePlansText: {
-    fontSize: 14,
-    fontWeight: "600",
-    lineHeight: 20,
+  alternativePlansTitle: {
+    fontSize: 16,
+    fontWeight: "700",
+    lineHeight: 22,
   },
   allPlansButton: {
     alignItems: "center",
@@ -291,24 +321,21 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     alignItems: "center",
+    backgroundColor: "rgba(39, 37, 35, 0.08)",
     borderRadius: 999,
     height: 36,
     justifyContent: "center",
     position: "absolute",
     right: 16,
     width: 36,
+    zIndex: 2,
   },
   content: {
-    borderTopLeftRadius: 28,
-    borderTopRightRadius: 28,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    gap: 24,
-    marginTop: -28,
+    gap: 28,
     paddingHorizontal: 20,
     paddingTop: 28,
   },
   footer: {
-    borderTopWidth: StyleSheet.hairlineWidth,
     bottom: 0,
     gap: 4,
     left: 0,
@@ -318,22 +345,33 @@ const styles = StyleSheet.create({
     right: 0,
   },
   hero: {
-    height: 252,
+    height: 190,
     overflow: "hidden",
     width: "100%",
   },
-  offerBadge: {
-    alignSelf: "center",
-    borderRadius: 999,
-    paddingHorizontal: 14,
-    paddingVertical: 7,
+  headerDiscount: {
+    color: "#F04C3A",
+    fontFamily: "serif",
+    fontSize: 27,
+    fontWeight: "800",
+    lineHeight: 34,
+    textAlign: "center",
   },
   offerBadgeText: {
+    color: "#F04C3A",
     fontSize: 13,
-    fontWeight: "700",
+    fontWeight: "800",
     letterSpacing: 0.8,
     lineHeight: 18,
     textTransform: "uppercase",
+  },
+  offerHeader: {
+    alignItems: "center",
+    backgroundColor: "#FAF7F2",
+    gap: 10,
+    paddingBottom: 30,
+    paddingHorizontal: 20,
+    position: "relative",
   },
   pressed: {
     opacity: 0.72,
@@ -345,6 +383,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   subtitle: {
+    color: "#67615D",
     fontSize: 15,
     fontWeight: "500",
     lineHeight: 23,
@@ -352,14 +391,16 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   title: {
-    fontSize: 30,
-    fontWeight: "700",
-    lineHeight: 38,
+    color: "#272523",
+    fontFamily: "serif",
+    fontSize: 31,
+    fontWeight: "800",
+    lineHeight: 39,
     maxWidth: 420,
     textAlign: "center",
   },
   titleBlock: {
     alignItems: "center",
-    gap: 10,
+    gap: 7,
   },
 });

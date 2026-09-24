@@ -21,6 +21,7 @@ const COLLAPSE_DURATION_MS = 220;
 
 interface PaywallFeatureComparisonProps {
   comparison: PaywallFeatureComparisonConfig;
+  shouldShowHeader?: boolean;
   theme: PaywallTheme;
   /**
    * Called with the height the expansion is about to reveal, so the screen can
@@ -138,6 +139,7 @@ const ComparisonRow = ({
 
 export const PaywallFeatureComparison = ({
   comparison,
+  shouldShowHeader = true,
   theme,
   onExpand,
 }: PaywallFeatureComparisonProps) => {
@@ -196,7 +198,7 @@ export const PaywallFeatureComparison = ({
           },
         ]}
       >
-        <View style={styles.headerRow}>
+        {shouldShowHeader ? <View style={styles.headerRow}>
           <View
             style={[
               styles.headerFeature,
@@ -236,7 +238,7 @@ export const PaywallFeatureComparison = ({
               {comparison.paidColumnTitle}
             </Text>
           </View>
-        </View>
+        </View> : null}
 
         {staticRows.map((row, index) => (
           <ComparisonRow

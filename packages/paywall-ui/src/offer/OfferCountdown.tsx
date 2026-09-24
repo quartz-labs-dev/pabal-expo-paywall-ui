@@ -8,11 +8,13 @@ import type {
 } from "../types";
 
 interface OfferCountdownProps {
+  accentColor?: string;
   expiresAt: number;
   formatRemainingTime?: (
     parts: LimitedTimeOfferCountdownParts,
   ) => string;
   label: string;
+  variant?: "pill" | "segmented";
   theme: PaywallTheme;
   onExpire: () => void;
 }
@@ -21,9 +23,11 @@ const padTimeUnit = (value: number): string =>
   String(value).padStart(2, "0");
 
 export const OfferCountdown = ({
+  accentColor,
   expiresAt,
   formatRemainingTime,
   label,
+  variant = "segmented",
   theme,
   onExpire,
 }: OfferCountdownProps) => {
@@ -60,6 +64,34 @@ export const OfferCountdown = ({
   const visibleParts = [parts.hours, parts.minutes, parts.seconds].map(
     padTimeUnit,
   );
+  const resolvedAccentColor = accentColor ?? theme.accentColor;
+
+  if (variant === "pill") {
+    return (
+      <View
+        accessibilityLabel={
+          formatRemainingTime?.(parts) ?? `${label} ${visibleTime}`
+        }
+        accessible
+        style={styles.container}
+      >
+        <View
+          style={[
+            styles.pill,
+            {
+              backgroundColor: resolvedAccentColor,
+              borderColor: resolvedAccentColor,
+            },
+          ]}
+        >
+          <Text style={styles.pillTime}>{visibleTime}</Text>
+        </View>
+        <Text style={[styles.pillLabel, { color: theme.mutedTextColor }]}>
+          {label}
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <View
@@ -77,7 +109,7 @@ export const OfferCountdown = ({
               <Text
                 accessibilityElementsHidden
                 importantForAccessibility="no-hide-descendants"
-                style={[styles.separator, { color: theme.accentColor }]}
+                style={[styles.separator, { color: resolvedAccentColor }]}
               >
                 :
               </Text>
@@ -112,6 +144,28 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     letterSpacing: 0.3,
     lineHeight: 18,
+    textAlign: "center",
+  },
+  pill: {
+    borderRadius: 999,
+    borderWidth: 1,
+    minWidth: 124,
+    paddingHorizontal: 18,
+    paddingVertical: 8,
+  },
+  pillLabel: {
+    fontSize: 11,
+    fontWeight: "600",
+    lineHeight: 15,
+    textAlign: "center",
+  },
+  pillTime: {
+    color: "#FFFFFF",
+    fontSize: 22,
+    fontVariant: ["tabular-nums"],
+    fontWeight: "700",
+    letterSpacing: 0.6,
+    lineHeight: 27,
     textAlign: "center",
   },
   separator: {

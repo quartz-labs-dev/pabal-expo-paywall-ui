@@ -7,9 +7,10 @@ eligibility, performs purchases, handles analytics, and owns navigation.
 ## What The Package Provides
 
 - `Paywall`: the React Native paywall screen
-- `LimitedTimeOfferPaywall`: a focused offer with an optional collapsed list of
-  normal-price alternatives and a segmented countdown
-  and an optional route back to the standard plan list
+- `LimitedTimeOfferPaywall`: a focused offer with a bundled default
+  illustration, compact countdown, split feature comparison, always-visible
+  normal-price alternatives, reviews, developer note, legal section, and an
+  optional route back to the standard plan list
 - `resolveLimitedTimeOfferWindow()`: resolves active, expired, and invalid
   campaign windows from an app-owned start time and duration
 - `resolvePaywallVariant()`: selects the offer only when eligibility, time,
@@ -120,12 +121,16 @@ if (variant === "limitedTimeOffer" && offerPlan && offerWindow.expiresAt) {
       discountText="30% off"
       billingDisclosure="One-time purchase. No subscription."
       expiresAt={offerWindow.expiresAt}
-      hero={<HeroImage />}
-      benefits={benefits}
+      // Omit hero to use the bundled hourglass-and-gift illustration.
+      // hero={<AppOwnedOfferIllustration />}
+      featureComparison={featureComparison}
+      featurePreviewCount={4}
+      reviewSection={reviewSection}
       copy={appLocalizedOfferCopy}
       onPurchase={purchasePlan}
       onSelectPlan={trackPlanSelection}
       onRestore={restorePurchases}
+      onOpenDeveloperWebsite={openDeveloperWebsite}
       onExpire={() => setVariant("standard")}
       onClose={() => router.back()}
       onOpenTerms={openTerms}
@@ -147,12 +152,21 @@ to a broader catalog. Omit it for a dedicated one-time deal; purchase restore,
 privacy, terms, close, and expiry fallback remain available.
 
 For a focused offer that still supports normal subscriptions, pass monthly and
-annual products through `alternativePlans`. They remain collapsed below the
-featured offer until `copy.viewAllPlansButton` is pressed. Selection updates the
-single purchase callback and CTA; collapsing restores the featured offer.
-`copy.purchaseButtonByPeriod` and `copy.collapseAlternativePlansButton` are
-app-localized optional overrides. The countdown always describes the featured
-offer, so its label should name that product explicitly when alternatives exist.
+annual products through `alternativePlans`. They stay visible between the first
+feature-comparison rows and the remaining rows; there is no disclosure toggle.
+Selection updates the single fixed purchase CTA. `copy.alternativePlansTitle`
+and `copy.purchaseButtonByPeriod` are app-localized optional overrides. Set
+`featurePreviewCount` to a value from 3 to 5 for the intended hierarchy. The
+countdown always describes the featured offer, so its label should name that
+product explicitly when alternatives exist.
+
+Omit `hero` to use the package's transparent hourglass-and-gift illustration,
+or pass an app-owned `ReactNode` to replace it. `reviewSection`,
+`copy.reviewSectionTitle`, `copy.supportMessageLabel`, `copy.supportMessage`,
+`copy.legalPrefix`, `supportMessageIcon`, and `onOpenDeveloperWebsite` reuse the
+same lower-page surfaces as `Paywall`. Restore/privacy/terms now live in the
+scrolling content while the footer contains the purchase CTA, matching the
+standard paywall layout.
 
 The playground exposes the standard and offer previews independently:
 
