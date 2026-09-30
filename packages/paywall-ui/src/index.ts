@@ -61,6 +61,7 @@ export { PreOnboardingValue } from "./onboarding/PreOnboardingValue";
 export { PreOnboardingWelcome } from "./onboarding/PreOnboardingWelcome";
 export {
   getDefaultPaywallCopy,
+  getDefaultLimitedTimeOfferCopy,
   getDefaultPaywallPlanOptions,
   getDefaultProfileIdentifiersCopy,
   getDefaultProfilePlanLabel,

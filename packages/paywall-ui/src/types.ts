@@ -64,6 +64,9 @@ export interface PaywallPlan<TPackage = unknown> {
 }
 
 export interface LimitedTimeOfferCopy {
+  formatPurchaseButtonLabel?: PaywallCopy["formatPurchaseButtonLabel"];
+  trialNoPaymentDueNow?: string;
+  purchaseDisclosureByPeriod?: Partial<Record<PaywallPlanPeriod, string>>;
   badgeText: string;
   title: string;
   subtitle?: string;
@@ -94,6 +97,8 @@ export interface LimitedTimeOfferHeaderTheme {
 }
 
 export interface LimitedTimeOfferPaywallProps<TPackage = unknown> {
+  locale?: string;
+  freeTrial?: boolean | PaywallFreeTrialConfig;
   plan: PaywallPlan<TPackage>;
   alternativePlans?: PaywallPlan<TPackage>[];
   originalPriceText?: string;

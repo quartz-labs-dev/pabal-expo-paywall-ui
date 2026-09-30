@@ -159,8 +159,13 @@ place. Alternative plans themselves stay visible without a disclosure toggle.
 Selection updates the single fixed purchase CTA. Each alternative uses the
 standard `PaywallPlan` fields, so `badgeText`, `monthlyPriceText`, and
 `selectedDescription` can carry copy such as savings versus monthly billing.
-`copy.alternativePlansTitle` and `copy.purchaseButtonByPeriod` are app-localized
-optional overrides. The countdown always describes the featured offer, so its
+`copy.alternativePlansTitle` and `copy.purchaseButtonByPeriod` are optional
+overrides. Pass `locale` to use the package-owned "View other plans" heading
+("다른 플랜 보기" in Korean) across all 74 supported languages.
+Use `getDefaultLimitedTimeOfferCopy(locale, { badgeText, title, countdownLabel })`
+for package-owned close, restore, legal and purchase labels; marketing title,
+countdown and campaign badge remain app-owned.
+The countdown always describes the featured offer, so its
 label should name that product explicitly when alternatives exist.
 
 Omit `hero` to use the package's transparent hourglass-and-gift illustration,
@@ -175,6 +180,47 @@ theme, and `primaryTextColor` / `secondaryTextColor` can override that behavior.
 same lower-page surfaces as `Paywall`. Restore/privacy/terms now live in the
 scrolling content while the footer contains the purchase CTA, matching the
 standard paywall layout.
+
+### Offer purchase summary (1.19.2)
+
+The top-right close control is fixed outside the scrolling content with the
+same 44-point touch target as the standard paywall. It is disabled while a
+purchase or restore is in progress.
+
+The fixed footer uses the selected plan's actual `priceText`, not a campaign
+price hardcoded in marketing copy. Without a trial it shows a price-aware
+purchase button and the billing period, or "One-time payment" for lifetime.
+With an eligible trial it shows "7 days free, then $14.99" and "No payment due
+now", using the standard paywall's localized formatter. Changing plans updates
+both the CTA and summary. `freeTrial` defaults to `false`; consumers must pass
+verified eligibility explicitly. Lifetime ignores trial configuration.
+
+```tsx
+const copy = getDefaultLimitedTimeOfferCopy(locale, {
+  badgeText: campaignCopy.badge,
+  title: campaignCopy.title,
+  countdownLabel: campaignCopy.countdown,
+  purchaseDisclosureByPeriod: {
+    lifetime: campaignCopy.oneTimeDisclosure,
+  },
+});
+
+<LimitedTimeOfferPaywall
+  {...offerProps}
+  locale={locale}
+  copy={copy}
+  freeTrial={{ byPeriod: { monthly: false, annual: isAnnualTrialEligible } }}
+/>;
+```
+
+For custom paid CTA copy, use `purchaseButtonByPeriod`; trial terms take
+precedence over those marketing labels. For full control including trials,
+use `formatPurchaseButtonLabel` with the same context as the standard paywall.
+The selected offer card also renders `plan.selectedDescription`; monthly and
+annual cards reuse the standard `PlanCard` selected-only description behavior.
+The playground uses the same price-based coffee-comparison descriptions for
+standard and offer paywalls in its ten campaign-copy locales. These comparisons
+are examples, not universal package claims about coffee prices.
 
 The playground exposes the standard and offer previews independently:
 

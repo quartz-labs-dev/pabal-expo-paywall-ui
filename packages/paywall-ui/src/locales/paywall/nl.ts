@@ -9,6 +9,7 @@ const nl = createPaywallLocaleText({
     reviewSectionTitle: "Gebruikersbeoordelingen",
   },
   text: {
+    otherPlansButton: "Andere abonnementen bekijken",
     annualPlanTitle: "Jaarlijks",
     benefitsTitle: "Je Pro-voordelen",
     continueButton: "Doorgaan",

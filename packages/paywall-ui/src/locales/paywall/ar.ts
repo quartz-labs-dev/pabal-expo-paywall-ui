@@ -9,6 +9,7 @@ const ar = createPaywallLocaleText({
     reviewSectionTitle: "آراء المستخدمين",
   },
   text: {
+    otherPlansButton: "عرض الخطط الأخرى",
     annualPlanTitle: "سنوي",
     benefitsTitle: "مزايا Pro",
     continueButton: "متابعة",

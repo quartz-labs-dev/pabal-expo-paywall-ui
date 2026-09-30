@@ -9,6 +9,7 @@ const am = createPaywallLocaleText({
     reviewSectionTitle: "የተጠቃሚ ግምገማዎች",
   },
   text: {
+    otherPlansButton: "ሌሎች እቅዶችን ይመልከቱ",
     annualPlanTitle: "ዓመታዊ",
     benefitsTitle: "የPro ጥቅሞች",
     continueButton: "ቀጥል",

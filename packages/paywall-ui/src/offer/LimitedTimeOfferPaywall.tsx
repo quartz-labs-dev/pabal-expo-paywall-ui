@@ -14,7 +14,9 @@ import { OfferPriceCard } from "./OfferPriceCard";
 import {
   getLimitedTimeOfferAlternativePlans,
   resolveLimitedTimeOfferSelectedPlan,
+  resolveLimitedTimeOfferPurchasePresentation,
 } from "./limited-time-offer";
+import { getDefaultLimitedTimeOfferCopy } from "../locales/localized-paywall-copy";
 import { LegalLinks } from "../paywall/LegalLinks";
 import { PaywallBenefitList } from "../paywall/PaywallBenefitList";
 import { PaywallFeatureComparison } from "../paywall/PaywallFeatureComparison";
@@ -22,7 +24,6 @@ import { PaywallReviewSection } from "../paywall/PaywallReviewSection";
 import { PlanCard } from "../paywall/PlanCard";
 import { PurchaseButton } from "../paywall/PurchaseButton";
 import { SupportMessageBubble } from "../paywall/SupportMessageBubble";
-import { getColorWithAlpha } from "../shared/color-utils";
 import { CloseIcon } from "../shared/icons";
 import { mergePaywallTheme } from "../shared/theme";
 import type {
@@ -41,10 +42,12 @@ export const LimitedTimeOfferPaywall = <TPackage,>({
   discountText,
   expiresAt,
   featureComparison,
+  freeTrial = false,
   headerTheme: headerThemeOverride,
   hero,
   isPurchasing = false,
   isRestoring = false,
+  locale,
   originalPriceText,
   plan,
   purchaseButtonBackground,
@@ -91,8 +94,17 @@ export const LimitedTimeOfferPaywall = <TPackage,>({
   const footerBottomPadding = Math.max(insets.bottom, 12) + 8;
   const fallbackFooterHeight = 12 + 52 + footerBottomPadding;
   const footerHeight = Math.max(measuredFooterHeight, fallbackFooterHeight);
-  const purchaseButtonLabel =
-    copy.purchaseButtonByPeriod?.[selectedPlan.period] ?? copy.purchaseButton;
+  const defaultCopy = getDefaultLimitedTimeOfferCopy(locale, {
+    badgeText: copy.badgeText,
+    countdownLabel: copy.countdownLabel,
+    title: copy.title,
+  });
+  const purchasePresentation = resolveLimitedTimeOfferPurchasePresentation({
+    copy,
+    freeTrial,
+    locale,
+    plan: selectedPlan,
+  });
   const legalCopy: PaywallCopy = {
     privacyText: copy.privacyText,
     purchaseButton: copy.purchaseButton,
@@ -108,6 +120,28 @@ export const LimitedTimeOfferPaywall = <TPackage,>({
 
   return (
     <View style={[styles.screen, { backgroundColor: theme.backgroundColor }]}>
+      <Pressable
+        accessibilityLabel={
+          copy.closeButtonAccessibilityLabel ?? defaultCopy.closeButtonAccessibilityLabel
+        }
+        accessibilityRole="button"
+        disabled={isPurchasing || isRestoring}
+        onPress={onClose}
+        style={({ pressed }) => [
+          styles.closeButton,
+          { top: Math.max(insets.top, 10) },
+          pressed && styles.pressed,
+        ]}
+      >
+        <View
+          style={[
+            styles.closeIcon,
+            { backgroundColor: theme.surfaceColor },
+          ]}
+        >
+          <CloseIcon color={theme.primaryTextColor} />
+        </View>
+      </Pressable>
       <ScrollView
         contentContainerStyle={[
           styles.scrollContent,
@@ -124,24 +158,6 @@ export const LimitedTimeOfferPaywall = <TPackage,>({
             },
           ]}
         >
-          <Pressable
-            accessibilityLabel={copy.closeButtonAccessibilityLabel}
-            accessibilityRole="button"
-            hitSlop={10}
-            onPress={onClose}
-            style={[
-              styles.closeButton,
-              {
-                backgroundColor: getColorWithAlpha(
-                  headerTheme.primaryTextColor,
-                  0.08,
-                ),
-                top: Math.max(insets.top, 12),
-              },
-            ]}
-          >
-            <CloseIcon color={headerTheme.primaryTextColor} />
-          </Pressable>
           <View style={styles.hero}>{hero ?? <DefaultOfferHero />}</View>
           <OfferCountdown
             accentColor={theme.accentColor}
@@ -220,7 +236,7 @@ export const LimitedTimeOfferPaywall = <TPackage,>({
                   { color: theme.primaryTextColor },
                 ]}
               >
-                {copy.alternativePlansTitle ?? copy.viewAllPlansButton}
+                {copy.alternativePlansTitle ?? defaultCopy.alternativePlansTitle}
               </Text>
               <View style={styles.alternativePlansList}>
                 {alternativePlans.map((alternativePlan) => (
@@ -228,7 +244,7 @@ export const LimitedTimeOfferPaywall = <TPackage,>({
                     key={alternativePlan.id}
                     isSelected={selectedPlan.id === alternativePlan.id}
                     plan={alternativePlan}
-                    shouldAnimate={false}
+                    shouldAnimate
                     theme={theme}
                     onPress={() => selectPlan(alternativePlan)}
                   />
@@ -287,11 +303,17 @@ export const LimitedTimeOfferPaywall = <TPackage,>({
           background={purchaseButtonBackground}
           isDisabled={isRestoring}
           isLoading={isPurchasing}
-          label={purchaseButtonLabel}
+          label={purchasePresentation.label}
           loadingLabel={copy.purchasingButton}
           theme={theme}
           onPress={() => void onPurchase(selectedPlan)}
         />
+        <Text
+          accessibilityLiveRegion="polite"
+          style={[styles.purchaseDisclosure, { color: theme.mutedTextColor }]}
+        >
+          {purchasePresentation.disclosure}
+        </Text>
         {onViewAllPlans ? (
           <Pressable
             accessibilityRole="button"
@@ -336,13 +358,26 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     alignItems: "center",
-    borderRadius: 999,
-    height: 36,
+    height: 44,
     justifyContent: "center",
     position: "absolute",
-    right: 16,
-    width: 36,
-    zIndex: 2,
+    right: 10,
+    width: 44,
+    zIndex: 10,
+  },
+  closeIcon: {
+    alignItems: "center",
+    borderRadius: 17,
+    height: 34,
+    justifyContent: "center",
+    width: 34,
+  },
+  purchaseDisclosure: {
+    fontSize: 12,
+    fontWeight: "500",
+    lineHeight: 18,
+    paddingTop: 4,
+    textAlign: "center",
   },
   content: {
     gap: 28,

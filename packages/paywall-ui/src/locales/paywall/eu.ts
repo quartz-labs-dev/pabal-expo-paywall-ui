@@ -9,6 +9,7 @@ const eu = createPaywallLocaleText({
     reviewSectionTitle: "Erabiltzaileen iritziak",
   },
   text: {
+    otherPlansButton: "Ikusi beste planak",
     annualPlanTitle: "Urtekoa",
     benefitsTitle: "Zure Pro abantailak",
     continueButton: "Jarraitu",

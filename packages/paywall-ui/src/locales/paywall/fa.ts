@@ -9,6 +9,7 @@ const fa = createPaywallLocaleText({
     reviewSectionTitle: "نظرات کاربران",
   },
   text: {
+    otherPlansButton: "مشاهده طرح‌های دیگر",
     annualPlanTitle: "سالانه",
     benefitsTitle: "مزایای Pro شما",
     continueButton: "ادامه",

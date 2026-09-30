@@ -1,5 +1,35 @@
 # Design QA — Limited-time offer paywall
 
+## 2026-10-01 — 1.19.2 selected plans and fixed controls
+
+- Reference: user-supplied monthly/yearly card capture (373×330 cropped region)
+  and standard purchase-footer capture. Compared with the same yearly-selected
+  state in the 393×852 mobile playground. The source region and rendered screen
+  were opened together for the plan-card comparison.
+- Typography/layout: standard PlanCard title, prices, radio, badge and selected
+  description slots remain shared. Longer translated descriptions wrap instead
+  of truncating. Monthly and annual stay visible after features.
+- Colors/tokens: playground intentionally uses its existing teal theme rather
+  than Sportling's yellow; selection, badge and CTA all use the same accent.
+  Fixed close icon uses the theme surface to stay legible over light or dark
+  header imagery. Earlier translucent-background contrast risk was corrected
+  before final capture.
+- Image quality: bundled hero is unchanged; no replacement or crop was added.
+- Copy/content: heading is now package-localized “다른 플랜 보기”. Monthly,
+  annual and lifetime prices interpolate into the same app-owned comparison
+  templates used by the standard preview. Paid footer shows actual selected
+  price and period; lifetime displays one-time purchase rather than trial copy.
+- Interactions: monthly → annual → lifetime updated the CTA and disclosure;
+  only the selected card's comparison was visible. X remained fixed during
+  scrolling and returned to the playground home. Console error log was empty.
+- Automated verification: typecheck, 166 tests and package library build passed.
+  Tests include all 74 locales, per-period trial eligibility, lifetime trial
+  exclusion, actual price updates and custom CTA/disclosure.
+- Native store purchase and iOS/Android rendering remain consumer-app checks.
+  App export/prebuild was omitted per the user's app-build constraint.
+
+final result: passed
+
 ## Target
 
 - References: the limited-offer, feature-comparison, plan-card, and lower-content screenshots supplied by the user

@@ -40,3 +40,12 @@ test("uses the default illustration and standard fixed CTA layout", () => {
   assert.match(offerSource, /onLayout=\{\(event\) => \{/);
   assert.match(offerSource, /<PurchaseButton/);
 });
+
+test("keeps close fixed outside scrolling content and supports selected descriptions", () => {
+  const closeIndex = offerSource.indexOf("styles.closeButton");
+  assert.ok(closeIndex < offerSource.indexOf("<ScrollView"));
+  assert.match(offerSource, /defaultCopy\.closeButtonAccessibilityLabel/);
+  assert.match(offerSource, /purchasePresentation\.disclosure/);
+  const card = readFileSync(join(process.cwd(), "src", "offer", "OfferPriceCard.tsx"), "utf8");
+  assert.match(card, /isSelected && plan\.selectedDescription/);
+});

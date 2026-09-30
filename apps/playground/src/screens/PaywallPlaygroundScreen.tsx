@@ -669,15 +669,14 @@ export const PaywallPlaygroundScreen = ({
       getPackagesForScenario(scenario),
       {
         ...getDefaultPaywallPlanOptions(selectedLocale),
-        annualSelectedDescription:
-          "About 90% less than a guided aurora hunt.",
-        lifetimeSelectedDescription: "One payment for every aurora season.",
-        monthlySelectedDescription:
-          "Flexible access for your next aurora window.",
         weeklySelectedDescription:
           "Short-term access for a single aurora trip.",
       },
-    );
+    ).map((plan) => ({
+      ...plan,
+      selectedDescription: getLimitedTimeOfferPreview(selectedLocale).getSelectedDescription(plan)
+        ?? plan.selectedDescription,
+    }));
   }, [scenario, selectedLocale]);
 
   const designPresentation = useMemo(
@@ -719,11 +718,7 @@ export const PaywallPlaygroundScreen = ({
     priceText: playgroundOfferPriceByDiscount[offerDiscountPercent],
   }))[0];
   const offerPreview = getLimitedTimeOfferPreview(selectedLocale);
-  const offerPlanOptions = {
-    ...getDefaultPaywallPlanOptions(selectedLocale),
-    annualSelectedDescription: offerPreview.annualSelectedDescription,
-    monthlySelectedDescription: offerPreview.monthlySelectedDescription,
-  };
+  const offerPlanOptions = getDefaultPaywallPlanOptions(selectedLocale);
   const alternativeOfferPlans = createPaywallPlans(
     getPackagesForScenario("standard"),
     offerPlanOptions,
@@ -743,6 +738,13 @@ export const PaywallPlaygroundScreen = ({
         ? offerPlanOptions.formatMonthlyPriceText?.("$1.25")
         : plan.monthlyPriceText,
     priceText: plan.period === "monthly" ? "$2.99" : "$14.99",
+  })).map((plan) => ({
+    ...plan,
+    pricePerPeriodText: offerPlanOptions.formatPricePerPeriodText?.(
+      plan.priceText,
+      plan.period as "monthly" | "annual",
+    ),
+    selectedDescription: offerPreview.getSelectedDescription(plan),
   })).sort((leftPlan, rightPlan) =>
     leftPlan.period === "monthly" && rightPlan.period === "annual" ? -1 : 1,
   );
@@ -769,10 +771,15 @@ export const PaywallPlaygroundScreen = ({
           ).formatDiscountText?.(Number(offerDiscountPercent))}
           expiresAt={offerExpiresAt}
           featureComparison={offerFeatureComparison}
+          locale={selectedLocale}
+          freeTrial={false}
           headerTheme={{ backgroundColor: "transparent" }}
           isPurchasing={isPurchasing}
           originalPriceText="$29.99"
-          plan={lifetimeOfferPlan}
+          plan={{
+            ...lifetimeOfferPlan,
+            selectedDescription: offerPreview.getSelectedDescription(lifetimeOfferPlan),
+          }}
           reviewSection={playgroundPaywallConfig.reviewSection}
           theme={designPresentation.theme}
           onClose={onClose}

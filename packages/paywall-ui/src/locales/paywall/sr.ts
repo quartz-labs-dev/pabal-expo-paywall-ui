@@ -9,6 +9,7 @@ const sr = createPaywallLocaleText({
     reviewSectionTitle: "Рецензије корисника",
   },
   text: {
+    otherPlansButton: "Pogledaj druge planove",
     annualPlanTitle: "Godišnje",
     benefitsTitle: "Vaše Pro pogodnosti",
     continueButton: "Nastavi",

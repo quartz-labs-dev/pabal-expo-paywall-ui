@@ -43,8 +43,8 @@ test("keeps standard and special-offer paywall entries independent", () => {
     /featureComparison=\{offerFeatureComparison\}/,
   );
   assert.match(paywallSource, /visibleRowCount: 4/);
-  assert.match(paywallSource, /annualSelectedDescription/);
-  assert.match(paywallSource, /monthlySelectedDescription/);
+  assert.match(paywallSource, /selectedDescription: offerPreview\.getSelectedDescription\(plan\)/);
+  assert.match(paywallSource, /getLimitedTimeOfferPreview\(selectedLocale\)\.getSelectedDescription\(plan\)/);
   assert.match(paywallSource, /formatDiscountText\?\.\(58\)/);
   assert.match(
     paywallSource,

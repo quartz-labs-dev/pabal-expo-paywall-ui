@@ -9,6 +9,7 @@ const cs = createPaywallLocaleText({
     reviewSectionTitle: "Uživatelské recenze",
   },
   text: {
+    otherPlansButton: "Zobrazit další plány",
     annualPlanTitle: "Roční",
     benefitsTitle: "Výhody Pro",
     continueButton: "Pokračovat",

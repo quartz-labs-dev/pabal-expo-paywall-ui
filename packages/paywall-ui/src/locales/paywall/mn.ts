@@ -9,6 +9,7 @@ const mn = createPaywallLocaleText({
     reviewSectionTitle: "Хэрэглэгчдийн сэтгэгдэл",
   },
   text: {
+    otherPlansButton: "Бусад багцыг харах",
     annualPlanTitle: "Жилийн",
     benefitsTitle: "Таны Pro давуу талууд",
     continueButton: "Үргэлжлүүлэх",

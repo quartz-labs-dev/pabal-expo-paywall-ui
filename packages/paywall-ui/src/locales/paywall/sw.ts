@@ -9,6 +9,7 @@ const sw = createPaywallLocaleText({
     reviewSectionTitle: "Maoni ya watumiaji",
   },
   text: {
+    otherPlansButton: "Angalia mipango mingine",
     annualPlanTitle: "Kila mwaka",
     benefitsTitle: "Manufaa yako ya Pro",
     continueButton: "Endelea",

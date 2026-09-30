@@ -9,6 +9,7 @@ const ta = createPaywallLocaleText({
     reviewSectionTitle: "பயனர் மதிப்புரைகள்",
   },
   text: {
+    otherPlansButton: "மற்ற திட்டங்களைக் காண்க",
     annualPlanTitle: "வருடாந்திர",
     benefitsTitle: "உங்கள் Pro நன்மைகள்",
     continueButton: "தொடரவும்",

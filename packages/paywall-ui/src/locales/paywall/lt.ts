@@ -9,6 +9,7 @@ const lt = createPaywallLocaleText({
     reviewSectionTitle: "Naudotojų atsiliepimai",
   },
   text: {
+    otherPlansButton: "Peržiūrėti kitus planus",
     annualPlanTitle: "Metinis",
     benefitsTitle: "Pro privalumai",
     continueButton: "Tęsti",

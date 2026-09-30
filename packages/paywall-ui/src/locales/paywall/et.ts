@@ -9,6 +9,7 @@ const et = createPaywallLocaleText({
     reviewSectionTitle: "Kasutajate arvustused",
   },
   text: {
+    otherPlansButton: "Vaata teisi pakette",
     annualPlanTitle: "Aastane",
     benefitsTitle: "Pro eelised",
     continueButton: "Jätka",

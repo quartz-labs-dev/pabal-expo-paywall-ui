@@ -9,6 +9,7 @@ const lo = createPaywallLocaleText({
     reviewSectionTitle: "ຣີວິວຈາກຜູ້ໃຊ້",
   },
   text: {
+    otherPlansButton: "ເບິ່ງແຜນອື່ນ",
     annualPlanTitle: "ລາຍປີ",
     benefitsTitle: "ສິດປະໂຫຍດ Pro ຂອງທ່ານ",
     continueButton: "ດຳເນີນຕໍ່",

@@ -88,6 +88,13 @@ export const OfferPriceCard = <TPackage,>({
       >
         {billingDisclosure}
       </Text>
+      {isSelected && plan.selectedDescription ? (
+        <Text
+          style={[styles.disclosure, { color: theme.secondaryTextColor }]}
+        >
+          {plan.selectedDescription}
+        </Text>
+      ) : null}
     </>
   );
 

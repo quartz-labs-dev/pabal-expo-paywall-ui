@@ -30,6 +30,21 @@ time, select the promotional store product, calculate discount copy, and use
 standard-paywall fallback. See
 [Limited-Time Install Offers](../../docs/paywall.md#limited-time-install-offers).
 
+Pass `locale` and build offer copy with `getDefaultLimitedTimeOfferCopy(locale,
+{ badgeText, title, countdownLabel })`. The package owns the translated
+"View other plans", close/restore/legal labels, and price-aware purchase CTA.
+The close button stays fixed at the top right while content scrolls.
+Offer trials default to `false`; pass `freeTrial` only after the app checks
+store eligibility. The footer follows the selected plan's price, period and
+trial, and lifetime purchases never display trial terms.
+`copy.purchaseButtonByPeriod` and `copy.purchaseDisclosureByPeriod` customize
+paid-plan actions. `copy.formatPurchaseButtonLabel` supports custom price-aware
+labels and uses the same context as the standard paywall.
+Use `plan.selectedDescription` for app-specific price comparisons; the same
+description appears when selecting that plan in either paywall. Keep comparisons
+appropriate to the app's actual local prices rather than assuming a universal
+coffee price.
+
 The paywall theme carries shape and typography tokens (`cardBorderRadius`,
 `buttonBorderRadius`, `titleFontSize`) alongside colors. Depth effects stay
 dependency-free: apps pass gradients into the `backgroundOverlay` slot, and

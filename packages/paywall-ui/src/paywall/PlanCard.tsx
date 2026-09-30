@@ -269,6 +269,8 @@ export const PlanCard = <TPackage,>({
 
           {plan.selectedDescription && (
             <Animated.View
+              accessibilityElementsHidden={!isSelected}
+              importantForAccessibility={isSelected ? "auto" : "no-hide-descendants"}
               style={[
                 styles.selectedDescriptionSlot,
                 {
@@ -280,7 +282,6 @@ export const PlanCard = <TPackage,>({
               ]}
             >
               <Text
-                numberOfLines={1}
                 style={[
                   styles.selectedDescription,
                   { color: theme.secondaryTextColor },
@@ -399,7 +400,7 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
   selectedDescriptionSlot: {
-    height: 16,
+    minHeight: 16,
     justifyContent: "center",
   },
   selectedDescription: {

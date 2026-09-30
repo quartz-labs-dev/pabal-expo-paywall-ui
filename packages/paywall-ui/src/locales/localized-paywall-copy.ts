@@ -12,6 +12,7 @@ import type {
 } from "./paywall";
 import type {
   CreatePaywallPlansOptions,
+  LimitedTimeOfferCopy,
   PaywallCopy,
   PaywallPlanPeriod,
   ProfileIdentifiersCopy,
@@ -88,6 +89,33 @@ export const getDefaultPaywallPlanOptions = (
     weeklyTitle: text.weeklyPlanTitle,
     formatDiscountText: text.saveDiscount,
     formatMonthlyPriceText: text.monthlyPrice,
+  };
+};
+
+export const getDefaultLimitedTimeOfferCopy = (
+  locale: string | undefined,
+  copy: Pick<LimitedTimeOfferCopy, "badgeText" | "title" | "countdownLabel"> &
+    Partial<LimitedTimeOfferCopy>,
+): LimitedTimeOfferCopy => {
+  const text = getPaywallText(locale);
+
+  return {
+    alternativePlansTitle: text.otherPlansButton,
+    viewAllPlansButton: text.otherPlansButton,
+    purchaseButton: text.continueButton,
+    formatPurchaseButtonLabel: text.formatPurchaseButtonLabel,
+    trialNoPaymentDueNow: text.trialNoPaymentDueNow,
+    purchasingButton: text.purchasingButton,
+    closeButtonAccessibilityLabel: text.closeButtonAccessibilityLabel,
+    privacyText: text.privacyText,
+    restoreButton: text.restoreButton,
+    termsText: text.termsText,
+    legalPrefix: text.subscriptionRenewsAutomatically,
+    reviewSectionTitle:
+      PAYWALL_REVIEW_SECTION_TEXT[resolvePaywallTextLocale(locale)].reviewSectionTitle,
+    supportMessageLabel: text.supportMessageLabel,
+    supportMessage: text.paywallSupportMessage,
+    ...copy,
   };
 };
 

@@ -9,6 +9,7 @@ const hu = createPaywallLocaleText({
     reviewSectionTitle: "Felhasználói vélemények",
   },
   text: {
+    otherPlansButton: "Más csomagok megtekintése",
     annualPlanTitle: "Éves",
     benefitsTitle: "Pro előnyök",
     continueButton: "Folytatás",

@@ -9,6 +9,7 @@ const rm = createPaywallLocaleText({
     reviewSectionTitle: "Recensiuns d'utilisaders",
   },
   text: {
+    otherPlansButton: "Vesair auters plans",
     annualPlanTitle: "Annual",
     benefitsTitle: "Tes avantatgs Pro",
     continueButton: "Cuntinuar",

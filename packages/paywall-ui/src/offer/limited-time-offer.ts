@@ -1,10 +1,51 @@
 import type {
+  LimitedTimeOfferCopy,
+  PaywallFreeTrialConfig,
   LimitedTimeOfferCountdownParts,
   LimitedTimeOfferDuration,
   LimitedTimeOfferWindow,
   PaywallPlan,
   PaywallVariant,
 } from "../types";
+import { resolveFreeTrialConfig } from "../paywall/free-trial-config";
+import {
+  getDefaultPaywallCopy,
+  resolvePaywallTextLocale,
+} from "../locales/localized-paywall-copy";
+import { PAYWALL_TEXT } from "../locales/paywall";
+
+export const resolveLimitedTimeOfferPurchasePresentation = ({
+  copy,
+  freeTrial = false,
+  locale,
+  plan,
+}: {
+  copy: LimitedTimeOfferCopy;
+  freeTrial?: boolean | PaywallFreeTrialConfig;
+  locale?: string;
+  plan: PaywallPlan;
+}): { label: string; disclosure: string } => {
+  const defaults = getDefaultPaywallCopy(locale, { title: copy.title });
+  const text = PAYWALL_TEXT[resolvePaywallTextLocale(locale)];
+  const trialDuration = resolveFreeTrialConfig(freeTrial, plan)?.duration;
+  const context = { hasFreeTrial: Boolean(trialDuration), plan, trialDuration };
+  // Trial terms take precedence over period-level marketing CTA overrides.
+  const label = trialDuration
+    ? (copy.formatPurchaseButtonLabel ?? defaults.formatPurchaseButtonLabel)?.(context)
+    : copy.purchaseButtonByPeriod?.[plan.period] ??
+      (copy.formatPurchaseButtonLabel ?? defaults.formatPurchaseButtonLabel)?.(context);
+  const disclosure = trialDuration
+    ? copy.trialNoPaymentDueNow ?? defaults.trialNoPaymentDueNow
+    : copy.purchaseDisclosureByPeriod?.[plan.period] ??
+      (plan.period === "lifetime"
+        ? text.oneTimePayment
+        : text.formatPricePerPeriodText(plan.priceText, plan.period));
+
+  return {
+    label: label ?? copy.purchaseButton,
+    disclosure: disclosure ?? "",
+  };
+};
 
 const MILLISECONDS_PER_HOUR = 60 * 60 * 1000;
 const MILLISECONDS_PER_DAY = 24 * MILLISECONDS_PER_HOUR;
