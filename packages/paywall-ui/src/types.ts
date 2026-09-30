@@ -87,6 +87,12 @@ export interface LimitedTimeOfferCopy {
   ) => string;
 }
 
+export interface LimitedTimeOfferHeaderTheme {
+  backgroundColor: string;
+  primaryTextColor: string;
+  secondaryTextColor: string;
+}
+
 export interface LimitedTimeOfferPaywallProps<TPackage = unknown> {
   plan: PaywallPlan<TPackage>;
   alternativePlans?: PaywallPlan<TPackage>[];
@@ -97,13 +103,13 @@ export interface LimitedTimeOfferPaywallProps<TPackage = unknown> {
   hero?: ReactNode;
   benefits?: PaywallBenefit[];
   featureComparison?: PaywallFeatureComparison;
-  featurePreviewCount?: number;
   content?: ReactNode;
   reviewSection?: PaywallReviewSection;
   supportMessageIcon?: ReactNode;
   purchaseButtonBackground?: ReactNode;
   copy: LimitedTimeOfferCopy;
   theme?: Partial<PaywallTheme>;
+  headerTheme?: Partial<LimitedTimeOfferHeaderTheme>;
   isPurchasing?: boolean;
   isRestoring?: boolean;
   onPurchase: (plan: PaywallPlan<TPackage>) => Promise<void> | void;

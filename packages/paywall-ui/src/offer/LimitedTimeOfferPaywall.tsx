@@ -14,7 +14,6 @@ import { OfferPriceCard } from "./OfferPriceCard";
 import {
   getLimitedTimeOfferAlternativePlans,
   resolveLimitedTimeOfferSelectedPlan,
-  splitLimitedTimeOfferFeatureRows,
 } from "./limited-time-offer";
 import { LegalLinks } from "../paywall/LegalLinks";
 import { PaywallBenefitList } from "../paywall/PaywallBenefitList";
@@ -23,12 +22,15 @@ import { PaywallReviewSection } from "../paywall/PaywallReviewSection";
 import { PlanCard } from "../paywall/PlanCard";
 import { PurchaseButton } from "../paywall/PurchaseButton";
 import { SupportMessageBubble } from "../paywall/SupportMessageBubble";
+import { getColorWithAlpha } from "../shared/color-utils";
 import { CloseIcon } from "../shared/icons";
 import { mergePaywallTheme } from "../shared/theme";
 import type {
   LimitedTimeOfferPaywallProps,
   PaywallCopy,
 } from "../types";
+
+const DEFAULT_HEADER_BACKGROUND_COLOR = "#FAF7F2";
 
 export const LimitedTimeOfferPaywall = <TPackage,>({
   alternativePlans: alternativePlanCandidates = [],
@@ -39,7 +41,7 @@ export const LimitedTimeOfferPaywall = <TPackage,>({
   discountText,
   expiresAt,
   featureComparison,
-  featurePreviewCount = 4,
+  headerTheme: headerThemeOverride,
   hero,
   isPurchasing = false,
   isRestoring = false,
@@ -61,6 +63,18 @@ export const LimitedTimeOfferPaywall = <TPackage,>({
 }: LimitedTimeOfferPaywallProps<TPackage>) => {
   const insets = useSafeAreaInsets();
   const theme = mergePaywallTheme(themeOverride);
+  const hasCustomHeaderBackground =
+    headerThemeOverride?.backgroundColor !== undefined;
+  const headerTheme = {
+    backgroundColor:
+      headerThemeOverride?.backgroundColor ?? DEFAULT_HEADER_BACKGROUND_COLOR,
+    primaryTextColor:
+      headerThemeOverride?.primaryTextColor ??
+      (hasCustomHeaderBackground ? theme.primaryTextColor : "#272523"),
+    secondaryTextColor:
+      headerThemeOverride?.secondaryTextColor ??
+      (hasCustomHeaderBackground ? theme.secondaryTextColor : "#67615D"),
+  };
   const [selectedPlanId, setSelectedPlanId] = useState(plan.id);
   const [measuredFooterHeight, setMeasuredFooterHeight] = useState(0);
   const alternativePlans = useMemo(
@@ -74,28 +88,6 @@ export const LimitedTimeOfferPaywall = <TPackage,>({
     selectedPlanId,
   );
   const hasAlternativePlans = alternativePlans.length > 0;
-  const featureRows = useMemo(
-    () =>
-      splitLimitedTimeOfferFeatureRows(
-        featureComparison?.rows ?? [],
-        featurePreviewCount,
-      ),
-    [featureComparison?.rows, featurePreviewCount],
-  );
-  const previewComparison = featureComparison
-    ? {
-        ...featureComparison,
-        collapse: undefined,
-        rows: featureRows.previewRows,
-      }
-    : undefined;
-  const remainingComparison = featureComparison
-    ? {
-        ...featureComparison,
-        collapse: undefined,
-        rows: featureRows.remainingRows,
-      }
-    : undefined;
   const footerBottomPadding = Math.max(insets.bottom, 12) + 8;
   const fallbackFooterHeight = 12 + 52 + footerBottomPadding;
   const footerHeight = Math.max(measuredFooterHeight, fallbackFooterHeight);
@@ -126,7 +118,10 @@ export const LimitedTimeOfferPaywall = <TPackage,>({
         <View
           style={[
             styles.offerHeader,
-            { paddingTop: Math.max(insets.top, 12) },
+            {
+              backgroundColor: headerTheme.backgroundColor,
+              paddingTop: Math.max(insets.top, 12),
+            },
           ]}
         >
           <Pressable
@@ -136,29 +131,57 @@ export const LimitedTimeOfferPaywall = <TPackage,>({
             onPress={onClose}
             style={[
               styles.closeButton,
-              { top: Math.max(insets.top, 12) },
+              {
+                backgroundColor: getColorWithAlpha(
+                  headerTheme.primaryTextColor,
+                  0.08,
+                ),
+                top: Math.max(insets.top, 12),
+              },
             ]}
           >
-            <CloseIcon color="#272523" />
+            <CloseIcon color={headerTheme.primaryTextColor} />
           </Pressable>
           <View style={styles.hero}>{hero ?? <DefaultOfferHero />}</View>
           <OfferCountdown
-            accentColor="#F04C3A"
+            accentColor={theme.accentColor}
             expiresAt={expiresAt}
             formatRemainingTime={copy.formatRemainingTime}
             label={copy.countdownLabel}
-            theme={theme}
+            theme={{
+              ...theme,
+              mutedTextColor: headerTheme.secondaryTextColor,
+            }}
             variant="pill"
             onExpire={onExpire}
           />
           <View style={styles.titleBlock}>
-            <Text style={styles.offerBadgeText}>{copy.badgeText}</Text>
-            <Text style={styles.title}>{copy.title}</Text>
+            <Text
+              style={[styles.offerBadgeText, { color: theme.accentColor }]}
+            >
+              {copy.badgeText}
+            </Text>
+            <Text
+              style={[styles.title, { color: headerTheme.primaryTextColor }]}
+            >
+              {copy.title}
+            </Text>
             {discountText ? (
-              <Text style={styles.headerDiscount}>{discountText}</Text>
+              <Text
+                style={[styles.headerDiscount, { color: theme.accentColor }]}
+              >
+                {discountText}
+              </Text>
             ) : null}
             {copy.subtitle ? (
-              <Text style={styles.subtitle}>{copy.subtitle}</Text>
+              <Text
+                style={[
+                  styles.subtitle,
+                  { color: headerTheme.secondaryTextColor },
+                ]}
+              >
+                {copy.subtitle}
+              </Text>
             ) : null}
           </View>
         </View>
@@ -174,12 +197,20 @@ export const LimitedTimeOfferPaywall = <TPackage,>({
             onPress={hasAlternativePlans ? () => selectPlan(plan) : undefined}
           />
 
-          {previewComparison && previewComparison.rows.length > 0 ? (
+          {featureComparison && featureComparison.rows.length > 0 ? (
             <PaywallFeatureComparison
-              comparison={previewComparison}
+              comparison={featureComparison}
               theme={theme}
             />
           ) : null}
+
+          <PaywallBenefitList
+            benefits={featureComparison ? [] : benefits}
+            content={content}
+            size="regular"
+            theme={theme}
+            variant="plain"
+          />
 
           {hasAlternativePlans ? (
             <View style={styles.alternativePlansSection}>
@@ -205,22 +236,6 @@ export const LimitedTimeOfferPaywall = <TPackage,>({
               </View>
             </View>
           ) : null}
-
-          {remainingComparison && remainingComparison.rows.length > 0 ? (
-            <PaywallFeatureComparison
-              comparison={remainingComparison}
-              shouldShowHeader={false}
-              theme={theme}
-            />
-          ) : null}
-
-          <PaywallBenefitList
-            benefits={featureComparison ? [] : benefits}
-            content={content}
-            size="regular"
-            theme={theme}
-            variant="plain"
-          />
 
           {reviewSection ? (
             <PaywallReviewSection
@@ -321,7 +336,6 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     alignItems: "center",
-    backgroundColor: "rgba(39, 37, 35, 0.08)",
     borderRadius: 999,
     height: 36,
     justifyContent: "center",
@@ -350,7 +364,6 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   headerDiscount: {
-    color: "#F04C3A",
     fontFamily: "serif",
     fontSize: 27,
     fontWeight: "800",
@@ -358,7 +371,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   offerBadgeText: {
-    color: "#F04C3A",
     fontSize: 13,
     fontWeight: "800",
     letterSpacing: 0.8,
@@ -367,7 +379,7 @@ const styles = StyleSheet.create({
   },
   offerHeader: {
     alignItems: "center",
-    backgroundColor: "#FAF7F2",
+    backgroundColor: DEFAULT_HEADER_BACKGROUND_COLOR,
     gap: 10,
     paddingBottom: 30,
     paddingHorizontal: 20,
@@ -383,7 +395,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   subtitle: {
-    color: "#67615D",
     fontSize: 15,
     fontWeight: "500",
     lineHeight: 23,
@@ -391,7 +402,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   title: {
-    color: "#272523",
     fontFamily: "serif",
     fontSize: 31,
     fontWeight: "800",

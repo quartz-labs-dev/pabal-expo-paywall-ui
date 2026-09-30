@@ -7,9 +7,8 @@ import {
   resolveLimitedTimeOfferWindow,
   resolveLimitedTimeOfferSelectedPlan,
   resolvePaywallVariant,
-  splitLimitedTimeOfferFeatureRows,
 } from "../src/offer/limited-time-offer";
-import type { PaywallFeatureComparisonRow, PaywallPlan } from "../src/types";
+import type { PaywallPlan } from "../src/types";
 
 const createPlan = (id: string, period: PaywallPlan["period"]): PaywallPlan => ({
   id,
@@ -117,43 +116,5 @@ test("selects a visible subscription plan and falls back to the offer", () => {
   assert.equal(
     resolveLimitedTimeOfferSelectedPlan(lifetime, [monthly], "missing"),
     lifetime,
-  );
-});
-
-test("splits featured and remaining offer benefits around the plan list", () => {
-  const rows = Array.from({ length: 7 }, (_, index) => ({
-    free: { kind: "excluded" as const },
-    id: `feature-${index + 1}`,
-    label: `Feature ${index + 1}`,
-    paid: { kind: "included" as const },
-  })) satisfies PaywallFeatureComparisonRow[];
-
-  const groups = splitLimitedTimeOfferFeatureRows(rows, 4);
-
-  assert.deepEqual(
-    groups.previewRows.map((row) => row.id),
-    ["feature-1", "feature-2", "feature-3", "feature-4"],
-  );
-  assert.deepEqual(
-    groups.remainingRows.map((row) => row.id),
-    ["feature-5", "feature-6", "feature-7"],
-  );
-});
-
-test("clamps invalid offer benefit preview counts", () => {
-  const rows = [
-    {
-      free: { kind: "excluded" as const },
-      id: "feature",
-      label: "Feature",
-      paid: { kind: "included" as const },
-    },
-  ] satisfies PaywallFeatureComparisonRow[];
-
-  assert.equal(splitLimitedTimeOfferFeatureRows(rows, 99).previewRows.length, 1);
-  assert.equal(splitLimitedTimeOfferFeatureRows(rows, -1).previewRows.length, 0);
-  assert.equal(
-    splitLimitedTimeOfferFeatureRows(rows, Number.NaN).previewRows.length,
-    1,
   );
 });

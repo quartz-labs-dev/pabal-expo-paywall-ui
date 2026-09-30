@@ -8,32 +8,34 @@ const offerSource = readFileSync(
   "utf8",
 );
 
-test("orders offer content around always-visible alternative plans", () => {
-  const previewFeaturesIndex = offerSource.indexOf(
-    "comparison={previewComparison}",
+test("orders collapsible features before always-visible alternative plans", () => {
+  const featuresIndex = offerSource.indexOf(
+    "comparison={featureComparison}",
   );
+  const benefitsIndex = offerSource.indexOf("<PaywallBenefitList");
   const alternativePlansIndex = offerSource.indexOf(
     "styles.alternativePlansSection",
-  );
-  const remainingFeaturesIndex = offerSource.indexOf(
-    "comparison={remainingComparison}",
   );
   const reviewsIndex = offerSource.indexOf("<PaywallReviewSection");
   const supportIndex = offerSource.indexOf("<SupportMessageBubble");
   const legalIndex = offerSource.indexOf("<LegalLinks");
 
-  assert.ok(previewFeaturesIndex > 0);
-  assert.ok(previewFeaturesIndex < alternativePlansIndex);
-  assert.ok(alternativePlansIndex < remainingFeaturesIndex);
-  assert.ok(remainingFeaturesIndex < reviewsIndex);
+  assert.ok(featuresIndex > 0);
+  assert.ok(featuresIndex < benefitsIndex);
+  assert.ok(benefitsIndex < alternativePlansIndex);
+  assert.ok(alternativePlansIndex < reviewsIndex);
   assert.ok(reviewsIndex < supportIndex);
   assert.ok(supportIndex < legalIndex);
   assert.doesNotMatch(offerSource, /isAlternativePlansExpanded/);
+  assert.doesNotMatch(offerSource, /previewComparison|remainingComparison/);
 });
 
 test("uses the default illustration and standard fixed CTA layout", () => {
   assert.match(offerSource, /hero \?\? <DefaultOfferHero \/>/);
   assert.match(offerSource, /variant="pill"/);
+  assert.match(offerSource, /accentColor=\{theme\.accentColor\}/);
+  assert.match(offerSource, /headerThemeOverride\?\.backgroundColor/);
+  assert.match(offerSource, /hasCustomHeaderBackground/);
   assert.match(offerSource, /paddingBottom: footerHeight \+ 24/);
   assert.match(offerSource, /onLayout=\{\(event\) => \{/);
   assert.match(offerSource, /<PurchaseButton/);

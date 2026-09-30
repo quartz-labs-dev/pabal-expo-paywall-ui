@@ -207,6 +207,7 @@ export type {
   LimitedTimeOfferCountdownParts,
   LimitedTimeOfferDuration,
   LimitedTimeOfferDurationUnit,
+  LimitedTimeOfferHeaderTheme,
   LimitedTimeOfferPaywallProps,
   LimitedTimeOfferWindow,
   PaywallAnimationMode,

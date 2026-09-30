@@ -38,11 +38,19 @@ test("keeps standard and special-offer paywall entries independent", () => {
     paywallSource,
     /areOfferAlternativePlansVisible \? alternativeOfferPlans : undefined/,
   );
-  assert.match(paywallSource, /featurePreviewCount=\{4\}/);
   assert.match(
     paywallSource,
-    /featureComparison=\{playgroundPaywallConfig\.featureComparison\}/,
+    /featureComparison=\{offerFeatureComparison\}/,
   );
+  assert.match(paywallSource, /visibleRowCount: 4/);
+  assert.match(paywallSource, /annualSelectedDescription/);
+  assert.match(paywallSource, /monthlySelectedDescription/);
+  assert.match(paywallSource, /formatDiscountText\?\.\(58\)/);
+  assert.match(
+    paywallSource,
+    /headerTheme=\{\{ backgroundColor: "transparent" \}\}/,
+  );
+  assert.match(paywallSource, /theme=\{designPresentation\.theme\}/);
   assert.match(
     paywallSource,
     /reviewSection=\{playgroundPaywallConfig\.reviewSection\}/,

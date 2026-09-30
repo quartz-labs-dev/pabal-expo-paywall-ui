@@ -17,8 +17,13 @@ It does not import `react-native-purchases` or `react-native-purchases-ui`.
 promotion with a compact countdown, original/offer prices, a bundled default
 illustration, and the same comparison, review, developer-note, legal, and fixed
 CTA building blocks as the standard paywall. Pass a custom `hero` to replace the
-default illustration. Pass `featureComparison` to show its first 3–5 rows,
-always-visible normal monthly or annual products, and then the remaining rows.
+default illustration. Pass a collapsible `featureComparison` to show its key
+rows first and let users expand the complete feature list before the
+always-visible normal monthly or annual products. Alternative plans use the
+same `badgeText`, `monthlyPriceText`, and `selectedDescription` copy as the
+standard `PlanCard`. `headerTheme.backgroundColor` customizes the promotion
+header; setting it to `transparent` lets the app's paywall background continue
+behind the illustration and header copy.
 The featured offer stays selected by default. Apps persist eligibility and start
 time, select the promotional store product, calculate discount copy, and use
 `resolveLimitedTimeOfferWindow()` plus `resolvePaywallVariant()` for a safe

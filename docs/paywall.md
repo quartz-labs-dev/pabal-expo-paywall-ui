@@ -8,8 +8,8 @@ eligibility, performs purchases, handles analytics, and owns navigation.
 
 - `Paywall`: the React Native paywall screen
 - `LimitedTimeOfferPaywall`: a focused offer with a bundled default
-  illustration, compact countdown, split feature comparison, always-visible
-  normal-price alternatives, reviews, developer note, legal section, and an
+  illustration, compact countdown, collapsible feature comparison,
+  always-visible normal-price alternatives, reviews, developer note, legal section, and an
   optional route back to the standard plan list
 - `resolveLimitedTimeOfferWindow()`: resolves active, expired, and invalid
   campaign windows from an app-owned start time and duration
@@ -123,8 +123,8 @@ if (variant === "limitedTimeOffer" && offerPlan && offerWindow.expiresAt) {
       expiresAt={offerWindow.expiresAt}
       // Omit hero to use the bundled hourglass-and-gift illustration.
       // hero={<AppOwnedOfferIllustration />}
+      headerTheme={{ backgroundColor: "transparent" }}
       featureComparison={featureComparison}
-      featurePreviewCount={4}
       reviewSection={reviewSection}
       copy={appLocalizedOfferCopy}
       onPurchase={purchasePlan}
@@ -152,16 +152,24 @@ to a broader catalog. Omit it for a dedicated one-time deal; purchase restore,
 privacy, terms, close, and expiry fallback remain available.
 
 For a focused offer that still supports normal subscriptions, pass monthly and
-annual products through `alternativePlans`. They stay visible between the first
-feature-comparison rows and the remaining rows; there is no disclosure toggle.
-Selection updates the single fixed purchase CTA. `copy.alternativePlansTitle`
-and `copy.purchaseButtonByPeriod` are app-localized optional overrides. Set
-`featurePreviewCount` to a value from 3 to 5 for the intended hierarchy. The
-countdown always describes the featured offer, so its label should name that
-product explicitly when alternatives exist.
+annual products through `alternativePlans`. The complete feature comparison
+appears before those plans. Configure `featureComparison.collapse` to keep the
+first 3–5 rows visible and let users expand or collapse the remaining rows in
+place. Alternative plans themselves stay visible without a disclosure toggle.
+Selection updates the single fixed purchase CTA. Each alternative uses the
+standard `PaywallPlan` fields, so `badgeText`, `monthlyPriceText`, and
+`selectedDescription` can carry copy such as savings versus monthly billing.
+`copy.alternativePlansTitle` and `copy.purchaseButtonByPeriod` are app-localized
+optional overrides. The countdown always describes the featured offer, so its
+label should name that product explicitly when alternatives exist.
 
 Omit `hero` to use the package's transparent hourglass-and-gift illustration,
-or pass an app-owned `ReactNode` to replace it. `reviewSection`,
+or pass an app-owned `ReactNode` to replace it. The header keeps its warm
+default surface when `headerTheme` is omitted. Set
+`headerTheme.backgroundColor` to a brand color or `transparent`; customized
+backgrounds default their foreground copy and close icon to the active paywall
+theme, and `primaryTextColor` / `secondaryTextColor` can override that behavior.
+`reviewSection`,
 `copy.reviewSectionTitle`, `copy.supportMessageLabel`, `copy.supportMessage`,
 `copy.legalPrefix`, `supportMessageIcon`, and `onOpenDeveloperWebsite` reuse the
 same lower-page surfaces as `Paywall`. Restore/privacy/terms now live in the

@@ -718,21 +718,42 @@ export const PaywallPlaygroundScreen = ({
     ...plan,
     priceText: playgroundOfferPriceByDiscount[offerDiscountPercent],
   }))[0];
+  const offerPreview = getLimitedTimeOfferPreview(selectedLocale);
+  const offerPlanOptions = {
+    ...getDefaultPaywallPlanOptions(selectedLocale),
+    annualSelectedDescription: offerPreview.annualSelectedDescription,
+    monthlySelectedDescription: offerPreview.monthlySelectedDescription,
+  };
   const alternativeOfferPlans = createPaywallPlans(
     getPackagesForScenario("standard"),
-    getDefaultPaywallPlanOptions(selectedLocale),
+    offerPlanOptions,
   ).map((plan) => ({
     ...plan,
-    badgeText: undefined,
-    discountText: undefined,
+    badgeText:
+      plan.period === "annual"
+        ? offerPlanOptions.formatDiscountText?.(58)
+        : plan.badgeText,
+    discountText:
+      plan.period === "annual"
+        ? offerPlanOptions.formatDiscountText?.(58)
+        : plan.discountText,
     isRecommended: false,
-    monthlyPriceText: undefined,
+    monthlyPriceText:
+      plan.period === "annual"
+        ? offerPlanOptions.formatMonthlyPriceText?.("$1.25")
+        : plan.monthlyPriceText,
     priceText: plan.period === "monthly" ? "$2.99" : "$14.99",
-    selectedDescription: undefined,
   })).sort((leftPlan, rightPlan) =>
     leftPlan.period === "monthly" && rightPlan.period === "annual" ? -1 : 1,
   );
-  const offerPreview = getLimitedTimeOfferPreview(selectedLocale);
+  const offerFeatureComparison = {
+    ...playgroundPaywallConfig.featureComparison,
+    collapse: {
+      visibleRowCount: 4,
+      expandLabel: offerPreview.expandFeaturesLabel,
+      collapseLabel: offerPreview.collapseFeaturesLabel,
+    },
+  } satisfies NonNullable<PaywallConfig["featureComparison"]>;
 
   if (variant === "offer" && lifetimeOfferPlan) {
     return (
@@ -747,24 +768,13 @@ export const PaywallPlaygroundScreen = ({
             selectedLocale,
           ).formatDiscountText?.(Number(offerDiscountPercent))}
           expiresAt={offerExpiresAt}
-          featureComparison={playgroundPaywallConfig.featureComparison}
-          featurePreviewCount={4}
+          featureComparison={offerFeatureComparison}
+          headerTheme={{ backgroundColor: "transparent" }}
           isPurchasing={isPurchasing}
           originalPriceText="$29.99"
           plan={lifetimeOfferPlan}
           reviewSection={playgroundPaywallConfig.reviewSection}
-          theme={{
-            accentColor: "#5AC8B7",
-            accentTextColor: "#071312",
-            backgroundColor: "#05080C",
-            borderColor: "#2B3845",
-            mutedTextColor: "#7F8B96",
-            primaryTextColor: "#F5F7FA",
-            secondaryTextColor: "#B9C4CF",
-            selectedBorderColor: "#5AC8B7",
-            selectedSurfaceColor: "#102A2A",
-            surfaceColor: "#151D25",
-          }}
+          theme={designPresentation.theme}
           onClose={onClose}
           onExpire={onClose}
           onOpenDeveloperWebsite={() => Alert.alert("Developer callback")}

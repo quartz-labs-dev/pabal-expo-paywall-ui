@@ -2,7 +2,6 @@ import type {
   LimitedTimeOfferCountdownParts,
   LimitedTimeOfferDuration,
   LimitedTimeOfferWindow,
-  PaywallFeatureComparisonRow,
   PaywallPlan,
   PaywallVariant,
 } from "../types";
@@ -109,20 +108,3 @@ export const resolveLimitedTimeOfferSelectedPlan = <TPackage>(
   [primaryPlan, ...alternativePlans].find(
     (candidate) => candidate.id === selectedPlanId,
   ) ?? primaryPlan;
-
-export const splitLimitedTimeOfferFeatureRows = (
-  rows: PaywallFeatureComparisonRow[],
-  previewCount = 4,
-): {
-  previewRows: PaywallFeatureComparisonRow[];
-  remainingRows: PaywallFeatureComparisonRow[];
-} => {
-  const safePreviewCount = Number.isFinite(previewCount)
-    ? Math.min(Math.max(Math.floor(previewCount), 0), rows.length)
-    : Math.min(4, rows.length);
-
-  return {
-    previewRows: rows.slice(0, safePreviewCount),
-    remainingRows: rows.slice(safePreviewCount),
-  };
-};
