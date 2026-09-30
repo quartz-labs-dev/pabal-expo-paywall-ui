@@ -173,11 +173,6 @@ export const LimitedTimeOfferPaywall = <TPackage,>({
           />
           <View style={styles.titleBlock}>
             <Text
-              style={[styles.offerBadgeText, { color: theme.accentColor }]}
-            >
-              {copy.badgeText}
-            </Text>
-            <Text
               style={[styles.title, { color: headerTheme.primaryTextColor }]}
             >
               {copy.title}
@@ -187,16 +182,6 @@ export const LimitedTimeOfferPaywall = <TPackage,>({
                 style={[styles.headerDiscount, { color: theme.accentColor }]}
               >
                 {discountText}
-              </Text>
-            ) : null}
-            {copy.subtitle ? (
-              <Text
-                style={[
-                  styles.subtitle,
-                  { color: headerTheme.secondaryTextColor },
-                ]}
-              >
-                {copy.subtitle}
               </Text>
             ) : null}
           </View>
@@ -243,7 +228,9 @@ export const LimitedTimeOfferPaywall = <TPackage,>({
                   <PlanCard
                     key={alternativePlan.id}
                     isSelected={selectedPlan.id === alternativePlan.id}
-                    plan={alternativePlan}
+                    plan={alternativePlan.period === "annual"
+                      ? { ...alternativePlan, badgeText: undefined }
+                      : alternativePlan}
                     shouldAnimate
                     theme={theme}
                     onPress={() => selectPlan(alternativePlan)}
@@ -405,19 +392,11 @@ const styles = StyleSheet.create({
     lineHeight: 34,
     textAlign: "center",
   },
-  offerBadgeText: {
-    fontSize: 13,
-    fontWeight: "800",
-    letterSpacing: 0.8,
-    lineHeight: 18,
-    textTransform: "uppercase",
-  },
   offerHeader: {
     alignItems: "center",
     backgroundColor: DEFAULT_HEADER_BACKGROUND_COLOR,
-    gap: 10,
-    paddingBottom: 30,
-    paddingHorizontal: 20,
+    gap: 16,
+    paddingBottom: 24,
     position: "relative",
   },
   pressed: {
@@ -429,13 +408,6 @@ const styles = StyleSheet.create({
   scrollContent: {
     flexGrow: 1,
   },
-  subtitle: {
-    fontSize: 15,
-    fontWeight: "500",
-    lineHeight: 23,
-    maxWidth: 420,
-    textAlign: "center",
-  },
   title: {
     fontFamily: "serif",
     fontSize: 31,
@@ -445,6 +417,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   titleBlock: {
+    paddingHorizontal: 20,
     alignItems: "center",
     gap: 7,
   },

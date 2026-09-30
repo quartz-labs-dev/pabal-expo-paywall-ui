@@ -168,7 +168,6 @@ export const getLimitedTimeOfferPreview = (locale: PlaygroundLocale) => {
     badgeText: offerText.badgeText,
     countdownLabel: offerText.countdownLabel,
     subtitle: offerText.subtitle,
-    title: offerText.title,
     formatRemainingTime,
   });
 

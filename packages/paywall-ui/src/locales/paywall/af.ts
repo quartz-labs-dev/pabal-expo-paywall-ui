@@ -9,6 +9,7 @@ const af = createPaywallLocaleText({
     reviewSectionTitle: "Gebruikersresensies",
   },
   text: {
+    limitedTimeOfferTitle: "Eenmalige betaling\nLewenslank Pro",
     otherPlansButton: "Bekyk ander planne",
     annualPlanTitle: "Yearliks",
     benefitsTitle: "Jou Pro-voordele",

@@ -84,7 +84,7 @@ export const OfferCountdown = ({
             },
           ]}
         >
-          <Text style={styles.pillTime}>{visibleTime}</Text>
+          <Text style={[styles.pillTime, { color: theme.accentTextColor }]}>{visibleTime}</Text>
         </View>
         <Text style={[styles.pillLabel, { color: theme.mutedTextColor }]}>
           {label}
@@ -149,23 +149,22 @@ const styles = StyleSheet.create({
   pill: {
     borderRadius: 999,
     borderWidth: 1,
-    minWidth: 124,
-    paddingHorizontal: 18,
-    paddingVertical: 8,
+    minWidth: 196,
+    paddingHorizontal: 24,
+    paddingVertical: 12,
   },
   pillLabel: {
-    fontSize: 11,
+    fontSize: 13,
     fontWeight: "600",
-    lineHeight: 15,
+    lineHeight: 18,
     textAlign: "center",
   },
   pillTime: {
-    color: "#FFFFFF",
-    fontSize: 22,
+    fontSize: 32,
     fontVariant: ["tabular-nums"],
     fontWeight: "700",
     letterSpacing: 0.6,
-    lineHeight: 27,
+    lineHeight: 40,
     textAlign: "center",
   },
   separator: {

@@ -9,6 +9,7 @@ const nb = createPaywallLocaleText({
     reviewSectionTitle: "Brukeranmeldelser",
   },
   text: {
+    limitedTimeOfferTitle: "Engangsbetaling\nLivstid Pro",
     otherPlansButton: "Se andre abonnementer",
     annualPlanTitle: "Årlig",
     benefitsTitle: "Dine Pro-fordeler",

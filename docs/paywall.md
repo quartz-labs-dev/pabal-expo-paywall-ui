@@ -1,5 +1,13 @@
 # Paywall
 
+Offer headers no longer render the legacy badge or subtitle. Hero media is
+edge-to-edge with no header horizontal padding. The prominent countdown pill uses
+`theme.accentTextColor` for contrast against the accent background.
+Annual alternatives in the limited-time offer do not show a discount badge;
+standard paywalls and the main offer discount are unchanged.
+Omit `title` in `getDefaultLimitedTimeOfferCopy` to use the package-owned
+localized two-line title (English: `One payment.\nPro forever.`).
+
 The paywall UI gives consuming apps a polished subscription screen without
 coupling this package to RevenueCat. The app fetches offerings, decides trial
 eligibility, performs purchases, handles analytics, and owns navigation.

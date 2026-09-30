@@ -9,6 +9,7 @@ const ka = createPaywallLocaleText({
     reviewSectionTitle: "მომხმარებელთა შეფასებები",
   },
   text: {
+    limitedTimeOfferTitle: "ერთჯერადი შეძენა\nსამუდამო Pro",
     otherPlansButton: "სხვა გეგმების ნახვა",
     annualPlanTitle: "წლიური",
     benefitsTitle: "თქვენი Pro უპირატესობები",

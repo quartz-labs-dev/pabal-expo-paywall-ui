@@ -13,6 +13,13 @@ plan period or plan id.
 
 It does not import `react-native-purchases` or `react-native-purchases-ui`.
 
+The offer countdown uses a larger, high-contrast pill with `theme.accentTextColor`.
+The header shows only the image, countdown, title and discount. Legacy
+`copy.badgeText` and `copy.subtitle` remain accepted but are not rendered.
+Hero media spans the full screen width; title padding is independent.
+Omit `title` in `getDefaultLimitedTimeOfferCopy` to share the package's localized
+two-line title between the app and playground.
+
 `LimitedTimeOfferPaywall` renders a visually distinct annual or lifetime
 promotion with a compact countdown, original/offer prices, a bundled default
 illustration, and the same comparison, review, developer-note, legal, and fixed

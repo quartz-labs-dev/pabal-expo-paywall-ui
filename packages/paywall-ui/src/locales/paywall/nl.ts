@@ -9,6 +9,7 @@ const nl = createPaywallLocaleText({
     reviewSectionTitle: "Gebruikersbeoordelingen",
   },
   text: {
+    limitedTimeOfferTitle: "Eenmalige betaling\nLevenslang Pro",
     otherPlansButton: "Andere abonnementen bekijken",
     annualPlanTitle: "Jaarlijks",
     benefitsTitle: "Je Pro-voordelen",

@@ -9,6 +9,7 @@ const ro = createPaywallLocaleText({
     reviewSectionTitle: "Recenzii ale utilizatorilor",
   },
   text: {
+    limitedTimeOfferTitle: "Plată unică\nPe viață Pro",
     otherPlansButton: "Vezi alte planuri",
     annualPlanTitle: "Anual",
     benefitsTitle: "Beneficiile Pro",

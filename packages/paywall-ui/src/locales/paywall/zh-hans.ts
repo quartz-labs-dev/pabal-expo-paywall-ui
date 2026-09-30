@@ -9,6 +9,7 @@ const zhHans = createPaywallLocaleText({
     reviewSectionTitle: "用户评价",
   },
   text: {
+    limitedTimeOfferTitle: "一次性付款\n终身 Pro",
     otherPlansButton: "查看其他方案",
     annualPlanTitle: "年度",
     benefitsTitle: "Pro 权益",

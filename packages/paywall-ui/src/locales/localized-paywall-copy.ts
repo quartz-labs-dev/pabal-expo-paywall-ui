@@ -94,13 +94,14 @@ export const getDefaultPaywallPlanOptions = (
 
 export const getDefaultLimitedTimeOfferCopy = (
   locale: string | undefined,
-  copy: Pick<LimitedTimeOfferCopy, "badgeText" | "title" | "countdownLabel"> &
+  copy: Pick<LimitedTimeOfferCopy, "badgeText" | "countdownLabel"> &
     Partial<LimitedTimeOfferCopy>,
 ): LimitedTimeOfferCopy => {
   const text = getPaywallText(locale);
 
   return {
     alternativePlansTitle: text.otherPlansButton,
+    title: text.limitedTimeOfferTitle,
     viewAllPlansButton: text.otherPlansButton,
     purchaseButton: text.continueButton,
     formatPurchaseButtonLabel: text.formatPurchaseButtonLabel,

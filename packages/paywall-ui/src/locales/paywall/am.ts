@@ -9,6 +9,7 @@ const am = createPaywallLocaleText({
     reviewSectionTitle: "የተጠቃሚ ግምገማዎች",
   },
   text: {
+    limitedTimeOfferTitle: "የአንድ ጊዜ ክፍያ\nየሕይወት ዘመን Pro",
     otherPlansButton: "ሌሎች እቅዶችን ይመልከቱ",
     annualPlanTitle: "ዓመታዊ",
     benefitsTitle: "የPro ጥቅሞች",

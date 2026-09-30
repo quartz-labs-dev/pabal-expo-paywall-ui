@@ -6,6 +6,7 @@ import type {
 } from "../../types";
 
 export interface PaywallText {
+  limitedTimeOfferTitle: string;
   otherPlansButton: string;
   annualPlanTitle: string;
   benefitsTitle: string;

@@ -9,6 +9,7 @@ const ru = createPaywallLocaleText({
     reviewSectionTitle: "Отзывы пользователей",
   },
   text: {
+    limitedTimeOfferTitle: "Разовый платеж\nНавсегда Pro",
     otherPlansButton: "Посмотреть другие планы",
     annualPlanTitle: "Годовой",
     benefitsTitle: "Ваши преимущества Pro",

@@ -9,6 +9,7 @@ const fil = createPaywallLocaleText({
     reviewSectionTitle: "Mga review ng user",
   },
   text: {
+    limitedTimeOfferTitle: "Isang beses na bayad\nPanghabambuhay Pro",
     otherPlansButton: "Tingnan ang ibang mga plano",
     annualPlanTitle: "Taunan",
     benefitsTitle: "Mga benepisyo ng Pro mo",

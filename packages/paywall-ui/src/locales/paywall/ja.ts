@@ -9,6 +9,7 @@ const ja = createPaywallLocaleText({
     reviewSectionTitle: "ユーザーレビュー",
   },
   text: {
+    limitedTimeOfferTitle: "一度の支払いで\nProをずっと。",
     otherPlansButton: "他のプランを見る",
     annualPlanTitle: "年額",
     benefitsTitle: "Pro特典",

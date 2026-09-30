@@ -9,6 +9,16 @@ import { resolveLimitedTimeOfferPurchasePresentation } from "../src/offer/limite
 import type { PaywallPlan } from "../src/types";
 
 const marketing = { badgeText: "24h", countdownLabel: "Ends in", title: "Pro" };
+
+test("provides a package-owned two-line title in every locale", () => {
+  for (const locale of PAYWALL_TEXT_LOCALES) {
+    const copy = getDefaultLimitedTimeOfferCopy(locale, { badgeText: "", countdownLabel: "" });
+    assert.equal(copy.title.split("\n").length, 2, locale);
+    assert.ok(copy.title.split("\n").every((line) => line.trim().length > 0), locale);
+  }
+  assert.equal(getDefaultLimitedTimeOfferCopy("en", { badgeText: "", countdownLabel: "" }).title, "One payment.\nPro forever.");
+  assert.equal(getDefaultLimitedTimeOfferCopy("ko", { badgeText: "", countdownLabel: "" }).title, "한 번 결제로\n평생 Pro.");
+});
 const plan = (period: PaywallPlan["period"], priceText: string): PaywallPlan => ({
   id: period, period, priceText, rawPackage: {}, title: period,
 });

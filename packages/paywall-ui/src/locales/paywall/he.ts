@@ -9,6 +9,7 @@ const he = createPaywallLocaleText({
     reviewSectionTitle: "ביקורות משתמשים",
   },
   text: {
+    limitedTimeOfferTitle: "רכישה חד-פעמית\nלכל החיים Pro",
     otherPlansButton: "הצגת תוכניות אחרות",
     annualPlanTitle: "שנתי",
     benefitsTitle: "הטבות ה-Pro שלך",

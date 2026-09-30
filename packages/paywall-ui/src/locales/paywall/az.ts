@@ -9,6 +9,7 @@ const az = createPaywallLocaleText({
     reviewSectionTitle: "İstifadəçi rəyləri",
   },
   text: {
+    limitedTimeOfferTitle: "Birdəfəlik ödəniş\nÖmürlük Pro",
     otherPlansButton: "Digər planlara bax",
     annualPlanTitle: "İllik",
     benefitsTitle: "Pro üstünlükləriniz",

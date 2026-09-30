@@ -9,6 +9,7 @@ const es = createPaywallLocaleText({
     reviewSectionTitle: "Reseñas de usuarios",
   },
   text: {
+    limitedTimeOfferTitle: "Un solo pago.\nPro para siempre.",
     otherPlansButton: "Ver otros planes",
     annualPlanTitle: "Anual",
     benefitsTitle: "Tus ventajas Pro",

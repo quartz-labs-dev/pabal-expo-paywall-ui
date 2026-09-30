@@ -9,6 +9,7 @@ const sq = createPaywallLocaleText({
     reviewSectionTitle: "Vlerësime nga përdoruesit",
   },
   text: {
+    limitedTimeOfferTitle: "Blerje njëherëshe\nPërgjithmonë Pro",
     otherPlansButton: "Shiko plane të tjera",
     annualPlanTitle: "Vjetor",
     benefitsTitle: "Përfitimet tuaja Pro",

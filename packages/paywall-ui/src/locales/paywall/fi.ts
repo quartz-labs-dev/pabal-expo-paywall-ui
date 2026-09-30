@@ -9,6 +9,7 @@ const fi = createPaywallLocaleText({
     reviewSectionTitle: "Käyttäjäarvostelut",
   },
   text: {
+    limitedTimeOfferTitle: "Kertamaksu\nElinikäinen Pro",
     otherPlansButton: "Näytä muut tilaukset",
     annualPlanTitle: "Vuosittain",
     benefitsTitle: "Pro-edut",

@@ -9,6 +9,7 @@ const bn = createPaywallLocaleText({
     reviewSectionTitle: "ব্যবহারকারীর পর্যালোচনা",
   },
   text: {
+    limitedTimeOfferTitle: "এককালীন ক্রয়\nআজীবন Pro",
     otherPlansButton: "অন্যান্য প্ল্যান দেখুন",
     annualPlanTitle: "বার্ষিক",
     benefitsTitle: "আপনার Pro সুবিধা",

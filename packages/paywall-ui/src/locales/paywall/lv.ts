@@ -9,6 +9,7 @@ const lv = createPaywallLocaleText({
     reviewSectionTitle: "Lietotāju atsauksmes",
   },
   text: {
+    limitedTimeOfferTitle: "Vienreizējs maksājums\nMūža Pro",
     otherPlansButton: "Skatīt citus plānus",
     annualPlanTitle: "Gada",
     benefitsTitle: "Pro priekšrocības",

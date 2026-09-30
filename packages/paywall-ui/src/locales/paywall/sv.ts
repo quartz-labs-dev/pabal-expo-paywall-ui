@@ -9,6 +9,7 @@ const sv = createPaywallLocaleText({
     reviewSectionTitle: "Användarrecensioner",
   },
   text: {
+    limitedTimeOfferTitle: "Engångsbetalning\nLivstid Pro",
     otherPlansButton: "Visa andra abonnemang",
     annualPlanTitle: "Årlig",
     benefitsTitle: "Dina Pro-förmåner",

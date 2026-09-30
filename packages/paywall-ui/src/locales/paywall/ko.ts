@@ -9,6 +9,7 @@ const ko = createPaywallLocaleText({
     reviewSectionTitle: "사용자 리뷰",
   },
   text: {
+    limitedTimeOfferTitle: "한 번 결제로\n평생 Pro.",
     otherPlansButton: "다른 플랜 보기",
     annualPlanTitle: "연간",
     benefitsTitle: "Pro 혜택",

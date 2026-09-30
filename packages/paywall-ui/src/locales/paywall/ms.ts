@@ -9,6 +9,7 @@ const ms = createPaywallLocaleText({
     reviewSectionTitle: "Ulasan pengguna",
   },
   text: {
+    limitedTimeOfferTitle: "Pembelian sekali\nSeumur hidup Pro",
     otherPlansButton: "Lihat pelan lain",
     annualPlanTitle: "Tahunan",
     benefitsTitle: "Manfaat Pro anda",

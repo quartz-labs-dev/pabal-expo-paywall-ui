@@ -9,6 +9,7 @@ const uk = createPaywallLocaleText({
     reviewSectionTitle: "Відгуки користувачів",
   },
   text: {
+    limitedTimeOfferTitle: "Одноразовий платіж\nНазавжди Pro",
     otherPlansButton: "Переглянути інші плани",
     annualPlanTitle: "Річний",
     benefitsTitle: "Переваги Pro",

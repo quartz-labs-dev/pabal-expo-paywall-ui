@@ -9,6 +9,7 @@ const mk = createPaywallLocaleText({
     reviewSectionTitle: "Рецензии од корисници",
   },
   text: {
+    limitedTimeOfferTitle: "Еднократно купување\nДоживотно Pro",
     otherPlansButton: "Види други планови",
     annualPlanTitle: "Годишно",
     benefitsTitle: "Вашите Pro придобивки",

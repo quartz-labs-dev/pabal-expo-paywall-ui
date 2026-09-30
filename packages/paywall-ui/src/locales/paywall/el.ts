@@ -9,6 +9,7 @@ const el = createPaywallLocaleText({
     reviewSectionTitle: "Κριτικές χρηστών",
   },
   text: {
+    limitedTimeOfferTitle: "Εφάπαξ πληρωμή\nΕφ' όρου ζωής Pro",
     otherPlansButton: "Δείτε άλλα προγράμματα",
     annualPlanTitle: "Ετήσιο",
     benefitsTitle: "Προνόμια Pro",

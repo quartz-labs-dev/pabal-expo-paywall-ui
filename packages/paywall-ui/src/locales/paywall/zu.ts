@@ -9,6 +9,7 @@ const zu = createPaywallLocaleText({
     reviewSectionTitle: "Izibuyekezo zabasebenzisi",
   },
   text: {
+    limitedTimeOfferTitle: "Ukuthenga kanye kuphela\nImpilo yonke Pro",
     otherPlansButton: "Buka ezinye izinhlelo",
     annualPlanTitle: "Ngonyaka",
     benefitsTitle: "Izinzuzo zakho ze-Pro",

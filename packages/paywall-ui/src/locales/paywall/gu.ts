@@ -9,6 +9,7 @@ const gu = createPaywallLocaleText({
     reviewSectionTitle: "વપરાશકર્તા સમીક્ષાઓ",
   },
   text: {
+    limitedTimeOfferTitle: "એક વખતની ખરીદી\nઆજીવન Pro",
     otherPlansButton: "અન્ય પ્લાન જુઓ",
     annualPlanTitle: "વાર્ષિક",
     benefitsTitle: "તમારા Pro લાભો",

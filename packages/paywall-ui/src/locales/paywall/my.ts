@@ -9,6 +9,7 @@ const my = createPaywallLocaleText({
     reviewSectionTitle: "အသုံးပြုသူ သုံးသပ်ချက်များ",
   },
   text: {
+    limitedTimeOfferTitle: "တစ်ကြိမ်တည်း ဝယ်ယူမှု\nတစ်သက်တာ Pro",
     otherPlansButton: "အခြားအစီအစဉ်များကို ကြည့်ရန်",
     annualPlanTitle: "နှစ်စဉ်",
     benefitsTitle: "သင်၏ Pro အကျိုးကျေးဇူးများ",

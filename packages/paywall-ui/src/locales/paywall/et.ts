@@ -9,6 +9,7 @@ const et = createPaywallLocaleText({
     reviewSectionTitle: "Kasutajate arvustused",
   },
   text: {
+    limitedTimeOfferTitle: "Ühekordne makse\nEluaegne Pro",
     otherPlansButton: "Vaata teisi pakette",
     annualPlanTitle: "Aastane",
     benefitsTitle: "Pro eelised",

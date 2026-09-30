@@ -8,6 +8,18 @@ const offerSource = readFileSync(
   "utf8",
 );
 
+test("removes supporting header copy and emphasizes the countdown with theme contrast", () => {
+  assert.match(offerSource, /alternativePlan\.period === "annual"/);
+  assert.match(offerSource, /\.\.\.alternativePlan, badgeText: undefined/);
+  assert.doesNotMatch(offerSource, /\{copy\.badgeText\}|\{copy\.subtitle\}/);
+  const header = offerSource.slice(offerSource.indexOf("  offerHeader: {"), offerSource.indexOf("  pressed: {"));
+  assert.doesNotMatch(header, /paddingHorizontal/);
+  const countdown = readFileSync(join(process.cwd(), "src", "offer", "OfferCountdown.tsx"), "utf8");
+  assert.match(countdown, /color: theme\.accentTextColor/);
+  assert.match(countdown, /fontSize: 32/);
+  assert.match(countdown, /fontVariant: \["tabular-nums"\]/);
+});
+
 test("orders collapsible features before always-visible alternative plans", () => {
   const featuresIndex = offerSource.indexOf(
     "comparison={featureComparison}",
