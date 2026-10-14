@@ -469,6 +469,8 @@ export interface ProfileIdentifiersSectionProps
   onCopy?: (item: ProfileIdentifierItem) => Promise<void> | void;
 }
 
+export type ProfileActionButtonVariant = "primary" | "secondary";
+
 export interface ProfileSubscriptionSectionProps {
   isSubscribed: boolean;
   benefits?: PaywallBenefit[];
@@ -488,6 +490,11 @@ export interface ProfileSubscriptionSectionProps {
   isManagingSubscription?: boolean;
   isRestoringPurchases?: boolean;
   isRedeemingPromoCode?: boolean;
+  /**
+   * "secondary" draws "Manage subscription" as an outlined button, for
+   * screens where it is not the main action. Defaults to "primary".
+   */
+  manageSubscriptionButtonVariant?: ProfileActionButtonVariant;
   onOpenDeveloperWebsite?: () => Promise<void> | void;
   onUpgrade?: () => Promise<void> | void;
   onManageSubscription?: () => Promise<void> | void;

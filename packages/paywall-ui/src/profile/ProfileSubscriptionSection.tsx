@@ -36,6 +36,7 @@ export const ProfileSubscriptionSection = ({
   isManagingSubscription = false,
   isRestoringPurchases = false,
   isRedeemingPromoCode = false,
+  manageSubscriptionButtonVariant = "primary",
   onOpenDeveloperWebsite,
   onUpgrade,
   onManageSubscription,
@@ -230,7 +231,7 @@ export const ProfileSubscriptionSection = ({
                       : copy.manageSubscriptionButton
                   }
                   theme={theme}
-                  variant="primary"
+                  variant={manageSubscriptionButtonVariant}
                   onPress={onManageSubscription}
                 />
               )}
@@ -316,7 +317,7 @@ interface ProfileActionButtonProps {
   disabled?: boolean;
   label: string;
   theme: PaywallTheme;
-  variant: "primary" | "text";
+  variant: "primary" | "secondary" | "text";
   onPress?: () => Promise<void> | void;
 }
 
@@ -328,6 +329,7 @@ const ProfileActionButton = ({
   onPress,
 }: ProfileActionButtonProps) => {
   const isPrimary = variant === "primary";
+  const isSecondary = variant === "secondary";
   const isDisabled = disabled || !onPress;
 
   return (
@@ -340,7 +342,8 @@ const ProfileActionButton = ({
       }}
       style={({ pressed }) => [
         styles.actionButton,
-        !isPrimary && styles.textButton,
+        variant === "text" && styles.textButton,
+        isSecondary && [styles.secondaryButton, { borderColor: theme.borderColor }],
         {
           backgroundColor: isPrimary ? theme.accentColor : "transparent",
           borderRadius: theme.buttonBorderRadius,
@@ -351,9 +354,13 @@ const ProfileActionButton = ({
       <Text
         style={[
           styles.actionButtonText,
-          !isPrimary && styles.textButtonLabel,
+          variant === "text" && styles.textButtonLabel,
           {
-            color: isPrimary ? theme.accentTextColor : theme.secondaryTextColor,
+            color: isPrimary
+              ? theme.accentTextColor
+              : isSecondary
+                ? theme.primaryTextColor
+                : theme.secondaryTextColor,
           },
         ]}
       >
@@ -488,6 +495,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 11,
     width: "100%",
+  },
+  secondaryButton: {
+    borderWidth: 1,
   },
   textButton: {
     borderWidth: 0,

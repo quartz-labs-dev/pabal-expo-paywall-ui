@@ -135,6 +135,8 @@ export const ProfilePlaygroundScreen = ({
   const [isManagingSubscription, setIsManagingSubscription] = useState(false);
   const [isRestoringPurchases, setIsRestoringPurchases] = useState(false);
   const [isRedeemingPromoCode, setIsRedeemingPromoCode] = useState(false);
+  const [isManageSubscriptionSecondary, setIsManageSubscriptionSecondary] =
+    useState(false);
   const [hasNewItem, setHasNewItem] = useState(true);
   const [hasInUseItems, setHasInUseItems] = useState(true);
   const [hasOnboardingLinks, setHasOnboardingLinks] = useState(true);
@@ -256,6 +258,15 @@ export const ProfilePlaygroundScreen = ({
               setShowProfileIdentifiers((previousValue) => !previousValue)
             }
           />
+          <ToggleButton
+            isSelected={isManageSubscriptionSecondary}
+            label={
+              isManageSubscriptionSecondary ? "Manage: secondary" : "Manage: primary"
+            }
+            onPress={() =>
+              setIsManageSubscriptionSecondary((previousValue) => !previousValue)
+            }
+          />
           {withOnboarding ? (
             <>
               <ToggleButton
@@ -298,6 +309,9 @@ export const ProfilePlaygroundScreen = ({
         <ProfileSubscriptionWithOnboarding
           {...profileSubscriptionBaseConfig}
           onboarding={withOnboarding ? onboarding : undefined}
+          manageSubscriptionButtonVariant={
+            isManageSubscriptionSecondary ? "secondary" : "primary"
+          }
           benefitDisplayMode={benefitDisplayMode}
           copy={profileCopy}
           headerIcon={<GoldenHorizonIcon isSubscribed={isSubscribed} />}

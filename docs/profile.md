@@ -86,6 +86,12 @@ Each usage item keeps a required plain `title` for accessibility and may pass
 selected but `benefitUsageSection.items` is empty, the component falls back to
 list mode so the profile does not render an empty benefits area.
 
+### Manage subscription button style
+
+`manageSubscriptionButtonVariant: "secondary"` draws "Manage subscription" as
+an outlined button for screens where it is not the main action (default
+`"primary"`, the filled accent button).
+
 ### Standalone, collapsible usage table
 
 Apps that want other content between the profile header and the usage table

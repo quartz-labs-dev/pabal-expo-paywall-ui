@@ -251,6 +251,7 @@ export type {
   ProfileIdentifierItem,
   ProfileBenefitDisplayMode,
   ProfileBenefitUsageItem,
+  ProfileActionButtonVariant,
   ProfileBenefitUsageListProps,
   ProfileSubscriptionWithOnboardingProps,
   ProOnboardingCopy,
