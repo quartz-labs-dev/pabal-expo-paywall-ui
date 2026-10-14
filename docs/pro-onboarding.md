@@ -135,7 +135,7 @@ independent.
 | 1.23.0 | Rows end in a check instead of the "In use" chip; the guide title folds the list (`defaultListExpanded`); "Pro" localized in non-Latin scripts | None |
 | 1.25.0 (1.24.0 was not published) | Getting-started checklist (`steps`, `onConfirmStepDone`, `defaultChecklistExpanded`, `copy.checklistTitle`) that keeps the next step when folded; folding the checklist and "View all Pro benefits" animates; section list back to "In use" chips and chevrons, always shown (`defaultListExpanded` removed); compact centered secondary "Manage subscription" in a tighter panel; `planLabel` / `renewalLabel` move under the title (the separate plan box is gone); with `onboarding`, the profile no longer repeats `benefits` above the folded table | Apps that passed `defaultListExpanded` remove it (the list is always shown) |
 | 1.26.0 | Checklist folded by default (`defaultChecklistExpanded`); tapping an open step makes it active; hidden once every step is done; folded, the active step's highlight fades; checklist title "Start here" in every locale | Pass `defaultChecklistExpanded: true` to open it by default |
-| 1.27.0 | Checklist title reworded in 29 locales (ko "여기부터 시작하세요"; "where to start" phrasing in Slavic and Romance locales) | None |
+| 1.27.0 | Checklist title reworded in 29 locales (ko "여기부터 시작하세요"; "where to start" phrasing in Slavic and Romance locales); switching the active step animates (the old step's actions and highlight fold away, the new one's open) | None |
 
 All changes are additive (no breaking change). To opt in:
 

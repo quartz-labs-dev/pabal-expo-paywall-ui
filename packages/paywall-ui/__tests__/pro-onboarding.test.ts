@@ -95,10 +95,11 @@ test("steps show as a folded checklist that keeps the active step and hides when
   assert.match(checklist, /step\.id === selectedStepId && !step\.isDone/);
   assert.match(checklist, /if \(!currentStep\) return null;/);
   assert.match(checklist, /accessibilityState=\{\{ expanded: isExpanded \}\}/);
-  // Folded, the current step stays put and the other rows shrink away.
-  assert.match(checklist, /step\.id === currentStep\.id[\s\S]*?<CurrentStep[\s\S]*?<CollapsibleView isExpanded=\{isExpanded\}/);
-  assert.match(checklist, /opacity: highlightOpacity/);
-  assert.doesNotMatch(checklist, /isExpanded=\{!isExpanded\}/);
+  // Folded, the active step stays put and the other rows shrink away;
+  // switching the active step animates its actions and highlight.
+  assert.match(checklist, /<CollapsibleView isExpanded=\{isExpanded \|\| isActive\}/);
+  assert.match(checklist, /<CollapsibleView isExpanded=\{isActive\}>/);
+  assert.match(checklist, /Animated\.multiply\(activeProgress, expandProgress\)/);
 
   const benefits = readFileSync(
     join(process.cwd(), "src", "profile", "ProfileBenefitUsageList.tsx"),

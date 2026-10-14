@@ -48,7 +48,6 @@ export const ProOnboardingChecklist = ({
     steps.find((step) => !step.isDone);
   if (!currentStep) return null;
 
-  const currentIndex = steps.indexOf(currentStep);
   const progress = doneCount / steps.length;
 
   return (
@@ -113,43 +112,30 @@ export const ProOnboardingChecklist = ({
       </Pressable>
 
       {/*
-        The active step never moves out: folding only
-        shrinks the rows around it, so it slides into place instead of a new
-        view appearing. Each row carries its spacing on the side facing the
-        active step, so a folded row leaves no gap.
+        Every step has the same structure, so changing the active step or
+        folding never swaps views: the active step's actions and highlight
+        animate in, the previous one's animate out, and folding only shrinks
+        the rows around the active step.
       */}
-      <View style={styles.fold}>
-        {steps.map((step, index) => {
-          if (step.id === currentStep.id) {
-            return (
-              <CurrentStep
+      <View style={styles.steps}>
+        {steps.map((step) => {
+          const isActive = step.id === currentStep.id;
+          return (
+            <CollapsibleView isExpanded={isExpanded || isActive} key={step.id}>
+              <StepItem
                 copy={copy}
-                highlightOpacity={expandProgress}
-                key={step.id}
+                expandProgress={expandProgress}
+                isActive={isActive}
                 step={step}
                 theme={theme}
                 onConfirmDone={onConfirmDone}
+                onSelect={
+                  step.isDone || isActive
+                    ? undefined
+                    : () => setSelectedStepId(step.id)
+                }
                 onTry={onTry}
               />
-            );
-          }
-          const isLast = index === steps.length - 1;
-          return (
-            <CollapsibleView isExpanded={isExpanded} key={step.id}>
-              <View
-                style={[
-                  index < currentIndex ? styles.rowBefore : styles.rowAfter,
-                  isLast && styles.rowLast,
-                ]}
-              >
-                <StepRow
-                  step={step}
-                  theme={theme}
-                  onSelect={
-                    step.isDone ? undefined : () => setSelectedStepId(step.id)
-                  }
-                />
-              </View>
             </CollapsibleView>
           );
         })}
@@ -158,157 +144,148 @@ export const ProOnboardingChecklist = ({
   );
 };
 
-interface StepRowProps {
-  step: ProOnboardingStep;
-  theme: PaywallTheme;
-  onSelect?: () => void;
-}
-
-const StepRow = ({ step, theme, onSelect }: StepRowProps) => (
-  <Pressable
-    accessibilityRole={onSelect ? "button" : undefined}
-    disabled={!onSelect}
-    onPress={onSelect}
-    style={({ pressed }) => [
-      styles.stepRow,
-      styles.stepInset,
-      pressed && styles.pressed,
-    ]}
-  >
-    <CheckCircleIcon
-      checkColor={theme.accentTextColor}
-      color={step.isDone ? theme.accentColor : theme.mutedTextColor}
-      isChecked={Boolean(step.isDone)}
-    />
-    <View style={styles.stepTexts}>
-      {step.isDone ? null : step.badge}
-      <Text
-        numberOfLines={2}
-        style={[
-          styles.stepTitle,
-          {
-            color: step.isDone
-              ? theme.mutedTextColor
-              : theme.secondaryTextColor,
-          },
-          step.isDone && styles.doneTitle,
-        ]}
-      >
-        {step.title}
-      </Text>
-      {step.description && !step.isDone ? (
-        <Text style={[styles.stepDescription, { color: theme.mutedTextColor }]}>
-          {step.description}
-        </Text>
-      ) : null}
-    </View>
-  </Pressable>
-);
-
-interface CurrentStepProps {
+interface StepItemProps {
   step: ProOnboardingStep;
   copy: ProOnboardingCopy;
   theme: PaywallTheme;
-  /** Folded, the highlight fades so the step sits on the card itself. */
-  highlightOpacity: Animated.Value;
+  isActive: boolean;
+  /** Folded, the highlight fades so the active step sits on the card. */
+  expandProgress: Animated.Value;
+  onSelect?: () => void;
   onTry: (step: ProOnboardingStep) => void;
   onConfirmDone?: (stepId: string) => void;
 }
 
-const CurrentStep = ({
+const StepItem = ({
   step,
   copy,
   theme,
-  highlightOpacity,
+  isActive,
+  expandProgress,
+  onSelect,
   onTry,
   onConfirmDone,
-}: CurrentStepProps) => (
-  <View style={styles.current}>
-    <Animated.View
-      pointerEvents="none"
-      style={[
-        StyleSheet.absoluteFill,
-        {
-          backgroundColor: getColorWithAlpha(
-            theme.accentColor,
-            0.1,
-            theme.surfaceColor,
-          ),
-          // Concentric with the card: its radius minus the 4px inset.
-          borderRadius: Math.max(theme.cardBorderRadius - CARD_INSET, 4),
-          opacity: highlightOpacity,
-        },
-      ]}
-    />
-    <View style={styles.stepRow}>
-      <CheckCircleIcon
-        checkColor={theme.accentTextColor}
-        color={theme.accentColor}
-        isChecked={false}
+}: StepItemProps) => {
+  const activeProgress = useExpandProgress(isActive);
+  const titleColor = step.isDone
+    ? theme.mutedTextColor
+    : isActive
+      ? theme.primaryTextColor
+      : theme.secondaryTextColor;
+
+  return (
+    <View style={styles.item}>
+      <Animated.View
+        pointerEvents="none"
+        style={[
+          StyleSheet.absoluteFill,
+          {
+            backgroundColor: getColorWithAlpha(
+              theme.accentColor,
+              0.1,
+              theme.surfaceColor,
+            ),
+            // Concentric with the card: its radius minus the 4px inset.
+            borderRadius: Math.max(theme.cardBorderRadius - CARD_INSET, 4),
+            opacity: Animated.multiply(activeProgress, expandProgress),
+          },
+        ]}
       />
-      <View style={styles.stepTexts}>
-        {step.badge}
-        <Text style={[styles.currentTitle, { color: theme.primaryTextColor }]}>
-          {step.title}
-        </Text>
-        {step.description ? (
+      <Pressable
+        accessibilityRole={onSelect ? "button" : undefined}
+        disabled={!onSelect}
+        onPress={onSelect}
+        style={({ pressed }) => [styles.stepRow, pressed && styles.pressed]}
+      >
+        <CheckCircleIcon
+          checkColor={theme.accentTextColor}
+          color={
+            step.isDone || isActive ? theme.accentColor : theme.mutedTextColor
+          }
+          isChecked={Boolean(step.isDone)}
+        />
+        <View style={styles.stepTexts}>
+          {step.isDone ? null : step.badge}
           <Text
+            numberOfLines={2}
             style={[
-              styles.stepDescription,
-              { color: theme.secondaryTextColor },
+              styles.stepTitle,
+              isActive && styles.activeTitle,
+              { color: titleColor },
+              step.isDone && styles.doneTitle,
             ]}
           >
-            {step.description}
+            {step.title}
           </Text>
-        ) : null}
-      </View>
-    </View>
-
-    <View style={styles.actions}>
-      {step.onPress ? (
-        <Pressable
-          accessibilityRole="button"
-          onPress={() => onTry(step)}
-          style={({ pressed }) => [
-            styles.button,
-            {
-              backgroundColor: theme.accentColor,
-              // Same border width as the secondary button keeps both labels
-              // on one line.
-              borderColor: theme.accentColor,
-              borderRadius: theme.buttonBorderRadius,
-            },
-            pressed && styles.pressed,
-          ]}
-        >
-          <Text style={[styles.buttonText, { color: theme.accentTextColor }]}>
-            {copy.tryButton}
-          </Text>
-        </Pressable>
-      ) : null}
-      <Pressable
-        accessibilityRole="button"
-        onPress={() => onConfirmDone?.(step.id)}
-        style={({ pressed }) => [
-          styles.button,
-          {
-            borderColor: getColorWithAlpha(
-              theme.secondaryTextColor,
-              0.28,
-              theme.borderColor,
-            ),
-            borderRadius: theme.buttonBorderRadius,
-          },
-          pressed && styles.pressed,
-        ]}
-      >
-        <Text style={[styles.buttonText, { color: theme.secondaryTextColor }]}>
-          {copy.alreadyUsedButton}
-        </Text>
+          {step.description && !step.isDone ? (
+            <Text
+              style={[
+                styles.stepDescription,
+                {
+                  color: isActive
+                    ? theme.secondaryTextColor
+                    : theme.mutedTextColor,
+                },
+              ]}
+            >
+              {step.description}
+            </Text>
+          ) : null}
+        </View>
       </Pressable>
+
+      <CollapsibleView isExpanded={isActive}>
+        <View style={styles.actions}>
+          {step.onPress ? (
+            <Pressable
+              accessibilityRole="button"
+              onPress={() => onTry(step)}
+              style={({ pressed }) => [
+                styles.button,
+                {
+                  backgroundColor: theme.accentColor,
+                  // Same border width as the secondary button keeps both
+                  // labels on one line.
+                  borderColor: theme.accentColor,
+                  borderRadius: theme.buttonBorderRadius,
+                },
+                pressed && styles.pressed,
+              ]}
+            >
+              <Text
+                style={[styles.buttonText, { color: theme.accentTextColor }]}
+              >
+                {copy.tryButton}
+              </Text>
+            </Pressable>
+          ) : null}
+          <Pressable
+            accessibilityRole="button"
+            onPress={() => onConfirmDone?.(step.id)}
+            style={({ pressed }) => [
+              styles.button,
+              {
+                borderColor: getColorWithAlpha(
+                  theme.secondaryTextColor,
+                  0.28,
+                  theme.borderColor,
+                ),
+                borderRadius: theme.buttonBorderRadius,
+              },
+              pressed && styles.pressed,
+            ]}
+          >
+            <Text
+              style={[styles.buttonText, { color: theme.secondaryTextColor }]}
+            >
+              {copy.alreadyUsedButton}
+            </Text>
+          </Pressable>
+        </View>
+      </CollapsibleView>
     </View>
-  </View>
-);
+  );
+};
 
 // Horizontal and bottom padding of the card; the active step's highlight
 // fills it so the edges stay even.
@@ -320,9 +297,6 @@ const styles = StyleSheet.create({
     paddingBottom: CARD_INSET,
     paddingHorizontal: CARD_INSET,
     paddingTop: 16,
-  },
-  fold: {
-    paddingTop: 14,
   },
   header: {
     gap: 10,
@@ -355,16 +329,14 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     height: 4,
   },
-  rowBefore: {
-    paddingBottom: 14,
+  steps: {
+    paddingTop: 6,
   },
-  rowAfter: {
-    paddingTop: 14,
-  },
-  // The card's bottom padding is only the 4px inset, sized for the active
-  // step's highlight; a plain last row needs the rest.
-  rowLast: {
-    paddingBottom: 12,
+  // Every step carries its own padding (no gap between rows), so a folded
+  // row leaves no space and the highlight fills the step evenly.
+  item: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
   },
   stepRow: {
     alignItems: "center",
@@ -379,9 +351,12 @@ const styles = StyleSheet.create({
   },
   stepTitle: {
     flexShrink: 1,
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: "600",
-    lineHeight: 19,
+    lineHeight: 20,
+  },
+  activeTitle: {
+    fontWeight: "700",
   },
   doneTitle: {
     textDecorationLine: "line-through",
@@ -392,24 +367,11 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     lineHeight: 16,
   },
-  current: {
-    gap: 12,
-    padding: 12,
-  },
-  // Same horizontal inset as the highlighted current step, so every check
-  // circle sits in one column.
-  stepInset: {
-    paddingHorizontal: 12,
-  },
-  currentTitle: {
-    flexShrink: 1,
-    fontSize: 15,
-    fontWeight: "700",
-    lineHeight: 20,
-  },
   actions: {
     flexDirection: "row",
     gap: 8,
+    paddingBottom: 4,
+    paddingTop: 12,
   },
   button: {
     alignItems: "center",
