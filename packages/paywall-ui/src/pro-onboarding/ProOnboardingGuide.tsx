@@ -1,16 +1,15 @@
-import { useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 import { getDefaultProOnboardingCopy } from "../locales/localized-paywall-copy";
-import { ChevronDownIcon } from "../shared/icons";
 import { mergePaywallTheme } from "../shared/theme";
 import type { ProOnboardingGuideProps, ProOnboardingItem } from "../types";
+import { ProOnboardingChecklist } from "./ProOnboardingChecklist";
 import { ProOnboardingNextCard } from "./ProOnboardingNextCard";
 import { ProOnboardingSectionList } from "./ProOnboardingSectionList";
 
 /**
- * Pro onboarding: a title, one "Try next" card (or an all-explored line) and
- * the app's Pro features by section. Storage, analytics and navigation stay
+ * Pro onboarding: a title, a getting-started checklist (`steps`) or one "Try
+ * next" card (or an all-explored line), and the app's Pro features by section. Storage, analytics and navigation stay
  * in the app; this only lays them out and reports taps.
  */
 export const ProOnboardingGuide = ({
@@ -22,9 +21,10 @@ export const ProOnboardingGuide = ({
   theme: themeOverride,
   onPressItem,
   onConfirmUsed,
-  defaultListExpanded = false,
+  steps,
+  onConfirmStepDone,
+  defaultChecklistExpanded = true,
 }: ProOnboardingGuideProps) => {
-  const [isListExpanded, setIsListExpanded] = useState(defaultListExpanded);
   const theme = mergePaywallTheme(themeOverride);
   const copy = { ...getDefaultProOnboardingCopy(locale), ...copyOverride };
   const nextItem = nextItemId ? items[nextItemId] : undefined;
@@ -36,21 +36,20 @@ export const ProOnboardingGuide = ({
 
   return (
     <View style={styles.guide}>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityState={{ expanded: isListExpanded }}
-        onPress={() => setIsListExpanded((expanded) => !expanded)}
-        style={styles.header}
-      >
-        <Text style={[styles.title, { color: theme.primaryTextColor }]}>
-          {copy.title}
-        </Text>
-        <View style={[styles.chevron, isListExpanded && styles.chevronExpanded]}>
-          <ChevronDownIcon color={theme.secondaryTextColor} />
-        </View>
-      </Pressable>
+      <Text style={[styles.title, { color: theme.primaryTextColor }]}>
+        {copy.title}
+      </Text>
 
-      {nextItem ? (
+      {steps && steps.length > 0 ? (
+        <ProOnboardingChecklist
+          copy={copy}
+          defaultExpanded={defaultChecklistExpanded}
+          steps={steps}
+          theme={theme}
+          onConfirmDone={onConfirmStepDone}
+          onTry={(step) => step.onPress?.()}
+        />
+      ) : nextItem ? (
         <ProOnboardingNextCard
           copy={copy}
           item={nextItem}
@@ -64,15 +63,13 @@ export const ProOnboardingGuide = ({
         </Text>
       )}
 
-      {isListExpanded ? (
-        <ProOnboardingSectionList
-          copy={copy}
-          items={items}
-          sections={sections}
-          theme={theme}
-          onPressItem={(item) => openItem(item, "list")}
-        />
-      ) : null}
+      <ProOnboardingSectionList
+        copy={copy}
+        items={items}
+        sections={sections}
+        theme={theme}
+        onPressItem={(item) => openItem(item, "list")}
+      />
     </View>
   );
 };
@@ -81,26 +78,9 @@ const styles = StyleSheet.create({
   guide: {
     gap: 24,
   },
-  header: {
-    alignItems: "center",
-    flexDirection: "row",
-    gap: 8,
-    minHeight: 44,
-  },
   title: {
-    flex: 1,
-    flexShrink: 1,
     fontSize: 20,
     fontWeight: "600",
-  },
-  chevron: {
-    alignItems: "center",
-    height: 20,
-    justifyContent: "center",
-    width: 20,
-  },
-  chevronExpanded: {
-    transform: [{ rotate: "180deg" }],
   },
   allExplored: {
     fontSize: 14,

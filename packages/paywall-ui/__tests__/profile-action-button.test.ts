@@ -13,10 +13,13 @@ test("manage subscription defaults to primary and can be secondary", () => {
   assert.match(sectionSource, /variant=\{manageSubscriptionButtonVariant\}/);
 });
 
-test("the secondary button is outlined with the theme border", () => {
+test("the secondary button is a small centered outlined pill", () => {
   assert.match(
     sectionSource,
     /isSecondary && \[styles\.secondaryButton, \{ borderColor: theme\.borderColor \}\]/,
   );
-  assert.match(sectionSource, /secondaryButton: \{\n    borderWidth: 1,/);
+  assert.match(
+    sectionSource,
+    /secondaryButton: \{\n    alignSelf: "center",\n    borderWidth: 1,\n    minHeight: 36,/,
+  );
 });

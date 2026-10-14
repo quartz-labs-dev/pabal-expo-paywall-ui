@@ -15,6 +15,7 @@ const sv = createPaywallLocaleText({
     benefitsTitle: "Dina Pro-förmåner",
     viewAllBenefitsTitle: "Visa alla Pro-förmåner",
     proOnboardingTitle: "Guide till Pro-funktioner",
+    proOnboardingChecklistTitle: "Kom igång med Pro",
     proOnboardingNextTitle: "Prova härnäst",
     proOnboardingTryButton: "Prova",
     proOnboardingAlreadyUsedButton: "Redan använd",

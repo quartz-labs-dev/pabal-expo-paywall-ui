@@ -15,6 +15,7 @@ const ka = createPaywallLocaleText({
     benefitsTitle: "თქვენი Pro უპირატესობები",
     viewAllBenefitsTitle: "პროს ყველა უპირატესობის ნახვა",
     proOnboardingTitle: "პრო ფუნქციების გზამკვლევი",
+    proOnboardingChecklistTitle: "დაიწყეთ პროთი",
     proOnboardingNextTitle: "სცადეთ შემდეგი",
     proOnboardingTryButton: "ცდა",
     proOnboardingAlreadyUsedButton: "უკვე გამოვიყენე",

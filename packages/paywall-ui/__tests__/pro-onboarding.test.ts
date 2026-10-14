@@ -79,18 +79,22 @@ test("every locale has its own onboarding copy", () => {
   }
 });
 
-test("rows end in a check (filled when in use) and the title folds the list", () => {
+test("steps show as a folding checklist; the section list keeps In use chips", () => {
   const { readFileSync } = require("node:fs") as typeof import("node:fs");
   const { join } = require("node:path") as typeof import("node:path");
   const read = (file: string) =>
     readFileSync(join(process.cwd(), "src", "pro-onboarding", file), "utf8");
 
-  const list = read("ProOnboardingSectionList.tsx");
-  assert.match(list, /<CheckCircleIcon/);
-  assert.match(list, /isChecked=\{Boolean\(item\.isInUse\)\}/);
-  assert.doesNotMatch(list, /ChevronLeftIcon/);
-
   const guide = read("ProOnboardingGuide.tsx");
-  assert.match(guide, /defaultListExpanded = false/);
-  assert.match(guide, /\{isListExpanded \? \(/);
+  assert.match(guide, /defaultChecklistExpanded = true/);
+  assert.match(guide, /steps && steps\.length > 0 \? \(\s*<ProOnboardingChecklist/);
+
+  const checklist = read("ProOnboardingChecklist.tsx");
+  assert.match(checklist, /isChecked=\{Boolean\(step\.isDone\)\}/);
+  assert.match(checklist, /const currentStep = steps\.find\(\(step\) => !step\.isDone\)/);
+  assert.match(checklist, /accessibilityState=\{\{ expanded: isExpanded \}\}/);
+
+  const list = read("ProOnboardingSectionList.tsx");
+  assert.match(list, /copy\.inUseBadge/);
+  assert.match(list, /ChevronLeftIcon/);
 });

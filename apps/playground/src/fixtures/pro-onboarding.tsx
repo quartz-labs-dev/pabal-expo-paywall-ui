@@ -1,6 +1,7 @@
 import type {
   ProOnboardingItem,
   ProOnboardingSection,
+  ProOnboardingStep,
 } from "pabal-expo-paywall-ui";
 import { Alert, StyleSheet, Text, View } from "react-native";
 
@@ -31,6 +32,34 @@ const AiBadge = () => (
     <Text style={styles.badgeText}>AI</Text>
   </View>
 );
+
+const PLAYGROUND_STEPS: Omit<ProOnboardingStep, "isDone" | "onPress">[] = [
+  { id: "theme", title: "Change the app color and icon" },
+  { id: "first-plan", title: "Plan your first sunset" },
+  { id: "widget", title: "Set up a home screen widget" },
+  { id: "alerts", title: "Turn on smart alerts", badge: <AiBadge /> },
+  {
+    id: "recap",
+    title: "View your monthly recap",
+    description: "Unlocks after 3 saved plans (1/3)",
+  },
+];
+
+/** Five getting-started steps; `lockedStepIds` get no "Try it". */
+export const createPlaygroundProOnboardingSteps = ({
+  doneStepIds,
+  lockedStepIds,
+}: {
+  doneStepIds: string[];
+  lockedStepIds: string[];
+}): ProOnboardingStep[] =>
+  PLAYGROUND_STEPS.map((step) => ({
+    ...step,
+    isDone: doneStepIds.includes(step.id),
+    onPress: lockedStepIds.includes(step.id)
+      ? undefined
+      : () => Alert.alert(`Open ${step.title}`),
+  }));
 
 interface PlaygroundItemOptions {
   hasLinks: boolean;

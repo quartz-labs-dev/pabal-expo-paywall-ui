@@ -15,6 +15,7 @@ const ja = createPaywallLocaleText({
     benefitsTitle: "Pro特典",
     viewAllBenefitsTitle: "プロ特典をすべて見る",
     proOnboardingTitle: "プロ機能ガイド",
+    proOnboardingChecklistTitle: "プロをはじめよう",
     proOnboardingNextTitle: "次に試す",
     proOnboardingTryButton: "試す",
     proOnboardingAlreadyUsedButton: "もう使った",

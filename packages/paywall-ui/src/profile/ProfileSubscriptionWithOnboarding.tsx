@@ -23,9 +23,11 @@ export const ProfileSubscriptionWithOnboarding = ({
 
   return (
     <View style={styles.container}>
+      {/* Benefits move to the folded table below, so the profile shows none. */}
       <ProfileSubscriptionSection
         {...sectionProps}
         benefitUsageSection={undefined}
+        benefits={[]}
       />
       <View style={[styles.separator, { backgroundColor: theme.borderColor }]} />
       <ProOnboardingGuide {...onboarding} locale={locale} theme={theme} />

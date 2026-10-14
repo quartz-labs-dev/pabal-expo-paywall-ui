@@ -15,6 +15,7 @@ const lt = createPaywallLocaleText({
     benefitsTitle: "Pro privalumai",
     viewAllBenefitsTitle: "Peržiūrėti visus Pro privalumus",
     proOnboardingTitle: "Pro funkcijų gidas",
+    proOnboardingChecklistTitle: "Pradėkite su Pro",
     proOnboardingNextTitle: "Išbandykite toliau",
     proOnboardingTryButton: "Išbandyti",
     proOnboardingAlreadyUsedButton: "Jau naudojau",

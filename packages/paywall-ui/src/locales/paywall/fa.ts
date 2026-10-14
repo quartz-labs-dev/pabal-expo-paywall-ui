@@ -15,6 +15,7 @@ const fa = createPaywallLocaleText({
     benefitsTitle: "مزایای Pro شما",
     viewAllBenefitsTitle: "مشاهده همه مزایای پرو",
     proOnboardingTitle: "راهنمای ویژگی‌های پرو",
+    proOnboardingChecklistTitle: "شروع با پرو",
     proOnboardingNextTitle: "بعدی را امتحان کنید",
     proOnboardingTryButton: "امتحان کنید",
     proOnboardingAlreadyUsedButton: "قبلاً استفاده کرده‌ام",

@@ -355,12 +355,9 @@ const ProfileActionButton = ({
         style={[
           styles.actionButtonText,
           variant === "text" && styles.textButtonLabel,
+          isSecondary && styles.secondaryButtonLabel,
           {
-            color: isPrimary
-              ? theme.accentTextColor
-              : isSecondary
-                ? theme.primaryTextColor
-                : theme.secondaryTextColor,
+            color: isPrimary ? theme.accentTextColor : theme.secondaryTextColor,
           },
         ]}
       >
@@ -496,8 +493,20 @@ const styles = StyleSheet.create({
     paddingVertical: 11,
     width: "100%",
   },
+  // A quiet, centered pill: on screens where managing the subscription is
+  // not the point, it should not read as the main call to action.
   secondaryButton: {
+    alignSelf: "center",
     borderWidth: 1,
+    minHeight: 36,
+    paddingHorizontal: 18,
+    paddingVertical: 8,
+    width: "auto",
+  },
+  secondaryButtonLabel: {
+    fontSize: 13,
+    fontWeight: "600",
+    lineHeight: 17,
   },
   textButton: {
     borderWidth: 0,

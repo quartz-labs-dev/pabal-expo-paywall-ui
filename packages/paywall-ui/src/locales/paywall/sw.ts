@@ -15,6 +15,7 @@ const sw = createPaywallLocaleText({
     benefitsTitle: "Manufaa yako ya Pro",
     viewAllBenefitsTitle: "Tazama manufaa yote ya Pro",
     proOnboardingTitle: "Mwongozo wa vipengele vya Pro",
+    proOnboardingChecklistTitle: "Anza na Pro",
     proOnboardingNextTitle: "Jaribu inayofuata",
     proOnboardingTryButton: "Jaribu",
     proOnboardingAlreadyUsedButton: "Nimeshatumia",

@@ -15,6 +15,7 @@ const gu = createPaywallLocaleText({
     benefitsTitle: "તમારા Pro લાભો",
     viewAllBenefitsTitle: "બધા પ્રો લાભો જુઓ",
     proOnboardingTitle: "પ્રો સુવિધા માર્ગદર્શિકા",
+    proOnboardingChecklistTitle: "પ્રો સાથે શરૂઆત કરો",
     proOnboardingNextTitle: "આગળ અજમાવો",
     proOnboardingTryButton: "અજમાવો",
     proOnboardingAlreadyUsedButton: "પહેલેથી વાપર્યું",

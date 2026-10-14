@@ -15,6 +15,7 @@ const ms = createPaywallLocaleText({
     benefitsTitle: "Manfaat Pro anda",
     viewAllBenefitsTitle: "Lihat semua manfaat Pro",
     proOnboardingTitle: "Panduan ciri Pro",
+    proOnboardingChecklistTitle: "Mula dengan Pro",
     proOnboardingNextTitle: "Cuba seterusnya",
     proOnboardingTryButton: "Cuba",
     proOnboardingAlreadyUsedButton: "Sudah digunakan",

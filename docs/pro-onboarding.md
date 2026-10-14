@@ -46,14 +46,28 @@ interface ProOnboardingItem {
   description?: string;   // shown under the title
   badge?: ReactNode;      // shown above the title (e.g. an AI badge)
   isNew?: boolean;        // NEW chip
-  isInUse?: boolean;      // filled check (and a dimmed title); only when the app can prove it
-  onPress?: () => void;   // without it: the row is not tappable and the next card hides "Try it"
+  isInUse?: boolean;      // "In use" chip; only when the app can prove it
+  onPress?: () => void;   // without it: no chevron, and the next card hides "Try it"
 }
 ```
 
-Each row ends in a check circle: filled when `isInUse`, empty otherwise. The
-guide title opens and closes the section list (`defaultListExpanded`, closed
-by default); the "Try next" card always shows.
+## Getting-started checklist (1.24.0)
+
+Pass `steps` to show a short checklist instead of the single "Try next" card:
+
+```tsx
+onboarding={{
+  ...,
+  steps: [{ id, title, description?, badge?, isDone?, onPress? }],
+  onConfirmStepDone: (stepId) => { /* record, then pass updated steps */ },
+  defaultChecklistExpanded: true, // the header folds it; open by default
+}}
+```
+
+Done steps are checked and struck through; the first open step gets "Try it"
+(only with `onPress`) and "Already used". The header shows `done/total` and
+opens or closes the checklist. When every step is done it shows
+`copy.allExplored`. The section list below is always shown.
 
 Never pass a "not used" state: past use that left no data is unknown.
 
@@ -70,11 +84,11 @@ Both are Node-testable and optional; apps can use their own rules.
 ## Copy
 
 - Package-owned, localized in every `locales/paywall` file:
-  `getDefaultProOnboardingCopy(locale)` → `title`, `nextTitle`, `tryButton`,
-  `alreadyUsedButton`, `inUseBadge` (accessibility label of the filled
-  check), `newBadge` ("NEW"), `allExplored`. Override any of them with
-  `onboarding.copy`. "Pro" in the guide title and in `viewAllBenefitsTitle`
-  is written in each locale's script (프로, プロ, 专业版, Про, برو …); Latin
+  `getDefaultProOnboardingCopy(locale)` → `title`, `checklistTitle`,
+  `nextTitle`, `tryButton`, `alreadyUsedButton`, `inUseBadge`, `newBadge`
+  ("NEW"), `allExplored`. Override any of them with
+  `onboarding.copy`. "Pro" in the guide title, the checklist title and
+  `viewAllBenefitsTitle` is written in each locale's script (프로, プロ, 专业版, Про, برو …); Latin
   script locales keep "Pro".
 - `getDefaultProfileSubscriptionCopy(locale).viewAllBenefitsTitle` labels the
   folded table.
@@ -96,8 +110,10 @@ The package stays RevenueCat-, Firebase- and navigation-agnostic.
 
 - `/profile`: classic profile, unchanged.
 - `/profile-onboarding`: `ProfileSubscriptionWithOnboarding` with fixture
-  items (`apps/playground/src/fixtures/pro-onboarding.tsx`) and toggles for a
-  NEW item, items in use, items without links, and resetting "Already used".
+  items and five checklist steps (`apps/playground/src/fixtures/pro-onboarding.tsx`)
+  and toggles for a NEW item, items in use, items without links, checklist
+  versus the single next card, and resetting "Already used". Both profile
+  entries have a primary/secondary "Manage subscription" toggle.
   The folded table and the all-explored state are reachable from there.
 
 `__tests__/playground-paywall-routing.test.ts` keeps the two entries
@@ -110,7 +126,8 @@ independent.
 | 1.20.0 | `ProfileBenefitUsageList` exported, `collapsible` | None |
 | 1.21.0 | `viewAllBenefitsTitle`; Pro onboarding (`ProfileSubscriptionWithOnboarding`, `ProOnboardingGuide`, helpers, copy) | None for classic apps |
 | 1.22.0 | `manageSubscriptionButtonVariant: "secondary"` | None |
-| 1.23.0 | Rows end in a check (filled when in use) instead of an "In use" chip and chevron; the guide title folds the list (`defaultListExpanded`, closed by default); "Pro" localized in non-Latin scripts | None. Pass `defaultListExpanded` to keep the list open |
+| 1.23.0 | Rows end in a check instead of the "In use" chip; the guide title folds the list (`defaultListExpanded`); "Pro" localized in non-Latin scripts | None |
+| 1.24.0 | Getting-started checklist (`steps`, `onConfirmStepDone`, `defaultChecklistExpanded`, `copy.checklistTitle`); section list back to "In use" chips and chevrons, always shown (`defaultListExpanded` removed); compact centered secondary "Manage subscription"; with `onboarding`, the profile no longer repeats `benefits` above the folded table | Apps that passed `defaultListExpanded` remove it (the list is always shown) |
 
 All changes are additive (no breaking change). To opt in:
 

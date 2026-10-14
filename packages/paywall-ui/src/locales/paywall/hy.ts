@@ -15,6 +15,7 @@ const hy = createPaywallLocaleText({
     benefitsTitle: "Ձեր Pro առավելությունները",
     viewAllBenefitsTitle: "Դիտել Պրո-ի բոլոր առավելությունները",
     proOnboardingTitle: "Պրո գործառույթների ուղեցույց",
+    proOnboardingChecklistTitle: "Սկսեք Պրո-ով",
     proOnboardingNextTitle: "Փորձեք հաջորդը",
     proOnboardingTryButton: "Փորձել",
     proOnboardingAlreadyUsedButton: "Արդեն օգտագործել եմ",

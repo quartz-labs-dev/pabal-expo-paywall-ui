@@ -15,6 +15,7 @@ const zhHant = createPaywallLocaleText({
     benefitsTitle: "Pro 權益",
     viewAllBenefitsTitle: "查看全部專業版權益",
     proOnboardingTitle: "專業版功能指南",
+    proOnboardingChecklistTitle: "專業版入門",
     proOnboardingNextTitle: "下一個試試",
     proOnboardingTryButton: "試試看",
     proOnboardingAlreadyUsedButton: "已經用過",

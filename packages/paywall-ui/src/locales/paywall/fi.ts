@@ -15,6 +15,7 @@ const fi = createPaywallLocaleText({
     benefitsTitle: "Pro-edut",
     viewAllBenefitsTitle: "Näytä kaikki Pro-edut",
     proOnboardingTitle: "Pro-ominaisuusopas",
+    proOnboardingChecklistTitle: "Aloita Pro",
     proOnboardingNextTitle: "Kokeile seuraavaksi",
     proOnboardingTryButton: "Kokeile",
     proOnboardingAlreadyUsedButton: "Jo käytetty",

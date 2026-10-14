@@ -259,6 +259,7 @@ export type {
   ProOnboardingGuideProps,
   ProOnboardingItem,
   ProOnboardingSection,
+  ProOnboardingStep,
   ProfileBenefitUsageSection,
   ProfileIdentifiersConfig,
   ProfileIdentifiersCopy,

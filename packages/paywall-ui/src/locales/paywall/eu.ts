@@ -15,6 +15,7 @@ const eu = createPaywallLocaleText({
     benefitsTitle: "Zure Pro abantailak",
     viewAllBenefitsTitle: "Ikusi Pro abantaila guztiak",
     proOnboardingTitle: "Pro funtzioen gida",
+    proOnboardingChecklistTitle: "Hasi Prorekin",
     proOnboardingNextTitle: "Probatu hurrengoa",
     proOnboardingTryButton: "Probatu",
     proOnboardingAlreadyUsedButton: "Dagoeneko erabili dut",

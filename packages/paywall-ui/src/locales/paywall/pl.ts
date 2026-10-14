@@ -15,6 +15,7 @@ const pl = createPaywallLocaleText({
     benefitsTitle: "Korzyści Pro",
     viewAllBenefitsTitle: "Zobacz wszystkie korzyści Pro",
     proOnboardingTitle: "Przewodnik po funkcjach Pro",
+    proOnboardingChecklistTitle: "Zacznij z Pro",
     proOnboardingNextTitle: "Wypróbuj teraz",
     proOnboardingTryButton: "Wypróbuj",
     proOnboardingAlreadyUsedButton: "Już używam",

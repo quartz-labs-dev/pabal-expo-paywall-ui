@@ -22,6 +22,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { playgroundBenefits } from "../fixtures/playground-benefits";
 import {
   createPlaygroundProOnboardingItems,
+  createPlaygroundProOnboardingSteps,
   playgroundProOnboardingOrder,
   playgroundProOnboardingSections,
 } from "../fixtures/pro-onboarding";
@@ -141,6 +142,8 @@ export const ProfilePlaygroundScreen = ({
   const [hasInUseItems, setHasInUseItems] = useState(true);
   const [hasOnboardingLinks, setHasOnboardingLinks] = useState(true);
   const [confirmedItemIds, setConfirmedItemIds] = useState<string[]>([]);
+  const [hasChecklist, setHasChecklist] = useState(true);
+  const [doneStepIds, setDoneStepIds] = useState<string[]>(["theme"]);
   const onboarding = useMemo(() => {
     const inUseItemIds = hasInUseItems ? ["widget"] : [];
     const newItemIds = hasNewItem ? ["trip-planner"] : [];
@@ -158,8 +161,23 @@ export const ProfilePlaygroundScreen = ({
       }),
       onConfirmUsed: (itemId: string) =>
         setConfirmedItemIds((previous) => [...previous, itemId]),
+      steps: hasChecklist
+        ? createPlaygroundProOnboardingSteps({
+            doneStepIds,
+            lockedStepIds: ["recap"],
+          })
+        : undefined,
+      onConfirmStepDone: (stepId: string) =>
+        setDoneStepIds((previous) => [...previous, stepId]),
     };
-  }, [confirmedItemIds, hasInUseItems, hasNewItem, hasOnboardingLinks]);
+  }, [
+    confirmedItemIds,
+    doneStepIds,
+    hasChecklist,
+    hasInUseItems,
+    hasNewItem,
+    hasOnboardingLinks,
+  ]);
   const subscribedPeriod = isLifetime ? "lifetime" : profilePeriods[scenario];
   const profileCopy = useMemo(() => {
     return {
@@ -289,9 +307,19 @@ export const ProfilePlaygroundScreen = ({
                 }
               />
               <ToggleButton
-                isSelected={confirmedItemIds.length === 0}
+                isSelected={hasChecklist}
+                label={hasChecklist ? "Checklist" : "Next card"}
+                onPress={() => setHasChecklist((previousValue) => !previousValue)}
+              />
+              <ToggleButton
+                isSelected={
+                  confirmedItemIds.length === 0 && doneStepIds.length === 1
+                }
                 label="Reset suggestions"
-                onPress={() => setConfirmedItemIds([])}
+                onPress={() => {
+                  setConfirmedItemIds([]);
+                  setDoneStepIds(["theme"]);
+                }}
               />
             </>
           ) : null}

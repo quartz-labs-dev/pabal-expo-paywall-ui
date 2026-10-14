@@ -15,6 +15,7 @@ const kk = createPaywallLocaleText({
     benefitsTitle: "Pro артықшылықтарыңыз",
     viewAllBenefitsTitle: "Про-ның барлық артықшылығын көру",
     proOnboardingTitle: "Про мүмкіндіктері нұсқаулығы",
+    proOnboardingChecklistTitle: "Про-мен бастаңыз",
     proOnboardingNextTitle: "Келесісін көріңіз",
     proOnboardingTryButton: "Көру",
     proOnboardingAlreadyUsedButton: "Бұрын қолдандым",

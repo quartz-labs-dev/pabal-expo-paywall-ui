@@ -13,6 +13,7 @@ export interface PaywallText {
   /** Toggle label of a collapsible profile benefit usage table. */
   viewAllBenefitsTitle: string;
   proOnboardingTitle: string;
+  proOnboardingChecklistTitle: string;
   proOnboardingNextTitle: string;
   proOnboardingTryButton: string;
   proOnboardingAlreadyUsedButton: string;

@@ -194,6 +194,7 @@ export const getDefaultProOnboardingCopy = (
 
   return {
     title: text.proOnboardingTitle,
+    checklistTitle: text.proOnboardingChecklistTitle,
     nextTitle: text.proOnboardingNextTitle,
     tryButton: text.proOnboardingTryButton,
     alreadyUsedButton: text.proOnboardingAlreadyUsedButton,

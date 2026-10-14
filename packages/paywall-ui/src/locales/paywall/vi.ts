@@ -15,6 +15,7 @@ const vi = createPaywallLocaleText({
     benefitsTitle: "Quyền lợi Pro của bạn",
     viewAllBenefitsTitle: "Xem tất cả quyền lợi Pro",
     proOnboardingTitle: "Hướng dẫn tính năng Pro",
+    proOnboardingChecklistTitle: "Bắt đầu với Pro",
     proOnboardingNextTitle: "Thử tiếp theo",
     proOnboardingTryButton: "Thử ngay",
     proOnboardingAlreadyUsedButton: "Đã dùng rồi",

@@ -520,6 +520,18 @@ export interface ProOnboardingItem {
   onPress?: () => void;
 }
 
+/** One getting-started step. */
+export interface ProOnboardingStep {
+  id: string;
+  title: string;
+  /** Shown under the title, e.g. progress or why it is locked. */
+  description?: string;
+  badge?: ReactNode;
+  isDone?: boolean;
+  /** Without it the step has no "Try it" (e.g. locked for now). */
+  onPress?: () => void;
+}
+
 export interface ProOnboardingSection {
   id: string;
   title: string;
@@ -528,6 +540,7 @@ export interface ProOnboardingSection {
 
 export interface ProOnboardingCopy {
   title: string;
+  checklistTitle: string;
   nextTitle: string;
   tryButton: string;
   alreadyUsedButton: string;
@@ -550,9 +563,16 @@ export interface ProOnboardingGuideProps {
   /** "Already used" on the next card. The app records it and passes a new
    * nextItemId. */
   onConfirmUsed?: (itemId: string) => void;
-  /** The title opens and closes the section list. Defaults to closed; the
-   * next card always shows. */
-  defaultListExpanded?: boolean;
+  /**
+   * A short getting-started checklist shown instead of the single "Try next"
+   * card: done steps are checked, and the first open step gets "Try it" and
+   * "Already used". Its header opens and closes it.
+   */
+  steps?: ProOnboardingStep[];
+  /** "Already used" on a checklist step. */
+  onConfirmStepDone?: (stepId: string) => void;
+  /** Initial state of the checklist. Defaults to open. */
+  defaultChecklistExpanded?: boolean;
 }
 
 export interface ProfileSubscriptionWithOnboardingProps
