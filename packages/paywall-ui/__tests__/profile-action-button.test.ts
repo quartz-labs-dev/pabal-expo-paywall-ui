@@ -20,6 +20,11 @@ test("the secondary button is a small centered outlined pill", () => {
   );
   assert.match(
     sectionSource,
-    /secondaryButton: \{\n    alignSelf: "center",\n    borderWidth: 1,\n    minHeight: 36,/,
+    /secondaryButton: \{\n    alignSelf: "center",\n    borderWidth: 1,\n    minHeight: 30,/,
   );
+});
+
+test("plan and renewal sit under the title instead of a separate box", () => {
+  assert.match(sectionSource, /hasPlanInfo \? \(\s*<View style=\{styles\.planInfo\}>/);
+  assert.doesNotMatch(sectionSource, /planSummary/);
 });

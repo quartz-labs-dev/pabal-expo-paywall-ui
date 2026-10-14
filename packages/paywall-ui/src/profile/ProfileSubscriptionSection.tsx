@@ -47,6 +47,8 @@ export const ProfileSubscriptionSection = ({
   const statusTitle = isSubscribed
     ? copy.subscribedTitle
     : copy.notSubscribedTitle;
+  // The plan and renewal take the subtitle's place instead of a separate box.
+  const hasPlanInfo = Boolean(planLabel || renewalLabel);
   const statusSubtitle = isSubscribed
     ? copy.subscribedSubtitle
     : copy.notSubscribedSubtitle;
@@ -81,6 +83,10 @@ export const ProfileSubscriptionSection = ({
           },
         }
       : undefined;
+  // With nothing but the action button left in the panel (benefits moved
+  // elsewhere), keep the panel tight around it.
+  const isActionsOnly =
+    !shouldShowUsageBenefits && benefits.length === 0 && !content;
   const cardAction = !isSubscribed && shouldShowUpgrade
     ? onUpgrade
     : undefined;
@@ -140,44 +146,43 @@ export const ProfileSubscriptionSection = ({
                   </View>
                 ) : null}
               </View>
-              {statusSubtitle && (
-                <Text
-                  style={[styles.subtitle, { color: theme.secondaryTextColor }]}
-                >
-                  {statusSubtitle}
-                </Text>
+              {hasPlanInfo ? (
+                <View style={styles.planInfo}>
+                  {planLabel && (
+                    <Text
+                      style={[
+                        styles.planLabel,
+                        { color: theme.primaryTextColor },
+                      ]}
+                    >
+                      {planLabel}
+                    </Text>
+                  )}
+                  {renewalLabel && (
+                    <Text
+                      style={[
+                        styles.renewalLabel,
+                        { color: theme.secondaryTextColor },
+                      ]}
+                    >
+                      {renewalLabel}
+                    </Text>
+                  )}
+                </View>
+              ) : (
+                statusSubtitle && (
+                  <Text
+                    style={[
+                      styles.subtitle,
+                      { color: theme.secondaryTextColor },
+                    ]}
+                  >
+                    {statusSubtitle}
+                  </Text>
+                )
               )}
             </View>
           </View>
-
-          {(planLabel || renewalLabel) && (
-            <View
-              style={[
-                styles.planSummary,
-                {
-                  backgroundColor: theme.backgroundColor,
-                },
-              ]}
-            >
-              {planLabel && (
-                <Text
-                  style={[styles.planLabel, { color: theme.primaryTextColor }]}
-                >
-                  {planLabel}
-                </Text>
-              )}
-              {renewalLabel && (
-                <Text
-                  style={[
-                    styles.renewalLabel,
-                    { color: theme.secondaryTextColor },
-                  ]}
-                >
-                  {renewalLabel}
-                </Text>
-              )}
-            </View>
-          )}
         </View>
 
         <View
@@ -186,7 +191,9 @@ export const ProfileSubscriptionSection = ({
             { backgroundColor: theme.backgroundColor },
           ]}
         >
-          <View style={styles.contentInner}>
+          <View
+            style={[styles.contentInner, isActionsOnly && styles.actionsOnly]}
+          >
             {shouldShowUsageBenefits && benefitUsageSection ? (
               <>
                 <ProfileBenefitUsageList
@@ -430,11 +437,8 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     lineHeight: 21,
   },
-  planSummary: {
-    borderCurve: "continuous",
-    borderRadius: 8,
-    gap: 4,
-    padding: 12,
+  planInfo: {
+    gap: 2,
   },
   planLabel: {
     flexShrink: 1,
@@ -454,6 +458,9 @@ const styles = StyleSheet.create({
   contentInner: {
     gap: 22,
     padding: 20,
+  },
+  actionsOnly: {
+    paddingVertical: 14,
   },
   customContent: {
     width: "100%",
@@ -498,15 +505,15 @@ const styles = StyleSheet.create({
   secondaryButton: {
     alignSelf: "center",
     borderWidth: 1,
-    minHeight: 36,
-    paddingHorizontal: 18,
-    paddingVertical: 8,
+    minHeight: 30,
+    paddingHorizontal: 14,
+    paddingVertical: 5,
     width: "auto",
   },
   secondaryButtonLabel: {
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: "600",
-    lineHeight: 17,
+    lineHeight: 16,
   },
   textButton: {
     borderWidth: 0,

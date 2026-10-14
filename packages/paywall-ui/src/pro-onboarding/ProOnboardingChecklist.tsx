@@ -21,8 +21,9 @@ interface ProOnboardingChecklistProps {
 
 /**
  * A short getting-started checklist with a progress bar. Open, it lists every
- * step and the first open one carries "Try it" and "Already used". Folded, it
- * keeps only that step, so the next thing to try stays visible.
+ * step and the first open one carries "Try it" and "Already used". Folded, the
+ * other rows shrink away and only that step stays, so the next thing to try is
+ * always visible.
  */
 export const ProOnboardingChecklist = ({
   steps,
@@ -35,6 +36,7 @@ export const ProOnboardingChecklist = ({
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
   const doneCount = steps.filter((step) => step.isDone).length;
   const currentStep = steps.find((step) => !step.isDone);
+  const currentIndex = currentStep ? steps.indexOf(currentStep) : -1;
   const progress = steps.length === 0 ? 0 : doneCount / steps.length;
 
   return (
@@ -98,27 +100,16 @@ export const ProOnboardingChecklist = ({
         </View>
       </Pressable>
 
-      {/* Spacing lives inside each fold so the closed one leaves no gap. */}
-      <CollapsibleView isExpanded={!isExpanded}>
-        <View style={styles.fold}>
-          {currentStep ? (
-            <CurrentStep
-              copy={copy}
-              step={currentStep}
-              theme={theme}
-              onConfirmDone={onConfirmDone}
-              onTry={onTry}
-            />
-          ) : (
-            <AllDone copy={copy} theme={theme} />
-          )}
-        </View>
-      </CollapsibleView>
-
-      <CollapsibleView isExpanded={isExpanded}>
-        <View style={[styles.fold, styles.steps]}>
-          {steps.map((step) =>
-            step.id === currentStep?.id ? (
+      {/*
+        The current step (or the all-done line) never moves out: folding only
+        shrinks the rows around it, so it slides into place instead of a new
+        view appearing. Each row carries its spacing on the side facing the
+        current step, so a folded row leaves no gap.
+      */}
+      <View style={styles.fold}>
+        {steps.map((step, index) => {
+          if (step.id === currentStep?.id) {
+            return (
               <CurrentStep
                 copy={copy}
                 key={step.id}
@@ -127,13 +118,21 @@ export const ProOnboardingChecklist = ({
                 onConfirmDone={onConfirmDone}
                 onTry={onTry}
               />
-            ) : (
-              <StepRow key={step.id} step={step} theme={theme} />
-            ),
-          )}
-          {!currentStep ? <AllDone copy={copy} theme={theme} /> : null}
-        </View>
-      </CollapsibleView>
+            );
+          }
+          const isBeforeCurrent = !currentStep || index < currentIndex;
+          return (
+            <CollapsibleView isExpanded={isExpanded} key={step.id}>
+              <View
+                style={isBeforeCurrent ? styles.rowBefore : styles.rowAfter}
+              >
+                <StepRow step={step} theme={theme} />
+              </View>
+            </CollapsibleView>
+          );
+        })}
+        {!currentStep ? <AllDone copy={copy} theme={theme} /> : null}
+      </View>
     </View>
   );
 };
@@ -144,7 +143,7 @@ interface StepRowProps {
 }
 
 const StepRow = ({ step, theme }: StepRowProps) => (
-  <View style={styles.stepRow}>
+  <View style={[styles.stepRow, styles.stepInset]}>
     <CheckCircleIcon
       checkColor={theme.accentTextColor}
       color={step.isDone ? theme.accentColor : theme.mutedTextColor}
@@ -204,14 +203,11 @@ const CurrentStep = ({
     ]}
   >
     <View style={styles.stepRow}>
-      <View style={[styles.currentDot, { borderColor: theme.accentColor }]}>
-        <View
-          style={[
-            styles.currentDotFill,
-            { backgroundColor: theme.accentColor },
-          ]}
-        />
-      </View>
+      <CheckCircleIcon
+        checkColor={theme.accentTextColor}
+        color={theme.accentColor}
+        isChecked={false}
+      />
       <View style={styles.stepTexts}>
         {step.badge}
         <Text style={[styles.currentTitle, { color: theme.primaryTextColor }]}>
@@ -282,7 +278,13 @@ interface AllDoneProps {
 }
 
 const AllDone = ({ copy, theme }: AllDoneProps) => (
-  <Text style={[styles.allDone, { color: theme.secondaryTextColor }]}>
+  <Text
+    style={[
+      styles.allDone,
+      styles.stepInset,
+      { color: theme.secondaryTextColor },
+    ]}
+  >
     {copy.allExplored}
   </Text>
 );
@@ -290,13 +292,15 @@ const AllDone = ({ copy, theme }: AllDoneProps) => (
 const styles = StyleSheet.create({
   card: {
     borderWidth: 1,
-    padding: 16,
+    paddingHorizontal: 4,
+    paddingVertical: 16,
   },
   fold: {
     paddingTop: 14,
   },
   header: {
     gap: 10,
+    paddingHorizontal: 12,
   },
   headerRow: {
     alignItems: "center",
@@ -325,8 +329,11 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     height: 4,
   },
-  steps: {
-    gap: 14,
+  rowBefore: {
+    paddingBottom: 14,
+  },
+  rowAfter: {
+    paddingTop: 14,
   },
   stepRow: {
     alignItems: "center",
@@ -358,18 +365,10 @@ const styles = StyleSheet.create({
     gap: 12,
     padding: 12,
   },
-  currentDot: {
-    alignItems: "center",
-    borderRadius: 11,
-    borderWidth: 2,
-    height: 22,
-    justifyContent: "center",
-    width: 22,
-  },
-  currentDotFill: {
-    borderRadius: 4,
-    height: 8,
-    width: 8,
+  // Same horizontal inset as the highlighted current step, so every check
+  // circle sits in one column.
+  stepInset: {
+    paddingHorizontal: 12,
   },
   currentTitle: {
     flexShrink: 1,

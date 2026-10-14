@@ -86,6 +86,12 @@ Each usage item keeps a required plain `title` for accessibility and may pass
 selected but `benefitUsageSection.items` is empty, the component falls back to
 list mode so the profile does not render an empty benefits area.
 
+### Plan line
+
+`planLabel` and `renewalLabel` show under the title, in place of
+`copy.subscribedSubtitle` (1.24.0; earlier versions drew them in a separate
+box). Without either label the subtitle shows as before.
+
 ### Manage subscription button style
 
 `manageSubscriptionButtonVariant: "secondary"` draws "Manage subscription" as

@@ -309,6 +309,7 @@ export const ProfilePlaygroundScreen = ({
           benefitDisplayMode={benefitDisplayMode}
           copy={profileCopy}
           headerIcon={<GoldenHorizonIcon isSubscribed={isSubscribed} />}
+          supportMessageIcon={<DeveloperLogo />}
           identifierSection={identifierSection}
           isManagingSubscription={isManagingSubscription}
           isRedeemingPromoCode={isRedeemingPromoCode}
@@ -462,6 +463,14 @@ function GoldenHorizonIcon({ isSubscribed }: GoldenHorizonIconProps) {
   );
 }
 
+function DeveloperLogo() {
+  return (
+    <View style={styles.developerLogo}>
+      <Text style={styles.developerLogoText}>P</Text>
+    </View>
+  );
+}
+
 interface ProfileUsageTitleProps {
   title: string;
 }
@@ -585,6 +594,18 @@ const styles = StyleSheet.create({
     fontSize: 8,
     fontWeight: "700",
     lineHeight: 10,
+  },
+  developerLogo: {
+    alignItems: "center",
+    alignSelf: "stretch",
+    backgroundColor: "#5AC8B7",
+    flex: 1,
+    justifyContent: "center",
+  },
+  developerLogoText: {
+    color: "#05080C",
+    fontSize: 16,
+    fontWeight: "700",
   },
   profileUsageTitle: {
     alignItems: "center",

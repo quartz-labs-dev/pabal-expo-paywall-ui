@@ -67,8 +67,8 @@ onboarding={{
 The header shows `done/total` with a progress bar and folds the checklist with
 a height animation. Open, every step is listed: done steps are checked and
 struck through, and the first open step is highlighted with "Try it" (only
-with `onPress`) and "Already used". Folded, only that next step stays, so the
-thing to try is always visible. When every step is done it shows
+with `onPress`) and "Already used". Folded, the other rows shrink away and
+that next step stays in place, so the thing to try is always visible. When every step is done it shows
 `copy.allExplored`. The section list below is always shown.
 
 Never pass a "not used" state: past use that left no data is unknown.
@@ -130,7 +130,7 @@ independent.
 | 1.21.0 | `viewAllBenefitsTitle`; Pro onboarding (`ProfileSubscriptionWithOnboarding`, `ProOnboardingGuide`, helpers, copy) | None for classic apps |
 | 1.22.0 | `manageSubscriptionButtonVariant: "secondary"` | None |
 | 1.23.0 | Rows end in a check instead of the "In use" chip; the guide title folds the list (`defaultListExpanded`); "Pro" localized in non-Latin scripts | None |
-| 1.24.0 | Getting-started checklist (`steps`, `onConfirmStepDone`, `defaultChecklistExpanded`, `copy.checklistTitle`) that keeps the next step when folded; folding the checklist and "View all Pro benefits" animates; section list back to "In use" chips and chevrons, always shown (`defaultListExpanded` removed); compact centered secondary "Manage subscription"; with `onboarding`, the profile no longer repeats `benefits` above the folded table | Apps that passed `defaultListExpanded` remove it (the list is always shown) |
+| 1.24.0 | Getting-started checklist (`steps`, `onConfirmStepDone`, `defaultChecklistExpanded`, `copy.checklistTitle`) that keeps the next step when folded; folding the checklist and "View all Pro benefits" animates; section list back to "In use" chips and chevrons, always shown (`defaultListExpanded` removed); compact centered secondary "Manage subscription" in a tighter panel; `planLabel` / `renewalLabel` move under the title (the separate plan box is gone); with `onboarding`, the profile no longer repeats `benefits` above the folded table | Apps that passed `defaultListExpanded` remove it (the list is always shown) |
 
 All changes are additive (no breaking change). To opt in:
 

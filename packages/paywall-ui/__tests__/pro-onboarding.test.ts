@@ -93,9 +93,9 @@ test("steps show as a folding checklist that keeps the next step; the section li
   assert.match(checklist, /isChecked=\{Boolean\(step\.isDone\)\}/);
   assert.match(checklist, /const currentStep = steps\.find\(\(step\) => !step\.isDone\)/);
   assert.match(checklist, /accessibilityState=\{\{ expanded: isExpanded \}\}/);
-  // Folded, only the next step stays; both folds animate.
-  assert.match(checklist, /<CollapsibleView isExpanded=\{!isExpanded\}>[\s\S]*?<CurrentStep/);
-  assert.match(checklist, /<CollapsibleView isExpanded=\{isExpanded\}>/);
+  // Folded, the current step stays put and the other rows shrink away.
+  assert.match(checklist, /step\.id === currentStep\?\.id[\s\S]*?<CurrentStep[\s\S]*?<CollapsibleView isExpanded=\{isExpanded\}/);
+  assert.doesNotMatch(checklist, /isExpanded=\{!isExpanded\}/);
 
   const benefits = readFileSync(
     join(process.cwd(), "src", "profile", "ProfileBenefitUsageList.tsx"),
