@@ -200,6 +200,7 @@ export {
   normalizeTitleSegments,
 } from "./paywall/title-segments";
 export type { NormalizedTitleSegment } from "./paywall/title-segments";
+export { ProfileBenefitUsageList } from "./profile/ProfileBenefitUsageList";
 export { ProfileSubscriptionSection } from "./profile/ProfileSubscriptionSection";
 export { isUnifiedLocale, UNIFIED_LOCALES } from "./locales/unified-locales";
 export type {
@@ -243,6 +244,7 @@ export type {
   ProfileIdentifierItem,
   ProfileBenefitDisplayMode,
   ProfileBenefitUsageItem,
+  ProfileBenefitUsageListProps,
   ProfileBenefitUsageSection,
   ProfileIdentifiersConfig,
   ProfileIdentifiersCopy,

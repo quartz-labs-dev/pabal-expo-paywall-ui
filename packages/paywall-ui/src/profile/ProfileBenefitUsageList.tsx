@@ -1,93 +1,125 @@
+import { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-import type { PaywallTheme, ProfileBenefitUsageSection } from "../types";
-
-interface ProfileBenefitUsageListProps {
-  section: ProfileBenefitUsageSection;
-  theme: PaywallTheme;
-  title?: string;
-}
+import { ChevronDownIcon } from "../shared/icons";
+import { isBenefitUsageTableVisible } from "./benefit-usage-visibility";
+import type { ProfileBenefitUsageListProps } from "../types";
 
 export const ProfileBenefitUsageList = ({
   section,
   theme,
   title,
+  collapsible = false,
+  defaultExpanded = false,
 }: ProfileBenefitUsageListProps) => {
+  const [isExpanded, setIsExpanded] = useState(defaultExpanded);
+
   if (section.items.length === 0) return null;
+
+  const isToggle = collapsible && Boolean(title);
+  const isTableVisible = isBenefitUsageTableVisible({
+    collapsible,
+    hasTitle: Boolean(title),
+    isExpanded,
+  });
 
   return (
     <View style={styles.section}>
-      {title && (
-        <Text style={[styles.title, { color: theme.primaryTextColor }]}>
-          {title}
-        </Text>
+      {isToggle ? (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityState={{ expanded: isExpanded }}
+          onPress={() => setIsExpanded((expanded) => !expanded)}
+          style={styles.toggle}
+        >
+          <Text
+            style={[
+              styles.title,
+              styles.toggleTitle,
+              { color: theme.primaryTextColor },
+            ]}
+          >
+            {title}
+          </Text>
+          <View style={[styles.chevron, isExpanded && styles.chevronExpanded]}>
+            <ChevronDownIcon color={theme.secondaryTextColor} />
+          </View>
+        </Pressable>
+      ) : (
+        title && (
+          <Text style={[styles.title, { color: theme.primaryTextColor }]}>
+            {title}
+          </Text>
+        )
       )}
 
-      <View style={styles.table}>
-        <View style={styles.headerRow}>
-          <View style={styles.featureHeader} />
-          <View style={styles.valueHeader}>
-            <Text
-              style={[styles.headerText, { color: theme.primaryTextColor }]}
-            >
-              {section.usageColumnTitle}
-            </Text>
-          </View>
-          <View style={styles.valueHeader}>
-            <Text style={[styles.headerText, { color: theme.accentColor }]}>
-              {section.proLimitColumnTitle}
-            </Text>
-          </View>
-        </View>
-
-        {section.items.map((item) => {
-          const featureTitle = item.titleContent ?? (
-            <Text
-              style={[
-                styles.featureTitle,
-                item.onPress && styles.clickableFeatureTitle,
-                { color: theme.primaryTextColor },
-              ]}
-            >
-              {item.title}
-            </Text>
-          );
-
-          return (
-            <View key={item.id} style={styles.row}>
-              {item.onPress ? (
-                <Pressable
-                  accessibilityLabel={item.title}
-                  accessibilityRole="button"
-                  onPress={() => {
-                    void item.onPress?.();
-                  }}
-                  style={({ pressed }) => [
-                    styles.featureCell,
-                    pressed && styles.pressedFeatureCell,
-                  ]}
-                >
-                  {featureTitle}
-                </Pressable>
-              ) : (
-                <View style={styles.featureCell}>{featureTitle}</View>
-              )}
-              <View style={styles.valueCell}>
-                <Text
-                  style={[styles.valueText, { color: theme.primaryTextColor }]}
-                >
-                  {item.usageText}
-                </Text>
-              </View>
-              <View style={styles.valueCell}>
-                <Text style={[styles.valueText, { color: theme.accentColor }]}>
-                  {item.proLimitText}
-                </Text>
-              </View>
+      {isTableVisible && (
+        <View style={styles.table}>
+          <View style={styles.headerRow}>
+            <View style={styles.featureHeader} />
+            <View style={styles.valueHeader}>
+              <Text
+                style={[styles.headerText, { color: theme.primaryTextColor }]}
+              >
+                {section.usageColumnTitle}
+              </Text>
             </View>
-          );
-        })}
-      </View>
+            <View style={styles.valueHeader}>
+              <Text style={[styles.headerText, { color: theme.accentColor }]}>
+                {section.proLimitColumnTitle}
+              </Text>
+            </View>
+          </View>
+
+          {section.items.map((item) => {
+            const featureTitle = item.titleContent ?? (
+              <Text
+                style={[
+                  styles.featureTitle,
+                  item.onPress && styles.clickableFeatureTitle,
+                  { color: theme.primaryTextColor },
+                ]}
+              >
+                {item.title}
+              </Text>
+            );
+
+            return (
+              <View key={item.id} style={styles.row}>
+                {item.onPress ? (
+                  <Pressable
+                    accessibilityLabel={item.title}
+                    accessibilityRole="button"
+                    onPress={() => {
+                      void item.onPress?.();
+                    }}
+                    style={({ pressed }) => [
+                      styles.featureCell,
+                      pressed && styles.pressedFeatureCell,
+                    ]}
+                  >
+                    {featureTitle}
+                  </Pressable>
+                ) : (
+                  <View style={styles.featureCell}>{featureTitle}</View>
+                )}
+                <View style={styles.valueCell}>
+                  <Text
+                    style={[styles.valueText, { color: theme.primaryTextColor }]}
+                  >
+                    {item.usageText}
+                  </Text>
+                </View>
+                <View style={styles.valueCell}>
+                  <Text style={[styles.valueText, { color: theme.accentColor }]}>
+                    {item.proLimitText}
+                  </Text>
+                </View>
+              </View>
+            );
+          })}
+        </View>
+      )}
     </View>
   );
 };
@@ -100,6 +132,25 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "700",
     lineHeight: 20,
+  },
+  toggle: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 8,
+    minHeight: 44,
+  },
+  toggleTitle: {
+    flex: 1,
+    flexShrink: 1,
+  },
+  chevron: {
+    alignItems: "center",
+    height: 20,
+    justifyContent: "center",
+    width: 20,
+  },
+  chevronExpanded: {
+    transform: [{ rotate: "180deg" }],
   },
   table: {
     width: "100%",

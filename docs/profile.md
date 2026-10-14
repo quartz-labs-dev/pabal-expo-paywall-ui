@@ -86,6 +86,23 @@ Each usage item keeps a required plain `title` for accessibility and may pass
 selected but `benefitUsageSection.items` is empty, the component falls back to
 list mode so the profile does not render an empty benefits area.
 
+### Standalone, collapsible usage table
+
+Apps that want other content between the profile header and the usage table
+can leave `benefitUsageSection` off `ProfileSubscriptionSection` and render
+the table themselves with `ProfileBenefitUsageList`. Pass `collapsible` to
+fold it behind its `title` (collapsed by default; `defaultExpanded` opens it).
+A collapsible table needs a `title` to tap; without one it always shows.
+
+```tsx
+<ProfileBenefitUsageList
+  section={benefitUsageSection}
+  theme={theme}
+  title={copy.benefitsTitle}
+  collapsible
+/>
+```
+
 ## Identifier Section
 
 `identifierSection` renders profile IDs for support/debugging. It is hidden by

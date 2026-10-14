@@ -429,6 +429,19 @@ export interface ProfileBenefitUsageSection {
   items: ProfileBenefitUsageItem[];
 }
 
+export interface ProfileBenefitUsageListProps {
+  section: ProfileBenefitUsageSection;
+  theme: PaywallTheme;
+  title?: string;
+  /**
+   * Fold the table behind its title so it can be opened and closed. Needs a
+   * `title`; without one the table always shows.
+   */
+  collapsible?: boolean;
+  /** Initial state when `collapsible`. Defaults to collapsed. */
+  defaultExpanded?: boolean;
+}
+
 export interface ProfileIdentifierItem {
   key: string;
   label: string;
