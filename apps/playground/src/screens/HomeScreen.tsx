@@ -1,6 +1,5 @@
-import { type ReactNode, useState } from "react";
+import { useState } from "react";
 import {
-  Modal,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -10,6 +9,8 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { LocaleSelector } from "../components/LocaleSelector";
+import { SettingsModal } from "../components/SettingsModal";
+import { PlaygroundEntryButton } from "../components/PlaygroundEntryButton";
 import type { PlaygroundOnboardingPlatform } from "../components/onboarding-context";
 import { playgroundOfferPriceByDiscount } from "../fixtures/limited-time-offer-settings";
 import { packageScenarioLabels } from "../fixtures/paywall-plans";
@@ -234,38 +235,40 @@ export const HomeScreen = ({
             title="Onboarding"
             onOpenSettings={() => setIsOnboardingSettingsVisible(true)}
           />
-          <Pressable
+          <PlaygroundEntryButton
+            title="Pre-onboarding"
+            description="Marketing screens before the main onboarding, with an optional login prompt."
+            route="/pre-onboarding"
             onPress={onOpenPreOnboarding}
-            style={styles.secondaryAction}
-          >
-            <Text style={styles.secondaryActionText}>Open /pre-onboarding</Text>
-          </Pressable>
-          <Pressable onPress={onOpenOnboarding} style={styles.secondaryAction}>
-            <Text style={styles.secondaryActionText}>Open /onboarding</Text>
-          </Pressable>
-          <Pressable
+          />
+          <PlaygroundEntryButton
+            title="Onboarding"
+            description="Main setup flow: collects context and asks for permissions."
+            route="/onboarding"
+            onPress={onOpenOnboarding}
+          />
+          <PlaygroundEntryButton
+            title="Onboarding · health & companion"
+            description="Only the companion and health steps, for a quick review."
+            route="/onboarding-health"
             onPress={onOpenOnboardingHealth}
-            style={styles.secondaryAction}
-          >
-            <Text style={styles.secondaryActionText}>
-              Open /onboarding-health (health & companion only)
-            </Text>
-          </Pressable>
+          />
         </View>
 
         <View style={styles.sharedSection}>
-          <Text style={styles.sectionTitle}>Profile</Text>
-          <Pressable onPress={onOpenProfile} style={styles.secondaryAction}>
-            <Text style={styles.secondaryActionText}>Open /profile</Text>
-          </Pressable>
-          <Pressable
+          <Text style={styles.sectionTitle}>Subscriber profile</Text>
+          <PlaygroundEntryButton
+            title="Classic"
+            description="ProfileSubscriptionSection: plan, actions and the benefit table."
+            route="/profile"
+            onPress={onOpenProfile}
+          />
+          <PlaygroundEntryButton
+            title="With Pro guide"
+            description="ProfileSubscriptionWithOnboarding: getting-started checklist, feature guide, folded benefits."
+            route="/profile-onboarding"
             onPress={onOpenProfileOnboarding}
-            style={styles.secondaryAction}
-          >
-            <Text style={styles.secondaryActionText}>
-              Open /profile-onboarding
-            </Text>
-          </Pressable>
+          />
         </View>
 
         <View style={styles.separator} />
@@ -454,60 +457,6 @@ const SettingsButton = ({ onPress }: SettingsButtonProps) => {
     >
       <Text style={styles.settingsButtonText}>Settings</Text>
     </Pressable>
-  );
-};
-
-interface SettingsModalProps {
-  children: ReactNode;
-  title: string;
-  visible: boolean;
-  onClose: () => void;
-}
-
-const SettingsModal = ({
-  children,
-  title,
-  visible,
-  onClose,
-}: SettingsModalProps) => {
-  const insets = useSafeAreaInsets();
-
-  return (
-    <Modal
-      animationType="fade"
-      onRequestClose={onClose}
-      transparent
-      visible={visible}
-    >
-      <View
-        style={[
-          styles.settingsModalBackdrop,
-          {
-            paddingBottom: Math.max(insets.bottom, 20),
-            paddingTop: Math.max(insets.top, 20),
-          },
-        ]}
-      >
-        <View style={styles.settingsModalCard}>
-          <View style={styles.settingsModalHeader}>
-            <Text style={styles.settingsModalTitle}>{title}</Text>
-            <Pressable
-              accessibilityRole="button"
-              onPress={onClose}
-              style={styles.settingsModalCloseButton}
-            >
-              <Text style={styles.settingsModalCloseButtonText}>Close</Text>
-            </Pressable>
-          </View>
-          <ScrollView
-            contentContainerStyle={styles.settingsModalContent}
-            showsVerticalScrollIndicator={false}
-          >
-            {children}
-          </ScrollView>
-        </View>
-      </View>
-    </Modal>
   );
 };
 
@@ -943,57 +892,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     lineHeight: 20,
     textAlign: "center",
-  },
-  settingsModalBackdrop: {
-    backgroundColor: "rgba(5, 8, 12, 0.78)",
-    flex: 1,
-    justifyContent: "flex-end",
-    paddingHorizontal: 14,
-  },
-  settingsModalCard: {
-    backgroundColor: "#05080C",
-    borderColor: "#2B3845",
-    borderRadius: 8,
-    borderWidth: 1,
-    maxHeight: "86%",
-    overflow: "hidden",
-  },
-  settingsModalHeader: {
-    alignItems: "center",
-    borderBottomColor: "#2B3845",
-    borderBottomWidth: 1,
-    flexDirection: "row",
-    gap: 12,
-    justifyContent: "space-between",
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-  },
-  settingsModalTitle: {
-    color: "#F5F7FA",
-    flexShrink: 1,
-    fontSize: 17,
-    fontWeight: "600",
-    lineHeight: 22,
-  },
-  settingsModalCloseButton: {
-    alignItems: "center",
-    backgroundColor: "#151D25",
-    borderColor: "#2B3845",
-    borderRadius: 8,
-    borderWidth: 1,
-    justifyContent: "center",
-    minHeight: 34,
-    paddingHorizontal: 10,
-  },
-  settingsModalCloseButtonText: {
-    color: "#F5F7FA",
-    fontSize: 12,
-    fontWeight: "600",
-    lineHeight: 15,
-  },
-  settingsModalContent: {
-    gap: 18,
-    padding: 14,
   },
   offerPreviewCard: {
     backgroundColor: "#111F33",

@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-import { CheckCircleIcon, ChevronDownIcon } from "../shared/icons";
+import { getColorWithAlpha } from "../shared/color-utils";
+import { AnimatedChevron, CollapsibleView } from "../shared/CollapsibleView";
+import { CheckCircleIcon } from "../shared/icons";
 import type {
   PaywallTheme,
   ProOnboardingCopy,
@@ -18,8 +20,9 @@ interface ProOnboardingChecklistProps {
 }
 
 /**
- * A short getting-started checklist. Done steps are checked; the first open
- * step carries "Try it" and "Already used". The header folds it.
+ * A short getting-started checklist with a progress bar. Open, it lists every
+ * step and the first open one carries "Try it" and "Already used". Folded, it
+ * keeps only that step, so the next thing to try stays visible.
  */
 export const ProOnboardingChecklist = ({
   steps,
@@ -32,13 +35,23 @@ export const ProOnboardingChecklist = ({
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
   const doneCount = steps.filter((step) => step.isDone).length;
   const currentStep = steps.find((step) => !step.isDone);
+  const progress = steps.length === 0 ? 0 : doneCount / steps.length;
 
   return (
     <View
       style={[
         styles.card,
         {
-          borderColor: theme.accentColor,
+          backgroundColor: getColorWithAlpha(
+            theme.accentColor,
+            0.06,
+            theme.surfaceColor,
+          ),
+          borderColor: getColorWithAlpha(
+            theme.accentColor,
+            0.45,
+            theme.accentColor,
+          ),
           borderRadius: theme.cardBorderRadius,
         },
       ]}
@@ -47,180 +60,290 @@ export const ProOnboardingChecklist = ({
         accessibilityRole="button"
         accessibilityState={{ expanded: isExpanded }}
         onPress={() => setIsExpanded((expanded) => !expanded)}
-        style={styles.header}
+        style={({ pressed }) => [styles.header, pressed && styles.pressed]}
       >
-        <Text style={[styles.title, { color: theme.primaryTextColor }]}>
-          {copy.checklistTitle}
-        </Text>
-        <Text style={[styles.progress, { color: theme.accentColor }]}>
-          {`${doneCount}/${steps.length}`}
-        </Text>
-        <View style={[styles.chevron, isExpanded && styles.chevronExpanded]}>
-          <ChevronDownIcon color={theme.secondaryTextColor} />
+        <View style={styles.headerRow}>
+          <Text style={[styles.title, { color: theme.primaryTextColor }]}>
+            {copy.checklistTitle}
+          </Text>
+          <Text style={[styles.progressText, { color: theme.accentColor }]}>
+            {`${doneCount}/${steps.length}`}
+          </Text>
+          <AnimatedChevron
+            color={theme.secondaryTextColor}
+            isExpanded={isExpanded}
+          />
+        </View>
+        <View
+          style={[
+            styles.track,
+            {
+              backgroundColor: getColorWithAlpha(
+                theme.accentColor,
+                0.16,
+                theme.borderColor,
+              ),
+            },
+          ]}
+        >
+          <View
+            style={[
+              styles.fill,
+              {
+                backgroundColor: theme.accentColor,
+                width: `${Math.round(progress * 100)}%`,
+              },
+            ]}
+          />
         </View>
       </Pressable>
 
-      {isExpanded ? (
-        <View style={styles.steps}>
-          {steps.map((step) => {
-            const isCurrent = step.id === currentStep?.id;
-            return (
-              <View key={step.id} style={styles.step}>
-                <View style={styles.stepRow}>
-                  <CheckCircleIcon
-                    checkColor={theme.accentTextColor}
-                    color={
-                      step.isDone || isCurrent
-                        ? theme.accentColor
-                        : theme.mutedTextColor
-                    }
-                    isChecked={Boolean(step.isDone)}
-                  />
-                  <View style={styles.stepTexts}>
-                    {step.badge}
-                    <Text
-                      style={[
-                        styles.stepTitle,
-                        {
-                          color: step.isDone
-                            ? theme.mutedTextColor
-                            : theme.primaryTextColor,
-                        },
-                        step.isDone && styles.doneTitle,
-                      ]}
-                    >
-                      {step.title}
-                    </Text>
-                    {step.description ? (
-                      <Text
-                        style={[
-                          styles.stepDescription,
-                          { color: theme.secondaryTextColor },
-                        ]}
-                      >
-                        {step.description}
-                      </Text>
-                    ) : null}
-                  </View>
-                </View>
-
-                {isCurrent ? (
-                  <View style={styles.actions}>
-                    {step.onPress ? (
-                      <Pressable
-                        accessibilityRole="button"
-                        onPress={() => onTry(step)}
-                        style={({ pressed }) => [
-                          styles.button,
-                          {
-                            backgroundColor: theme.accentColor,
-                            // Same border width as the secondary button keeps
-                            // both labels on one line.
-                            borderColor: theme.accentColor,
-                            borderRadius: theme.buttonBorderRadius,
-                          },
-                          pressed && styles.pressed,
-                        ]}
-                      >
-                        <Text
-                          style={[
-                            styles.buttonText,
-                            { color: theme.accentTextColor },
-                          ]}
-                        >
-                          {copy.tryButton}
-                        </Text>
-                      </Pressable>
-                    ) : null}
-                    <Pressable
-                      accessibilityRole="button"
-                      onPress={() => onConfirmDone?.(step.id)}
-                      style={({ pressed }) => [
-                        styles.button,
-                        {
-                          borderColor: theme.borderColor,
-                          borderRadius: theme.buttonBorderRadius,
-                        },
-                        pressed && styles.pressed,
-                      ]}
-                    >
-                      <Text
-                        style={[
-                          styles.buttonText,
-                          { color: theme.secondaryTextColor },
-                        ]}
-                      >
-                        {copy.alreadyUsedButton}
-                      </Text>
-                    </Pressable>
-                  </View>
-                ) : null}
-              </View>
-            );
-          })}
-          {!currentStep ? (
-            <Text style={[styles.allDone, { color: theme.secondaryTextColor }]}>
-              {copy.allExplored}
-            </Text>
-          ) : null}
+      {/* Spacing lives inside each fold so the closed one leaves no gap. */}
+      <CollapsibleView isExpanded={!isExpanded}>
+        <View style={styles.fold}>
+          {currentStep ? (
+            <CurrentStep
+              copy={copy}
+              step={currentStep}
+              theme={theme}
+              onConfirmDone={onConfirmDone}
+              onTry={onTry}
+            />
+          ) : (
+            <AllDone copy={copy} theme={theme} />
+          )}
         </View>
-      ) : null}
+      </CollapsibleView>
+
+      <CollapsibleView isExpanded={isExpanded}>
+        <View style={[styles.fold, styles.steps]}>
+          {steps.map((step) =>
+            step.id === currentStep?.id ? (
+              <CurrentStep
+                copy={copy}
+                key={step.id}
+                step={step}
+                theme={theme}
+                onConfirmDone={onConfirmDone}
+                onTry={onTry}
+              />
+            ) : (
+              <StepRow key={step.id} step={step} theme={theme} />
+            ),
+          )}
+          {!currentStep ? <AllDone copy={copy} theme={theme} /> : null}
+        </View>
+      </CollapsibleView>
     </View>
   );
 };
 
+interface StepRowProps {
+  step: ProOnboardingStep;
+  theme: PaywallTheme;
+}
+
+const StepRow = ({ step, theme }: StepRowProps) => (
+  <View style={styles.stepRow}>
+    <CheckCircleIcon
+      checkColor={theme.accentTextColor}
+      color={step.isDone ? theme.accentColor : theme.mutedTextColor}
+      isChecked={Boolean(step.isDone)}
+    />
+    <View style={styles.stepTexts}>
+      {step.isDone ? null : step.badge}
+      <Text
+        numberOfLines={2}
+        style={[
+          styles.stepTitle,
+          {
+            color: step.isDone
+              ? theme.mutedTextColor
+              : theme.secondaryTextColor,
+          },
+          step.isDone && styles.doneTitle,
+        ]}
+      >
+        {step.title}
+      </Text>
+      {step.description && !step.isDone ? (
+        <Text style={[styles.stepDescription, { color: theme.mutedTextColor }]}>
+          {step.description}
+        </Text>
+      ) : null}
+    </View>
+  </View>
+);
+
+interface CurrentStepProps {
+  step: ProOnboardingStep;
+  copy: ProOnboardingCopy;
+  theme: PaywallTheme;
+  onTry: (step: ProOnboardingStep) => void;
+  onConfirmDone?: (stepId: string) => void;
+}
+
+const CurrentStep = ({
+  step,
+  copy,
+  theme,
+  onTry,
+  onConfirmDone,
+}: CurrentStepProps) => (
+  <View
+    style={[
+      styles.current,
+      {
+        backgroundColor: getColorWithAlpha(
+          theme.accentColor,
+          0.1,
+          theme.surfaceColor,
+        ),
+        borderRadius: Math.max(theme.cardBorderRadius - 6, 8),
+      },
+    ]}
+  >
+    <View style={styles.stepRow}>
+      <View style={[styles.currentDot, { borderColor: theme.accentColor }]}>
+        <View
+          style={[
+            styles.currentDotFill,
+            { backgroundColor: theme.accentColor },
+          ]}
+        />
+      </View>
+      <View style={styles.stepTexts}>
+        {step.badge}
+        <Text style={[styles.currentTitle, { color: theme.primaryTextColor }]}>
+          {step.title}
+        </Text>
+        {step.description ? (
+          <Text
+            style={[
+              styles.stepDescription,
+              { color: theme.secondaryTextColor },
+            ]}
+          >
+            {step.description}
+          </Text>
+        ) : null}
+      </View>
+    </View>
+
+    <View style={styles.actions}>
+      {step.onPress ? (
+        <Pressable
+          accessibilityRole="button"
+          onPress={() => onTry(step)}
+          style={({ pressed }) => [
+            styles.button,
+            {
+              backgroundColor: theme.accentColor,
+              // Same border width as the secondary button keeps both labels
+              // on one line.
+              borderColor: theme.accentColor,
+              borderRadius: theme.buttonBorderRadius,
+            },
+            pressed && styles.pressed,
+          ]}
+        >
+          <Text style={[styles.buttonText, { color: theme.accentTextColor }]}>
+            {copy.tryButton}
+          </Text>
+        </Pressable>
+      ) : null}
+      <Pressable
+        accessibilityRole="button"
+        onPress={() => onConfirmDone?.(step.id)}
+        style={({ pressed }) => [
+          styles.button,
+          {
+            borderColor: getColorWithAlpha(
+              theme.secondaryTextColor,
+              0.28,
+              theme.borderColor,
+            ),
+            borderRadius: theme.buttonBorderRadius,
+          },
+          pressed && styles.pressed,
+        ]}
+      >
+        <Text style={[styles.buttonText, { color: theme.secondaryTextColor }]}>
+          {copy.alreadyUsedButton}
+        </Text>
+      </Pressable>
+    </View>
+  </View>
+);
+
+interface AllDoneProps {
+  copy: ProOnboardingCopy;
+  theme: PaywallTheme;
+}
+
+const AllDone = ({ copy, theme }: AllDoneProps) => (
+  <Text style={[styles.allDone, { color: theme.secondaryTextColor }]}>
+    {copy.allExplored}
+  </Text>
+);
+
 const styles = StyleSheet.create({
   card: {
-    borderWidth: 1.5,
-    gap: 12,
+    borderWidth: 1,
     padding: 16,
   },
+  fold: {
+    paddingTop: 14,
+  },
   header: {
+    gap: 10,
+  },
+  headerRow: {
     alignItems: "center",
     flexDirection: "row",
     gap: 8,
-    minHeight: 32,
+    minHeight: 28,
   },
   title: {
     flex: 1,
     flexShrink: 1,
-    fontSize: 17,
-    fontWeight: "600",
+    fontSize: 16,
+    fontWeight: "700",
+    lineHeight: 21,
   },
-  progress: {
-    fontSize: 14,
-    fontWeight: "600",
+  progressText: {
+    fontSize: 13,
+    fontWeight: "700",
+    lineHeight: 17,
   },
-  chevron: {
-    alignItems: "center",
-    height: 20,
-    justifyContent: "center",
-    width: 20,
+  track: {
+    borderRadius: 2,
+    height: 4,
+    overflow: "hidden",
   },
-  chevronExpanded: {
-    transform: [{ rotate: "180deg" }],
+  fill: {
+    borderRadius: 2,
+    height: 4,
   },
   steps: {
     gap: 14,
   },
-  step: {
-    gap: 10,
-  },
   stepRow: {
     alignItems: "center",
     flexDirection: "row",
-    gap: 10,
+    gap: 12,
   },
   stepTexts: {
     alignItems: "flex-start",
     flex: 1,
-    gap: 2,
+    gap: 3,
     minWidth: 0,
   },
   stepTitle: {
     flexShrink: 1,
-    fontSize: 15,
-    fontWeight: "500",
+    fontSize: 14,
+    fontWeight: "600",
+    lineHeight: 19,
   },
   doneTitle: {
     textDecorationLine: "line-through",
@@ -228,7 +351,31 @@ const styles = StyleSheet.create({
   stepDescription: {
     flexShrink: 1,
     fontSize: 12,
-    fontWeight: "400",
+    fontWeight: "600",
+    lineHeight: 16,
+  },
+  current: {
+    gap: 12,
+    padding: 12,
+  },
+  currentDot: {
+    alignItems: "center",
+    borderRadius: 11,
+    borderWidth: 2,
+    height: 22,
+    justifyContent: "center",
+    width: 22,
+  },
+  currentDotFill: {
+    borderRadius: 4,
+    height: 8,
+    width: 8,
+  },
+  currentTitle: {
+    flexShrink: 1,
+    fontSize: 15,
+    fontWeight: "700",
+    lineHeight: 20,
   },
   actions: {
     flexDirection: "row",
@@ -239,18 +386,20 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     flex: 1,
     justifyContent: "center",
-    minHeight: 44,
+    minHeight: 40,
     paddingHorizontal: 8,
-    paddingVertical: 10,
+    paddingVertical: 9,
   },
   buttonText: {
     fontSize: 14,
     fontWeight: "700",
+    lineHeight: 18,
     textAlign: "center",
   },
   allDone: {
     fontSize: 14,
-    fontWeight: "400",
+    fontWeight: "600",
+    lineHeight: 19,
   },
   pressed: {
     opacity: 0.72,

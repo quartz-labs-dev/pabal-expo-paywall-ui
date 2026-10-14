@@ -79,7 +79,7 @@ test("every locale has its own onboarding copy", () => {
   }
 });
 
-test("steps show as a folding checklist; the section list keeps In use chips", () => {
+test("steps show as a folding checklist that keeps the next step; the section list keeps In use chips", () => {
   const { readFileSync } = require("node:fs") as typeof import("node:fs");
   const { join } = require("node:path") as typeof import("node:path");
   const read = (file: string) =>
@@ -93,6 +93,15 @@ test("steps show as a folding checklist; the section list keeps In use chips", (
   assert.match(checklist, /isChecked=\{Boolean\(step\.isDone\)\}/);
   assert.match(checklist, /const currentStep = steps\.find\(\(step\) => !step\.isDone\)/);
   assert.match(checklist, /accessibilityState=\{\{ expanded: isExpanded \}\}/);
+  // Folded, only the next step stays; both folds animate.
+  assert.match(checklist, /<CollapsibleView isExpanded=\{!isExpanded\}>[\s\S]*?<CurrentStep/);
+  assert.match(checklist, /<CollapsibleView isExpanded=\{isExpanded\}>/);
+
+  const benefits = readFileSync(
+    join(process.cwd(), "src", "profile", "ProfileBenefitUsageList.tsx"),
+    "utf8",
+  );
+  assert.match(benefits, /<CollapsibleView isExpanded=\{isExpanded\}>/);
 
   const list = read("ProOnboardingSectionList.tsx");
   assert.match(list, /copy\.inUseBadge/);

@@ -19,6 +19,12 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import {
+  PlaygroundOptionRow,
+  onOffOptions,
+  type PlaygroundOption,
+} from "../components/PlaygroundOptionRow";
+import { SettingsModal } from "../components/SettingsModal";
 import { playgroundBenefits } from "../fixtures/playground-benefits";
 import {
   createPlaygroundProOnboardingItems,
@@ -111,6 +117,31 @@ const profilePeriods: Record<PlaygroundScenario, PaywallPlanPeriod> = {
   weeklyOnly: "weekly",
 };
 
+type ProfilePlaygroundPlan = "free" | "subscribed" | "lifetime";
+
+const planOptions = [
+  { label: "Free", value: "free" },
+  { label: "Subscribed", value: "subscribed" },
+  { label: "Lifetime", value: "lifetime" },
+] as const satisfies readonly PlaygroundOption<ProfilePlaygroundPlan>[];
+
+const manageButtonOptions = [
+  { label: "Filled", value: "primary" },
+  { label: "Quiet", value: "secondary" },
+] as const satisfies readonly PlaygroundOption<"primary" | "secondary">[];
+
+const benefitDisplayOptions = [
+  { label: "List", value: "list" },
+  { label: "Usage table", value: "usage" },
+] as const satisfies readonly PlaygroundOption<ProfileBenefitDisplayMode>[];
+
+const guideTopOptions = [
+  { label: "Checklist", value: "checklist" },
+  { label: "Next card", value: "next" },
+] as const satisfies readonly PlaygroundOption<"checklist" | "next">[];
+
+const toOnOff = (isOn: boolean) => (isOn ? "on" : "off");
+
 interface ProfilePlaygroundScreenProps {
   scenario: PlaygroundScenario;
   selectedLocale: PlaygroundLocale;
@@ -126,8 +157,13 @@ export const ProfilePlaygroundScreen = ({
   onClose,
 }: ProfilePlaygroundScreenProps) => {
   const insets = useSafeAreaInsets();
-  const [isSubscribed, setIsSubscribed] = useState(false);
-  const [isLifetime, setIsLifetime] = useState(false);
+  // The guide is for subscribers, so /profile-onboarding opens subscribed
+  // with the quiet manage button, as an app would show it.
+  const [plan, setPlan] = useState<ProfilePlaygroundPlan>(
+    withOnboarding ? "subscribed" : "free",
+  );
+  const isSubscribed = plan !== "free";
+  const isLifetime = plan === "lifetime";
   const [showPromoCodeButton, setShowPromoCodeButton] = useState(true);
   const [showProfileIdentifiers, setShowProfileIdentifiers] = useState(false);
   const [benefitDisplayMode, setBenefitDisplayMode] =
@@ -137,12 +173,13 @@ export const ProfilePlaygroundScreen = ({
   const [isRestoringPurchases, setIsRestoringPurchases] = useState(false);
   const [isRedeemingPromoCode, setIsRedeemingPromoCode] = useState(false);
   const [isManageSubscriptionSecondary, setIsManageSubscriptionSecondary] =
-    useState(false);
+    useState(withOnboarding);
   const [hasNewItem, setHasNewItem] = useState(true);
   const [hasInUseItems, setHasInUseItems] = useState(true);
   const [hasOnboardingLinks, setHasOnboardingLinks] = useState(true);
   const [confirmedItemIds, setConfirmedItemIds] = useState<string[]>([]);
   const [hasChecklist, setHasChecklist] = useState(true);
+  const [isSettingsVisible, setIsSettingsVisible] = useState(false);
   const [doneStepIds, setDoneStepIds] = useState<string[]>(["theme"]);
   const onboarding = useMemo(() => {
     const inUseItemIds = hasInUseItems ? ["widget"] : [];
@@ -247,91 +284,20 @@ export const ProfilePlaygroundScreen = ({
           },
         ]}
       >
-        <Pressable onPress={onClose} style={styles.backButton}>
-          <Text style={styles.backButtonText}>Back</Text>
-        </Pressable>
-
-        <View style={styles.controls}>
-          <ToggleButton
-            isSelected={isSubscribed}
-            label={isSubscribed ? "Subscribed" : "Free"}
-            onPress={() => setIsSubscribed((previousValue) => !previousValue)}
-          />
-          <ToggleButton
-            isSelected={isLifetime}
-            label="Lifetime"
-            onPress={() => setIsLifetime((previousValue) => !previousValue)}
-          />
-          <ToggleButton
-            isSelected={showPromoCodeButton}
-            label={showPromoCodeButton ? "Promo" : "No promo"}
-            onPress={() =>
-              setShowPromoCodeButton((previousValue) => !previousValue)
-            }
-          />
-          <ToggleButton
-            isSelected={showProfileIdentifiers}
-            label={showProfileIdentifiers ? "IDs" : "No IDs"}
-            onPress={() =>
-              setShowProfileIdentifiers((previousValue) => !previousValue)
-            }
-          />
-          <ToggleButton
-            isSelected={isManageSubscriptionSecondary}
-            label={
-              isManageSubscriptionSecondary ? "Manage: secondary" : "Manage: primary"
-            }
-            onPress={() =>
-              setIsManageSubscriptionSecondary((previousValue) => !previousValue)
-            }
-          />
-          {withOnboarding ? (
-            <>
-              <ToggleButton
-                isSelected={hasNewItem}
-                label={hasNewItem ? "NEW item" : "No NEW"}
-                onPress={() => setHasNewItem((previousValue) => !previousValue)}
-              />
-              <ToggleButton
-                isSelected={hasInUseItems}
-                label={hasInUseItems ? "In use" : "None in use"}
-                onPress={() =>
-                  setHasInUseItems((previousValue) => !previousValue)
-                }
-              />
-              <ToggleButton
-                isSelected={hasOnboardingLinks}
-                label={hasOnboardingLinks ? "Links" : "No links"}
-                onPress={() =>
-                  setHasOnboardingLinks((previousValue) => !previousValue)
-                }
-              />
-              <ToggleButton
-                isSelected={hasChecklist}
-                label={hasChecklist ? "Checklist" : "Next card"}
-                onPress={() => setHasChecklist((previousValue) => !previousValue)}
-              />
-              <ToggleButton
-                isSelected={
-                  confirmedItemIds.length === 0 && doneStepIds.length === 1
-                }
-                label="Reset suggestions"
-                onPress={() => {
-                  setConfirmedItemIds([]);
-                  setDoneStepIds(["theme"]);
-                }}
-              />
-            </>
-          ) : null}
-          <ToggleButton
-            isSelected={benefitDisplayMode === "usage"}
-            label={benefitDisplayMode === "usage" ? "Usage" : "List"}
-            onPress={() =>
-              setBenefitDisplayMode((previousMode) =>
-                previousMode === "usage" ? "list" : "usage",
-              )
-            }
-          />
+        <View style={styles.topBar}>
+          <Pressable onPress={onClose} style={styles.barButton}>
+            <Text style={styles.barButtonText}>Back</Text>
+          </Pressable>
+          <Text numberOfLines={1} style={styles.title}>
+            {withOnboarding ? "Profile · Pro guide" : "Profile"}
+          </Text>
+          <Pressable
+            accessibilityRole="button"
+            onPress={() => setIsSettingsVisible(true)}
+            style={styles.barButton}
+          >
+            <Text style={styles.barButtonText}>Settings</Text>
+          </Pressable>
         </View>
 
         <ProfileSubscriptionWithOnboarding
@@ -364,14 +330,100 @@ export const ProfilePlaygroundScreen = ({
           onRedeemPromoCode={() => runLoadingState(setIsRedeemingPromoCode)}
           onRestorePurchases={() =>
             runLoadingState(setIsRestoringPurchases, () =>
-              setIsSubscribed(true),
+              setPlan("subscribed"),
             )
           }
           onUpgrade={() =>
-            runLoadingState(setIsUpgrading, () => setIsSubscribed(true))
+            runLoadingState(setIsUpgrading, () => setPlan("subscribed"))
           }
         />
       </ScrollView>
+
+      <SettingsModal
+        title={
+          withOnboarding ? "Profile · Pro guide settings" : "Profile settings"
+        }
+        visible={isSettingsVisible}
+        onClose={() => setIsSettingsVisible(false)}
+      >
+        <View style={styles.panel}>
+          <Text style={styles.panelTitle}>Account</Text>
+          <PlaygroundOptionRow
+            label="Plan"
+            options={planOptions}
+            value={plan}
+            onChange={setPlan}
+          />
+          <PlaygroundOptionRow
+            label="Manage subscription"
+            options={manageButtonOptions}
+            value={isManageSubscriptionSecondary ? "secondary" : "primary"}
+            onChange={(value) =>
+              setIsManageSubscriptionSecondary(value === "secondary")
+            }
+          />
+          <PlaygroundOptionRow
+            label="Promo code button"
+            options={onOffOptions}
+            value={toOnOff(showPromoCodeButton)}
+            onChange={(value) => setShowPromoCodeButton(value === "on")}
+          />
+          <PlaygroundOptionRow
+            label="User IDs"
+            options={onOffOptions}
+            value={toOnOff(showProfileIdentifiers)}
+            onChange={(value) => setShowProfileIdentifiers(value === "on")}
+          />
+          <PlaygroundOptionRow
+            label="Benefits"
+            options={benefitDisplayOptions}
+            value={benefitDisplayMode}
+            onChange={setBenefitDisplayMode}
+          />
+        </View>
+
+        {withOnboarding ? (
+          <View style={styles.panel}>
+            <Text style={styles.panelTitle}>Pro guide</Text>
+            <PlaygroundOptionRow
+              label="Top card"
+              options={guideTopOptions}
+              value={hasChecklist ? "checklist" : "next"}
+              onChange={(value) => setHasChecklist(value === "checklist")}
+            />
+            <PlaygroundOptionRow
+              label="NEW chip on Trip planner"
+              options={onOffOptions}
+              value={toOnOff(hasNewItem)}
+              onChange={(value) => setHasNewItem(value === "on")}
+            />
+            <PlaygroundOptionRow
+              label="In use chip on Widget"
+              options={onOffOptions}
+              value={toOnOff(hasInUseItems)}
+              onChange={(value) => setHasInUseItems(value === "on")}
+            />
+            <PlaygroundOptionRow
+              label="Rows open a screen"
+              options={onOffOptions}
+              value={toOnOff(hasOnboardingLinks)}
+              onChange={(value) => setHasOnboardingLinks(value === "on")}
+            />
+            <Pressable
+              accessibilityRole="button"
+              onPress={() => {
+                setConfirmedItemIds([]);
+                setDoneStepIds(["theme"]);
+              }}
+              style={styles.resetButton}
+            >
+              <Text style={styles.resetButtonText}>
+                Reset progress ("Already used")
+              </Text>
+            </Pressable>
+          </View>
+        ) : null}
+      </SettingsModal>
     </View>
   );
 };
@@ -422,31 +474,6 @@ function ProfileUsageTitle({ title }: ProfileUsageTitleProps) {
   );
 }
 
-interface ToggleButtonProps {
-  isSelected: boolean;
-  label: string;
-  onPress: () => void;
-}
-
-const ToggleButton = ({ isSelected, label, onPress }: ToggleButtonProps) => {
-  return (
-    <Pressable
-      onPress={onPress}
-      style={[styles.toggleButton, isSelected && styles.toggleButtonSelected]}
-    >
-      <Text
-        numberOfLines={1}
-        style={[
-          styles.toggleButtonText,
-          isSelected && styles.toggleButtonTextSelected,
-        ]}
-      >
-        {label}
-      </Text>
-    </Pressable>
-  );
-};
-
 const styles = StyleSheet.create({
   root: {
     backgroundColor: "#05080C",
@@ -456,53 +483,58 @@ const styles = StyleSheet.create({
     gap: 22,
     paddingHorizontal: 20,
   },
-  backButton: {
-    alignSelf: "flex-start",
+  topBar: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 12,
+  },
+  title: {
+    color: "#F5F7FA",
+    flex: 1,
+    fontSize: 15,
+    fontWeight: "600",
+    textAlign: "center",
+  },
+  barButton: {
     backgroundColor: "#151D25",
     borderRadius: 8,
     minHeight: 38,
     paddingHorizontal: 14,
     paddingVertical: 9,
   },
-  backButtonText: {
+  barButtonText: {
     color: "#F5F7FA",
     fontSize: 13,
     fontWeight: "600",
   },
-  controls: {
-    alignSelf: "stretch",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 8,
+  panel: {
+    backgroundColor: "#0F161D",
+    borderColor: "#22303C",
+    borderRadius: 10,
+    borderWidth: 1,
+    gap: 12,
+    padding: 14,
   },
-  toggleButton: {
-    backgroundColor: "#151D25",
+  panelTitle: {
+    color: "#F5F7FA",
+    fontSize: 13,
+    fontWeight: "700",
+    letterSpacing: 0.4,
+    lineHeight: 17,
+    textTransform: "uppercase",
+  },
+  resetButton: {
+    alignItems: "center",
     borderColor: "#2B3845",
     borderRadius: 8,
     borderWidth: 1,
-    flex: 1,
-    flexBasis: 0,
-    maxWidth: "48%",
-    minHeight: 44,
-    minWidth: 112,
-    overflow: "hidden",
-    paddingHorizontal: 8,
-    paddingVertical: 11,
+    justifyContent: "center",
+    minHeight: 38,
   },
-  toggleButtonSelected: {
-    backgroundColor: "#102A2A",
-    borderColor: "#5AC8B7",
-  },
-  toggleButtonText: {
+  resetButtonText: {
     color: "#B9C4CF",
-    flexShrink: 1,
     fontSize: 13,
     fontWeight: "600",
-    lineHeight: 17,
-    textAlign: "center",
-  },
-  toggleButtonTextSelected: {
-    color: "#5AC8B7",
   },
   appIcon: {
     borderRadius: 29,

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-import { ChevronDownIcon } from "../shared/icons";
+import { AnimatedChevron, CollapsibleView } from "../shared/CollapsibleView";
 import { isBenefitUsageTableVisible } from "./benefit-usage-visibility";
 import type { ProfileBenefitUsageListProps } from "../types";
 
@@ -23,8 +23,74 @@ export const ProfileBenefitUsageList = ({
     isExpanded,
   });
 
+  const table = (
+    <View style={styles.table}>
+      <View style={styles.headerRow}>
+        <View style={styles.featureHeader} />
+        <View style={styles.valueHeader}>
+          <Text style={[styles.headerText, { color: theme.primaryTextColor }]}>
+            {section.usageColumnTitle}
+          </Text>
+        </View>
+        <View style={styles.valueHeader}>
+          <Text style={[styles.headerText, { color: theme.accentColor }]}>
+            {section.proLimitColumnTitle}
+          </Text>
+        </View>
+      </View>
+
+      {section.items.map((item) => {
+        const featureTitle = item.titleContent ?? (
+          <Text
+            style={[
+              styles.featureTitle,
+              item.onPress && styles.clickableFeatureTitle,
+              { color: theme.primaryTextColor },
+            ]}
+          >
+            {item.title}
+          </Text>
+        );
+
+        return (
+          <View key={item.id} style={styles.row}>
+            {item.onPress ? (
+              <Pressable
+                accessibilityLabel={item.title}
+                accessibilityRole="button"
+                onPress={() => {
+                  void item.onPress?.();
+                }}
+                style={({ pressed }) => [
+                  styles.featureCell,
+                  pressed && styles.pressedFeatureCell,
+                ]}
+              >
+                {featureTitle}
+              </Pressable>
+            ) : (
+              <View style={styles.featureCell}>{featureTitle}</View>
+            )}
+            <View style={styles.valueCell}>
+              <Text
+                style={[styles.valueText, { color: theme.primaryTextColor }]}
+              >
+                {item.usageText}
+              </Text>
+            </View>
+            <View style={styles.valueCell}>
+              <Text style={[styles.valueText, { color: theme.accentColor }]}>
+                {item.proLimitText}
+              </Text>
+            </View>
+          </View>
+        );
+      })}
+    </View>
+  );
+
   return (
-    <View style={styles.section}>
+    <View style={isToggle ? undefined : styles.section}>
       {isToggle ? (
         <Pressable
           accessibilityRole="button"
@@ -41,9 +107,10 @@ export const ProfileBenefitUsageList = ({
           >
             {title}
           </Text>
-          <View style={[styles.chevron, isExpanded && styles.chevronExpanded]}>
-            <ChevronDownIcon color={theme.secondaryTextColor} />
-          </View>
+          <AnimatedChevron
+            color={theme.secondaryTextColor}
+            isExpanded={isExpanded}
+          />
         </Pressable>
       ) : (
         title && (
@@ -53,72 +120,13 @@ export const ProfileBenefitUsageList = ({
         )
       )}
 
-      {isTableVisible && (
-        <View style={styles.table}>
-          <View style={styles.headerRow}>
-            <View style={styles.featureHeader} />
-            <View style={styles.valueHeader}>
-              <Text
-                style={[styles.headerText, { color: theme.primaryTextColor }]}
-              >
-                {section.usageColumnTitle}
-              </Text>
-            </View>
-            <View style={styles.valueHeader}>
-              <Text style={[styles.headerText, { color: theme.accentColor }]}>
-                {section.proLimitColumnTitle}
-              </Text>
-            </View>
-          </View>
-
-          {section.items.map((item) => {
-            const featureTitle = item.titleContent ?? (
-              <Text
-                style={[
-                  styles.featureTitle,
-                  item.onPress && styles.clickableFeatureTitle,
-                  { color: theme.primaryTextColor },
-                ]}
-              >
-                {item.title}
-              </Text>
-            );
-
-            return (
-              <View key={item.id} style={styles.row}>
-                {item.onPress ? (
-                  <Pressable
-                    accessibilityLabel={item.title}
-                    accessibilityRole="button"
-                    onPress={() => {
-                      void item.onPress?.();
-                    }}
-                    style={({ pressed }) => [
-                      styles.featureCell,
-                      pressed && styles.pressedFeatureCell,
-                    ]}
-                  >
-                    {featureTitle}
-                  </Pressable>
-                ) : (
-                  <View style={styles.featureCell}>{featureTitle}</View>
-                )}
-                <View style={styles.valueCell}>
-                  <Text
-                    style={[styles.valueText, { color: theme.primaryTextColor }]}
-                  >
-                    {item.usageText}
-                  </Text>
-                </View>
-                <View style={styles.valueCell}>
-                  <Text style={[styles.valueText, { color: theme.accentColor }]}>
-                    {item.proLimitText}
-                  </Text>
-                </View>
-              </View>
-            );
-          })}
-        </View>
+      {isToggle ? (
+        // Spacing lives inside the fold so a closed table leaves no gap.
+        <CollapsibleView isExpanded={isExpanded}>
+          <View style={styles.foldedTable}>{table}</View>
+        </CollapsibleView>
+      ) : (
+        isTableVisible && table
       )}
     </View>
   );
@@ -127,6 +135,9 @@ export const ProfileBenefitUsageList = ({
 const styles = StyleSheet.create({
   section: {
     gap: 12,
+  },
+  foldedTable: {
+    paddingTop: 4,
   },
   title: {
     fontSize: 15,
@@ -142,15 +153,6 @@ const styles = StyleSheet.create({
   toggleTitle: {
     flex: 1,
     flexShrink: 1,
-  },
-  chevron: {
-    alignItems: "center",
-    height: 20,
-    justifyContent: "center",
-    width: 20,
-  },
-  chevronExpanded: {
-    transform: [{ rotate: "180deg" }],
   },
   table: {
     width: "100%",

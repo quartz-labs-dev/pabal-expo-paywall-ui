@@ -77,7 +77,7 @@ test("keeps the classic and Pro onboarding profile entries independent", () => {
   assert.match(appSource, /window\.location\.pathname === "\/profile-onboarding"/);
   assert.match(appSource, /navigate\("profileOnboarding"\)/);
   assert.match(appSource, /withOnboarding=\{route === "profileOnboarding"\}/);
-  assert.match(homeSource, /Open \/profile-onboarding/);
+  assert.match(homeSource, /route="\/profile-onboarding"/);
   assert.match(
     profileSource,
     /onboarding=\{withOnboarding \? onboarding : undefined\}/,

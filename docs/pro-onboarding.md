@@ -64,9 +64,11 @@ onboarding={{
 }}
 ```
 
-Done steps are checked and struck through; the first open step gets "Try it"
-(only with `onPress`) and "Already used". The header shows `done/total` and
-opens or closes the checklist. When every step is done it shows
+The header shows `done/total` with a progress bar and folds the checklist with
+a height animation. Open, every step is listed: done steps are checked and
+struck through, and the first open step is highlighted with "Try it" (only
+with `onPress`) and "Already used". Folded, only that next step stays, so the
+thing to try is always visible. When every step is done it shows
 `copy.allExplored`. The section list below is always shown.
 
 Never pass a "not used" state: past use that left no data is unknown.
@@ -110,11 +112,12 @@ The package stays RevenueCat-, Firebase- and navigation-agnostic.
 
 - `/profile`: classic profile, unchanged.
 - `/profile-onboarding`: `ProfileSubscriptionWithOnboarding` with fixture
-  items and five checklist steps (`apps/playground/src/fixtures/pro-onboarding.tsx`)
-  and toggles for a NEW item, items in use, items without links, checklist
-  versus the single next card, and resetting "Already used". Both profile
-  entries have a primary/secondary "Manage subscription" toggle.
-  The folded table and the all-explored state are reachable from there.
+  items and five checklist steps (`apps/playground/src/fixtures/pro-onboarding.tsx`).
+  It opens subscribed with the quiet manage button. The screen shows only the
+  profile; Settings (top right) opens a sheet for the plan, manage button,
+  promo, IDs, benefit display, checklist versus single next card, NEW / In
+  use / link fixtures, and resetting "Already used". `/profile` has the same
+  sheet without the Pro guide group.
 
 `__tests__/playground-paywall-routing.test.ts` keeps the two entries
 independent.
@@ -127,7 +130,7 @@ independent.
 | 1.21.0 | `viewAllBenefitsTitle`; Pro onboarding (`ProfileSubscriptionWithOnboarding`, `ProOnboardingGuide`, helpers, copy) | None for classic apps |
 | 1.22.0 | `manageSubscriptionButtonVariant: "secondary"` | None |
 | 1.23.0 | Rows end in a check instead of the "In use" chip; the guide title folds the list (`defaultListExpanded`); "Pro" localized in non-Latin scripts | None |
-| 1.24.0 | Getting-started checklist (`steps`, `onConfirmStepDone`, `defaultChecklistExpanded`, `copy.checklistTitle`); section list back to "In use" chips and chevrons, always shown (`defaultListExpanded` removed); compact centered secondary "Manage subscription"; with `onboarding`, the profile no longer repeats `benefits` above the folded table | Apps that passed `defaultListExpanded` remove it (the list is always shown) |
+| 1.24.0 | Getting-started checklist (`steps`, `onConfirmStepDone`, `defaultChecklistExpanded`, `copy.checklistTitle`) that keeps the next step when folded; folding the checklist and "View all Pro benefits" animates; section list back to "In use" chips and chevrons, always shown (`defaultListExpanded` removed); compact centered secondary "Manage subscription"; with `onboarding`, the profile no longer repeats `benefits` above the folded table | Apps that passed `defaultListExpanded` remove it (the list is always shown) |
 
 All changes are additive (no breaking change). To opt in:
 
