@@ -15,7 +15,7 @@ const km = createPaywallLocaleText({
     benefitsTitle: "អត្ថប្រយោជន៍ Pro របស់អ្នក",
     viewAllBenefitsTitle: "មើលអត្ថប្រយោជន៍ ប្រូ ទាំងអស់",
     proOnboardingTitle: "មគ្គុទ្ទេសក៍មុខងារ ប្រូ",
-    proOnboardingChecklistTitle: "ចាប់ផ្តើមជាមួយ ប្រូ",
+    proOnboardingChecklistTitle: "ចាប់ផ្តើមនៅទីនេះ",
     proOnboardingNextTitle: "សាកល្បងបន្ទាប់",
     proOnboardingTryButton: "សាកល្បង",
     proOnboardingAlreadyUsedButton: "បានប្រើរួចហើយ",

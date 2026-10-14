@@ -15,7 +15,7 @@ const tr = createPaywallLocaleText({
     benefitsTitle: "Pro avantajları",
     viewAllBenefitsTitle: "Tüm Pro avantajlarını gör",
     proOnboardingTitle: "Pro özellik rehberi",
-    proOnboardingChecklistTitle: "Pro ile başlayın",
+    proOnboardingChecklistTitle: "Buradan başlayın",
     proOnboardingNextTitle: "Sıradaki",
     proOnboardingTryButton: "Dene",
     proOnboardingAlreadyUsedButton: "Zaten kullandım",

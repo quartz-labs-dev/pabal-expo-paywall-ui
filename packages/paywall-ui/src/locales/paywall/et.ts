@@ -15,7 +15,7 @@ const et = createPaywallLocaleText({
     benefitsTitle: "Pro eelised",
     viewAllBenefitsTitle: "Vaata kõiki Pro eeliseid",
     proOnboardingTitle: "Pro funktsioonide juhend",
-    proOnboardingChecklistTitle: "Alusta Proga",
+    proOnboardingChecklistTitle: "Alusta siit",
     proOnboardingNextTitle: "Proovi järgmisena",
     proOnboardingTryButton: "Proovi",
     proOnboardingAlreadyUsedButton: "Juba kasutanud",

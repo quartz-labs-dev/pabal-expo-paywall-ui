@@ -15,7 +15,7 @@ const ar = createPaywallLocaleText({
     benefitsTitle: "مزايا Pro",
     viewAllBenefitsTitle: "عرض كل مزايا برو",
     proOnboardingTitle: "دليل ميزات برو",
-    proOnboardingChecklistTitle: "ابدأ مع برو",
+    proOnboardingChecklistTitle: "ابدأ من هنا",
     proOnboardingNextTitle: "جرّب التالي",
     proOnboardingTryButton: "جرّبه",
     proOnboardingAlreadyUsedButton: "استخدمته من قبل",

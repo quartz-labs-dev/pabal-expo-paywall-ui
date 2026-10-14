@@ -1,8 +1,12 @@
 import { useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Animated, Pressable, StyleSheet, Text, View } from "react-native";
 
 import { getColorWithAlpha } from "../shared/color-utils";
-import { AnimatedChevron, CollapsibleView } from "../shared/CollapsibleView";
+import {
+  AnimatedChevron,
+  CollapsibleView,
+  useExpandProgress,
+} from "../shared/CollapsibleView";
 import { CheckCircleIcon } from "../shared/icons";
 import type {
   PaywallTheme,
@@ -21,9 +25,10 @@ interface ProOnboardingChecklistProps {
 
 /**
  * A short getting-started checklist with a progress bar. Open, it lists every
- * step and the first open one carries "Try it" and "Already used". Folded, the
- * other rows shrink away and only that step stays, so the next thing to try is
- * always visible.
+ * step; the active one (the first open step, or an open step the user taps)
+ * carries "Try it" and "Already used". Folded, the other rows shrink away and
+ * only the active step stays, so the next thing to try is always visible.
+ * Once every step is done the checklist hides.
  */
 export const ProOnboardingChecklist = ({
   steps,
@@ -34,10 +39,17 @@ export const ProOnboardingChecklist = ({
   onConfirmDone,
 }: ProOnboardingChecklistProps) => {
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
+  const [selectedStepId, setSelectedStepId] = useState<string | null>(null);
+  const expandProgress = useExpandProgress(isExpanded);
   const doneCount = steps.filter((step) => step.isDone).length;
-  const currentStep = steps.find((step) => !step.isDone);
-  const currentIndex = currentStep ? steps.indexOf(currentStep) : -1;
-  const progress = steps.length === 0 ? 0 : doneCount / steps.length;
+  // A tapped step stays active until it is done; then the first open one.
+  const currentStep =
+    steps.find((step) => step.id === selectedStepId && !step.isDone) ??
+    steps.find((step) => !step.isDone);
+  if (!currentStep) return null;
+
+  const currentIndex = steps.indexOf(currentStep);
+  const progress = doneCount / steps.length;
 
   return (
     <View
@@ -101,17 +113,18 @@ export const ProOnboardingChecklist = ({
       </Pressable>
 
       {/*
-        The current step (or the all-done line) never moves out: folding only
+        The active step never moves out: folding only
         shrinks the rows around it, so it slides into place instead of a new
         view appearing. Each row carries its spacing on the side facing the
-        current step, so a folded row leaves no gap.
+        active step, so a folded row leaves no gap.
       */}
       <View style={styles.fold}>
         {steps.map((step, index) => {
-          if (step.id === currentStep?.id) {
+          if (step.id === currentStep.id) {
             return (
               <CurrentStep
                 copy={copy}
+                highlightOpacity={expandProgress}
                 key={step.id}
                 step={step}
                 theme={theme}
@@ -120,18 +133,26 @@ export const ProOnboardingChecklist = ({
               />
             );
           }
-          const isBeforeCurrent = !currentStep || index < currentIndex;
+          const isLast = index === steps.length - 1;
           return (
             <CollapsibleView isExpanded={isExpanded} key={step.id}>
               <View
-                style={isBeforeCurrent ? styles.rowBefore : styles.rowAfter}
+                style={[
+                  index < currentIndex ? styles.rowBefore : styles.rowAfter,
+                  isLast && styles.rowLast,
+                ]}
               >
-                <StepRow step={step} theme={theme} />
+                <StepRow
+                  step={step}
+                  theme={theme}
+                  onSelect={
+                    step.isDone ? undefined : () => setSelectedStepId(step.id)
+                  }
+                />
               </View>
             </CollapsibleView>
           );
         })}
-        {!currentStep ? <AllDone copy={copy} theme={theme} /> : null}
       </View>
     </View>
   );
@@ -140,10 +161,20 @@ export const ProOnboardingChecklist = ({
 interface StepRowProps {
   step: ProOnboardingStep;
   theme: PaywallTheme;
+  onSelect?: () => void;
 }
 
-const StepRow = ({ step, theme }: StepRowProps) => (
-  <View style={[styles.stepRow, styles.stepInset]}>
+const StepRow = ({ step, theme, onSelect }: StepRowProps) => (
+  <Pressable
+    accessibilityRole={onSelect ? "button" : undefined}
+    disabled={!onSelect}
+    onPress={onSelect}
+    style={({ pressed }) => [
+      styles.stepRow,
+      styles.stepInset,
+      pressed && styles.pressed,
+    ]}
+  >
     <CheckCircleIcon
       checkColor={theme.accentTextColor}
       color={step.isDone ? theme.accentColor : theme.mutedTextColor}
@@ -171,13 +202,15 @@ const StepRow = ({ step, theme }: StepRowProps) => (
         </Text>
       ) : null}
     </View>
-  </View>
+  </Pressable>
 );
 
 interface CurrentStepProps {
   step: ProOnboardingStep;
   copy: ProOnboardingCopy;
   theme: PaywallTheme;
+  /** Folded, the highlight fades so the step sits on the card itself. */
+  highlightOpacity: Animated.Value;
   onTry: (step: ProOnboardingStep) => void;
   onConfirmDone?: (stepId: string) => void;
 }
@@ -186,22 +219,27 @@ const CurrentStep = ({
   step,
   copy,
   theme,
+  highlightOpacity,
   onTry,
   onConfirmDone,
 }: CurrentStepProps) => (
-  <View
-    style={[
-      styles.current,
-      {
-        backgroundColor: getColorWithAlpha(
-          theme.accentColor,
-          0.1,
-          theme.surfaceColor,
-        ),
-        borderRadius: Math.max(theme.cardBorderRadius - 6, 8),
-      },
-    ]}
-  >
+  <View style={styles.current}>
+    <Animated.View
+      pointerEvents="none"
+      style={[
+        StyleSheet.absoluteFill,
+        {
+          backgroundColor: getColorWithAlpha(
+            theme.accentColor,
+            0.1,
+            theme.surfaceColor,
+          ),
+          // Concentric with the card: its radius minus the 4px inset.
+          borderRadius: Math.max(theme.cardBorderRadius - CARD_INSET, 4),
+          opacity: highlightOpacity,
+        },
+      ]}
+    />
     <View style={styles.stepRow}>
       <CheckCircleIcon
         checkColor={theme.accentTextColor}
@@ -272,28 +310,16 @@ const CurrentStep = ({
   </View>
 );
 
-interface AllDoneProps {
-  copy: ProOnboardingCopy;
-  theme: PaywallTheme;
-}
-
-const AllDone = ({ copy, theme }: AllDoneProps) => (
-  <Text
-    style={[
-      styles.allDone,
-      styles.stepInset,
-      { color: theme.secondaryTextColor },
-    ]}
-  >
-    {copy.allExplored}
-  </Text>
-);
+// Horizontal and bottom padding of the card; the active step's highlight
+// fills it so the edges stay even.
+const CARD_INSET = 4;
 
 const styles = StyleSheet.create({
   card: {
     borderWidth: 1,
-    paddingHorizontal: 4,
-    paddingVertical: 16,
+    paddingBottom: CARD_INSET,
+    paddingHorizontal: CARD_INSET,
+    paddingTop: 16,
   },
   fold: {
     paddingTop: 14,
@@ -334,6 +360,11 @@ const styles = StyleSheet.create({
   },
   rowAfter: {
     paddingTop: 14,
+  },
+  // The card's bottom padding is only the 4px inset, sized for the active
+  // step's highlight; a plain last row needs the rest.
+  rowLast: {
+    paddingBottom: 12,
   },
   stepRow: {
     alignItems: "center",
@@ -394,11 +425,6 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     lineHeight: 18,
     textAlign: "center",
-  },
-  allDone: {
-    fontSize: 14,
-    fontWeight: "600",
-    lineHeight: 19,
   },
   pressed: {
     opacity: 0.72,

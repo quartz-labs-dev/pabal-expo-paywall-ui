@@ -15,7 +15,7 @@ const id = createPaywallLocaleText({
     benefitsTitle: "Manfaat Pro Anda",
     viewAllBenefitsTitle: "Lihat semua manfaat Pro",
     proOnboardingTitle: "Panduan fitur Pro",
-    proOnboardingChecklistTitle: "Mulai dengan Pro",
+    proOnboardingChecklistTitle: "Mulai dari sini",
     proOnboardingNextTitle: "Coba berikutnya",
     proOnboardingTryButton: "Coba",
     proOnboardingAlreadyUsedButton: "Sudah pernah",

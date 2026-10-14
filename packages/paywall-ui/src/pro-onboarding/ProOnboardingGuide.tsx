@@ -23,7 +23,7 @@ export const ProOnboardingGuide = ({
   onConfirmUsed,
   steps,
   onConfirmStepDone,
-  defaultChecklistExpanded = true,
+  defaultChecklistExpanded = false,
 }: ProOnboardingGuideProps) => {
   const theme = mergePaywallTheme(themeOverride);
   const copy = { ...getDefaultProOnboardingCopy(locale), ...copyOverride };

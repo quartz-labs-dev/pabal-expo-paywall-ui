@@ -5,7 +5,7 @@ import { ChevronDownIcon } from "./icons";
 
 const EXPAND_DURATION = 260;
 
-const useExpandProgress = (isExpanded: boolean) => {
+export const useExpandProgress = (isExpanded: boolean) => {
   const progress = useRef(new Animated.Value(isExpanded ? 1 : 0)).current;
 
   useEffect(() => {

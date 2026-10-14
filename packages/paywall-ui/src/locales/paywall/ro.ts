@@ -15,7 +15,7 @@ const ro = createPaywallLocaleText({
     benefitsTitle: "Beneficiile Pro",
     viewAllBenefitsTitle: "Vezi toate beneficiile Pro",
     proOnboardingTitle: "Ghidul funcțiilor Pro",
-    proOnboardingChecklistTitle: "Începe cu Pro",
+    proOnboardingChecklistTitle: "Începe de aici",
     proOnboardingNextTitle: "Încearcă în continuare",
     proOnboardingTryButton: "Încearcă",
     proOnboardingAlreadyUsedButton: "Am folosit deja",

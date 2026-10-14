@@ -79,22 +79,25 @@ test("every locale has its own onboarding copy", () => {
   }
 });
 
-test("steps show as a folding checklist that keeps the next step; the section list keeps In use chips", () => {
+test("steps show as a folded checklist that keeps the active step and hides when done; the section list keeps In use chips", () => {
   const { readFileSync } = require("node:fs") as typeof import("node:fs");
   const { join } = require("node:path") as typeof import("node:path");
   const read = (file: string) =>
     readFileSync(join(process.cwd(), "src", "pro-onboarding", file), "utf8");
 
   const guide = read("ProOnboardingGuide.tsx");
-  assert.match(guide, /defaultChecklistExpanded = true/);
+  assert.match(guide, /defaultChecklistExpanded = false/);
   assert.match(guide, /steps && steps\.length > 0 \? \(\s*<ProOnboardingChecklist/);
 
   const checklist = read("ProOnboardingChecklist.tsx");
   assert.match(checklist, /isChecked=\{Boolean\(step\.isDone\)\}/);
-  assert.match(checklist, /const currentStep = steps\.find\(\(step\) => !step\.isDone\)/);
+  // A tapped open step becomes active; with every step done it hides.
+  assert.match(checklist, /step\.id === selectedStepId && !step\.isDone/);
+  assert.match(checklist, /if \(!currentStep\) return null;/);
   assert.match(checklist, /accessibilityState=\{\{ expanded: isExpanded \}\}/);
   // Folded, the current step stays put and the other rows shrink away.
-  assert.match(checklist, /step\.id === currentStep\?\.id[\s\S]*?<CurrentStep[\s\S]*?<CollapsibleView isExpanded=\{isExpanded\}/);
+  assert.match(checklist, /step\.id === currentStep\.id[\s\S]*?<CurrentStep[\s\S]*?<CollapsibleView isExpanded=\{isExpanded\}/);
+  assert.match(checklist, /opacity: highlightOpacity/);
   assert.doesNotMatch(checklist, /isExpanded=\{!isExpanded\}/);
 
   const benefits = readFileSync(

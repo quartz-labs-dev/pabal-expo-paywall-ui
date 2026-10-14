@@ -15,7 +15,7 @@ const is = createPaywallLocaleText({
     benefitsTitle: "Pro fríðindi",
     viewAllBenefitsTitle: "Sjá alla Pro-kosti",
     proOnboardingTitle: "Leiðarvísir um Pro-eiginleika",
-    proOnboardingChecklistTitle: "Byrjaðu með Pro",
+    proOnboardingChecklistTitle: "Byrjaðu hér",
     proOnboardingNextTitle: "Prófaðu næst",
     proOnboardingTryButton: "Prófa",
     proOnboardingAlreadyUsedButton: "Hef þegar notað",

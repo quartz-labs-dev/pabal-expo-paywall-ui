@@ -15,7 +15,7 @@ const my = createPaywallLocaleText({
     benefitsTitle: "သင်၏ Pro အကျိုးကျေးဇူးများ",
     viewAllBenefitsTitle: "ပရို အကျိုးခံစားခွင့်အားလုံးကို ကြည့်ရန်",
     proOnboardingTitle: "ပရို လုပ်ဆောင်ချက် လမ်းညွှန်",
-    proOnboardingChecklistTitle: "ပရိုဖြင့် စတင်ပါ",
+    proOnboardingChecklistTitle: "ဒီကနေ စတင်ပါ",
     proOnboardingNextTitle: "နောက်တစ်ခု စမ်းကြည့်ပါ",
     proOnboardingTryButton: "စမ်းကြည့်ရန်",
     proOnboardingAlreadyUsedButton: "သုံးပြီးပါပြီ",

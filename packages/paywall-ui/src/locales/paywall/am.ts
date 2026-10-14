@@ -15,7 +15,7 @@ const am = createPaywallLocaleText({
     benefitsTitle: "የPro ጥቅሞች",
     viewAllBenefitsTitle: "ሁሉንም የፕሮ ጥቅሞች ይመልከቱ",
     proOnboardingTitle: "የፕሮ ባህሪያት መመሪያ",
-    proOnboardingChecklistTitle: "በፕሮ ይጀምሩ",
+    proOnboardingChecklistTitle: "ከዚህ ይጀምሩ",
     proOnboardingNextTitle: "ቀጥሎ ይሞክሩ",
     proOnboardingTryButton: "ይሞክሩት",
     proOnboardingAlreadyUsedButton: "አስቀድሜ ተጠቅሜበታለሁ",

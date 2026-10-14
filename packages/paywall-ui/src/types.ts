@@ -564,14 +564,15 @@ export interface ProOnboardingGuideProps {
    * nextItemId. */
   onConfirmUsed?: (itemId: string) => void;
   /**
-   * A short getting-started checklist shown instead of the single "Try next"
-   * card: done steps are checked, and the first open step gets "Try it" and
-   * "Already used". Its header opens and closes it.
+   * Getting-started checklist shown instead of the "Try next" card. Done
+   * steps are checked; the active step (the first open one, or an open step
+   * the user taps) gets "Try it" and "Already used". Its header folds it to
+   * the active step. Hidden once every step is done.
    */
   steps?: ProOnboardingStep[];
   /** "Already used" on a checklist step. */
   onConfirmStepDone?: (stepId: string) => void;
-  /** Initial state of the checklist. Defaults to open. */
+  /** Initial state of the checklist. Defaults to folded. */
   defaultChecklistExpanded?: boolean;
 }
 

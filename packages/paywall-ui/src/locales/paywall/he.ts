@@ -15,7 +15,7 @@ const he = createPaywallLocaleText({
     benefitsTitle: "הטבות ה-Pro שלך",
     viewAllBenefitsTitle: "הצגת כל הטבות פרו",
     proOnboardingTitle: "מדריך תכונות פרו",
-    proOnboardingChecklistTitle: "מתחילים עם פרו",
+    proOnboardingChecklistTitle: "מתחילים כאן",
     proOnboardingNextTitle: "לנסות עכשיו",
     proOnboardingTryButton: "לנסות",
     proOnboardingAlreadyUsedButton: "כבר השתמשתי",

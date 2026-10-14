@@ -15,7 +15,7 @@ const zu = createPaywallLocaleText({
     benefitsTitle: "Izinzuzo zakho ze-Pro",
     viewAllBenefitsTitle: "Buka zonke izinzuzo ze-Pro",
     proOnboardingTitle: "Umhlahlandlela wezici ze-Pro",
-    proOnboardingChecklistTitle: "Qala nge-Pro",
+    proOnboardingChecklistTitle: "Qala lapha",
     proOnboardingNextTitle: "Zama okulandelayo",
     proOnboardingTryButton: "Zama",
     proOnboardingAlreadyUsedButton: "Sengikusebenzisile",

@@ -15,7 +15,7 @@ const rm = createPaywallLocaleText({
     benefitsTitle: "Tes avantatgs Pro",
     viewAllBenefitsTitle: "Mussar tut ils avantatgs da Pro",
     proOnboardingTitle: "Guida da las funcziuns Pro",
-    proOnboardingChecklistTitle: "Cumenza cun Pro",
+    proOnboardingChecklistTitle: "Cumenza qua",
     proOnboardingNextTitle: "Emprova sco proxim",
     proOnboardingTryButton: "Emprova",
     proOnboardingAlreadyUsedButton: "Gia duvrà",

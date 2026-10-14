@@ -15,7 +15,7 @@ const si = createPaywallLocaleText({
     benefitsTitle: "ඔබගේ Pro වාසි",
     viewAllBenefitsTitle: "සියලු ප්‍රෝ ප්‍රතිලාභ බලන්න",
     proOnboardingTitle: "ප්‍රෝ විශේෂාංග මාර්ගෝපදේශය",
-    proOnboardingChecklistTitle: "ප්‍රෝ සමඟ අරඹන්න",
+    proOnboardingChecklistTitle: "මෙතැනින් අරඹන්න",
     proOnboardingNextTitle: "ඊළඟට උත්සාහ කරන්න",
     proOnboardingTryButton: "උත්සාහ කරන්න",
     proOnboardingAlreadyUsedButton: "දැනටමත් භාවිත කළා",

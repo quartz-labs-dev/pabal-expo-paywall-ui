@@ -15,7 +15,7 @@ const mk = createPaywallLocaleText({
     benefitsTitle: "Вашите Pro придобивки",
     viewAllBenefitsTitle: "Видете ги сите Про придобивки",
     proOnboardingTitle: "Водич за Про функции",
-    proOnboardingChecklistTitle: "Започнете со Про",
+    proOnboardingChecklistTitle: "Започнете оттука",
     proOnboardingNextTitle: "Пробајте следно",
     proOnboardingTryButton: "Пробај",
     proOnboardingAlreadyUsedButton: "Веќе користев",

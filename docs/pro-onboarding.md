@@ -60,16 +60,19 @@ onboarding={{
   ...,
   steps: [{ id, title, description?, badge?, isDone?, onPress? }],
   onConfirmStepDone: (stepId) => { /* record, then pass updated steps */ },
-  defaultChecklistExpanded: true, // the header folds it; open by default
+  defaultChecklistExpanded: false, // the header opens it; folded by default (1.26.0)
 }}
 ```
 
-The header shows `done/total` with a progress bar and folds the checklist with
-a height animation. Open, every step is listed: done steps are checked and
-struck through, and the first open step is highlighted with "Try it" (only
-with `onPress`) and "Already used". Folded, the other rows shrink away and
-that next step stays in place, so the thing to try is always visible. When every step is done it shows
-`copy.allExplored`. The section list below is always shown.
+The title is `copy.checklistTitle` ("Start here"). The header shows
+`done/total` with a progress bar and opens or folds the checklist with a
+height animation. Open, every step is listed: done steps are checked and
+struck through, and the active step is highlighted with "Try it" (only with
+`onPress`) and "Already used". The active step is the first open one, or an
+open step the user taps (1.26.0). Folded (the default), the other rows shrink
+away, the active step stays in place and its highlight fades so it sits on
+the card. Once every step is done the checklist hides (1.26.0); the "Try next"
+card does not come back. The section list below is always shown.
 
 Never pass a "not used" state: past use that left no data is unknown.
 
@@ -89,7 +92,7 @@ Both are Node-testable and optional; apps can use their own rules.
   `getDefaultProOnboardingCopy(locale)` → `title`, `checklistTitle`,
   `nextTitle`, `tryButton`, `alreadyUsedButton`, `inUseBadge`, `newBadge`
   ("NEW"), `allExplored`. Override any of them with
-  `onboarding.copy`. "Pro" in the guide title, the checklist title and
+  `onboarding.copy`. "Pro" in the guide title and
   `viewAllBenefitsTitle` is written in each locale's script (프로, プロ, 专业版, Про, برو …); Latin
   script locales keep "Pro".
 - `getDefaultProfileSubscriptionCopy(locale).viewAllBenefitsTitle` labels the
@@ -131,6 +134,7 @@ independent.
 | 1.22.0 | `manageSubscriptionButtonVariant: "secondary"` | None |
 | 1.23.0 | Rows end in a check instead of the "In use" chip; the guide title folds the list (`defaultListExpanded`); "Pro" localized in non-Latin scripts | None |
 | 1.25.0 (1.24.0 was not published) | Getting-started checklist (`steps`, `onConfirmStepDone`, `defaultChecklistExpanded`, `copy.checklistTitle`) that keeps the next step when folded; folding the checklist and "View all Pro benefits" animates; section list back to "In use" chips and chevrons, always shown (`defaultListExpanded` removed); compact centered secondary "Manage subscription" in a tighter panel; `planLabel` / `renewalLabel` move under the title (the separate plan box is gone); with `onboarding`, the profile no longer repeats `benefits` above the folded table | Apps that passed `defaultListExpanded` remove it (the list is always shown) |
+| 1.26.0 | Checklist folded by default (`defaultChecklistExpanded`); tapping an open step makes it active; hidden once every step is done; folded, the active step's highlight fades; checklist title "Start here" in every locale | Pass `defaultChecklistExpanded: true` to open it by default |
 
 All changes are additive (no breaking change). To opt in:
 

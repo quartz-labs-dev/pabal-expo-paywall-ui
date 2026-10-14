@@ -15,7 +15,7 @@ const ur = createPaywallLocaleText({
     benefitsTitle: "آپ کے Pro فوائد",
     viewAllBenefitsTitle: "تمام پرو فوائد دیکھیں",
     proOnboardingTitle: "پرو فیچر گائیڈ",
-    proOnboardingChecklistTitle: "پرو کے ساتھ شروع کریں",
+    proOnboardingChecklistTitle: "یہاں سے شروع کریں",
     proOnboardingNextTitle: "اگلا آزمائیں",
     proOnboardingTryButton: "آزمائیں",
     proOnboardingAlreadyUsedButton: "پہلے ہی استعمال کیا",
