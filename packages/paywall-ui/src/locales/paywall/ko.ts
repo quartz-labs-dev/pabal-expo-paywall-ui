@@ -15,7 +15,7 @@ const ko = createPaywallLocaleText({
     benefitsTitle: "Pro 혜택",
     viewAllBenefitsTitle: "프로 혜택 전체 보기",
     proOnboardingTitle: "프로 기능 가이드",
-    proOnboardingChecklistTitle: "이것부터 해보세요",
+    proOnboardingChecklistTitle: "여기부터 시작하세요",
     proOnboardingNextTitle: "다음에 해보기",
     proOnboardingTryButton: "해보기",
     proOnboardingAlreadyUsedButton: "이미 써봤어요",

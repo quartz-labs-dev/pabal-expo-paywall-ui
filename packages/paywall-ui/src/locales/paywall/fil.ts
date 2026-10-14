@@ -15,7 +15,7 @@ const fil = createPaywallLocaleText({
     benefitsTitle: "Mga benepisyo ng Pro mo",
     viewAllBenefitsTitle: "Tingnan ang lahat ng benepisyo ng Pro",
     proOnboardingTitle: "Gabay sa mga feature ng Pro",
-    proOnboardingChecklistTitle: "Magsimula rito",
+    proOnboardingChecklistTitle: "Dito magsimula",
     proOnboardingNextTitle: "Subukan ang susunod",
     proOnboardingTryButton: "Subukan",
     proOnboardingAlreadyUsedButton: "Nagamit ko na",

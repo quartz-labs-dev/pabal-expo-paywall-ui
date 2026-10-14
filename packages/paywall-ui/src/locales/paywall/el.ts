@@ -15,7 +15,7 @@ const el = createPaywallLocaleText({
     benefitsTitle: "Προνόμια Pro",
     viewAllBenefitsTitle: "Δείτε όλα τα οφέλη του Προ",
     proOnboardingTitle: "Οδηγός λειτουργιών Προ",
-    proOnboardingChecklistTitle: "Ξεκινήστε από εδώ",
+    proOnboardingChecklistTitle: "Από πού να ξεκινήσετε",
     proOnboardingNextTitle: "Δοκιμάστε μετά",
     proOnboardingTryButton: "Δοκιμή",
     proOnboardingAlreadyUsedButton: "Το έχω χρησιμοποιήσει",

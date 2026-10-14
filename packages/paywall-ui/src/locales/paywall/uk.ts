@@ -15,7 +15,7 @@ const uk = createPaywallLocaleText({
     benefitsTitle: "Переваги Pro",
     viewAllBenefitsTitle: "Переглянути всі переваги Про",
     proOnboardingTitle: "Посібник із функцій Про",
-    proOnboardingChecklistTitle: "Почніть звідси",
+    proOnboardingChecklistTitle: "З чого почати",
     proOnboardingNextTitle: "Спробуйте далі",
     proOnboardingTryButton: "Спробувати",
     proOnboardingAlreadyUsedButton: "Уже користувався",

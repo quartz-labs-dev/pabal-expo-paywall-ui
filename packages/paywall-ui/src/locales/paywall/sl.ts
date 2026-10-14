@@ -15,7 +15,7 @@ const sl = createPaywallLocaleText({
     benefitsTitle: "Prednosti Pro",
     viewAllBenefitsTitle: "Prikaži vse ugodnosti Pro",
     proOnboardingTitle: "Vodnik po funkcijah Pro",
-    proOnboardingChecklistTitle: "Začnite tukaj",
+    proOnboardingChecklistTitle: "Kje začeti",
     proOnboardingNextTitle: "Preizkusi naslednje",
     proOnboardingTryButton: "Preizkusi",
     proOnboardingAlreadyUsedButton: "Že uporabljeno",

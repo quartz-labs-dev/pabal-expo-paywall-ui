@@ -15,7 +15,7 @@ const hu = createPaywallLocaleText({
     benefitsTitle: "Pro előnyök",
     viewAllBenefitsTitle: "Az összes Pro előny megtekintése",
     proOnboardingTitle: "Pro funkcióútmutató",
-    proOnboardingChecklistTitle: "Kezdd itt",
+    proOnboardingChecklistTitle: "Itt kezdd",
     proOnboardingNextTitle: "Próbáld ki ezt",
     proOnboardingTryButton: "Kipróbálom",
     proOnboardingAlreadyUsedButton: "Már használtam",
