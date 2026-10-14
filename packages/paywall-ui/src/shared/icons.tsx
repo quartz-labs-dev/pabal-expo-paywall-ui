@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 interface IconProps {
   color: string;
@@ -81,7 +81,47 @@ export const CopyIcon = ({
   );
 };
 
+interface CheckCircleIconProps {
+  isChecked: boolean;
+  /** Outline when empty, fill when checked. */
+  color: string;
+  /** The check mark on the filled circle. */
+  checkColor: string;
+}
+
+export const CheckCircleIcon = ({
+  isChecked,
+  color,
+  checkColor,
+}: CheckCircleIconProps) => (
+  <View
+    style={[
+      styles.checkCircle,
+      isChecked
+        ? { backgroundColor: color, borderColor: color }
+        : { borderColor: color },
+    ]}
+  >
+    {isChecked ? (
+      <Text style={[styles.checkMark, { color: checkColor }]}>✓</Text>
+    ) : null}
+  </View>
+);
+
 const styles = StyleSheet.create({
+  checkCircle: {
+    alignItems: "center",
+    borderRadius: 11,
+    borderWidth: 1.5,
+    height: 22,
+    justifyContent: "center",
+    width: 22,
+  },
+  checkMark: {
+    fontSize: 13,
+    fontWeight: "700",
+    lineHeight: 15,
+  },
   chevronDownIcon: {
     height: 14,
     width: 14,

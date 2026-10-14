@@ -41,7 +41,7 @@ test("every locale has its own 'view all Pro benefits' toggle label", async () =
   assert.equal(english, "View all Pro benefits");
   assert.equal(
     getDefaultProfileSubscriptionCopy("ko").viewAllBenefitsTitle,
-    "Pro 혜택 전체 보기"
+    "프로 혜택 전체 보기"
   );
   for (const locale of PAYWALL_TEXT_LOCALES) {
     const label = getDefaultProfileSubscriptionCopy(locale).viewAllBenefitsTitle;

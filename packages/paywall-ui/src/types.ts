@@ -550,6 +550,9 @@ export interface ProOnboardingGuideProps {
   /** "Already used" on the next card. The app records it and passes a new
    * nextItemId. */
   onConfirmUsed?: (itemId: string) => void;
+  /** The title opens and closes the section list. Defaults to closed; the
+   * next card always shows. */
+  defaultListExpanded?: boolean;
 }
 
 export interface ProfileSubscriptionWithOnboardingProps

@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-import { ChevronLeftIcon } from "../shared/icons";
+import { CheckCircleIcon } from "../shared/icons";
 import type {
   PaywallTheme,
   ProOnboardingCopy,
@@ -16,7 +16,11 @@ interface ProOnboardingSectionListProps {
   onPressItem: (item: ProOnboardingItem) => void;
 }
 
-/** Section titles and item rows: badge, title, NEW, description, In use. */
+/**
+ * Section titles and item rows: badge, title, NEW, description, and a check
+ * on the right (filled when the app proves the item is in use). In-use titles
+ * are dimmed so what is left to try stands out.
+ */
 export const ProOnboardingSectionList = ({
   sections,
   items,
@@ -52,7 +56,14 @@ export const ProOnboardingSectionList = ({
                 {item.badge}
                 <View style={styles.titleRow}>
                   <Text
-                    style={[styles.title, { color: theme.primaryTextColor }]}
+                    style={[
+                      styles.title,
+                      {
+                        color: item.isInUse
+                          ? theme.secondaryTextColor
+                          : theme.primaryTextColor,
+                      },
+                    ]}
                   >
                     {item.title}
                   </Text>
@@ -79,23 +90,16 @@ export const ProOnboardingSectionList = ({
                   </Text>
                 ) : null}
               </View>
-              {item.isInUse ? (
-                <View
-                  style={[
-                    styles.chip,
-                    { backgroundColor: theme.selectedSurfaceColor },
-                  ]}
-                >
-                  <Text style={[styles.chipText, { color: theme.accentColor }]}>
-                    {copy.inUseBadge}
-                  </Text>
-                </View>
-              ) : null}
-              {item.onPress ? (
-                <View style={styles.chevron}>
-                  <ChevronLeftIcon color={theme.mutedTextColor} />
-                </View>
-              ) : null}
+              <View
+                accessibilityLabel={item.isInUse ? copy.inUseBadge : undefined}
+                accessible={Boolean(item.isInUse)}
+              >
+                <CheckCircleIcon
+                  checkColor={theme.accentTextColor}
+                  color={item.isInUse ? theme.accentColor : theme.mutedTextColor}
+                  isChecked={Boolean(item.isInUse)}
+                />
+              </View>
             </Pressable>
           ))}
         </View>
@@ -154,9 +158,6 @@ const styles = StyleSheet.create({
   chipText: {
     fontSize: 11,
     fontWeight: "600",
-  },
-  chevron: {
-    transform: [{ rotate: "180deg" }],
   },
   pressed: {
     opacity: 0.72,

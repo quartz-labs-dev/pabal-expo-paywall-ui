@@ -46,10 +46,14 @@ interface ProOnboardingItem {
   description?: string;   // shown under the title
   badge?: ReactNode;      // shown above the title (e.g. an AI badge)
   isNew?: boolean;        // NEW chip
-  isInUse?: boolean;      // "In use" chip; only when the app can prove it
-  onPress?: () => void;   // without it: no chevron, and the next card hides "Try it"
+  isInUse?: boolean;      // filled check (and a dimmed title); only when the app can prove it
+  onPress?: () => void;   // without it: the row is not tappable and the next card hides "Try it"
 }
 ```
+
+Each row ends in a check circle: filled when `isInUse`, empty otherwise. The
+guide title opens and closes the section list (`defaultListExpanded`, closed
+by default); the "Try next" card always shows.
 
 Never pass a "not used" state: past use that left no data is unknown.
 
@@ -67,8 +71,11 @@ Both are Node-testable and optional; apps can use their own rules.
 
 - Package-owned, localized in every `locales/paywall` file:
   `getDefaultProOnboardingCopy(locale)` → `title`, `nextTitle`, `tryButton`,
-  `alreadyUsedButton`, `inUseBadge`, `newBadge` ("NEW"), `allExplored`.
-  Override any of them with `onboarding.copy`.
+  `alreadyUsedButton`, `inUseBadge` (accessibility label of the filled
+  check), `newBadge` ("NEW"), `allExplored`. Override any of them with
+  `onboarding.copy`. "Pro" in the guide title and in `viewAllBenefitsTitle`
+  is written in each locale's script (프로, プロ, 专业版, Про, برو …); Latin
+  script locales keep "Pro".
 - `getDefaultProfileSubscriptionCopy(locale).viewAllBenefitsTitle` labels the
   folded table.
 - App-provided: section titles, item titles and descriptions.
@@ -102,6 +109,8 @@ independent.
 | --- | --- | --- |
 | 1.20.0 | `ProfileBenefitUsageList` exported, `collapsible` | None |
 | 1.21.0 | `viewAllBenefitsTitle`; Pro onboarding (`ProfileSubscriptionWithOnboarding`, `ProOnboardingGuide`, helpers, copy) | None for classic apps |
+| 1.22.0 | `manageSubscriptionButtonVariant: "secondary"` | None |
+| 1.23.0 | Rows end in a check (filled when in use) instead of an "In use" chip and chevron; the guide title folds the list (`defaultListExpanded`, closed by default); "Pro" localized in non-Latin scripts | None. Pass `defaultListExpanded` to keep the list open |
 
 All changes are additive (no breaking change). To opt in:
 

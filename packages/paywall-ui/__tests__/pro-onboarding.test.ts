@@ -78,3 +78,19 @@ test("every locale has its own onboarding copy", () => {
     }
   }
 });
+
+test("rows end in a check (filled when in use) and the title folds the list", () => {
+  const { readFileSync } = require("node:fs") as typeof import("node:fs");
+  const { join } = require("node:path") as typeof import("node:path");
+  const read = (file: string) =>
+    readFileSync(join(process.cwd(), "src", "pro-onboarding", file), "utf8");
+
+  const list = read("ProOnboardingSectionList.tsx");
+  assert.match(list, /<CheckCircleIcon/);
+  assert.match(list, /isChecked=\{Boolean\(item\.isInUse\)\}/);
+  assert.doesNotMatch(list, /ChevronLeftIcon/);
+
+  const guide = read("ProOnboardingGuide.tsx");
+  assert.match(guide, /defaultListExpanded = false/);
+  assert.match(guide, /\{isListExpanded \? \(/);
+});
