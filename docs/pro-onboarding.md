@@ -2,6 +2,8 @@
 
 Available since 1.21.0. Reference app: Post Black Belt
 (`src/components/pro-guide/`, `docs/product-specs/pro-guide.md` there).
+To add it to another app, paste `docs/pro-onboarding-adoption-prompt.md` into
+that app's session.
 
 Pro onboarding tells a subscriber what to try next. On the subscriber profile
 it shows one "Try next" card and the app's Pro features by section, marks what
