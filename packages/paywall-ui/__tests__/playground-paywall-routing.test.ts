@@ -66,3 +66,20 @@ test("preserves the legacy offer query as an offer route", () => {
   );
   assert.match(appSource, /return "offerPaywall";/);
 });
+
+test("keeps the classic and Pro onboarding profile entries independent", () => {
+  const appSource = readPlaygroundSource("App.tsx");
+  const homeSource = readPlaygroundSource("src/screens/HomeScreen.tsx");
+  const profileSource = readPlaygroundSource(
+    "src/screens/ProfilePlaygroundScreen.tsx",
+  );
+
+  assert.match(appSource, /window\.location\.pathname === "\/profile-onboarding"/);
+  assert.match(appSource, /navigate\("profileOnboarding"\)/);
+  assert.match(appSource, /withOnboarding=\{route === "profileOnboarding"\}/);
+  assert.match(homeSource, /Open \/profile-onboarding/);
+  assert.match(
+    profileSource,
+    /onboarding=\{withOnboarding \? onboarding : undefined\}/,
+  );
+});

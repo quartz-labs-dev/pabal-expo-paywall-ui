@@ -64,6 +64,7 @@ export {
   getDefaultLimitedTimeOfferCopy,
   getDefaultPaywallPlanOptions,
   getDefaultProfileIdentifiersCopy,
+  getDefaultProOnboardingCopy,
   getDefaultProfilePlanLabel,
   getDefaultProfileRenewalLabel,
   getDefaultProfileSubscriptionCopy,
@@ -202,6 +203,12 @@ export {
 export type { NormalizedTitleSegment } from "./paywall/title-segments";
 export { ProfileBenefitUsageList } from "./profile/ProfileBenefitUsageList";
 export { ProfileSubscriptionSection } from "./profile/ProfileSubscriptionSection";
+export { ProfileSubscriptionWithOnboarding } from "./profile/ProfileSubscriptionWithOnboarding";
+export { ProOnboardingGuide } from "./pro-onboarding/ProOnboardingGuide";
+export {
+  getNextProOnboardingItemId,
+  isProOnboardingItemNew,
+} from "./pro-onboarding/pro-onboarding";
 export { isUnifiedLocale, UNIFIED_LOCALES } from "./locales/unified-locales";
 export type {
   CreatePaywallPlansOptions,
@@ -245,6 +252,12 @@ export type {
   ProfileBenefitDisplayMode,
   ProfileBenefitUsageItem,
   ProfileBenefitUsageListProps,
+  ProfileSubscriptionWithOnboardingProps,
+  ProOnboardingCopy,
+  ProOnboardingEntryPoint,
+  ProOnboardingGuideProps,
+  ProOnboardingItem,
+  ProOnboardingSection,
   ProfileBenefitUsageSection,
   ProfileIdentifiersConfig,
   ProfileIdentifiersCopy,

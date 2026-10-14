@@ -400,6 +400,8 @@ export interface ProfileSubscriptionCopy {
   subscribedBadge?: string;
   notSubscribedBadge?: string;
   benefitsTitle?: string;
+  /** Toggle label for a collapsible `ProfileBenefitUsageList`. */
+  viewAllBenefitsTitle?: string;
   upgradeButton?: string;
   upgradingButton?: string;
   manageSubscriptionButton: string;
@@ -491,6 +493,65 @@ export interface ProfileSubscriptionSectionProps {
   onManageSubscription?: () => Promise<void> | void;
   onRestorePurchases: () => Promise<void> | void;
   onRedeemPromoCode?: () => Promise<void> | void;
+}
+
+export type ProOnboardingEntryPoint = "next" | "list";
+
+/** One thing a subscriber can try. The app resolves titles and state. */
+export interface ProOnboardingItem {
+  id: string;
+  title: string;
+  description?: string;
+  /** Brand badge shown above the title (e.g. an AI badge). */
+  badge?: ReactNode;
+  /** Added in a release the user has not seen yet. */
+  isNew?: boolean;
+  /** The app can prove the user already uses it. Never pass "not used". */
+  isInUse?: boolean;
+  /** Where the item opens. Without it the row has no chevron and the next
+   * card hides "Try it". */
+  onPress?: () => void;
+}
+
+export interface ProOnboardingSection {
+  id: string;
+  title: string;
+  itemIds: string[];
+}
+
+export interface ProOnboardingCopy {
+  title: string;
+  nextTitle: string;
+  tryButton: string;
+  alreadyUsedButton: string;
+  inUseBadge: string;
+  newBadge: string;
+  allExplored: string;
+}
+
+export interface ProOnboardingGuideProps {
+  sections: ProOnboardingSection[];
+  items: Record<string, ProOnboardingItem>;
+  /** The item to suggest next, or null when everything is explored. Use
+   * getNextProOnboardingItemId or the app's own rule. */
+  nextItemId?: string | null;
+  copy?: Partial<ProOnboardingCopy>;
+  locale?: string;
+  theme?: Partial<PaywallTheme>;
+  /** Called before the item's own onPress, e.g. for analytics. */
+  onPressItem?: (itemId: string, entryPoint: ProOnboardingEntryPoint) => void;
+  /** "Already used" on the next card. The app records it and passes a new
+   * nextItemId. */
+  onConfirmUsed?: (itemId: string) => void;
+}
+
+export interface ProfileSubscriptionWithOnboardingProps
+  extends ProfileSubscriptionSectionProps {
+  /**
+   * Pro onboarding shown between the profile and the benefit usage table.
+   * Leave it out to render the classic ProfileSubscriptionSection.
+   */
+  onboarding?: Omit<ProOnboardingGuideProps, "locale" | "theme">;
 }
 
 export interface ProfileSubscriptionConfig {

@@ -32,3 +32,20 @@ test("a collapsible table without a title has nothing to tap, so it shows", () =
     true
   );
 });
+
+test("every locale has its own 'view all Pro benefits' toggle label", async () => {
+  const { getDefaultProfileSubscriptionCopy, PAYWALL_TEXT_LOCALES } =
+    await import("../src/locales/localized-paywall-copy");
+  const english = getDefaultProfileSubscriptionCopy("en").viewAllBenefitsTitle;
+
+  assert.equal(english, "View all Pro benefits");
+  assert.equal(
+    getDefaultProfileSubscriptionCopy("ko").viewAllBenefitsTitle,
+    "Pro 혜택 전체 보기"
+  );
+  for (const locale of PAYWALL_TEXT_LOCALES) {
+    const label = getDefaultProfileSubscriptionCopy(locale).viewAllBenefitsTitle;
+    assert.ok(label && label.trim().length > 0, locale);
+    if (!locale.startsWith("en")) assert.notEqual(label, english, locale);
+  }
+});

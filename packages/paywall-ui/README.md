@@ -115,6 +115,8 @@ dependency.
   first-screen language selector placement under the title.
 - [Profile](../../docs/profile.md): subscription status, benefit usage, and
   profile identifier UI.
+- [Pro Onboarding](../../docs/pro-onboarding.md): subscriber profile with a
+  "Try next" guide to Pro features (`ProfileSubscriptionWithOnboarding`).
 
 ## Validate
 

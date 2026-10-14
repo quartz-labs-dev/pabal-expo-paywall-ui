@@ -66,6 +66,7 @@ interface HomeScreenProps {
   onOpenOfferPaywall: () => void;
   onOpenPreOnboarding: () => void;
   onOpenProfile: () => void;
+  onOpenProfileOnboarding: () => void;
 }
 
 const scenarios = Object.keys(
@@ -168,6 +169,7 @@ export const HomeScreen = ({
   onOpenOfferPaywall,
   onOpenPreOnboarding,
   onOpenProfile,
+  onOpenProfileOnboarding,
 }: HomeScreenProps) => {
   const insets = useSafeAreaInsets();
   const [isPaywallSettingsVisible, setIsPaywallSettingsVisible] =
@@ -255,6 +257,14 @@ export const HomeScreen = ({
           <Text style={styles.sectionTitle}>Profile</Text>
           <Pressable onPress={onOpenProfile} style={styles.secondaryAction}>
             <Text style={styles.secondaryActionText}>Open /profile</Text>
+          </Pressable>
+          <Pressable
+            onPress={onOpenProfileOnboarding}
+            style={styles.secondaryAction}
+          >
+            <Text style={styles.secondaryActionText}>
+              Open /profile-onboarding
+            </Text>
           </Pressable>
         </View>
 

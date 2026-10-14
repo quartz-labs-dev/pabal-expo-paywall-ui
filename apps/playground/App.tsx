@@ -35,6 +35,9 @@ const getInitialRoute = (): PlaygroundRoute => {
   }
 
   if (window.location.pathname === "/profile") return "profile";
+  if (window.location.pathname === "/profile-onboarding") {
+    return "profileOnboarding";
+  }
   if (window.location.pathname === "/onboarding") return "onboarding";
   if (window.location.pathname === "/onboarding-health") return "onboardingHealth";
   if (window.location.pathname === "/pre-onboarding") return "preOnboarding";
@@ -61,6 +64,8 @@ const pushWebPath = (route: PlaygroundRoute) => {
         ? "/offer-paywall"
         : route === "profile"
           ? "/profile"
+          : route === "profileOnboarding"
+            ? "/profile-onboarding"
           : route === "onboarding"
             ? "/onboarding"
             : route === "onboardingHealth"
@@ -158,10 +163,11 @@ export default function App() {
           areOfferAlternativePlansVisible={areOfferAlternativePlansVisible}
           onClose={() => navigate("home")}
         />
-      ) : route === "profile" ? (
+      ) : route === "profile" || route === "profileOnboarding" ? (
         <ProfilePlaygroundScreen
           scenario={effectiveScenario}
           selectedLocale={selectedLocale}
+          withOnboarding={route === "profileOnboarding"}
           onClose={() => navigate("home")}
         />
       ) : route === "onboarding" ? (
@@ -225,6 +231,7 @@ export default function App() {
           onOpenOfferPaywall={() => navigate("offerPaywall")}
           onOpenPreOnboarding={() => navigate("preOnboarding")}
           onOpenProfile={() => navigate("profile")}
+          onOpenProfileOnboarding={() => navigate("profileOnboarding")}
         />
       )}
     </SafeAreaProvider>

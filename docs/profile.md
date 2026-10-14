@@ -93,15 +93,20 @@ can leave `benefitUsageSection` off `ProfileSubscriptionSection` and render
 the table themselves with `ProfileBenefitUsageList`. Pass `collapsible` to
 fold it behind its `title` (collapsed by default; `defaultExpanded` opens it).
 A collapsible table needs a `title` to tap; without one it always shows.
+`getDefaultProfileSubscriptionCopy` provides `viewAllBenefitsTitle` ("View all
+Pro benefits", localized) for this toggle.
 
 ```tsx
 <ProfileBenefitUsageList
   section={benefitUsageSection}
   theme={theme}
-  title={copy.benefitsTitle}
+  title={copy.viewAllBenefitsTitle}
   collapsible
 />
 ```
+
+For the profile with Pro onboarding (`ProfileSubscriptionWithOnboarding`), see
+[Pro Onboarding](./pro-onboarding.md).
 
 ## Identifier Section
 

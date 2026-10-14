@@ -21,7 +21,8 @@ export type PlaygroundRoute =
   | "offerPaywall"
   | "paywall"
   | "preOnboarding"
-  | "profile";
+  | "profile"
+  | "profileOnboarding";
 
 export type PlaygroundPaywallVariant = "standard" | "offer";
 

@@ -10,6 +10,14 @@ export interface PaywallText {
   otherPlansButton: string;
   annualPlanTitle: string;
   benefitsTitle: string;
+  /** Toggle label of a collapsible profile benefit usage table. */
+  viewAllBenefitsTitle: string;
+  proOnboardingTitle: string;
+  proOnboardingNextTitle: string;
+  proOnboardingTryButton: string;
+  proOnboardingAlreadyUsedButton: string;
+  proOnboardingInUseBadge: string;
+  proOnboardingAllExplored: string;
   closeButtonAccessibilityLabel: string;
   continueButton: string;
   copyIdentifierAccessibilityLabel: string;

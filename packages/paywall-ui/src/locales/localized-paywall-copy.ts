@@ -15,6 +15,7 @@ import type {
   LimitedTimeOfferCopy,
   PaywallCopy,
   PaywallPlanPeriod,
+  ProOnboardingCopy,
   ProfileIdentifiersCopy,
   ProfileSubscriptionCopy,
 } from "../types";
@@ -172,6 +173,7 @@ export const getDefaultProfileSubscriptionCopy = (
     notSubscribedTitle: productName,
     subscribedBadge: "PRO",
     benefitsTitle: text.benefitsTitle,
+    viewAllBenefitsTitle: text.viewAllBenefitsTitle,
     upgradeButton: text.upgradeTo(productName),
     upgradingButton: text.openingPaywall,
     manageSubscriptionButton: text.manageSubscription,
@@ -182,6 +184,22 @@ export const getDefaultProfileSubscriptionCopy = (
     redeemingPromoCodeButton: text.opening,
     supportMessageLabel: text.supportMessageLabel,
     supportMessage: text.profileSupportMessage,
+  };
+};
+
+export const getDefaultProOnboardingCopy = (
+  locale?: string,
+): ProOnboardingCopy => {
+  const text = getPaywallText(locale);
+
+  return {
+    title: text.proOnboardingTitle,
+    nextTitle: text.proOnboardingNextTitle,
+    tryButton: text.proOnboardingTryButton,
+    alreadyUsedButton: text.proOnboardingAlreadyUsedButton,
+    inUseBadge: text.proOnboardingInUseBadge,
+    newBadge: "NEW",
+    allExplored: text.proOnboardingAllExplored,
   };
 };
 

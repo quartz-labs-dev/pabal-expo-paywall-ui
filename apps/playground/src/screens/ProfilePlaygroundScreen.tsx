@@ -1,5 +1,6 @@
 import {
-  ProfileSubscriptionSection,
+  ProfileSubscriptionWithOnboarding,
+  getNextProOnboardingItemId,
   getDefaultProfilePlanLabel,
   getDefaultProfileRenewalLabel,
   getDefaultProfileSubscriptionCopy,
@@ -19,6 +20,11 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { playgroundBenefits } from "../fixtures/playground-benefits";
+import {
+  createPlaygroundProOnboardingItems,
+  playgroundProOnboardingOrder,
+  playgroundProOnboardingSections,
+} from "../fixtures/pro-onboarding";
 import type { PlaygroundLocale, PlaygroundScenario } from "../types/playground";
 
 const wait = (duration: number) => {
@@ -107,12 +113,15 @@ const profilePeriods: Record<PlaygroundScenario, PaywallPlanPeriod> = {
 interface ProfilePlaygroundScreenProps {
   scenario: PlaygroundScenario;
   selectedLocale: PlaygroundLocale;
+  /** /profile-onboarding: ProfileSubscriptionWithOnboarding. */
+  withOnboarding?: boolean;
   onClose: () => void;
 }
 
 export const ProfilePlaygroundScreen = ({
   scenario,
   selectedLocale,
+  withOnboarding = false,
   onClose,
 }: ProfilePlaygroundScreenProps) => {
   const insets = useSafeAreaInsets();
@@ -126,6 +135,29 @@ export const ProfilePlaygroundScreen = ({
   const [isManagingSubscription, setIsManagingSubscription] = useState(false);
   const [isRestoringPurchases, setIsRestoringPurchases] = useState(false);
   const [isRedeemingPromoCode, setIsRedeemingPromoCode] = useState(false);
+  const [hasNewItem, setHasNewItem] = useState(true);
+  const [hasInUseItems, setHasInUseItems] = useState(true);
+  const [hasOnboardingLinks, setHasOnboardingLinks] = useState(true);
+  const [confirmedItemIds, setConfirmedItemIds] = useState<string[]>([]);
+  const onboarding = useMemo(() => {
+    const inUseItemIds = hasInUseItems ? ["widget"] : [];
+    const newItemIds = hasNewItem ? ["trip-planner"] : [];
+    return {
+      sections: playgroundProOnboardingSections,
+      items: createPlaygroundProOnboardingItems({
+        hasLinks: hasOnboardingLinks,
+        inUseItemIds,
+        newItemIds,
+      }),
+      nextItemId: getNextProOnboardingItemId({
+        order: playgroundProOnboardingOrder,
+        usedItemIds: [...inUseItemIds, ...confirmedItemIds],
+        newItemIds,
+      }),
+      onConfirmUsed: (itemId: string) =>
+        setConfirmedItemIds((previous) => [...previous, itemId]),
+    };
+  }, [confirmedItemIds, hasInUseItems, hasNewItem, hasOnboardingLinks]);
   const subscribedPeriod = isLifetime ? "lifetime" : profilePeriods[scenario];
   const profileCopy = useMemo(() => {
     return {
@@ -224,6 +256,34 @@ export const ProfilePlaygroundScreen = ({
               setShowProfileIdentifiers((previousValue) => !previousValue)
             }
           />
+          {withOnboarding ? (
+            <>
+              <ToggleButton
+                isSelected={hasNewItem}
+                label={hasNewItem ? "NEW item" : "No NEW"}
+                onPress={() => setHasNewItem((previousValue) => !previousValue)}
+              />
+              <ToggleButton
+                isSelected={hasInUseItems}
+                label={hasInUseItems ? "In use" : "None in use"}
+                onPress={() =>
+                  setHasInUseItems((previousValue) => !previousValue)
+                }
+              />
+              <ToggleButton
+                isSelected={hasOnboardingLinks}
+                label={hasOnboardingLinks ? "Links" : "No links"}
+                onPress={() =>
+                  setHasOnboardingLinks((previousValue) => !previousValue)
+                }
+              />
+              <ToggleButton
+                isSelected={confirmedItemIds.length === 0}
+                label="Reset suggestions"
+                onPress={() => setConfirmedItemIds([])}
+              />
+            </>
+          ) : null}
           <ToggleButton
             isSelected={benefitDisplayMode === "usage"}
             label={benefitDisplayMode === "usage" ? "Usage" : "List"}
@@ -235,8 +295,9 @@ export const ProfilePlaygroundScreen = ({
           />
         </View>
 
-        <ProfileSubscriptionSection
+        <ProfileSubscriptionWithOnboarding
           {...profileSubscriptionBaseConfig}
+          onboarding={withOnboarding ? onboarding : undefined}
           benefitDisplayMode={benefitDisplayMode}
           copy={profileCopy}
           headerIcon={<GoldenHorizonIcon isSubscribed={isSubscribed} />}
