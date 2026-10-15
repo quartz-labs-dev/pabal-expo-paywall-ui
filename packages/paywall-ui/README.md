@@ -116,7 +116,8 @@ dependency.
 - [Profile](../../docs/profile.md): subscription status, benefit usage, and
   profile identifier UI.
 - [Pro Onboarding](../../docs/pro-onboarding.md): subscriber profile with a
-  "Try next" guide to Pro features (`ProfileSubscriptionWithOnboarding`).
+  "Try next" guide to Pro features (`ProfileSubscriptionWithOnboarding`) and a
+  compact Settings/My Page entry card (`ProOnboardingEntryCard`).
 
 ## Validate
 

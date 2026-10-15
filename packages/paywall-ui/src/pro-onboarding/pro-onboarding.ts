@@ -3,6 +3,17 @@
  * which items are used or new; these only order and compare.
  */
 
+import type { ProOnboardingStep } from "../types";
+
+/** Done count and the first open step, for the compact entry card. */
+export const getProOnboardingProgress = (
+  steps: ProOnboardingStep[],
+): { doneCount: number; totalCount: number; nextStep: ProOnboardingStep | null } => ({
+  doneCount: steps.filter((step) => step.isDone).length,
+  totalCount: steps.length,
+  nextStep: steps.find((step) => !step.isDone) ?? null,
+});
+
 /**
  * The item to suggest next: a NEW item first, then `order`, skipping used
  * items. Null when every item in `order` is used.

@@ -33,32 +33,13 @@ interface ProfileIdentifiersSectionComponentProps {
   theme: PaywallTheme;
 }
 
-export const ProfileIdentifiersSection = ({
-  section,
-  theme,
-}: ProfileIdentifiersSectionComponentProps) => {
-  const [isExpanded, setIsExpanded] = useState(
-    section.defaultExpanded ?? true,
-  );
-  const cardBackgroundColor = getColorWithAlpha(
-    theme.surfaceColor,
-    0.42,
-    theme.surfaceColor,
-  );
+/** Open/closed state of the identifier list, shared by the toggle and the
+ * list so they can sit in different places. */
+export const useProfileIdentifiersExpansion = (defaultExpanded = true) => {
+  const [isExpanded, setIsExpanded] = useState(defaultExpanded);
   const expandProgress = useRef(
-    new Animated.Value(section.defaultExpanded ?? true ? 1 : 0),
+    new Animated.Value(defaultExpanded ? 1 : 0),
   ).current;
-  const toggleLabel = isExpanded
-    ? section.copy.hideButtonLabel
-    : section.copy.showButtonLabel;
-  const chevronRotation = expandProgress.interpolate({
-    inputRange: [0, 1],
-    outputRange: ["0deg", "180deg"],
-  });
-  const contentOffset = expandProgress.interpolate({
-    inputRange: [0, 1],
-    outputRange: [-6, 0],
-  });
 
   useEffect(() => {
     Animated.timing(expandProgress, {
@@ -69,7 +50,7 @@ export const ProfileIdentifiersSection = ({
     }).start();
   }, [expandProgress, isExpanded]);
 
-  const toggleExpanded = (event: GestureResponderEvent) => {
+  const toggle = (event: GestureResponderEvent) => {
     event.stopPropagation();
     LayoutAnimation.configureNext(
       LayoutAnimation.create(
@@ -81,62 +62,136 @@ export const ProfileIdentifiersSection = ({
     setIsExpanded((previousValue) => !previousValue);
   };
 
+  return { expandProgress, isExpanded, toggle };
+};
+
+type ProfileIdentifiersExpansion = ReturnType<
+  typeof useProfileIdentifiersExpansion
+>;
+
+interface ProfileIdentifiersToggleProps {
+  copy: ProfileIdentifiersCopy;
+  expansion: ProfileIdentifiersExpansion;
+  /** Matches the secondary "Manage subscription" label it sits next to. */
+  isCompact?: boolean;
+  theme: PaywallTheme;
+}
+
+export const ProfileIdentifiersToggle = ({
+  copy,
+  expansion,
+  isCompact = false,
+  theme,
+}: ProfileIdentifiersToggleProps) => {
+  const chevronRotation = expansion.expandProgress.interpolate({
+    inputRange: [0, 1],
+    outputRange: ["0deg", "180deg"],
+  });
+
   return (
-    <View style={styles.identifierSection}>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityState={{ expanded: isExpanded }}
-        onPress={toggleExpanded}
-        style={({ pressed }) => [
-          styles.identifierToggle,
-          { opacity: pressed ? 0.72 : 1 },
+    <Pressable
+      accessibilityRole="button"
+      accessibilityState={{ expanded: expansion.isExpanded }}
+      onPress={expansion.toggle}
+      style={({ pressed }) => [
+        styles.identifierToggle,
+        { opacity: pressed ? 0.72 : 1 },
+      ]}
+    >
+      <Text
+        style={[
+          styles.identifierToggleText,
+          isCompact && styles.compactToggleText,
+          { color: theme.secondaryTextColor },
         ]}
       >
-        <Text
-          style={[
-            styles.identifierToggleText,
-            { color: theme.secondaryTextColor },
-          ]}
-        >
-          {toggleLabel}
-        </Text>
-        <Animated.View
-          style={[
-            styles.chevronIcon,
-            { transform: [{ rotate: chevronRotation }] },
-          ]}
-        >
-          <ChevronDownIcon color={theme.secondaryTextColor} />
-        </Animated.View>
-      </Pressable>
+        {expansion.isExpanded ? copy.hideButtonLabel : copy.showButtonLabel}
+      </Text>
+      <Animated.View
+        style={[styles.chevronIcon, { transform: [{ rotate: chevronRotation }] }]}
+      >
+        <ChevronDownIcon color={theme.secondaryTextColor} />
+      </Animated.View>
+    </Pressable>
+  );
+};
 
-      {isExpanded && (
-        <Animated.View
-          style={[
-            styles.identifierCard,
-            {
-              backgroundColor: cardBackgroundColor,
-              borderColor: theme.borderColor,
-              borderRadius: theme.cardBorderRadius,
-              opacity: expandProgress,
-              transform: [{ translateY: contentOffset }],
-            },
-          ]}
-        >
-          {section.items.map((item) => (
-            <ProfileIdentifierRow
-              copyButtonAccessibilityLabel={
-                item.copyAccessibilityLabel ??
-                section.copy.copyButtonAccessibilityLabel
-              }
-              item={item}
-              key={item.key}
-              theme={theme}
-              onCopy={section.onCopy}
-            />
-          ))}
-        </Animated.View>
-      )}
+interface ProfileIdentifiersListProps {
+  expansion: ProfileIdentifiersExpansion;
+  /** Inside the subscription card: no border, the card already frames it. */
+  isEmbedded?: boolean;
+  section: ProfileIdentifiersSectionProps & { copy: ProfileIdentifiersCopy };
+  theme: PaywallTheme;
+}
+
+export const ProfileIdentifiersList = ({
+  expansion,
+  isEmbedded = false,
+  section,
+  theme,
+}: ProfileIdentifiersListProps) => {
+  if (!expansion.isExpanded) return null;
+
+  const contentOffset = expansion.expandProgress.interpolate({
+    inputRange: [0, 1],
+    outputRange: [-6, 0],
+  });
+
+  return (
+    <Animated.View
+      style={[
+        styles.identifierCard,
+        isEmbedded && styles.embeddedIdentifierCard,
+        {
+          backgroundColor: getColorWithAlpha(
+            theme.surfaceColor,
+            0.42,
+            theme.surfaceColor,
+          ),
+          borderColor: theme.borderColor,
+          borderRadius: theme.cardBorderRadius,
+          opacity: expansion.expandProgress,
+          transform: [{ translateY: contentOffset }],
+        },
+      ]}
+    >
+      {section.items.map((item) => (
+        <ProfileIdentifierRow
+          copyButtonAccessibilityLabel={
+            item.copyAccessibilityLabel ??
+            section.copy.copyButtonAccessibilityLabel
+          }
+          item={item}
+          key={item.key}
+          theme={theme}
+          onCopy={section.onCopy}
+        />
+      ))}
+    </Animated.View>
+  );
+};
+
+/** Toggle centered above its list, for when the toggle has its own row. */
+export const ProfileIdentifiersSection = ({
+  section,
+  theme,
+}: ProfileIdentifiersSectionComponentProps) => {
+  const expansion = useProfileIdentifiersExpansion(
+    section.defaultExpanded ?? true,
+  );
+
+  return (
+    <View style={styles.identifierSection}>
+      <ProfileIdentifiersToggle
+        copy={section.copy}
+        expansion={expansion}
+        theme={theme}
+      />
+      <ProfileIdentifiersList
+        expansion={expansion}
+        section={section}
+        theme={theme}
+      />
     </View>
   );
 };
@@ -236,6 +291,12 @@ const styles = StyleSheet.create({
     lineHeight: 17,
     textAlign: "center",
   },
+  // Same as the secondary manage button label.
+  compactToggleText: {
+    fontSize: 12,
+    fontWeight: "600",
+    lineHeight: 16,
+  },
   chevronIcon: {
     alignItems: "center",
     height: 18,
@@ -247,6 +308,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     gap: 18,
     padding: 14,
+  },
+  embeddedIdentifierCard: {
+    borderWidth: 0,
   },
   identifierItem: {
     gap: 7,

@@ -6,7 +6,13 @@ import {
   type GestureResponderEvent,
 } from "react-native";
 
-import { ProfileIdentifiersSection } from "./ProfileIdentifiersSection";
+import { getProfileIdentifierPlacement } from "./identifier-placement";
+import {
+  ProfileIdentifiersList,
+  ProfileIdentifiersSection,
+  ProfileIdentifiersToggle,
+  useProfileIdentifiersExpansion,
+} from "./ProfileIdentifiersSection";
 import { getDefaultProfileIdentifiersCopy } from "../locales/localized-paywall-copy";
 import { PaywallBenefitList } from "../paywall/PaywallBenefitList";
 import { ProfileBenefitUsageList } from "./ProfileBenefitUsageList";
@@ -83,6 +89,14 @@ export const ProfileSubscriptionSection = ({
           },
         }
       : undefined;
+  const identifierPlacement = getProfileIdentifierPlacement({
+    hasIdentifiers: Boolean(resolvedIdentifierSection),
+    manageSubscriptionButtonVariant,
+    showsManageSubscription: shouldShowManageSubscription,
+  });
+  const identifierExpansion = useProfileIdentifiersExpansion(
+    identifierSection?.defaultExpanded ?? true,
+  );
   // With nothing but the action button left in the panel (benefits moved
   // elsewhere), keep the panel tight around it.
   const isActionsOnly =
@@ -228,7 +242,38 @@ export const ProfileSubscriptionSection = ({
                 />
               )}
 
-              {shouldShowManageSubscription && (
+              {identifierPlacement === "inline" && resolvedIdentifierSection ? (
+                // IDs on the left, the quiet manage pill on the right; the
+                // list opens inside the card, right under them.
+                <View style={styles.inlineIdentifiers}>
+                  <View style={styles.manageRow}>
+                    <ProfileIdentifiersToggle
+                      copy={resolvedIdentifierSection.copy}
+                      expansion={identifierExpansion}
+                      isCompact
+                      theme={theme}
+                    />
+                    <ProfileActionButton
+                      disabled={isManagingSubscription}
+                      label={
+                        isManagingSubscription
+                          ? copy.managingSubscriptionButton ??
+                            copy.manageSubscriptionButton
+                          : copy.manageSubscriptionButton
+                      }
+                      theme={theme}
+                      variant={manageSubscriptionButtonVariant}
+                      onPress={onManageSubscription}
+                    />
+                  </View>
+                  <ProfileIdentifiersList
+                    expansion={identifierExpansion}
+                    isEmbedded
+                    section={resolvedIdentifierSection}
+                    theme={theme}
+                  />
+                </View>
+              ) : shouldShowManageSubscription && (
                 <ProfileActionButton
                   disabled={isManagingSubscription}
                   label={
@@ -298,12 +343,12 @@ export const ProfileSubscriptionSection = ({
         </View>
       </Pressable>
 
-      {resolvedIdentifierSection && (
+      {identifierPlacement === "below" && resolvedIdentifierSection ? (
         <ProfileIdentifiersSection
           section={resolvedIdentifierSection}
           theme={theme}
         />
-      )}
+      ) : null}
 
       {copy.supportMessage && (
         <View style={styles.supportMessageContainer}>
@@ -467,6 +512,16 @@ const styles = StyleSheet.create({
   },
   actions: {
     gap: 10,
+  },
+  inlineIdentifiers: {
+    gap: 12,
+  },
+  manageRow: {
+    alignItems: "center",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 12,
+    justifyContent: "space-between",
   },
   secondaryActions: {
     alignItems: "center",

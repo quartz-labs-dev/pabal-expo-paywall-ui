@@ -1,4 +1,5 @@
 import {
+  ProOnboardingEntryCard,
   ProfileSubscriptionWithOnboarding,
   getNextProOnboardingItemId,
   getDefaultProfilePlanLabel,
@@ -300,6 +301,28 @@ export const ProfilePlaygroundScreen = ({
           </Pressable>
         </View>
 
+        {withOnboarding && isSubscribed && onboarding.steps ? (
+          // How an app's Settings or My Page shows the same checklist.
+          <View style={styles.entryCardPreview}>
+            <Text style={styles.entryCardPreviewLabel}>Settings entry card</Text>
+            <ProOnboardingEntryCard
+              header={
+                <View style={styles.entryCardHeader}>
+                  <Text style={styles.entryCardHeaderTitle}>Pro Member</Text>
+                  {planLabel ? (
+                    <Text style={styles.entryCardHeaderSubtitle}>
+                      {planLabel}
+                    </Text>
+                  ) : null}
+                </View>
+              }
+              locale={selectedLocale}
+              steps={onboarding.steps}
+              onPress={() => Alert.alert("Open the Pro profile")}
+            />
+          </View>
+        ) : null}
+
         <ProfileSubscriptionWithOnboarding
           {...profileSubscriptionBaseConfig}
           onboarding={withOnboarding ? onboarding : undefined}
@@ -503,6 +526,27 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "600",
     textAlign: "center",
+  },
+  entryCardPreview: {
+    gap: 8,
+  },
+  entryCardPreviewLabel: {
+    color: "#8A97A5",
+    fontSize: 12,
+    fontWeight: "600",
+  },
+  entryCardHeader: {
+    gap: 2,
+  },
+  entryCardHeaderTitle: {
+    color: "#F5F7FA",
+    fontSize: 15,
+    fontWeight: "600",
+  },
+  entryCardHeaderSubtitle: {
+    color: "#8A97A5",
+    fontSize: 12,
+    fontWeight: "500",
   },
   barButton: {
     backgroundColor: "#151D25",

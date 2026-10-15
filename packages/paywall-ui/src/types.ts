@@ -576,6 +576,23 @@ export interface ProOnboardingGuideProps {
   defaultChecklistExpanded?: boolean;
 }
 
+/**
+ * Compact Pro onboarding for a Settings or My Page list: an optional app
+ * header (e.g. the profile row), progress and the next step, in one card.
+ */
+export interface ProOnboardingEntryCardProps {
+  /** App content at the top of the card. It and the progress call `onPress`. */
+  header?: ReactNode;
+  /** The same steps as the checklist. Done steps only count toward progress. */
+  steps: ProOnboardingStep[];
+  /** Progress title. Defaults to `checklistTitle` ("Start here"). */
+  title?: string;
+  /** Header and progress, e.g. open the full guide on the profile. */
+  onPress?: () => void;
+  locale?: string;
+  theme?: Partial<PaywallTheme>;
+}
+
 export interface ProfileSubscriptionWithOnboardingProps
   extends ProfileSubscriptionSectionProps {
   /**

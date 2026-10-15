@@ -7,6 +7,7 @@ import {
 } from "../src/locales/localized-paywall-copy";
 import {
   getNextProOnboardingItemId,
+  getProOnboardingProgress,
   isProOnboardingItemNew,
 } from "../src/pro-onboarding/pro-onboarding";
 
@@ -110,4 +111,21 @@ test("steps show as a folded checklist that keeps the active step and hides when
   const list = read("ProOnboardingSectionList.tsx");
   assert.match(list, /copy\.inUseBadge/);
   assert.match(list, /ChevronLeftIcon/);
+});
+
+test("entry card progress counts done steps and finds the first open one", () => {
+  const steps = [
+    { id: "theme", title: "Theme", isDone: true },
+    { id: "widget", title: "Widget" },
+    { id: "recap", title: "Recap" },
+  ];
+  const progress = getProOnboardingProgress(steps);
+  assert.equal(progress.doneCount, 1);
+  assert.equal(progress.totalCount, 3);
+  assert.equal(progress.nextStep?.id, "widget");
+  assert.equal(
+    getProOnboardingProgress(steps.map((step) => ({ ...step, isDone: true })))
+      .nextStep,
+    null,
+  );
 });

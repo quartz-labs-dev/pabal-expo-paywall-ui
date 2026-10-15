@@ -205,8 +205,10 @@ export { ProfileBenefitUsageList } from "./profile/ProfileBenefitUsageList";
 export { ProfileSubscriptionSection } from "./profile/ProfileSubscriptionSection";
 export { ProfileSubscriptionWithOnboarding } from "./profile/ProfileSubscriptionWithOnboarding";
 export { ProOnboardingGuide } from "./pro-onboarding/ProOnboardingGuide";
+export { ProOnboardingEntryCard } from "./pro-onboarding/ProOnboardingEntryCard";
 export {
   getNextProOnboardingItemId,
+  getProOnboardingProgress,
   isProOnboardingItemNew,
 } from "./pro-onboarding/pro-onboarding";
 export { isUnifiedLocale, UNIFIED_LOCALES } from "./locales/unified-locales";
@@ -255,6 +257,7 @@ export type {
   ProfileBenefitUsageListProps,
   ProfileSubscriptionWithOnboardingProps,
   ProOnboardingCopy,
+  ProOnboardingEntryCardProps,
   ProOnboardingEntryPoint,
   ProOnboardingGuideProps,
   ProOnboardingItem,

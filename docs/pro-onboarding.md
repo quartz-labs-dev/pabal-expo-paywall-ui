@@ -78,6 +78,27 @@ card does not come back. The section list below is always shown.
 
 Never pass a "not used" state: past use that left no data is unknown.
 
+## Entry card for Settings or My Page (1.28.0)
+
+`ProOnboardingEntryCard` is the compact form of the checklist for a list
+screen: one card with an optional app `header` (e.g. the profile row),
+progress (`title`, `done/total`, a bar) and the next open step.
+
+```tsx
+<ProOnboardingEntryCard
+  header={<ProfileRow />}        // optional; app content
+  steps={steps}                  // the same steps as the checklist
+  title={t("proGuide.title")}    // optional; defaults to checklistTitle
+  onPress={openProProfile}       // header and progress
+  locale={locale}
+  theme={theme}
+/>
+```
+
+The step row opens `step.onPress`. Once every step is done only the header is
+left, or nothing without one. Apps can pass a later set of steps (e.g. extra
+missions) to keep the card going.
+
 ## Pure helpers
 
 - `getNextProOnboardingItemId({ order, usedItemIds, newItemIds })`: NEW items
@@ -85,8 +106,10 @@ Never pass a "not used" state: past use that left no data is unknown.
 - `isProOnboardingItemNew({ addedInVersion, lastSeenVersion, baselineVersion })`:
   added after the version the user last opened the guide on. First visits
   compare against `baselineVersion` so not everything is NEW.
+- `getProOnboardingProgress(steps)` (1.28.0): `{ doneCount, totalCount, nextStep }`,
+  as the entry card shows it.
 
-Both are Node-testable and optional; apps can use their own rules.
+All are Node-testable and optional; apps can use their own rules.
 
 ## Copy
 
@@ -118,7 +141,8 @@ The package stays RevenueCat-, Firebase- and navigation-agnostic.
 - `/profile`: classic profile, unchanged.
 - `/profile-onboarding`: `ProfileSubscriptionWithOnboarding` with fixture
   items and five checklist steps (`apps/playground/src/fixtures/pro-onboarding.tsx`).
-  It opens subscribed with the quiet manage button. The screen shows only the
+  It opens subscribed with the quiet manage button, and shows the
+  `ProOnboardingEntryCard` preview above the profile. The screen shows only the
   profile; Settings (top right) opens a sheet for the plan, manage button,
   promo, IDs, benefit display, checklist versus single next card, NEW / In
   use / link fixtures, and resetting "Already used". `/profile` has the same
@@ -138,6 +162,7 @@ independent.
 | 1.25.0 (1.24.0 was not published) | Getting-started checklist (`steps`, `onConfirmStepDone`, `defaultChecklistExpanded`, `copy.checklistTitle`) that keeps the next step when folded; folding the checklist and "View all Pro benefits" animates; section list back to "In use" chips and chevrons, always shown (`defaultListExpanded` removed); compact centered secondary "Manage subscription" in a tighter panel; `planLabel` / `renewalLabel` move under the title (the separate plan box is gone); with `onboarding`, the profile no longer repeats `benefits` above the folded table | Apps that passed `defaultListExpanded` remove it (the list is always shown) |
 | 1.26.0 | Checklist folded by default (`defaultChecklistExpanded`); tapping an open step makes it active; hidden once every step is done; folded, the active step's highlight fades; checklist title "Start here" in every locale | Pass `defaultChecklistExpanded: true` to open it by default |
 | 1.27.0 | Checklist title reworded in 29 locales (ko "여기부터 시작하세요"; "where to start" phrasing in Slavic and Romance locales); switching the active step animates (the old step's actions and highlight fold away, the new one's open) | None |
+| 1.28.0 | `ProOnboardingEntryCard` and `getProOnboardingProgress` for Settings/My Page; with the secondary manage button, "Show IDs" sits left of "Manage subscription" in one row (same text size) and the ID list opens borderless inside the card | None. Apps using the secondary manage button with `identifierSection` see the new ID placement |
 
 All changes are additive (no breaking change). To opt in:
 
@@ -157,4 +182,5 @@ stored data changes.
 ## Not yet in the package
 
 The home mission card and post-purchase welcome sheet from Post Black Belt.
-Their presentational parts can follow the same split later.
+Their presentational parts can follow the same split later. The Settings or My
+Page entry is in the package as `ProOnboardingEntryCard`.

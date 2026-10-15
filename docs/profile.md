@@ -143,6 +143,13 @@ const profileIdentifiers = [
 The package localizes show/hide/copy labels from `locale`. The package does not
 import a clipboard dependency, so the consuming app owns `onCopy`.
 
+Placement (1.28.0): with `manageSubscriptionButtonVariant="secondary"`, the
+"Show IDs" toggle shares one row with the quiet "Manage subscription" pill (IDs
+on the left, manage on the right), in the same text size. The ID list opens
+inside the subscription card, under that row, without a border. With the
+primary manage button, or when the manage button is not shown, the toggle and
+list stay centered below the card as before.
+
 ## Copy Guidance
 
 Prefer using the same profile title in both states, formatted as the app name
