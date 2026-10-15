@@ -129,3 +129,17 @@ test("entry card progress counts done steps and finds the first open one", () =>
     null,
   );
 });
+
+test("entry card is one compact progress row naming the next step", () => {
+  const { readFileSync } = require("node:fs") as typeof import("node:fs");
+  const { join } = require("node:path") as typeof import("node:path");
+  const card = readFileSync(
+    join(process.cwd(), "src", "pro-onboarding", "ProOnboardingEntryCard.tsx"),
+    "utf8",
+  );
+  // The next step takes the title's place; no separate step row, no chevron.
+  assert.match(card, /\{nextStep\.title\}/);
+  assert.doesNotMatch(card, /ChevronLeftIcon|CheckCircleIcon/);
+  // The row opens the step, falling back to the card's onPress.
+  assert.match(card, /nextStep\?\.onPress \?\? onPress/);
+});

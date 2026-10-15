@@ -81,23 +81,28 @@ Never pass a "not used" state: past use that left no data is unknown.
 ## Entry card for Settings or My Page (1.28.0)
 
 `ProOnboardingEntryCard` is the compact form of the checklist for a list
-screen: one card with an optional app `header` (e.g. the profile row),
-progress (`title`, `done/total`, a bar) and the next open step.
+screen: one card with an optional app `header` (e.g. the profile row) and a
+single progress row that names the next open step, with `done/total` and a
+bar.
 
 ```tsx
 <ProOnboardingEntryCard
   header={<ProfileRow />}        // optional; app content
   steps={steps}                  // the same steps as the checklist
-  title={t("proGuide.title")}    // optional; defaults to checklistTitle
-  onPress={openProProfile}       // header and progress
+  title={t("proGuide.title")}    // optional; screen reader only, defaults to checklistTitle
+  onPress={openProGuide}         // the header
   locale={locale}
   theme={theme}
 />
 ```
 
-The step row opens `step.onPress`. Once every step is done only the header is
-left, or nothing without one. Apps can pass a later set of steps (e.g. extra
-missions) to keep the card going.
+The header opens `onPress`; the progress row opens the next step's `onPress`
+(or `onPress` when the step has none). Since 1.29.0 the next step replaces the
+"Start here" title in the progress row, and the separate step row with its
+check circle and chevron is gone; `title` is read by screen readers only.
+Once every step is done only the header is left, or nothing without one.
+Apps can pass a later set of steps (e.g. extra missions) to keep the card
+going.
 
 ## Pure helpers
 
@@ -163,6 +168,7 @@ independent.
 | 1.26.0 | Checklist folded by default (`defaultChecklistExpanded`); tapping an open step makes it active; hidden once every step is done; folded, the active step's highlight fades; checklist title "Start here" in every locale | Pass `defaultChecklistExpanded: true` to open it by default |
 | 1.27.0 | Checklist title reworded in 29 locales (ko "여기부터 시작하세요"; "where to start" phrasing in Slavic and Romance locales); switching the active step animates (the old step's actions and highlight fold away, the new one's open) | None |
 | 1.28.0 | `ProOnboardingEntryCard` and `getProOnboardingProgress` for Settings/My Page; with the secondary manage button, "Show IDs" sits left of "Manage subscription" in one row (same text size) and the ID list opens borderless inside the card | None. Apps using the secondary manage button with `identifierSection` see the new ID placement |
+| 1.29.0 | `ProOnboardingEntryCard` is one compact progress row: the next step takes the title's place (`title` becomes screen-reader only); no step row, check circle or chevron; the row opens the next step | None. Apps that rely on the visible "Start here" title in the entry card see the step name instead |
 
 All changes are additive (no breaking change). To opt in:
 
